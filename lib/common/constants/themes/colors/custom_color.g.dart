@@ -7,7 +7,7 @@ const mediumprimary = Color(0xFF7D84C6);
 const minusred = Color(0xFFF73224);
 const lightblue = Color(0xFFA1D1FE);
 const lightgreen = Color(0xFF93DD41);
-const lightywllow = Color(0xFFFFCE52);
+const lightyellow = Color(0xFFFFCE52);
 
 CustomColors lightCustomColors = const CustomColors(
   sourceSubprimary: Color(0xFFD5D7FF),
@@ -40,11 +40,11 @@ CustomColors lightCustomColors = const CustomColors(
   onLightgreen: Color(0xFFFFFFFF),
   lightgreenContainer: Color(0xFFABF859),
   onLightgreenContainer: Color(0xFF0F2000),
-  sourceLightywllow: Color(0xFFFFCE52),
-  lightywllow: Color(0xFF775A00),
-  onLightywllow: Color(0xFFFFFFFF),
-  lightywllowContainer: Color(0xFFFFDF98),
-  onLightywllowContainer: Color(0xFF251A00),
+  sourceLightyellow: Color(0xFFFFCE52),
+  lightyellow: Color(0xFF775A00),
+  onLightyellow: Color(0xFFFFFFFF),
+  lightyellowContainer: Color(0xFFFFDF98),
+  onLightyellowContainer: Color(0xFF251A00),
 );
 
 CustomColors darkCustomColors = const CustomColors(
@@ -78,11 +78,11 @@ CustomColors darkCustomColors = const CustomColors(
   onLightgreen: Color(0xFF1D3700),
   lightgreenContainer: Color(0xFF2C5000),
   onLightgreenContainer: Color(0xFFABF859),
-  sourceLightywllow: Color(0xFFFFCE52),
-  lightywllow: Color(0xFFF0C045),
-  onLightywllow: Color(0xFF3F2E00),
-  lightywllowContainer: Color(0xFF5A4300),
-  onLightywllowContainer: Color(0xFFFFDF98),
+  sourceLightyellow: Color(0xFFFFCE52),
+  lightyellow: Color(0xFFF0C045),
+  onLightyellow: Color(0xFF3F2E00),
+  lightyellowContainer: Color(0xFF5A4300),
+  onLightyellowContainer: Color(0xFFFFDF98),
 );
 
 /// Defines a set of custom colors, each comprised of 4 complementary tones.
@@ -122,11 +122,11 @@ class CustomColors extends ThemeExtension<CustomColors> {
     required this.onLightgreen,
     required this.lightgreenContainer,
     required this.onLightgreenContainer,
-    required this.sourceLightywllow,
-    required this.lightywllow,
-    required this.onLightywllow,
-    required this.lightywllowContainer,
-    required this.onLightywllowContainer,
+    required this.sourceLightyellow,
+    required this.lightyellow,
+    required this.onLightyellow,
+    required this.lightyellowContainer,
+    required this.onLightyellowContainer,
   });
 
   final Color? sourceSubprimary;
@@ -159,11 +159,11 @@ class CustomColors extends ThemeExtension<CustomColors> {
   final Color? onLightgreen;
   final Color? lightgreenContainer;
   final Color? onLightgreenContainer;
-  final Color? sourceLightywllow;
-  final Color? lightywllow;
-  final Color? onLightywllow;
-  final Color? lightywllowContainer;
-  final Color? onLightywllowContainer;
+  final Color? sourceLightyellow;
+  final Color? lightyellow;
+  final Color? onLightyellow;
+  final Color? lightyellowContainer;
+  final Color? onLightyellowContainer;
 
   @override
   CustomColors copyWith({
@@ -197,11 +197,11 @@ class CustomColors extends ThemeExtension<CustomColors> {
     Color? onLightgreen,
     Color? lightgreenContainer,
     Color? onLightgreenContainer,
-    Color? sourceLightywllow,
-    Color? lightywllow,
-    Color? onLightywllow,
-    Color? lightywllowContainer,
-    Color? onLightywllowContainer,
+    Color? sourceLightyellow,
+    Color? lightyellow,
+    Color? onLightyellow,
+    Color? lightywlloeContainer,
+    Color? onLightyellowContainer,
   }) {
     return CustomColors(
       sourceSubprimary: sourceSubprimary ?? this.sourceSubprimary,
@@ -239,12 +239,12 @@ class CustomColors extends ThemeExtension<CustomColors> {
       lightgreenContainer: lightgreenContainer ?? this.lightgreenContainer,
       onLightgreenContainer:
           onLightgreenContainer ?? this.onLightgreenContainer,
-      sourceLightywllow: sourceLightywllow ?? this.sourceLightywllow,
-      lightywllow: lightywllow ?? this.lightywllow,
-      onLightywllow: onLightywllow ?? this.onLightywllow,
-      lightywllowContainer: lightywllowContainer ?? this.lightywllowContainer,
-      onLightywllowContainer:
-          onLightywllowContainer ?? this.onLightywllowContainer,
+      sourceLightyellow: sourceLightyellow ?? this.sourceLightyellow,
+      lightyellow: lightyellow ?? this.lightyellow,
+      onLightyellow: onLightyellow ?? this.onLightyellow,
+      lightyellowContainer: lightywlloeContainer ?? this.lightyellowContainer,
+      onLightyellowContainer:
+          onLightyellowContainer ?? this.onLightyellowContainer,
     );
   }
 
@@ -298,14 +298,14 @@ class CustomColors extends ThemeExtension<CustomColors> {
           Color.lerp(lightgreenContainer, other.lightgreenContainer, t),
       onLightgreenContainer:
           Color.lerp(onLightgreenContainer, other.onLightgreenContainer, t),
-      sourceLightywllow:
-          Color.lerp(sourceLightywllow, other.sourceLightywllow, t),
-      lightywllow: Color.lerp(lightywllow, other.lightywllow, t),
-      onLightywllow: Color.lerp(onLightywllow, other.onLightywllow, t),
-      lightywllowContainer:
-          Color.lerp(lightywllowContainer, other.lightywllowContainer, t),
-      onLightywllowContainer:
-          Color.lerp(onLightywllowContainer, other.onLightywllowContainer, t),
+      sourceLightyellow:
+          Color.lerp(sourceLightyellow, other.sourceLightyellow, t),
+      lightyellow: Color.lerp(lightyellow, other.lightyellow, t),
+      onLightyellow: Color.lerp(onLightyellow, other.onLightyellow, t),
+      lightyellowContainer:
+          Color.lerp(lightyellowContainer, other.lightyellowContainer, t),
+      onLightyellowContainer:
+          Color.lerp(onLightyellowContainer, other.onLightyellowContainer, t),
     );
   }
 
@@ -341,11 +341,11 @@ class CustomColors extends ThemeExtension<CustomColors> {
   ///   * [CustomColors.onLightgreen]
   ///   * [CustomColors.lightgreenContainer]
   ///   * [CustomColors.onLightgreenContainer]
-  ///   * [CustomColors.sourceLightywllow]
-  ///   * [CustomColors.lightywllow]
-  ///   * [CustomColors.onLightywllow]
-  ///   * [CustomColors.lightywllowContainer]
-  ///   * [CustomColors.onLightywllowContainer]
+  ///   * [CustomColors.sourceLightyellow]
+  ///   * [CustomColors.lightyellow]
+  ///   * [CustomColors.onLightyellow]
+  ///   * [CustomColors.lightyellowContainer]
+  ///   * [CustomColors.onLightyellowContainer]
   ///
   /// See also:
   ///   * <https://m3.material.io/styles/color/the-color-system/custom-colors#harmonization>
@@ -388,13 +388,13 @@ class CustomColors extends ThemeExtension<CustomColors> {
       lightgreenContainer: lightgreenContainer!.harmonizeWith(dynamic.primary),
       onLightgreenContainer:
           onLightgreenContainer!.harmonizeWith(dynamic.primary),
-      sourceLightywllow: sourceLightywllow!.harmonizeWith(dynamic.primary),
-      lightywllow: lightywllow!.harmonizeWith(dynamic.primary),
-      onLightywllow: onLightywllow!.harmonizeWith(dynamic.primary),
-      lightywllowContainer:
-          lightywllowContainer!.harmonizeWith(dynamic.primary),
-      onLightywllowContainer:
-          onLightywllowContainer!.harmonizeWith(dynamic.primary),
+      sourceLightyellow: sourceLightyellow!.harmonizeWith(dynamic.primary),
+      lightyellow: lightyellow!.harmonizeWith(dynamic.primary),
+      onLightyellow: onLightyellow!.harmonizeWith(dynamic.primary),
+      lightywlloeContainer:
+          lightyellowContainer!.harmonizeWith(dynamic.primary),
+      onLightyellowContainer:
+          onLightyellowContainer!.harmonizeWith(dynamic.primary),
     );
   }
 }

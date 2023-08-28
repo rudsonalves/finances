@@ -94,7 +94,7 @@ class _AddCategoryDialogState extends State<AddCategoryDialog> {
             icon: Icon(
               Icons.warning,
               size: 32,
-              color: customColors.sourceLightywllow,
+              color: customColors.sourceLightyellow,
             ),
             content: Text(locale.addCategoryDialogThisCategoryExists),
           ),

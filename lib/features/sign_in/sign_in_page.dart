@@ -34,7 +34,7 @@ class _SignInPageState extends State<SignInPage> {
   @override
   void initState() {
     super.initState();
-    final locale = AppLocalizations.of(context)!;
+    //
 
     _controller.addListener(
       () {
@@ -59,6 +59,7 @@ class _SignInPageState extends State<SignInPage> {
 
         // SignIn State Error
         if (_controller.state is SignInStateError) {
+          final locale = AppLocalizations.of(context)!;
           final SignInStateError error = _controller.state as SignInStateError;
 
           Navigator.pop(context);
@@ -155,7 +156,7 @@ class _SignInPageState extends State<SignInPage> {
                                     title: Text(locale.signInPageResetPassword),
                                     icon: Icon(
                                       Icons.lock_reset,
-                                      color: customColors.sourceLightywllow,
+                                      color: customColors.sourceLightyellow,
                                       size: 64,
                                     ),
                                     content: Text(

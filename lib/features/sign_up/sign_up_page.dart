@@ -74,6 +74,25 @@ class _SignUpPageState extends State<SignUpPage> {
     _controller.dispose();
   }
 
+  Future<void> signInButton() async {
+    final valit =
+        _formKey.currentState != null && _formKey.currentState!.validate();
+
+    if (valit) {
+      UserModel user = UserModel(
+        name: _nameController.text,
+        email: _emailController.text,
+        password: _pwdController.text,
+      );
+      await _controller.doSignUp(user);
+    }
+  }
+
+  void signUpButton() => Navigator.popAndPushNamed(
+        context,
+        AppRoute.signIn.name,
+      );
+
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
@@ -121,30 +140,12 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   PrimaryButton(
                     label: locale.signUpPageSignUp,
-                    onTap: () async {
-                      final valit = _formKey.currentState != null &&
-                          _formKey.currentState!.validate();
-
-                      if (valit) {
-                        UserModel user = UserModel(
-                          name: _nameController.text,
-                          email: _emailController.text,
-                          password: _pwdController.text,
-                        );
-                        await _controller.doSignUp(user);
-                      }
-                      // else {
-                      //   log('SignUpPage: Some field is not validated!');
-                      // }
-                    },
+                    onTap: signInButton,
                   ),
                   CustomTextButton(
                     labelMessage: locale.signUpPageAlreadyHaveAccount,
                     labelButton: locale.signUpPageSignIn,
-                    onPressed: () => Navigator.popAndPushNamed(
-                      context,
-                      AppRoute.signIn.name,
-                    ),
+                    onPressed: signUpButton,
                   ),
                 ],
               ),

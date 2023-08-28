@@ -81,7 +81,7 @@ class _BalanceCardState extends State<BalanceCard> {
                             children: [
                               currentAccount.accountIcon.iconWidget(
                                 size: 20,
-                                color: customColors.sourceLightywllow,
+                                color: customColors.sourceLightyellow,
                               ),
                               const SizedBox(width: 6),
                               Text(
@@ -89,7 +89,7 @@ class _BalanceCardState extends State<BalanceCard> {
                                 maxLines: 1,
                                 style:
                                     AppTextStyles.textStyleSemiBold14.copyWith(
-                                  color: customColors.sourceLightywllow,
+                                  color: customColors.sourceLightyellow,
                                 ),
                               ),
                             ],

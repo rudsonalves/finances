@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "828903492310",
+    "project_id": "finances-148e6",
+    "storage_bucket": "finances-148e6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:828903492310:android:9af92779f8417692909777",
+        "android_client_info": {
+          "package_name": "br.com.jrblog.finances.finances"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "828903492310-pjbdihno2t3f0n5ed9ugo17c5e8cmddc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBJIakPsCReNInTxylF0pPl_G3S5-IyyQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "828903492310-pjbdihno2t3f0n5ed9ugo17c5e8cmddc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "828903492310-887edpma4br65ar46sr9ib35cfjl881q.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "br.com.jrblog.finances.finances.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

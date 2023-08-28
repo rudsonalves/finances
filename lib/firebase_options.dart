@@ -47,29 +47,30 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDVLmjsuXMq1xmCpTNx5ELIzaLZBE-YJyk',
-    appId: '1:515033499857:web:48b7cb485a8645b47f1df0',
-    messagingSenderId: '515033499857',
-    projectId: 'finance-ed28c',
-    authDomain: 'finance-ed28c.firebaseapp.com',
-    storageBucket: 'finance-ed28c.appspot.com',
-    measurementId: 'G-Z4F9R5DD0B',
+    apiKey: 'AIzaSyD_MaH2lliIqADxxTwTTDsRu9rZA6f18kI',
+    appId: '1:828903492310:web:0e919b3ccbff995d909777',
+    messagingSenderId: '828903492310',
+    projectId: 'finances-148e6',
+    authDomain: 'finances-148e6.firebaseapp.com',
+    storageBucket: 'finances-148e6.appspot.com',
+    measurementId: 'G-QQ8EBRMD18',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDtongZpdkpixgzoDS4Nbz8cXkQYP_WZ1c',
-    appId: '1:515033499857:android:8dddce5b61f107cf7f1df0',
-    messagingSenderId: '515033499857',
-    projectId: 'finance-ed28c',
-    storageBucket: 'finance-ed28c.appspot.com',
+    apiKey: 'AIzaSyCBJIakPsCReNInTxylF0pPl_G3S5-IyyQ',
+    appId: '1:828903492310:android:9af92779f8417692909777',
+    messagingSenderId: '828903492310',
+    projectId: 'finances-148e6',
+    storageBucket: 'finances-148e6.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDmF2DNGOkP8L4NjZ_g1ipfW8zXbSueZv0',
-    appId: '1:515033499857:ios:b4b380ce4085e6177f1df0',
-    messagingSenderId: '515033499857',
-    projectId: 'finance-ed28c',
-    storageBucket: 'finance-ed28c.appspot.com',
-    iosBundleId: 'br.com.jrblog.finance',
+    apiKey: 'AIzaSyDScwKsAkQkXEwk4rLYn7WPn96cTDO1fvk',
+    appId: '1:828903492310:ios:a4c41c126ab29ffb909777',
+    messagingSenderId: '828903492310',
+    projectId: 'finances-148e6',
+    storageBucket: 'finances-148e6.appspot.com',
+    iosClientId: '828903492310-jp6eaq9mrq6heg1mj94hb4oscq34ougd.apps.googleusercontent.com',
+    iosBundleId: 'br.com.jrblog.finances.finances',
   );
 }
