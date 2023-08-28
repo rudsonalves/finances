@@ -247,7 +247,7 @@ Com esses gatilhos em vigor, qualquer tentativa de inserir um valor inválido em
 
 ## 2023/08/28:
 
-In this committee, four changes were made to the project:
+In this commit, four changes were made to the project:
 
 - The project was renamed to "finances" and moved to another repository with the same name.
 - Three more colors were added to the project's color palette: lightblue, lightgreen, and lightyellow.
