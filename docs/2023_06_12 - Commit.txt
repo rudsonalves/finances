@@ -5,4 +5,4 @@ In this commit I added some implementations to add a new CategoryModel class. Wi
  * lib/common/constants/models/current_user_model.dart:
    - renamed several attributes in CurrentUser class for better standardization.
  * lib/common/constants/models/transaction_model.dart:
-   - 
+   
