@@ -1150,4 +1150,234 @@ In this commit, I added edit category editing capability to the code with the fo
    - add a helpDialog function, activated by a long press on a transaction.
  * lib/features/transaction/transaction_page.dart:
    - added a switch to diaplay Icons.thumb_up/Icons.thumb_down icons to indicate income/expanse release.
-   - 
+
+## 2023/06/24:
+
+Changes:
+ * lib/common/constants/models/categories_icons.dart:
+   - added getter keys to return iconsNames list;
+   - added getIconPath method to return iconPath from an iconName.
+ * lib/common/constants/themes/app_text_styles.dart:
+   - added text style size 11, textStyleNormal11.
+ * lib/features/category/category_controller.dar:
+   - added an init() method to standardize initialization methods. This method is just a call to the getAllCategories() method, to start the internal _categories list;
+   - added the categoryImage method to return the image path of an icon.
+ * lib/features/category/widgets/category_card.dart:
+   - legacy code removed.
+ * lib/features/category/widgets/category_floating_action_button.dart:
+   - renamed newIconPath by newIcon. Now this code working with iconName and not with iconPath like: 'assets/icons/twotone_attach_money_black_18pt_3x.png' -> 'attach money'.
+ * lib/features/category/widgets/dismissible_category.dart:
+ * lib/features/category/widgets/icon_selection_dialog.dart:
+ * lib/features/category/widgets/select_icon_row.dart:
+   - replaced iconPath with iconName.
+ * lib/features/home_page/home_page.dart:
+   - now openBalance is set to true, starting open Balance by default;
+   - added a Padding() to place 8 horizontal pixels of borders to put transactions on Cards.
+ * lib/features/home_page/widgets/transaction_list_tile.dart:
+   - Dismissible widget wrapped with a Card widget;
+   - inclusion of finished category icon.
+ * lib/main.dart:
+   - added a locator.get<CategoryController>().init(), to initialize the internal list of _categories of the CategoryController.
+
+
+## 2023/06/23:
+
+Changes:
+In this commit I fixed some bugs and finalized of transaction deletion functionality. See the changes below:
+ * README.md:
+   - added some project documentation in Portuguese. In the future, I intend to translated the text into English.
+ * lib/common/constants/models/categories_icons.dart:
+   - added a CategoriesIcons class to control icon names and path. This class store the icon information in a Map<iconName, iconPath> and creates an abstraction to use iconName instead of iconPath in the database.
+ * lib/common/constants/themes/app_text_styles.dart:
+   - added new text styles and reorganized the styles code by font size.
+ * lib/common/functions/base_dismissible_container.dart:
+   - created a general function to generate a Container for Dismisseble widget. This Container has a Icon() and Text() widgets aligned according to the alignment argument passed. 
+ * lib/features/category/widgets/dismissible_category.dart:
+   - background and secondaryBackground attributes of Dismissible, now use baseDismissibleContainer function.
+ * lib/features/home_page/balance_card/balance_card.dart:
+   - value.toStringAsFixed(2) changed by value.abs().toStringAsFixed(2) in the inner function of the CardBalance clas. This removes the occurrence of "-0.00" in the Expanses view.
+ * lib/features/home_page/widgets/transaction_list_tile.dart:
+   - added Dismissible widget in TransactionListTile to replace onTab and longOnTap methods in the functions call of delete and edit transactions.
+ * lib/locator.dart:
+   - added a CategoriesIcons in a registerLazySingleton.
+ * lib/main.dart:
+   - initialized CategoriesIcons.
+ * lib/services/database/sqflite_helper.dart:
+   - reorganized the order of drop tables commands to avoid foreign key database errors;
+   - the queryAggregateTransactions method now return a 0.0 if the database empty.
+
+## 2023/06/22:
+
+??
+
+## 2023/06/21:
+
+Mudanças:
+Este comentário serão feitos em português, pois vai me faltar inglês para expressar o que necessito neste commit.
+ * lib/app.dart:
+   - foi adicionado uma entrada no roteamento para a página TransactionPage. TransactionPage recebe dois argumentos de entrada, mas nenhum deles é obrigatório. São eles:
+     - addTransaction - um booleano que é true se for um diálogo de adição de uma transação e false se for um upgrade. Eventualmente vou alterar isto para um enum com valores como: addTransaction e updateTransaction.No momento o seu valor padrão é true, adição de uma nova transação;
+     - transaction - a transação em si. Este é um TransactionModel?, ou seja pode ser nulo.
+   A adição do roteamento é feito por meio do ModalRoute.of(context) para passar o argumento via um Map<String, dynamic>. A forma como isto funciona me ficou claro nesta implementação. O roteador recebe os parâmetros de um Navigator.pushNamed via um Map<String, dynamic> passado pelo parâmetro arguments. Estes parâmetros são recebidos e enviados para uma chamada ao TransactionPage(), através do seu construtor padrão.
+ * lib/common/constants/routes/app_route.dart:
+   - a ideia inicial das classes AppRoute e Route não contemplam o uso do roteamento descrito acima, mas por enquanto vou manter a implementação, pois me simplifica a manutenção das demais páginas.
+ * lib/common/extensions/money_masked_text_controller.dart:
+   - este é um pacote importado do https://github.com/LeandroNovak/extended_masked_text.git. Em linhas gerais ele implementa uma extensão do TextEditingController, adicionando propriedades para a entrada de valores financeiros. A implementação me parece simples e a estratégia é bem interessante. Devo usá-lo para implementar algo semelhante para um pseudo controle que implementei para usar no CustomDropdownFormField do TransactionPage.
+ * lib/common/validate/transaction_validator.dart:
+   - atualizei o TransactionValidator para validar adequadamente o valor de amount, uma fez que agora ele emprega o MoneyMaskedTextController.
+ * lib/features/category/widgets/category_floating_action_button.dart:
+   - apenas pequenas correções de texto.
+ * lib/features/category/widgets/select_icon_row.dart:
+   - neste código adicionei um FocusScope.of(context).unfocus() para remover o foco da widget de filtro de ícones. Tenho de me lembrar deste FocusScope, muito útil para remover o teclado em páginas de formulário, quando estes estão preenchidos.
+ * lib/features/home/home_page_controller.dart
+ * lib/features/home/home_page_state.dart
+ * lib/features/home/home_page.dart:
+   - renomeei esta feature de home para home_page. Exite outras mudanças mais importantes feitas nestes pacotes, mas as mesmas são feitas em outros pontos do código e serão comentadas adiante.
+ * lib/features/home_page/widgets/transaction_list_tile.dart:
+   - neste código dá para ver uma das principais mudanças deste commit. A função onTap, usada para chamar a página TransactionPage, agora executa a alteração da transação antes de retornar a página originaria. Isto garante que os dados foram alterados no banco de dados e possam ser empregados para a criação da nova tela. O problema foi que o Navigator.push... é um Future, e portanto o código seguia a execução e os locator.get<HomePageController>().getAllTransactions() e o locator.get<BalanceCardController>().getBalance() não carregavam nenhuma nova transação/categoria, já que estes não haviam sido atualizados no banco de dados.
+   A adição de um await no Navigator.push..., ou um .then(...) como feito em outros pontos do código, resolvem a questão.
+   Este é um ponto importante da proposta do padrão do projeto, onde daca feature é responsável por apenas uma característica do aplicativo.
+ * lib/features/home_page_view/home_page_view.dart:
+   - o mesmo foi feito na função addTransactionPressed, para aguardar que a nova transação seja adicionada ao banco de dados.
+ * lib/features/transaction/widgets/general_aap_bar.dart:
+   - esta é uma adição importante pois dela deve sair a construção de todas as AppBars que no momento estão empregando a widget AppBar() padrão. Da forma proposta aqui é possível rolar a página sem criar um vinco na parte inferior da AppBar, e simplifica a criação do gradiente de cores da AppBar, visto que este se torna um único widget.
+ * lib/features/transaction/transaction_page_controller.dart
+ * lib/features/transaction/transaction_page.dart
+ * lib/features/transaction/transaction_page_state.dart:
+   - esta página foi criada para substituir o TransactionDialog. Esta substituição é incerta no momento e devo avaliar melhor adiante. A meu ver um dialogo é o mais adequado para a inserção/edição de uma transação. No entanto, por ser muita informação e o pequeno espaço disponível na tela do celular, uma página me parece fazer melhor o serviço. 
+   No entanto, a implementação do dialogo statefull ficou bem interessante para ser descartado e devo guardar este código no projeto, ainda que inativo, por algum tempo.
+   Outro ponto interessante desta implementação foi o uso da widget SingleChildScrollView, que permite encapsular uma parte do dialogo em uma área scrollable e que ainda cresce por demanda dentro de um uma widget Positioned(), impedindo que ela se estenda por toda a tela do dispositivo.
+   
+De certo tem bem mais alterações para serem comentadas, no entanto não vou me lembrar de todas e novamente perdi muitas com a renomeação e mudança de diretório de alguns arquivos. Vou tentar fazer commits menores e mas bem comentados.
+
+
+## 2023/06/18:
+
+Changes:
+In this commit, two main changes were made: I the first one, I isolated a balance variable in the BalanceCard class to communicate with the HomePage class and resized the screen if it is true or false. This adjusts the space for viewing the list of transactions on the HomePage screen. In the second, I refactored the code of the category_floating_action_button.dart module, to separating the responsibilities and simplifying its visualization. More details are present below:
+ * lib/common/widgets/balance_card.dart:
+   - created a attribute balance to register if show balance is on or off;
+   - created a method balanceCallBack to communicate with HomePage class the balance status;
+   - an internal openBalance variable control the balance in the BalanceCard class;
+   - when balance card is change, balanceCallBack method is called to resized screen in the HomePage class;
+   - finally, I have added a call to CategoryPage in the vertical menu from BalanceCard.
+ * lib/features/home/home_page.dart:
+   - added a openBalance variable to control if BalanceCard is open or close;
+   - added an adjust from screen space if openBalance is on;
+   - passed new openBalance and callback function to the BalanceCard object.
+ * lib/features/category/category_page.dart:
+   - redesigned the page header to better express the swipe actions on the 
+ DismissibleCategory class.
+ * lib/features/category/widgets/category_floating_action_button.dart:
+  This code was refactored, removed loadIcons, openIconSelectionDialog, and all code from the input category TextField, icon selection and add/cancel buttons. Now this class just manages the CategoryTextField, SelectIconRow and AddCancelButtons classes.
+ * lib/features/category/widgets/add_cancel_buttons.dart:
+   - this module was created to regroup the add/cancel buttons.
+ * lib/features/category/widgets/category_text_field.dart:
+   - this module was created to regroup the category TextField, to get category name. 
+ * lib/features/category/widgets/select_icon_row.dart:
+   - this module was created to regroup the icon selection row.
+
+## 2023/06/17:
+
+Changes:
+In this commit I removed a small bug in the DismissibleCategory code and implemented the reload of categories in the CategoryPage code. Here are the changes:
+ * lib/features/category/widgets/dismissible_category.dart:
+   - the key of the Dismissible() widget has been changed from ValueKey<int>(controller.categories[index].categoryId!) to UniqueKey(). This was necessary because the widget was generating the error "A dismissed Dismissible widget is still part of the tree", when a category was removed by swiping.
+ * lib/features/category/category_controller.dart:
+   - now the addCategory, removeCategory and updateCategory methods have been implemented with a reload of the resulting categories in the database. For a small table the approach is a safe option for implementing this code, however a different approach should be considered for handing transactions.   
+
+## 2023/06/16:
+
+Changes:
+CategoryDialogs is now able to add and remove a category, but it still needs to update a category and make some adjustments.
+
+ * add_category_*.dart as renamed do category_*.dart, as well as their classes.
+
+Unfortunately due to the renaming of several files and folders many code changes were shadowed on my github diff, so I won't present them here. I will try to be more careful when renaming files and folders so as not lose the changes.
+
+## 2023/06/14:
+
+Changes:
+Add category is working.
+   * lib/features/add_category/add_category_controller.dart:
+     - added AddCategoryController. This will change to CategoryController in future commit.
+   * lib/features/add_category/add_category_page.dart:
+     - AddCategoryPage is now loading categories from database like HomePage loading transactions.
+     - TODO: I need to refactor this code in the future.
+   * lib/features/add_category/add_category_state.dart:
+     - define the abstract class AddCategoryCard.
+   * lib/features/sign_up/sign_up_controller.dart:
+     - now this module uses UserRepository locator to add CurrentUsers news in database.
+   * lib/locator.dart:
+     - Registered CategoryRepository and AddCategoryController.
+   * lib/repositories/category_repository.dart:
+     - define the CategoryRepository abstract class.
+   * lib/repositories/sqfile_category_repository.dart:
+     - implements CategoryRepository in the SqfileCategoryRepository class.
+   * lib/repositories/sqflite_transaction_repository.dart:
+     - now deleteTransaction returns an integer, the number of deleted records in the database.
+   * lib/repositories/sqlflite_user_repository.dart:
+     - implements UserRepository in the SqfliteUserRepository class.
+   * lib/repositories/user_repository.dart:
+     - declare the UserRepository abstract class.
+   * lib/services/database/sqlflite_helper.dart:
+     - several bugs fixed;
+     - added queryCategoryAtId method.
+
+## 2023/06/12:
+
+Changes:
+In this commit I added some implementations to add a new CategoryModel class. With this class I changed the structure of the database and made a many changes, as described bellow.
+ * lib/common/constants/models/category_model.dart:
+   - added new CategoriesModel class, to control categories in transactions.
+ * lib/common/constants/models/current_user_model.dart:
+   - renamed several attributes in CurrentUser class for better standardization.
+ * lib/common/constants/models/transaction_model.dart:
+   - ...
+   
+
+## 2023/06/09:
+
+ * lib/common/constants/models/transaction_model.dart:
+ class TransactionModel
+   - userId changed from int to String?;
+   - method toMap() return a exception if userId is null;
+   - minor changes in toString() method with User replaced by UserId string.
+ * lib/common/widgets/add_transaction_card.dart: 
+ class AddTransactionCard:
+   - bool income now is passed as argument to RowOfTwoBottons() custom widget. The default value is changed to false (expense mode);
+   - added an IconButton to the future addCategory action;
+   - now, signal of receiving value of Income/Expanse selected in custom widge RowOfTwoBottons();
+   - date attribute of the TransactionModel in the valid transaction is parsed by DateTime from _dateController.text;
+   - the transaction is added to the database from TransactionRepository.addTransaction(transaction) via locator.get();
+   - now a new transaction is started after adding a transaction.
+ * lib/common/widgets/balance_card.dart:
+   - add a temporary reset button for database transactions in the BalanceCart widget;
+ * lib/common/widgets/custom_dropdown_form_field.dart:
+   - added a suffixicon attribute in the CustomDropdownFormField class.
+ * lib/common/widgets/date_time_picker_form.dart:
+   - fixed time format in method formatTime(TimeOfDay time);
+   - now the CustomDropdownFormField show two icons in the right corner: (Icons.calendar_month and Icons.schedule).
+ * lib/common/widgets/row_of_two_bottons.dart:
+   - the RowOfTwoBottons widget now have an initial state.
+ * lib/features/home/home_page.dart:
+   - elevation is made equal to 0, but it did not solve appBar warping while scrolling. This was left to be resolved in future releases.
+ * lib/features/home_page_view/home_page_view.dart:
+   - added NeverScrollableScrollPhysics() option in PageView physics attribute. This prevents gesture page scrolling.
+ * lib/locator.dart:
+   - replace TransactionRepositoryImpl by SqfliteTransactionRepository. TransactionRepositoryImpl is a mock repository transaction class.
+ * lib/repositories/mock_transaction_repository.dart:
+   - renamed transaction_repository.dart to mock_transaction_repository.dart.
+ * lib/repositories/sqflite_transaction_repository.dart:
+   - this module integrates sqflite database into the project with the methods: addTransaction; getAllTransactions; getTransactionId; updateTransaction; and deleteTransaction. All methods to an authenticated user.
+ * lib/repositories/transaction_repository.dart:
+   - this module is now the abtract class of TransactionRepository.
+ * lib/services/database/sqflite_helper.dart:
+   - added the definitions of a category table;
+   - reformulated _onCreate method;
+   - _onCreateUsersTable, _onCreateTransactionsTable, and the new _onCreateCategoryTable method now use the internal _db attribute to access database;
+   - insertUser and insertTransaction now have a conflictAlgorithm attribute with value ConflictAlgorithm.abort, to abort in cases of conflict;
+   - added queryUserTransactions method to return a list of Maps<String, dynamics> of user transactions, sorted by date/time;
+   - added updateTransactionId method;
+   - added clearTransactionsTable method. At this time, this method is for application development needs.
+ 
