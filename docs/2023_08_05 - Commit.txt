@@ -1,4 +1,4 @@
-* lib/common/current_models/current_account.dart:
+  * lib/common/current_models/current_account.dart:
     - added method changeCurrentAccount to change CurrentAccount
   * lib/common/models/extends_date.dart:
     - lastDayOfMonth was corrected to handle the last day of the month of December;

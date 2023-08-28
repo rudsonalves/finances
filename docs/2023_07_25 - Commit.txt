@@ -1,4 +1,4 @@
-* lib/common/current_models/current_wallet.dart:
+  * lib/common/current_models/current_wallet.dart:
     - added a constructor to the CurrentWallet class;
     - attribute walletDescription was added to CurrentWallet class.
   * lib/common/models/categories_icons.dart:
@@ -30,3 +30,4 @@
     - openDatabase method now checks if there is any update script for the database;
     - added _createVersionControlTable private method to create a version control table;
     - added _applyMigrations private method for applying migrations in version control table.
+
