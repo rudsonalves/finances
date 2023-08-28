@@ -1,0 +1,64 @@
+In this commit I added color support to icons and made some tweaks to the WalletPage implementation, still in progress.
+  * docs/convert_font_config_json_to_map.py:
+    - python code to convert json into list of iconNames vs. iconsCode.
+  * docs/databaseDiagram.jpg:
+    - new database diagram with addition of icons table and its use in walletsTable and categoriesTable tables.
+  * lib/common/constants/themes/app_icons.dart:
+    - a non-instantiable class for icon support with the methods:
+      - IconsFontFamily(String fontFamilyName) - returns an IconsFontFamily named fontFamilyName;
+      - iconNames(IconsFontFamily fontFamily) - returns the list of icon names from the fontFamily family;
+      - IconData? iconData(String iconName, [IconsFontFamily fontFamily = IconsFontFamily.MaterialIcons]) - returns the iconData of the iconName and fontFamily family.
+  * lib/common/constants/themes/icons/material_icons_codes.dart:
+    - Map<String, int> materialIconsCodes with the names of the MaterialIcons icons.
+  * lib/common/constants/themes/icons/trademarks_icons_codes.dart:
+    - Map<String, int> trademarkIconsCodes with the names of the TrademarkIcons icons.
+  * lib/common/current_models/current_wallet.dart:
+  * lib/common/models/category_db_model.dart:
+  * lib/common/models/wallet_db_model.dart:
+    - changes in the CurrentWallet, WalletDbModel and CaterogyDbModel classes to accept the IconModel walletIcon as a parameter;
+  * lib/common/models/categories_icons.dart:
+    - the CategoriesIcons class seems to me to be a remnant of code developed over the many changes I had to make to add the icons to the project. This code will likely be removed in the future. At the moment all it does is filter icon names to display in the icon selection dialog.
+  * lib/common/models/icons_model.dart:
+    - declaration of the IconModel class to handle the App's icons;
+    - this class has the following attributes: int? iconId; String iconName; IconsFontFamily iconFontFamily; int iconColor.
+    - in addition to the classic toMap, fromMap, toJson, fromJson and toString methods, this class has the iconWidget({double? size}) method, which returns an icon widget.
+  * lib/common/widgets/color_button.dart:
+    - this class adds a button for selecting colors.
+  * lib/common/widgets/custom_dropdown_form_field.dart:
+  * lib/features/category/category_controller.dart:
+  * lib/features/category/widgets/dismissible_category.dart:
+  * lib/features/category/widgets/icon_selection_dialog.dart:
+  * lib/features/category/widgets/select_icon_row.dart:
+  * lib/features/category/widgets/statefull_add_category_dialog.dart:
+    - tweaked to employ iconWidget({double? size}) method of IconModel class.
+  * lib/features/wallet/add_wallet/add_wallet.dart:
+  * lib/features/wallet/add_wallet/dismissible_wallet_card.dart:
+  * lib/features/wallet/wallet_controller.dart:
+  * lib/features/wallet/wallet_page.dart:
+    - implementations to WalletPage.
+* lib/locator.dart:
+    - changes to CurrentWallet's registerLazySingleton to add a default wallet;
+    - added registerLazySingleton to the IconRepository class.
+  * lib/repositories/category/category_repository.dart:
+  * lib/repositories/category/sqflile_category_repository.dart:
+    - replacement of method `String getNameById(int id)` by `CategoryDbModel getCategoryId(int id)`;
+    - the addCategory method now adds its icon before adding the new category;
+    - method updateCategory now updates its icon before updating the category;
+  * lib/repositories/wallet/sqflite_wallet_repository.dart:
+    - separate method to create a new wallet, named _addOnly;
+    - _addOnly first adds the new icon before creating the new wallet;
+    - updateWallet updates the icon before updating the wallet.
+  * lib/repositories/icons/icons_repository.dart:
+  * lib/repositories/icons/sqlite_icons_repository.dart:
+    - addition of a repository to handle the icons.
+  * lib/services/database/database_helper.dart:
+    - addition of methods: Future<int> insertIcon(Map<String, dynamic> iconMap); Future<int> updateIcon(Map<String, dynamic> iconMap); Future<Map<String, dynamic>?> queryIconId(int id); and Future<void> deleteIconId(int id);
+    - the deleteIconId method should not be used too often, as the icons are tied to the category and wallet that created them via the database;
+  * lib/services/database/sqlflite_helper.dart:
+    - in addition to the addition of the previously described methods, addition of the _createIconsTable(batch) method for creating the icon table;
+     - change of walletsTable and categoriesTable tables to use iconsTable ids as walletIcon and categoryIcon, respectively. The deletion in these tables is connected in cascade to the deletion of the respective icons in the iconsTable.
+     - made adjustments to _recordMigration and _updateMigration methods for database migration control.
+     - _getCurrentDatabaseSchemeVersion - has also been changed to adjust database migration control. Database migration still needs further testing.
+   * pubspec.yaml:
+     - added to the project flutter_colorpicker package for color control and
+     - the TrademarkIcons font, with some trademark icons.

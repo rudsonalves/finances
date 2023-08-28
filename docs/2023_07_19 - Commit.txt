@@ -1,0 +1,30 @@
+In this commit, I added basic support to wallet page. The main wallet is now visible on the WalletPage and the balance getter has been implemented. See the main changes below:
+
+ * lib/common/current_models/current_wallet.dart:
+   - added a CurrentWallet.fromWalletDbModel factory constructor to return a CurrentWallet from a passed WalletDbModel. This is needed to construct a CurrentWallet, which is not the actual current balance.
+ * lib/features/home_page/balance_card/balance_card.dart:
+   - now balance value is returned from currentBalance.
+ * lib/features/home_page_view/home_page_view.dart:
+   - now the locator.get<BalanceCardController>().getBalance() is executed after locator.get<HomePageController>().getTransactions() completes.
+ * lib/features/wallet/wallet_controller.dart:
+   - added a wallet controller to control WalletPage construction;
+   - walletsDataList is a simple list of SimpleWalletData {walletName, walletBalance (the current day's closed balance), walletImage}, a simples class to saving basic wallets informations. This informaqions are used to build the wallets list in WalletPage.
+ * lib/features/wallet/wallet_page.dart:
+   - a basic wallet page. This page has changed in future versions.
+ * lib/features/wallet/wallet_state.dart:
+   - WalletStates class.
+ * lib/repositories/balance/sqflite_balance_repository.dart:
+ * lib/repositories/balance/balance_repository.dart:
+   - getBalanceInDate signature has changed. Now a balanceId can be passed to return a non-current wallet balance.
+ * lib/repositories/wallet/sqflite_wallet_repository.dart:
+   - added a getter to walletsList, a list of wallets.
+ * lib/services/database/database_helper.dart:
+   - now queryBalanceId searches the database only by balanceId. walletId is not longer required;
+   - rawQueryTransForBalanceId has its return order inverted to DESC, to correct a bug in the transactions order.
+ * lib/services/database/transactions_manager/balance_manager.dart:
+   - the BalanceManager method now receives a wallet attribute (a CurrentWallet objetc, but not a current wallet, necessarily) to allow injecting a balance into the list of non-current balances;
+   - a _reloadCurrentBalance() method was added in the addValue and subtractValue methods to update eventual changes in the currentBalance.
+ * lib/services/database/transactions_manager/transactions_manager.dart:
+   - minor changes to possibly turn this class into a non-instanciable class.
+ * lib/services/database/transactions_manager/wallet_manager.dart:
+   - a non-instanciable class to get current wallet balance, for now.

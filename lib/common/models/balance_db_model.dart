@@ -1,0 +1,74 @@
+import 'dart:convert';
+
+import './extends_date.dart';
+
+class BalanceDbModel {
+  int? balanceId;
+  int? balanceAccountId;
+  ExtendedDate? balanceDate;
+  int? balanceNextId;
+  int? balancePreviousId;
+  int balanceTransCount;
+  double balanceOpen;
+  double balanceClose;
+
+  BalanceDbModel({
+    this.balanceId,
+    this.balanceAccountId,
+    this.balanceDate,
+    this.balanceNextId,
+    this.balancePreviousId,
+    this.balanceTransCount = 0,
+    this.balanceOpen = 0.0,
+    this.balanceClose = 0.0,
+  });
+
+  @override
+  String toString() {
+    return 'Balance('
+        ' Id: $balanceId;'
+        ' AccountId: $balanceAccountId;'
+        ' Date: $balanceDate;'
+        ' NextId: $balanceNextId;'
+        ' PreviousId: $balancePreviousId;'
+        ' Count: $balanceTransCount;'
+        ' Open: $balanceOpen;'
+        ' Close: $balanceClose'
+        ')';
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'balanceId': balanceId,
+      'balanceAccountId': balanceAccountId,
+      'balanceDate': balanceDate!.millisecondsSinceEpoch,
+      'balanceNextId': balanceNextId,
+      'balancePreviousId': balancePreviousId,
+      'balanceTransCount': balanceTransCount,
+      'balanceOpen': balanceOpen,
+      'balanceClose': balanceClose,
+    };
+  }
+
+  factory BalanceDbModel.fromMap(Map<String, dynamic> map) {
+    return BalanceDbModel(
+      balanceId: map['balanceId'] != null ? map['balanceId'] as int : null,
+      balanceAccountId: map['balanceAccountId'] as int,
+      balanceDate:
+          ExtendedDate.fromMillisecondsSinceEpoch(map['balanceDate'] as int),
+      balanceNextId:
+          map['balanceNextId'] != null ? map['balanceNextId'] as int : null,
+      balancePreviousId: map['balancePreviousId'] != null
+          ? map['balancePreviousId'] as int
+          : null,
+      balanceTransCount: map['balanceTransCount'] as int,
+      balanceOpen: map['balanceOpen'] as double,
+      balanceClose: map['balanceClose'] as double,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory BalanceDbModel.fromJson(String source) =>
+      BalanceDbModel.fromMap(json.decode(source) as Map<String, dynamic>);
+}

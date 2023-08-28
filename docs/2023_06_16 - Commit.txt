@@ -1,0 +1,6 @@
+Changes:
+CategoryDialogs is now able to add and remove a category, but it still needs to update a category and make some adjustments.
+
+ * add_category_*.dart as renamed do category_*.dart, as well as their classes.
+
+Unfortunately due to the renaming of several files and folders many code changes were shadowed on my github diff, so I won't present them here. I will try to be more careful when renaming files and folders so as not lose the changes.

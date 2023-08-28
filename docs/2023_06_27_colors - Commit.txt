@@ -1,0 +1,4 @@
+Changes:
+In this commit I just adjusted the colors of the application. In summary the changes were:
+  * integration of application colors with theme colors;
+  * AppColors now takes colors directly from the theme with the functions getColorsGradient and getGrayGradient, to generate gradients with the color palette or in grayscale.

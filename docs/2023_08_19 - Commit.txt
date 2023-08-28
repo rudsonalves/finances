@@ -1,0 +1,28 @@
+In this commit, I made the following changes:
+
+1. I modified the prefixes of the `TransferDbModel` class and its associated elements from "transf" to "transfer". Additionally, I removed the `transfValue` and `transfDate` attributes as they were not being used.
+
+2. I reviewed the logs to eliminate unnecessary ones, including debug logs. Furthermore, I improved the content of the remaining logs within the application.
+
+3. I fixed a bug in the `AccountDropdownFormField` widget, which was related to incorrect usage of `accountId` instead of `accountName`. Now, the widget correctly returns the account name throughout the app.
+
+Here's a breakdown of the changes in each file:
+
+- `lib/common/models/transfer_db_model.dart`
+- `lib/features/transaction/transaction_controller.dart`
+- `lib/repositories/transfer_repository/sqflite_transfer_repository.dart`
+- `lib/services/database/managers/transfers_manager.dart`
+- `lib/services/database/sqflite_helper.dart`
+  - Attributes now use the prefix "transfer" instead of "transf".
+  - The attributes `transfValue` and `transfDate` have been removed.
+
+- `lib/common/widgets/account_dropdown_form_field.dart`
+  - I fixed a bug in the widget. Now, the widget correctly returns the `accountName` instead of the previously returned `accountId`, which was incorrect. `accountName` is now the default throughout the application.
+
+- `lib/features/home_page/home_page.dart`
+- `lib/features/home_page/widgets/transaction_dismissible_tile.dart`
+  - I changed the class name `TransactionListTile` to `TransactionDismissibleTile` to better align with similar approaches in other parts of the project.
+
+- `lib/features/sign_in/sign_in_page.dart`
+- `lib/features/sign_up/sign_up_page.dart`
+  - I modified the permanent logs to provide clearer error indications.

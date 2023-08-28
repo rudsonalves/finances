@@ -1,0 +1,104 @@
+Changes:
+
+In this commit, the database was remodeled to better maintain the necessary information in the app. The final structure of the database is presented in the README.md of this project. Here are the changes from this commit.
+
+  * lib/common/constants/models/balance_db_model.dart:
+    - to differ from the models for the database of other models in the app, a "_db_" was added to the name of the code files, as well as a "Db" was added to the name of the classes;
+    - the BalanceDbModel class now contains a control of the daily balance, as well as a counter of transactions posted on the balance sheet;
+    - the ExtendedDate class is used as a date control in the class. ExtendedDate is shown below.
+  * lib/common/constants/models/card_balance_model.dart:
+    - this module is the former balance_model.dart, which has been renamed to better represent its use in the application and integration with the stateful CardBalance widget. In short, this class has been simplified to explicitly meet the needs of the CardBalance widget.
+* lib/common/constants/models/category_db_model.dart:
+  * lib/common/constants/models/trans_day_db_model.dart:
+  * lib/common/constants/models/transaction_db_model.dart:
+  * lib/common/constants/models/user_db_model.dart:
+  * lib/common/constants/models/wallet_db_model.dart:
+    - the same as was done to balance_db_model.dart.
+  * lib/common/constants/models/extends_date.dart:
+    - this module is an adaptation of custom_date.dart.
+    - now the ExtendedDate class extends from the DateTime class and adds some necessary implementations for the app, in addition to supplementing unnecessary features of the ExtendedDate class;
+    - factory ExtendedDate.nowDate() - adds a named constructor to generate a new ExtendedDate with just the current date;
+    - static (int, int) getMillisecondsIntervalOfMonth(ExtendedDate date) - implements a static method to return the interval of a month in millisecondsSinceEpoch. This is used to generate the balance and will also be used to generate statistics in the app;
+    - ExtendedDate get onlyDate - a getter to return only the date (hours = 0, minutes = 0, sec = 0);
+    - ExtendedDate nextDay(), previusDay(), nextMonth() - generate an ExtendedDate of the next day, previous day and next month, respectively;
+    - implements support for operators >, >=, <, <= and == through direct comparison of the ExtendedDate millisecondsSinceEpoch.
+  * lib/common/generals/current_balance.dart:
+  * lib/common/generals/current_user.dart:
+  * lib/common/generals/current_wallet.dart:
+   - this modules were created to keep the current balance, current user and current wallet in use in the app. These are singletons created and accessed throughout its app code, with the informations:
+     - the balance of the current day;
+     - the information of the logged in user;
+     - from the wallet opened in the app.
+   - these new classes also have init() methods to start them, when necessary, and specific methods for their operation.
+  * lib/features/category/category_controller.dart:
+    - the constructor of the CategoryController class no longer receives a parameter. Now the CategoryRepository is loaded via getIt.get<CategoryRepository>();
+    - no longer has _categories list. This has been replaced by direct access to the list in categoryRepository.categories;
+    - categoryNames is now a getter for categoryRepository.categoriesMap.keys.toList();
+    - added a categoryRepository.init() in the init() of the class;
+    - method removeCategory now returns void;
+    - categoryImage, addCategory and updateCategory methods were remodeled, since the category list control is now done by categoryRepository.
+  * lib/features/category/category_page.dart:
+    - CategoryPage has been adapted to work with the new CategoryRepository and CategoryController guidelines.
+  * lib/features/category/widgets/dismissible_category.dart:
+  * lib/features/category/widgets/statefull_category_dialog.dart:
+  * lib/features/category/widgets/icon_selection_dialog.dart:
+    - have also been adjusted to accommodate changes to CategoriesIcons and CategoryController.
+  * lib/features/home_page/balance_card/balance_card.dart:
+  * lib/features/home_page/balance_card/balance_card_controller.dart:
+    - adjusted to accommodate changes in CardBalanceModel.
+  * lib/features/home_page/home_page.dart:
+  * lib/features/home_page/home_page_controller.dart:
+  * lib/features/home_page/widgets/transaction_list_tile.dart:
+    - adjusted to accommodate changes to HomePageController, BalanceCardController, CurrentUser, CurrentWallet and CurrentBalance.
+  * lib/features/home_page/widgets/cart_popup_menu_buttons.dart:
+    - at the moment some changes were made to generate test logs.
+  * lib/features/home_page_view/home_page_view.dart:
+  * lib/features/profile/profile_page.dart:
+  * lib/features/statistics/statistics_page.dart:
+  * lib/features/wallet/wallet_page.dart:
+   - adjusted to accommodate changes to CurrentUser, CurrentWallet and CurrentBalance.
+  * lib/features/sign_in/sign_in_controller.dart:
+  * lib/features/sign_in/sign_in_page.dart:
+  * lib/features/sign_up/sign_up_controller.dart:
+  * lib/features/sign_up/sign_up_page.dart:
+  * lib/features/splash/splash_controller.dart:
+  * lib/features/splash/splash_page.dart:
+    - Several changes were made to the login and splash control pages. Between them:
+      - when creating an account, the user receives a default wallet, configured as currentWallet;
+      - a new balance is generated, if there is none, for the current day in the open wallet;
+      - Logged user registration now uses a flag, userLogged, and no longer by secure_store package.
+  * lib/features/transaction/transaction_controller.dart:
+    - no receives arguments in the constructor;
+    - addTransactions and updateTransactions now use TransactionsManager to add/update a transaction;
+  * lib/features/transaction/transaction_page.dart:
+    - adjusted for changes in transactionControle and CategoryRepository.
+  * lib/locator.dart:
+    - due to changes in the project, several objects became Singleton, being started by demand. This generated many problems in the code during the implementations, generating many changes in the initialization of these objects. I had to carefully review each class and its obligations to fit this file.
+  * lib/main.dart:
+    - adjusted app startup for the new changes.
+  * lib/repositories/balance/balance_repository.dart:
+  * lib/repositories/balance/sqflite_balance_repository.dart:
+    - added to handle connections between database and app actions regarding adding, removing and updating a balance.
+  * lib/repositories/category/category_repository.dart:
+  * lib/repositories/category/sqflile_category_repository.dart:
+    - the categoryRepository now maintains a Map<String, CategoryDbModel> with all categories created in the app. As there are few categories, I thought it reasonable to keep them in memory while the app is running.
+  * lib/repositories/trans_day/trans_day_repository.dart:
+  * lib/repositories/trans_day/sqflite_trans_day_repository.dart:
+    - added to handle connections between database and app actions with respect to adding, removing and updating a transDay.
+  * lib/repositories/transaction/transaction_repository.dart:
+  * lib/repositories/transaction/sqflite_transaction_repository.dart:
+    - these modules are responsible for the first layer of abstraction between the database and the transactions in the app. As a first layer they just translate information between the database and how transactions are handled in the app. Transactions management by the app is done by TransactionsManager, described below;
+    - these modules underwent several changes to restrict their responsibilities only to the level of translation between the database and the app. This was necessary because the addition/removal and updating of new transactions started to require other information and actions, with the launch of balances, insertions and removals in the transDayTable, among others.
+  * lib/repositories/user/user_repository.dart:
+  * lib/repositories/user/sqflite_user_repository.dart:
+    - just like the CategoryRepository, the UserRepository also keeps in memory the user list registered in the system. Motivations are the same as used in CategoryRepository. In general, 1 to 2 users are expected in the same app and therefore little information is retained in memory.
+  * lib/repositories/wallet/wallet_repository.dart:
+  * lib/repositories/wallet/sqflite_wallet_repository.dart:
+    - the same as above.
+  * lib/services/database/database_helper.dart:
+  * lib/services/database/sqlflite_helper.dart:
+     - the database was completely restructured to meet the needs of the project. See the documentation for more details.
+     - elsewhere I removed unused code and renamed several methods to clearer and more objective names.
+  * lib/services/database/transactions_manager/balance_manager.dart:
+  * lib/services/database/transactions_manager/transactions_manager.dart:
+    - these classes were created to manage balances and transactions in the app. This was necessary to simplify the maintenance of modules in the app's code, keeping each module with limited and clear responsibilities.

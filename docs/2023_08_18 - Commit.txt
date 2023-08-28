@@ -1,0 +1,22 @@
+In this commit, several bugs were fixed. The description of the changes is provided below:
+
+* lib/features/category/category_controller.dart:
+  - Added a `WidgetsBinding.instance.addPostFrameCallback` before `notifyListeners` to synchronize frame rendering. This is used to enqueue the callback to the end of the next frame's layout.
+  - Multiple calls to `_changeState` were removed, and the responsibility of state change is now concentrated solely within the `getAllCategories` method.
+
+* lib/features/category/category_page.dart:
+  - `addCategory()` has been converted into a `Future` function.
+  - The ElevatedButton for adding now invokes the `AddCategoryDialog` class within a `showDialog` instead of the `statefullAddCategoryDialog`.
+
+* lib/features/category/widgets/add_category_dialog.dart:
+  - New class introduced to replace the `statefullAddCategoryDialog`. Issues with the `dispose` of `TextEditingController` used in the dialog prompted a more conventional approach to resolve the problem.
+
+* lib/features/category/widgets/dismissible_category.dart:
+  - Now utilizes the `AddCategoryDialog` class within a `showDialog` instead of the `statefullAddCategoryDialog`.
+
+* lib/features/category/widgets/statefull_add_category_dialog.dart:
+  * lib/features/category/statefull_category_dialog.dart:
+  - These modules were removed from the app.
+
+* lib/features/transaction/transaction_controller.dart:
+  - Added a missing `override` to the `accountIdByName` method.

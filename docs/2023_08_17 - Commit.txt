@@ -1,0 +1,24 @@
+This commit completes the implementation of transfers between accounts and fixes bugs in the process. More tests still need to be executed, however, the functionality of transferring values between accounts is working well. Below is a detailed breakdown of the changes:
+
+ * lib/common/models/category_db_model.dart:
+   - Improved the `toString()` method details by adding more information.
+ * lib/common/widgets/account_dropdown_form_field.dart:
+   - Added the default value to the `AccountDropdownFormField` class. The default account value is passed to the widget through a `TextEditingController` as a string. This value, known as `accountName`, is then converted to `accountId` using the new `accountIdByName` method in the `AccountRepository`.
+ * lib/features/account/widgets/statefull_add_account_dialog.dart:
+   - Now the `currentAccount` is updated when it undergoes any changes.
+ * lib/features/category/widgets/statefull_add_category_dialog.dart:
+   - I'm still facing issues with this stateful dialog. The `categoryController`, used in the form to control the category name, is being disposed of before closing the dialog or something similar. This has been marked as a TODO to be investigated more carefully later on. Currently, a 200ms delay is resolving the issue.
+ * lib/features/transaction/transaction_controller.dart:
+   - I had to add the `Future<void> getTransferAccountName` method to the `TransactionController` to load the account name to be edited in the case of a transfer.
+ * lib/features/transaction/transaction_page.dart:
+   - Added a call to load the account name to be edited in the case of a transfer in the `initState()` of `TransactionPageState`.
+   - The destination account's `accountId` is retrieved through the `accountName` passed by `_accountController.text` (a `TextEditingController`) in the `addAction()` method.
+   - The `_categoryId` is retrieved from the transaction passed to `TransactionPage`.
+ * lib/repositories/account/sqflite_account_repository.dart:
+   - Added the `accountIdByName` method to retrieve the `accountId` by `accountName`.
+ * lib/repositories/category/sqflile_category_repository.dart:
+   - Added a default category for Inputs, along with the Transfers category.
+ * lib/services/database/managers/transfers_manager.dart:
+   - Added documentation to the `updateTransfer` method. In the current version, the update is done by removing transactions from the previous transfer and creating a new transaction.
+ * lib/services/database/sqflite_helper.dart:
+   - Fixed a bug in the `deleteTransfer` method. The use of the `transferId` attribute was conflicting with the internal attribute of the `SqfliteHelper` class.

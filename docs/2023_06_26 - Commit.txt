@@ -1,0 +1,20 @@
+Changes:
+In this commit, I added edit category editing capability to the code with the following changes:
+ * lib/common/widgets/add_cancel_buttons.dart:
+   - added addIcon attribute to replace add icon with AddCancelButtons class.
+ * lib/common/widgets/basic_text_form_field.dart:
+   - added suffixIcon to add suffix icon in TextFormField widget.
+ * lib/features/category/category_page.dart:
+   - now the TextEditingController _categoryController is controlled by CategoryPage class;
+   - CategoryFloatingActinoButton has been removed and replaced by a direct call to the FloatingActionButton widget.
+ * lib/features/category/widgets/category_floating_action_button.dart:
+   - code removed.
+ * lib/features/category/widgets/dismissible_category.dart:
+   - DismissibleCategory has its own TextEditingController categoryController, to control edit and delete actions.
+ * lib/features/category/widgets/statefull_category_dialog.dart:
+   - extracted statefullCategoryDialog from CategoryFloatingActionButton class.
+ * lib/features/home_page/widgets/transaction_list_tile.dart:
+   - changed date format to use DateFormat.yMMMEd().add_Hm() format;
+   - add a helpDialog function, activated by a long press on a transaction.
+ * lib/features/transaction/transaction_page.dart:
+   - added a switch to diaplay Icons.thumb_up/Icons.thumb_down icons to indicate income/expanse release.

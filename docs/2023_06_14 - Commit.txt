@@ -1,0 +1,26 @@
+Changes:
+Add category is working.
+   * lib/features/add_category/add_category_controller.dart:
+     - added AddCategoryController. This will change to CategoryController in future commit.
+   * lib/features/add_category/add_category_page.dart:
+     - AddCategoryPage is now loading categories from database like HomePage loading transactions.
+     - TODO: I need to refactor this code in the future.
+   * lib/features/add_category/add_category_state.dart:
+     - define the abstract class AddCategoryCard.
+   * lib/features/sign_up/sign_up_controller.dart:
+     - now this module uses UserRepository locator to add CurrentUsers news in database.
+   * lib/locator.dart:
+     - Registered CategoryRepository and AddCategoryController.
+   * lib/repositories/category_repository.dart:
+     - define the CategoryRepository abstract class.
+   * lib/repositories/sqfile_category_repository.dart:
+     - implements CategoryRepository in the SqfileCategoryRepository class.
+   * lib/repositories/sqflite_transaction_repository.dart:
+     - now deleteTransaction returns an integer, the number of deleted records in the database.
+   * lib/repositories/sqlflite_user_repository.dart:
+     - implements UserRepository in the SqfliteUserRepository class.
+   * lib/repositories/user_repository.dart:
+     - declare the UserRepository abstract class.
+   * lib/services/database/sqlflite_helper.dart:
+     - several bugs fixed;
+     - added queryCategoryAtId method.

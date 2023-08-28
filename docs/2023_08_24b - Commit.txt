@@ -1,0 +1,24 @@
+* android/build.gradle:
+   - kotlin_version changed to 1.8.0.
+* lib/common/models/extends_date.dart:
+   - Fixed the bug on line 34. Changed from date.microsecond to date.millisecond;
+   - Simplified the getMillisecondsIntervalOfMonth method by adding the methods _isLeapYear(int year) and _lastDayOfMonth(ExtendedDate date) and removing the _isLeap getter.
+* lib/features/settings/settings_page_controller.dart:
+* lib/features/settings/settings_page_state.dart:
+* lib/features/settings/settings_page.dart:
+   - The SettingsPage now utilizes a controller to manage the state. This was necessary to access the app version;
+   - The app version is displayed on this page.
+* lib/features/statistics/statistic_card/statistic_card.dart:
+   - The state of this card is now controlled by the same controller as the StatisticPage.
+* lib/features/statistics/statistic_controller.dart:
+   - _incomes and _expenses have been transformed into Map<String, double>, with strDate as the key;
+   - _statisticsList has been transformed into Map<String, List<StatisticResult>>, also with strDate as the key;
+   - List<String> _strDates contains the list of strDate keys;
+   - The strDate getter returns the strDate at _index;
+   - The _index attribute holds the index of the selected strDate key;
+   - The methods nextMonth() and previousMonth() switch between strDate keys.
+* lib/features/statistics/statistics_page.dart:
+   - The StatisticsPage class has been modified to use strDate as the index for statistics;
+   - The rest of the class has been adapted to use the new attributes from StatisticsController.
+* pubspec.yaml:
+   - Added the package_info_plus package to gather app information.

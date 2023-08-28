@@ -1,0 +1,31 @@
+Adjusted iconData, decided to keep iconData being constructed by the app. Completed app internationalization using ChatGPT for message translation. Changes are as follows:
+ * android/build.gradle:
+   - Updated to version 1.7.10.
+ * lib/common/functions/function_alert_dialog.dart:
+ * lib/common/widgets/color_button.dart:
+ * lib/features/category/category_page.dart:
+ * lib/features/category/widgets/add_category_dialog.dart:
+ * lib/features/category/widgets/dismissible_category.dart:
+ * lib/features/category/widgets/icon_selection_dialog.dart:
+ * lib/features/database_recover/database_recover.dart:
+ * lib/features/home_page/home_page.dart:
+ * lib/features/settings/settings_page.dart:
+ * lib/features/sign_in/sign_in_page.dart:
+ * lib/features/statistics/statistic_card/statistic_card.dart:
+ * lib/features/statistics/statistics_page.dart:
+   - Added internationalization.
+ * lib/common/widgets/markdown_text.dart:
+   - Created this module to generate RichText from Markdown phrases. Currently supports only bold text.
+ * lib/features/account/account_page.dart:
+   - Implemented the use of MarkdownText;
+   - Added internationalization.
+ * lib/l10n/app_en.arb:
+ * lib/l10n/app_en_US.arb:
+   - Added new texts;
+   - Corrected spelling of some texts.
+ * lib/l10n/app_es.arb:
+ * lib/l10n/app_pt.arb:
+ * lib/l10n/app_pt_BR.arb:
+   - Revised translations.
+---
+

@@ -1,0 +1,24 @@
+Changes:
+ * lib/common/constants/themes/icons/fontello_icons_codes.dart:
+   - Added 6 more custom icons: sign-language, microchip, alimony, bill, services.
+ * lib/common/functions/card_income_function.dart:
+   - Added a function to assemble Incomes/Expenses for the Cards on the HomePage and Statistics pages.
+ * lib/common/validate/sign_validator.dart:
+   - Reduced the password validation requirement to only letters and numbers, up to 6 characters.
+ * lib/common/widgets/autocomplete_text_form_field.dart:
+   - Now removes focus from the widget after selecting one of the suggestions in AutocompleteTextFormField.
+ * lib/features/account/widgets/dismissible_account_card.dart:
+ * lib/features/home_page/balance_card/balance_card.dart:
+   - Residues in the balance were causing negative values of 0.00. These operation residues have been removed to ensure the integrity of operations;
+   - In BalanceCard, the method _incomeExpenseShowValue has also been removed and separated into an exclusive module for reuse by other Cards.
+ * lib/features/home_page/home_page_controller.dart:
+   - The maximum number of transactions to be presented on the HomePage is now an attribute of HomePageController and can be changed directly;
+   - The function getNextTransactions can also receive an integer attribute "more" to limit the number of new transactions to be collected.
+ * lib/features/statistics/statistic_card/statistic_card.dart:
+ * lib/features/statistics/statistic_controller.dart:
+ * lib/features/statistics/statistic_state.dart:
+ * lib/features/statistics/statistics_page.dart:
+   - Created a basic statistics page. This is not the final page yet, but it will be a starting point.
+ * lib/services/database/sqflite_helper.dart:
+   - The transDayTable has been changed to have only transDayTransId as the primary key;
+   - The method getTransactionSumsByCategory({required int startDate, required int endDate}) has been added to return the sum of transactions in categories within the date range from startDate to endDate.

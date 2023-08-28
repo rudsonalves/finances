@@ -1,0 +1,44 @@
+ * lib/common/constants/models/transaction_model.dart:
+ class TransactionModel
+   - userId changed from int to String?;
+   - method toMap() return a exception if userId is null;
+   - minor changes in toString() method with User replaced by UserId string.
+ * lib/common/widgets/add_transaction_card.dart: 
+ class AddTransactionCard:
+   - bool income now is passed as argument to RowOfTwoBottons() custom widget. The default value is changed to false (expense mode);
+   - added an IconButton to the future addCategory action;
+   - now, signal of receiving value of Income/Expanse selected in custom widge RowOfTwoBottons();
+   - date attribute of the TransactionModel in the valid transaction is parsed by DateTime from _dateController.text;
+   - the transaction is added to the database from TransactionRepository.addTransaction(transaction) via locator.get();
+   - now a new transaction is started after adding a transaction.
+ * lib/common/widgets/balance_card.dart:
+   - add a temporary reset button for database transactions in the BalanceCart widget;
+ * lib/common/widgets/custom_dropdown_form_field.dart:
+   - added a suffixicon attribute in the CustomDropdownFormField class.
+ * lib/common/widgets/date_time_picker_form.dart:
+   - fixed time format in method formatTime(TimeOfDay time);
+   - now the CustomDropdownFormField show two icons in the right corner: (Icons.calendar_month and Icons.schedule).
+ * lib/common/widgets/row_of_two_bottons.dart:
+   - the RowOfTwoBottons widget now have an initial state.
+ * lib/features/home/home_page.dart:
+   - elevation is made equal to 0, but it did not solve appBar warping while scrolling. This was left to be resolved in future releases.
+ * lib/features/home_page_view/home_page_view.dart:
+   - added NeverScrollableScrollPhysics() option in PageView physics attribute. This prevents gesture page scrolling.
+ * lib/locator.dart:
+   - replace TransactionRepositoryImpl by SqfliteTransactionRepository. TransactionRepositoryImpl is a mock repository transaction class.
+ * lib/repositories/mock_transaction_repository.dart:
+   - renamed transaction_repository.dart to mock_transaction_repository.dart.
+ * lib/repositories/sqflite_transaction_repository.dart:
+   - this module integrates sqflite database into the project with the methods: addTransaction; getAllTransactions; getTransactionId; updateTransaction; and deleteTransaction. All methods to an authenticated user.
+ * lib/repositories/transaction_repository.dart:
+   - this module is now the abtract class of TransactionRepository.
+ * lib/services/database/sqflite_helper.dart:
+   - added the definitions of a category table;
+   - reformulated _onCreate method;
+   - _onCreateUsersTable, _onCreateTransactionsTable, and the new _onCreateCategoryTable method now use the internal _db attribute to access database;
+   - insertUser and insertTransaction now have a conflictAlgorithm attribute with value ConflictAlgorithm.abort, to abort in cases of conflict;
+   - added queryUserTransactions method to return a list of Maps<String, dynamics> of user transactions, sorted by date/time;
+   - added updateTransactionId method;
+   - added clearTransactionsTable method. At this time, this method is for application development needs.
+ 
+

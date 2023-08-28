@@ -1,0 +1,6 @@
+Changes:
+In this commit I removed a small bug in the DismissibleCategory code and implemented the reload of categories in the CategoryPage code. Here are the changes:
+ * lib/features/category/widgets/dismissible_category.dart:
+   - the key of the Dismissible() widget has been changed from ValueKey<int>(controller.categories[index].categoryId!) to UniqueKey(). This was necessary because the widget was generating the error "A dismissed Dismissible widget is still part of the tree", when a category was removed by swiping.
+ * lib/features/category/category_controller.dart:
+   - now the addCategory, removeCategory and updateCategory methods have been implemented with a reload of the resulting categories in the database. For a small table the approach is a safe option for implementing this code, however a different approach should be considered for handing transactions.   

@@ -1,0 +1,11 @@
+* lib/common/widgets/custom_modal_bottom_sheet.dart:
+   - The CustomModalBottomSheet now automatically resizes to adjust to the size of the displayed message.
+* lib/features/database_recover/database_recover.dart:
+   In this class, several code improvements have been implemented to enhance readability and flexibility. These include:
+   - Addition of the enum DialogStates {create, restore, createRestore} to customize the type of dialog to be presented.
+   - Introduction of the DialogStates dialogState attribute to choose the appropriate dialog type to display.
+   - Inclusion of methods dialogMessage(), dialogCreateBackup(), dialogRestoreBackup(), and dialogDivider() to enhance code readability.
+* lib/features/settings/settings_page.dart:
+   - Adjusted the SettingsPage to appropriately select the DatabaseRecover dialog.
+* lib/features/sign_in/sign_in_page.dart:
+   - Modified the customModalBottomSheet call to display the DatabaseRecover(dialogState: DialogStates.restore) dialog if necessary.

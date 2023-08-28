@@ -1,0 +1,121 @@
+In this commit, various changes were made to the code, ranging from bug fixes to the implementation of account transfers, along with several other modifications. Below are more detailed descriptions of the changes:
+
+* `lib/common/constants/themes/icons/trademarks_icons_codes.dart`:
+   - Added new icons: citibank, jpmorgan_chase, wellsfargo, goldmansachs, itaubank, authelia, bradesco_bank.
+
+* `lib/common/models/account_db_model.dart`:
+* `lib/common/models/balance_db_model.dart`:
+* `lib/common/models/card_balance_model.dart`:
+* `lib/common/models/category_db_model.dart`:
+* `lib/common/models/icons_model.dart`:
+* `lib/common/models/language_model.dart`:
+* `lib/common/models/trans_day_db_model.dart`:
+* `lib/common/models/user_db_model.dart`:
+   - Cosmetic changes in the `toString()` method.
+
+* `lib/common/models/transaction_db_model.dart`:
+   - Modified the `toString()` method.
+   - The `transStatus` attribute is now an enum `TransStatus{transactionNotChecked, transactionChecked}`.
+   - Added the `copyToTransfer()` method to generate a copy of the transaction with the inverted `transValue`.
+   - Simplified the `toMap()` method.
+   - Adjusted the `factory TransactionDbModel.fromMap` method.
+   - Added the `Future<void> updateTransaction()` method to update the transaction in the database.
+
+* `lib/common/models/transfer_db_model.dart`:
+   - Created a model for transfers.
+
+* `lib/common/validate/sign_validator.dart`:
+   - Corrected email validation. Now, it's necessary to have two to three characters at the end of the email.
+
+* `lib/common/widgets/account_dropdown_form_field.dart`:
+   - Created a dropdown list for selecting accounts.
+
+* `lib/common/widgets/category_dropdown_form_field.dart`:
+   - Renamed the `CustomDropdownFormField` class to `CategoryDropdownFormField`, as the class is specialized in handling categories.
+   - The items are now loaded directly from `categoryRepository.categoriesMap.keys.toList()`.
+
+* `lib/common/widgets/custom_floating_action_button.dart`:
+   - Renamed the `TransactionFloatingButton` class to `CustomFloatingActionButton`, as it's a more generic class.
+
+* `lib/features/account/account_page.dart`:
+   - The base `Card` was replaced by a `Container` to adjust colors and standardize the app.
+
+* `lib/features/category/category_controller.dart`:
+   - Now, only the `getAllCategories()` method manages the states in `CategoryState`. There were issues with excessive calls to `getAllCategories()` that led to state conflicts. The updated approach now requires calling `getAllCategories()` to update the categories.
+
+* `lib/features/category/category_page.dart`:
+   - Removed the `TextEditingController _categoryController` from this page and moved it to the widget that uses it.
+   - Added the `addCategory()` and `callBack()` methods to manage page refreshing.
+   - Replaced the `Card` widget with a `Container` to adjust colors and standardize the app.
+
+* `lib/features/category/statefull_category_dialog.dart`:
+   - This dialog is temporarily disabled, with its content commented out. I'm still considering whether to utilize it.
+
+* `lib/features/category/widgets/dismissible_category.dart`:
+   - Added control to preserve category with ID 1 for account transfers. Category with ID 1 can be edited but not deleted.
+
+* `lib/features/category/widgets/statefull_add_category_dialog.dart`:
+   - This dialog now creates its own `TextEditingController` for the category. The issue of disposing this controller still needs to be resolved.
+
+* `lib/features/home_page/home_page.dart`:
+   - Now, this page is redrawn with each call.
+
+* `lib/features/home_page/widgets/cart_popup_menu_buttons.dart`:
+   - Made minor adjustments to the main page menu.
+
+* `lib/features/home_page/widgets/transaction_list_tile.dart`:
+   - Added removal of transfers.
+
+* `lib/features/home_page_view/home_page_view.dart`:
+   - The `HomePageView` now passes the `addTransaction` or `AddAccount` function to the `floatingActionButton` based on the open page.
+
+* `lib/features/onboarding/onboarding_page.dart`:
+   - Simplified the images presented in the `OnboardingPage`.
+
+* `lib/features/sign_in/sign_in_controller.dart`:
+   - Added the option for password recovery to the `SignInController`.
+
+* `lib/features/sign_in/sign_in_page.dart`:
+   - Added widgets and code for requesting password changes.
+
+* `lib/features/sign_up/sign_up_page.dart`:
+* `lib/features/splash/splash_page.dart`:
+   - The disposal order in these classes, along with others using the `dispose()` method, had the sequence of disposal changed. Now, `super.dispose()` is the first to be released.
+
+* `lib/features/transaction/transaction_page.dart`:
+   - Adjusted the order of disposal.
+   - The `addAction()`
+
+ method now checks if a destination `AccountDbModel` (`account1`) was passed. If `account1` is provided, it's loaded into `account1` for use in an account transfer.
+   - If `account1` (destination account) is passed, a transfer between accounts is initiated. Otherwise, only a transaction is recorded.
+   - Added an `AccountDropdownFormField` to receive the destination account for a transfer.
+
+* `lib/locator.dart`:
+   - New locators registered: `TransferRepository` and `AccountController`.
+
+* `lib/repositories/account/sqflite_account_repository.dart`:
+   - Added the `getAccount` method to retrieve an account by its ID.
+
+* `lib/repositories/transfer_repository/transfer_repository.dart`:
+* `lib/repositories/transfer_repository/sqflite_transfer_repository.dart`:
+   - Added the `TransferRepository` (abstract) and `SqfliteTransferRepository` classes to handle account information in the database.
+
+* `lib/services/authentication/auth_service.dart`:
+* `lib/services/authentication/firebase_auth_service.dart`:
+   - Added the `recoverPassword` method for password recovery.
+
+* `lib/services/database/database_helper.dart`:
+* `lib/services/database/sqflite_helper.dart`:
+   - Added the `insertTransfer` method to insert a transfer into the database.
+   - Added the `updateTransaction` method to update a transfer in the database.
+   - Added the `deleteTransDay` method to remove a transfer from the database.
+   - Added the `queryTransDay` method to load a transfer from the database.
+   - The logging methods were separated into various individual methods: `logTransactions()`, `logBalances()`, `logTransDay()`, `logTransfers()`, `logCategories()`.
+   - Added a method for creating the `transfersTable` table.
+
+* `lib/services/database/managers/account_manager.dart`:
+* `lib/services/database/managers/balance_manager.dart`:
+* `lib/services/database/managers/transactions_manager.dart`:
+* `lib/services/database/managers/transfers_manager.dart`:
+   - Several methods were reviewed and had varying levels of documentation added.
+---

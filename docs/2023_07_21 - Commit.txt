@@ -1,0 +1,15 @@
+In this commit, I implemented a "more transactions" button and added an autocomplete for the description field in the TransactionsPage. See the description below for more details:
+ * lib/common/current_models/current_balance.dart:
+   - added a factory contructor CurrentBalance.fromWalletDbModel(BalanceDbModel balance).
+ * lib/common/models/user_db_model.dart:
+   - replace the default language 'en' by 'en_US'.
+ * lib/common/widgets/autocomplete_text_form_field.dart:
+   - added a AutocompleteTextformField class to use the description of old transactions to autocomplete descriptions entry in the new transactions.
+ * lib/features/home_page/home_page.dart:
+   - added a 'more transactions' button in the ListView to open the oldest transactions in the HomePage.
+ * lib/features/home_page/home_page_controller.dart:
+   - added a ExtendedDate _lastDate variable to track the date of the last transaction displayed on the HomePage. If _lastDate is null, there are no more transactions in the current wallet;
+   - the _updateLastDate() method was created to check if the last balance has a balancePreviousId equal to null, if true set _lastDate to null too;
+   - getNextTransactions() method get the more old transactions from database, using _lastDate as starting date.
+ * lib/features/transaction/transaction_page.dart:
+   - replaced BasicTextFormField with AutocompleteTextFormField and added transaction descriptions as suggestions to the description field.

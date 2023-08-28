@@ -1,0 +1,8 @@
+Changes:
+In this commit I added some implementations to add a new CategoryModel class. With this class I changed the structure of the database and made a many changes, as described bellow.
+ * lib/common/constants/models/category_model.dart:
+   - added new CategoriesModel class, to control categories in transactions.
+ * lib/common/constants/models/current_user_model.dart:
+   - renamed several attributes in CurrentUser class for better standardization.
+ * lib/common/constants/models/transaction_model.dart:
+   - 

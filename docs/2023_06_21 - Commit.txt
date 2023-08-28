@@ -1,0 +1,37 @@
+Mudanças:
+Este comentário serão feitos em português, pois vai me faltar inglês para expressar o que necessito neste commit.
+ * lib/app.dart:
+   - foi adicionado uma entrada no roteamento para a página TransactionPage. TransactionPage recebe dois argumentos de entrada, mas nenhum deles é obrigatório. São eles:
+     - addTransaction - um booleano que é true se for um diálogo de adição de uma transação e false se for um upgrade. Eventualmente vou alterar isto para um enum com valores como: addTransaction e updateTransaction.No momento o seu valor padrão é true, adição de uma nova transação;
+     - transaction - a transação em si. Este é um TransactionModel?, ou seja pode ser nulo.
+   A adição do roteamento é feito por meio do ModalRoute.of(context) para passar o argumento via um Map<String, dynamic>. A forma como isto funciona me ficou claro nesta implementação. O roteador recebe os parâmetros de um Navigator.pushNamed via um Map<String, dynamic> passado pelo parâmetro arguments. Estes parâmetros são recebidos e enviados para uma chamada ao TransactionPage(), através do seu construtor padrão.
+ * lib/common/constants/routes/app_route.dart:
+   - a ideia inicial das classes AppRoute e Route não contemplam o uso do roteamento descrito acima, mas por enquanto vou manter a implementação, pois me simplifica a manutenção das demais páginas.
+ * lib/common/extensions/money_masked_text_controller.dart:
+   - este é um pacote importado do https://github.com/LeandroNovak/extended_masked_text.git. Em linhas gerais ele implementa uma extensão do TextEditingController, adicionando propriedades para a entrada de valores financeiros. A implementação me parece simples e a estratégia é bem interessante. Devo usá-lo para implementar algo semelhante para um pseudo controle que implementei para usar no CustomDropdownFormField do TransactionPage.
+ * lib/common/validate/transaction_validator.dart:
+   - atualizei o TransactionValidator para validar adequadamente o valor de amount, uma fez que agora ele emprega o MoneyMaskedTextController.
+ * lib/features/category/widgets/category_floating_action_button.dart:
+   - apenas pequenas correções de texto.
+ * lib/features/category/widgets/select_icon_row.dart:
+   - neste código adicionei um FocusScope.of(context).unfocus() para remover o foco da widget de filtro de ícones. Tenho de me lembrar deste FocusScope, muito útil para remover o teclado em páginas de formulário, quando estes estão preenchidos.
+ * lib/features/home/home_page_controller.dart
+ * lib/features/home/home_page_state.dart
+ * lib/features/home/home_page.dart:
+   - renomeei esta feature de home para home_page. Exite outras mudanças mais importantes feitas nestes pacotes, mas as mesmas são feitas em outros pontos do código e serão comentadas adiante.
+ * lib/features/home_page/widgets/transaction_list_tile.dart:
+   - neste código dá para ver uma das principais mudanças deste commit. A função onTap, usada para chamar a página TransactionPage, agora executa a alteração da transação antes de retornar a página originaria. Isto garante que os dados foram alterados no banco de dados e possam ser empregados para a criação da nova tela. O problema foi que o Navigator.push... é um Future, e portanto o código seguia a execução e os locator.get<HomePageController>().getAllTransactions() e o locator.get<BalanceCardController>().getBalance() não carregavam nenhuma nova transação/categoria, já que estes não haviam sido atualizados no banco de dados.
+   A adição de um await no Navigator.push..., ou um .then(...) como feito em outros pontos do código, resolvem a questão.
+   Este é um ponto importante da proposta do padrão do projeto, onde daca feature é responsável por apenas uma característica do aplicativo.
+ * lib/features/home_page_view/home_page_view.dart:
+   - o mesmo foi feito na função addTransactionPressed, para aguardar que a nova transação seja adicionada ao banco de dados.
+ * lib/features/transaction/widgets/general_aap_bar.dart:
+   - esta é uma adição importante pois dela deve sair a construção de todas as AppBars que no momento estão empregando a widget AppBar() padrão. Da forma proposta aqui é possível rolar a página sem criar um vinco na parte inferior da AppBar, e simplifica a criação do gradiente de cores da AppBar, visto que este se torna um único widget.
+ * lib/features/transaction/transaction_page_controller.dart
+ * lib/features/transaction/transaction_page.dart
+ * lib/features/transaction/transaction_page_state.dart:
+   - esta página foi criada para substituir o TransactionDialog. Esta substituição é incerta no momento e devo avaliar melhor adiante. A meu ver um dialogo é o mais adequado para a inserção/edição de uma transação. No entanto, por ser muita informação e o pequeno espaço disponível na tela do celular, uma página me parece fazer melhor o serviço. 
+   No entanto, a implementação do dialogo statefull ficou bem interessante para ser descartado e devo guardar este código no projeto, ainda que inativo, por algum tempo.
+   Outro ponto interessante desta implementação foi o uso da widget SingleChildScrollView, que permite encapsular uma parte do dialogo em uma área scrollable e que ainda cresce por demanda dentro de um uma widget Positioned(), impedindo que ela se estenda por toda a tela do dispositivo.
+   
+De certo tem bem mais alterações para serem comentadas, no entanto não vou me lembrar de todas e novamente perdi muitas com a renomeação e mudança de diretório de alguns arquivos. Vou tentar fazer commits menores e mas bem comentados.

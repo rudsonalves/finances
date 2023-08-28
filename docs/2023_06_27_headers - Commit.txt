@@ -1,0 +1,42 @@
+Changes:
+The colors were all adjusted to the theme using Material3. Three colors are customized as Extended Colors:
+  - SubPrimary: has Tone 30 above Primary;
+  - SubTertiary: has Tone 30 above Tertiary;
+  - MediumPrimary: an intermediate Tone between Primary and SubPrimary.
+The other changes are shown below:
+  * lib/common/constants/themes/app_colors.dart:
+    - now AppColors uses the context to get the colors of the theme in use. There are still a few tweaks to the dark theme.
+  * lib/common/constants/themes/colors/color_schemes.g.dart:
+  * lib/common/constants/themes/colors/custom_color.g.dart:
+    - updated theme to a blue one.
+  * lib/common/extensions/app_scale.dart:
+    - I created an AppScale class to store the application's scale. At the moment this is only being used to adjust the text size, but I intend to extend its use in the future.
+  * lib/common/widgets/app_top_border.dart:
+    - This class only generates the bottom part of the screen decoration. This was about to be removed from the code, but I managed to resolve the issues with the AppBar and am using an implementation of it for the app.
+  * lib/common/widgets/custom_app_bar.dart:
+    - This is the CustomAppBar class, which customizes an AppBar with the properties:
+      * automaticallyImplyLeading: false;
+      * foregroundColor: can be colorScheme.onPrimary or colorScheme.tertiary, depending on the enableColor flag;
+      * elevation: 0;
+      * scrolledUnderElevation: 0.0. This guarantees that no crease will be generated at the base of the AppBar when a ListView is moved upwards;
+      * flexibleSpace: a Container with the app's decoration colors.
+   Otherwise, the class replicates an AppBar.
+  * lib/common/widgets/image_header.dart:
+  * lib/common/widgets/main_app_bar.dart:
+   - removed from the code. They are no longer used.
+  * lib/features/category/category_page.dart:
+  * lib/features/home_page/balance_card/balance_card.dart:
+  * lib/features/profile/profile_page.dart:
+  * lib/features/statistics/statistics_page.dart:
+  * lib/features/wallet/wallet_page.dart:
+    - all these pages had their AppBar replaced by the CustomAppBar class.
+  * lib/features/category/widgets/categories_header.dart:
+    - just some cosmetic changes.
+  * lib/features/category/widgets/dismissible_category.dart:
+    - bug fix.
+  * lib/features/splash/splash_controller.dart:
+    - added a 1 second delay for the screen to be displayed.
+  * lib/features/transaction/widgets/general_app_bar.dart:
+   - renamed to custom_app_bar.dart.
+  * lib/locator.dart:
+    - registered the AppScale class as a LazySingleton.

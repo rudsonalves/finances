@@ -1,0 +1,29 @@
+ * lib/common/constants/routes/app_route.dart:
+ * lib/features/category/category_page.dart:
+   - renamed AddCategoryPage to CategoryPage.
+ * lib/common/current_models/current_balance.dart:
+ * lib/features/home_page/home_page_controller.dart:
+ * lib/features/transaction/transaction_controller.dart:
+   - BalanceManager and TransactionsManager are now non-intanciable class, that is, they only have static methods.
+ * lib/common/widgets/image_header.dart:
+ * lib/common/widgets/main_app_bar.dart:
+   - removed from the code. This codes have been disable for a long time
+ * lib/common/widgets/row_of_two_bottons.dart:
+ * lib/common/widgets/widget_alert_dialog.dart:
+ * lib/features/category/widgets/categories_header.dart:
+ * lib/features/category/widgets/category_text_field.dart:
+ * lib/features/category/widgets/dismissible_category.dart:
+ * lib/features/category/widgets/icon_selection_dialog.dart:
+ * lib/features/category/widgets/statefull_category_dialog.dart:
+ * lib/features/home_page/home_page_controller.dart:
+   - these widgets have been translated.
+ * lib/l10n/app_en.arb, app_en_US.arb, ...:
+   - added news messages in translation.
+ * lib/features/transaction/transaction_page.dart:
+   - fixed category list update on TransactionPage.
+ * lib/locator.dart:
+ * lib/services/database/transactions_manager/balance_manager.dart:
+ * lib/services/database/transactions_manager/transactions_manager.dart:
+ * lib/services/database/transactions_manager/wallet_manager.dart:
+   - Lazy Singleton TransactionsManager and BalanceManager have been removed from locator.dart. Now these classes are non-instanciable with statics methods.
+
