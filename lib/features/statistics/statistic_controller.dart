@@ -83,6 +83,7 @@ class StatisticsController extends ChangeNotifier {
       _incomes.clear();
       _expanses.clear();
       _strDates.clear();
+      final Map<String, StatisticTotal> totals = {};
 
       ExtendedDate date = ExtendedDate.now();
       int startDate;
@@ -113,12 +114,31 @@ class StatisticsController extends ChangeNotifier {
           } else {
             expanses += result.totalSum;
           }
+          if (totals.containsKey(result.categoryName)) {
+            totals[result.categoryName]!.addValue(result.totalSum);
+          } else {
+            totals[result.categoryName] =
+                StatisticTotal.create(result.totalSum);
+          }
         }
         _incomes[strDate] = incomes;
         _expanses[strDate] = expanses;
 
         count++;
         date = date.previousMonth();
+      }
+
+      for (final thisDate in _statisticsList.keys) {
+        final List<StatisticResult>? statDate = _statisticsList[thisDate];
+        if (statDate == null || statDate.isEmpty) {
+          continue;
+        }
+        for (int index = 0; index < statDate.length; index++) {
+          final category = statDate[index].categoryName;
+          final average = totals[category]!.average.abs();
+          statDate[index].variation =
+              100 * (statDate[index].totalSum.abs() - average) / average;
+        }
       }
       _strDates = _strDates.reversed.toList();
       _index = _strDates.length - 1;
@@ -129,13 +149,37 @@ class StatisticsController extends ChangeNotifier {
   }
 }
 
+class StatisticTotal {
+  double total;
+  int count;
+
+  double get average => total / count;
+  // double get annualAverage => total / 12;
+
+  StatisticTotal(
+    this.total, [
+    this.count = 1,
+  ]);
+
+  static StatisticTotal create(double value) {
+    return StatisticTotal(value);
+  }
+
+  void addValue(double value) {
+    total += value;
+    count++;
+  }
+}
+
 class StatisticResult {
   String categoryName;
   double totalSum;
+  double variation;
 
   StatisticResult({
     required this.categoryName,
     required this.totalSum,
+    this.variation = 0.0,
   });
 
   @override

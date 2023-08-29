@@ -48,6 +48,39 @@ class _StatisticsPageState extends State<StatisticsPage>
     }
   }
 
+  Widget variationColumn(double value) {
+    final colorScheme = Theme.of(context).colorScheme;
+    IconData icon;
+    Color color;
+
+    if (value > 0) {
+      icon = Icons.arrow_upward;
+      color = colorScheme.primary;
+    } else if (value < 0) {
+      icon = Icons.arrow_downward;
+      color = colorScheme.error;
+    } else {
+      icon = Icons.horizontal_rule;
+      color = colorScheme.primary;
+    }
+
+    return Column(
+      children: [
+        Icon(
+          icon,
+          color: color,
+          size: 18,
+        ),
+        Text(
+          '${value.toStringAsFixed(0)}%',
+          style: AppTextStyles.textStyleBold10.copyWith(
+            color: color,
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -140,15 +173,22 @@ class _StatisticsPageState extends State<StatisticsPage>
                                 bool minus = item.totalSum < 0;
                                 return ListTile(
                                   leading: icon,
-                                  title: Text(item.categoryName),
-                                  trailing: Text(
-                                    money.text(item.totalSum),
-                                    style: AppTextStyles.textStyleSemiBold18
-                                        .copyWith(
-                                            color: minus
-                                                ? colorScheme.error
-                                                : colorScheme.primary,
-                                            fontWeight: FontWeight.w700),
+                                  title: Row(
+                                    children: [
+                                      Text(item.categoryName),
+                                      const Spacer(),
+                                      Text(
+                                        money.text(item.totalSum),
+                                        style: AppTextStyles.textStyleSemiBold18
+                                            .copyWith(
+                                                color: minus
+                                                    ? colorScheme.error
+                                                    : colorScheme.primary,
+                                                fontWeight: FontWeight.w700),
+                                      ),
+                                      const SizedBox(width: 4),
+                                      variationColumn(item.variation),
+                                    ],
                                   ),
                                 );
                               },
