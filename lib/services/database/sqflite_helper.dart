@@ -1121,6 +1121,22 @@ class SqfliteHelper implements DatabaseHelper {
   }
 
   @override
+  Future<int> updateTransactionStatus(int id, int newStatus) async {
+    try {
+      int result = await _db.update(
+        transactionsTable,
+        {transStatus: newStatus},
+        where: '$transId = ?',
+        whereArgs: [id],
+      );
+      return result;
+    } catch (err) {
+      log('Error: $err');
+      return -1;
+    }
+  }
+
+  @override
   Future<int> deleteTransactionId(int id) async {
     try {
       int result = await _db.delete(

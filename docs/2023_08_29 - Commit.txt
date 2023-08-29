@@ -1,0 +1,21 @@
+---
+In this commit, one more color adjustment to the app and the addition of transaction status change were made. See the details of the changes below:
+
+* lib/common/constants/themes/colors/color_schemes.g.dart:
+* lib/common/constants/themes/colors/custom_color.g.dart:
+  - One more adjustment to the app's theme colors.
+* lib/common/models/transaction_db_model.dart:
+  - Created a getter to return true if the transaction status is `TransStatus.transactionChecked`;
+  - Added the method `toggleTransStatus` (and the auxiliary method `_toggleStatus`) to allow changing the transaction status and recording the change in the database.
+* lib/features/home_page/balance_card/balance_card.dart:
+  - Added a `Switch` button to enable and disable the transaction status change.
+* lib/features/home_page/balance_card/balance_card_controller.dart:
+  - Added a boolean attribute `_transStatusCheck` to control the `Switch` button of `BalanceCard`;
+  - Added the method `Future<void> toggleTransStatusCheck` to enable and disable the `Switch` button of `BalanceCard`. This method changes the state of `BalanceCard` to force its redraw.
+* lib/features/home_page/widgets/transaction_dismissible_tile.dart:
+  - `TransactionDismissibleTile` has been changed to a `StatefulWidget` to allow a setState on the transactions on the `HomePage`;
+  - Added the `onTap` method to the `ListTile` widget to trigger the transaction status change if `BalanceCardController.transStatusCheck` is true.
+* lib/l10n/app_en.arb b/lib/l10n/*:
+  - Updated with the translation of the tooltip for the `Switch` added to the `BalanceCard`.
+* lib/services/database/sqflite_helper.dart:
+  - added the method `updateTransactionStatus(int id, int newStatus)` to update only the transaction status for a transaction.

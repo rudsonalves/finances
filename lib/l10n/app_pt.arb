@@ -8,6 +8,7 @@
     "balanceCardBalance": "Saldo Total",
     "balanceCardIncomes": "Entradas",
     "balanceCardExpenses": "Despesas",
+    "balanceCardSwitch": "Confirma transações",
     "balanceCardError": "Ocorreu um erro! Por favor, tente novamente mais tarde.",
     "homePageTransHistory": "Histórico de Transações",
     "homePageNoTransactions": "Não há transações neste momento.",

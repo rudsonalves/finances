@@ -17,19 +17,27 @@ import '../../../repositories/category/category_repository.dart';
 import '../../../common/functions/base_dismissible_container.dart';
 import '../../../services/database/managers/transactions_manager.dart';
 
-class TransactionDismissibleTile extends StatelessWidget {
+class TransactionDismissibleTile extends StatefulWidget {
   final double textScale;
   final TransactionDbModel transaction;
   final void Function()? onTap;
 
-  TransactionDismissibleTile({
+  const TransactionDismissibleTile({
     super.key,
     required this.textScale,
     required this.transaction,
     this.onTap,
   });
 
+  @override
+  State<TransactionDismissibleTile> createState() =>
+      _TransactionDismissibleTileState();
+}
+
+class _TransactionDismissibleTileState
+    extends State<TransactionDismissibleTile> {
   final homePageController = locator.get<HomePageController>();
+
   final balanceCardController = locator.get<BalanceCardController>();
 
   Widget rowTransaction(String title, String content) {
@@ -105,14 +113,15 @@ class TransactionDismissibleTile extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final money = locator.get<MoneyMaskedText>();
+    final balanceCardController = locator.get<BalanceCardController>();
 
-    double value = transaction.transValue;
+    double value = widget.transaction.transValue;
     bool minus = value.isNegative;
     value = value.abs();
 
     final CategoryDbModel category =
         locator.get<CategoryRepository>().getCategoryId(
-              transaction.transCategoryId,
+              widget.transaction.transCategoryId,
             );
     final AppLocalizations locale = AppLocalizations.of(context)!;
 
@@ -140,29 +149,36 @@ class TransactionDismissibleTile extends StatelessWidget {
           label: locale.transactionListTileDelete,
         ),
         child: Card(
+          elevation: widget.transaction.ischecked ? 0 : 1,
           margin: EdgeInsets.zero,
           child: ListTile(
-            leading: category.categoryIcon.iconWidget(size: 32),
+            leading: category.categoryIcon.iconWidget(size: 28),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   maxLines: 2,
-                  transaction.transDescription,
+                  widget.transaction.transDescription,
                   style: AppTextStyles.textStyle16,
                 ),
                 Text(
-                  transaction.transDate.toString(),
+                  widget.transaction.transDate.toString(),
                   style: AppTextStyles.textStyle11,
                 ),
               ],
             ),
             trailing: Text(
-              money.text(transaction.transValue),
+              money.text(widget.transaction.transValue),
               style: AppTextStyles.textStyleSemiBold18.copyWith(
                   color: minus ? colorScheme.error : colorScheme.primary,
                   fontWeight: FontWeight.w700),
             ),
+            onTap: () async {
+              if (balanceCardController.transStatusCheck) {
+                await widget.transaction.toggleTransStatus();
+                setState(() {});
+              }
+            },
           ),
         ),
         confirmDismiss: (direction) async {
@@ -173,7 +189,7 @@ class TransactionDismissibleTile extends StatelessWidget {
               AppRoute.transaction.name,
               arguments: {
                 'addTransaction': false,
-                'transaction': transaction,
+                'transaction': widget.transaction,
               },
             );
             locator.get<StatisticsController>().requestRedraw();
@@ -183,21 +199,22 @@ class TransactionDismissibleTile extends StatelessWidget {
           }
           if (direction == DismissDirection.endToStart) {
             // Delete
-            bool? action = await deleteTransactionDialog(context, transaction);
+            bool? action =
+                await deleteTransactionDialog(context, widget.transaction);
 
             if (action ?? false) {
               try {
-                if (transaction.transTransferId == null) {
-                  await TransactionsManager.removeTransaction(transaction);
+                if (widget.transaction.transTransferId == null) {
+                  await TransactionsManager.removeTransaction(
+                      widget.transaction);
                 } else {
-                  await TransfersManager.removeTransfer(transaction);
+                  await TransfersManager.removeTransfer(widget.transaction);
                 }
                 locator.get<StatisticsController>().requestRedraw();
                 homePageController.getTransactions();
                 balanceCardController.getBalance();
                 return true;
               } catch (err) {
-                // ignore: use_build_context_synchronously
                 if (!context.mounted) return false;
                 functionAlertDialog(
                   context,

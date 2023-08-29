@@ -13,6 +13,9 @@ class BalanceCardController extends ChangeNotifier {
   final transactionRepository = locator.get<TransactionRepository>();
   final accountRepository = locator.get<AccountRepository>();
   ExtendedDate _balanceDate = ExtendedDate(1980, 1, 1);
+  bool _transStatusCheck = false;
+
+  bool get transStatusCheck => _transStatusCheck;
 
   BalanceCardController();
 
@@ -69,5 +72,12 @@ class BalanceCardController extends ChangeNotifier {
   void setBalanceDate(ExtendedDate date) {
     _balanceDate = date;
     getBalance();
+  }
+
+  Future<void> toggleTransStatusCheck() async {
+    changeState(BalanceCardStateLoading());
+    _transStatusCheck = !_transStatusCheck;
+    Future.delayed(const Duration(milliseconds: 50));
+    changeState(BalanceCardStateSuccess());
   }
 }

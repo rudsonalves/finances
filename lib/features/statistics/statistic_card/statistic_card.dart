@@ -38,7 +38,7 @@ class _StatisticCardState extends State<StatisticCard> {
     return Positioned(
       left: 24,
       right: 24,
-      top: 15,
+      top: 10,
       child: Card(
         color: primary,
         elevation: 5,

@@ -42,13 +42,24 @@ class _BalanceCardState extends State<BalanceCard> {
     final currentBalance = locator.get<CurrentBalance>();
     final currentAccount = locator.get<CurrentAccount>();
     final formattedDate = DateFormat('MMMM y', locale.localeName);
+
     // TODO: check this
     // log('BalanceClose residue: ${currentBalance.balanceClose}');
+
+    final MaterialStateProperty<Icon?> thumbIcon =
+        MaterialStateProperty.resolveWith<Icon?>(
+      (Set<MaterialState> states) {
+        if (states.contains(MaterialState.selected)) {
+          return const Icon(Icons.check);
+        }
+        return const Icon(Icons.close);
+      },
+    );
 
     return Positioned(
       left: 24,
       right: 24,
-      top: 15,
+      top: 10,
       child: Card(
         elevation: 5,
         color: colorScheme.primary,
@@ -73,58 +84,85 @@ class _BalanceCardState extends State<BalanceCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        PopupMenuButton<int>(
-                          child: Row(
+                        Expanded(
+                          flex: 2,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              currentAccount.accountIcon.iconWidget(
-                                size: 20,
-                                color: customColors.sourceLightyellow,
-                              ),
-                              const SizedBox(width: 6),
-                              Text(
-                                currentAccount.accountName,
-                                maxLines: 1,
-                                style:
-                                    AppTextStyles.textStyleSemiBold14.copyWith(
-                                  color: customColors.sourceLightyellow,
+                              PopupMenuButton<int>(
+                                child: Row(
+                                  children: [
+                                    currentAccount.accountIcon.iconWidget(
+                                      size: 20,
+                                      color: customColors.sourceLightyellow,
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      currentAccount.accountName,
+                                      maxLines: 1,
+                                      style: AppTextStyles.textStyleSemiBold14
+                                          .copyWith(
+                                        color: customColors.sourceLightyellow,
+                                      ),
+                                    ),
+                                  ],
                                 ),
+                                onSelected: (accountId) {
+                                  final account =
+                                      widget.controller.accountsMap[accountId]!;
+                                  widget.balanceCallBack(account);
+                                },
+                                itemBuilder: (BuildContext context) {
+                                  return widget.controller.accountsList
+                                      .map((account) {
+                                    return PopupMenuItem(
+                                      value: account.accountId,
+                                      child: Row(
+                                        children: [
+                                          account.accountIcon
+                                              .iconWidget(size: 16),
+                                          const SizedBox(width: 8),
+                                          Text(account.accountName),
+                                        ],
+                                      ),
+                                    );
+                                  }).toList();
+                                },
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    money.text(currentBalance.balanceClose),
+                                    textAlign: TextAlign.left,
+                                    style:
+                                        AppTextStyles.textStyleBold22.copyWith(
+                                      color:
+                                          currentBalance.balanceClose < -0.005
+                                              ? customColors.sourceMinusred
+                                              : colorScheme.onPrimary,
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                ],
                               ),
                             ],
                           ),
-                          onSelected: (accountId) {
-                            final account =
-                                widget.controller.accountsMap[accountId]!;
-                            widget.balanceCallBack(account);
-                          },
-                          itemBuilder: (BuildContext context) {
-                            return widget.controller.accountsList
-                                .map((account) {
-                              return PopupMenuItem(
-                                value: account.accountId,
-                                child: Row(
-                                  children: [
-                                    account.accountIcon.iconWidget(size: 16),
-                                    const SizedBox(width: 8),
-                                    Text(account.accountName),
-                                  ],
-                                ),
-                              );
-                            }).toList();
-                          },
+                        ),
+                        Tooltip(
+                          message: locale.balanceCardSwitch,
+                          child: Switch(
+                            activeColor: colorScheme.inversePrimary,
+                            inactiveTrackColor: colorScheme.background,
+                            thumbIcon: thumbIcon,
+                            value: widget.controller.transStatusCheck,
+                            onChanged: (value) {
+                              widget.controller.toggleTransStatusCheck();
+                            },
+                          ),
                         ),
                       ],
-                    ),
-                    Text(
-                      money.text(currentBalance.balanceClose),
-                      textAlign: TextAlign.left,
-                      style: AppTextStyles.textStyleBold22.copyWith(
-                        color: currentBalance.balanceClose < -0.005
-                            ? customColors.sourceMinusred
-                            : colorScheme.onPrimary,
-                      ),
                     ),
                     const Divider(),
                     const SizedBox(height: 4),

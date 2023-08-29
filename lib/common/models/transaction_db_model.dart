@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:finances/services/database/database_helper.dart';
+
 import '../../locator.dart';
 import '../../repositories/transaction/transaction_repository.dart';
 import './extends_date.dart';
@@ -27,6 +29,21 @@ class TransactionDbModel {
     this.transTransferId,
     required this.transDate,
   });
+
+  bool get ischecked => transStatus == TransStatus.transactionChecked;
+
+  void _toggleStatus() {
+    transStatus = transStatus == TransStatus.transactionChecked
+        ? TransStatus.transactionNotChecked
+        : TransStatus.transactionChecked;
+  }
+
+  Future<void> toggleTransStatus() async {
+    _toggleStatus();
+    await locator
+        .get<DatabaseHelper>()
+        .updateTransactionStatus(transId!, transStatus.index);
+  }
 
   static List<TransactionDbModel> listOfTransactions(
       List<Map<String, dynamic>> listMap) {
@@ -74,16 +91,6 @@ class TransactionDbModel {
       'transTransferId': transTransferId,
       'transDate': transDate.millisecondsSinceEpoch,
     };
-    // } else {
-    //   return <String, dynamic>{
-    //     'transDescription': transDescription,
-    //     'transCategoryId': transCategoryId,
-    //     'transValue': transValue,
-    //     'transStatus': transStatus.index,
-    //     'transTransferId': transTransferId,
-    //     'transDate': transDate.millisecondsSinceEpoch,
-    //   };
-    // }
   }
 
   factory TransactionDbModel.fromMap(Map<String, dynamic> map) {

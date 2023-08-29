@@ -62,6 +62,7 @@ abstract class DatabaseHelper {
   Future<int> deleteTransferId(int id);
   Future<Map<String, Object?>?> queryTranferId(int id);
   Future<int> updateTransfer(Map<String, dynamic> transferMap);
+  Future<int> updateTransactionStatus(int id, int newStatus);
 
   Future<void> logSchema();
   Future<void> logTables();

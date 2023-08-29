@@ -1,6 +1,7 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 
+const lowgreen = Color(0xFFD2FFD3);
 const subprimary = Color(0xFFD5D7FF);
 const subtertiary = Color(0xFFF8A9F4);
 const mediumprimary = Color(0xFF7D84C6);
@@ -9,7 +10,13 @@ const lightblue = Color(0xFFA1D1FE);
 const lightgreen = Color(0xFF93DD41);
 const lightyellow = Color(0xFFFFCE52);
 
+
 CustomColors lightCustomColors = const CustomColors(
+  sourceLowgreen: Color(0xFFD2FFD3),
+  lowgreen: Color(0xFF166D33),
+  onLowgreen: Color(0xFFFFFFFF),
+  lowgreenContainer: Color(0xFFA1F6AC),
+  onLowgreenContainer: Color(0xFF002109),
   sourceSubprimary: Color(0xFFD5D7FF),
   subprimary: Color(0xFF4E57A9),
   onSubprimary: Color(0xFFFFFFFF),
@@ -48,6 +55,11 @@ CustomColors lightCustomColors = const CustomColors(
 );
 
 CustomColors darkCustomColors = const CustomColors(
+  sourceLowgreen: Color(0xFFD2FFD3),
+  lowgreen: Color(0xFF86D992),
+  onLowgreen: Color(0xFF003915),
+  lowgreenContainer: Color(0xFF005322),
+  onLowgreenContainer: Color(0xFFA1F6AC),
   sourceSubprimary: Color(0xFFD5D7FF),
   subprimary: Color(0xFFBDC2FF),
   onSubprimary: Color(0xFF1D2678),
@@ -85,6 +97,8 @@ CustomColors darkCustomColors = const CustomColors(
   onLightyellowContainer: Color(0xFFFFDF98),
 );
 
+
+
 /// Defines a set of custom colors, each comprised of 4 complementary tones.
 ///
 /// See also:
@@ -92,6 +106,11 @@ CustomColors darkCustomColors = const CustomColors(
 @immutable
 class CustomColors extends ThemeExtension<CustomColors> {
   const CustomColors({
+    required this.sourceLowgreen,
+    required this.lowgreen,
+    required this.onLowgreen,
+    required this.lowgreenContainer,
+    required this.onLowgreenContainer,
     required this.sourceSubprimary,
     required this.subprimary,
     required this.onSubprimary,
@@ -129,6 +148,11 @@ class CustomColors extends ThemeExtension<CustomColors> {
     required this.onLightyellowContainer,
   });
 
+  final Color? sourceLowgreen;
+  final Color? lowgreen;
+  final Color? onLowgreen;
+  final Color? lowgreenContainer;
+  final Color? onLowgreenContainer;
   final Color? sourceSubprimary;
   final Color? subprimary;
   final Color? onSubprimary;
@@ -167,6 +191,11 @@ class CustomColors extends ThemeExtension<CustomColors> {
 
   @override
   CustomColors copyWith({
+    Color? sourceLowgreen,
+    Color? lowgreen,
+    Color? onLowgreen,
+    Color? lowgreenContainer,
+    Color? onLowgreenContainer,
     Color? sourceSubprimary,
     Color? subprimary,
     Color? onSubprimary,
@@ -200,29 +229,30 @@ class CustomColors extends ThemeExtension<CustomColors> {
     Color? sourceLightyellow,
     Color? lightyellow,
     Color? onLightyellow,
-    Color? lightywlloeContainer,
+    Color? lightyellowContainer,
     Color? onLightyellowContainer,
   }) {
     return CustomColors(
+      sourceLowgreen: sourceLowgreen ?? this.sourceLowgreen,
+      lowgreen: lowgreen ?? this.lowgreen,
+      onLowgreen: onLowgreen ?? this.onLowgreen,
+      lowgreenContainer: lowgreenContainer ?? this.lowgreenContainer,
+      onLowgreenContainer: onLowgreenContainer ?? this.onLowgreenContainer,
       sourceSubprimary: sourceSubprimary ?? this.sourceSubprimary,
       subprimary: subprimary ?? this.subprimary,
       onSubprimary: onSubprimary ?? this.onSubprimary,
       subprimaryContainer: subprimaryContainer ?? this.subprimaryContainer,
-      onSubprimaryContainer:
-          onSubprimaryContainer ?? this.onSubprimaryContainer,
+      onSubprimaryContainer: onSubprimaryContainer ?? this.onSubprimaryContainer,
       sourceSubtertiary: sourceSubtertiary ?? this.sourceSubtertiary,
       subtertiary: subtertiary ?? this.subtertiary,
       onSubtertiary: onSubtertiary ?? this.onSubtertiary,
       subtertiaryContainer: subtertiaryContainer ?? this.subtertiaryContainer,
-      onSubtertiaryContainer:
-          onSubtertiaryContainer ?? this.onSubtertiaryContainer,
+      onSubtertiaryContainer: onSubtertiaryContainer ?? this.onSubtertiaryContainer,
       sourceMediumprimary: sourceMediumprimary ?? this.sourceMediumprimary,
       mediumprimary: mediumprimary ?? this.mediumprimary,
       onMediumprimary: onMediumprimary ?? this.onMediumprimary,
-      mediumprimaryContainer:
-          mediumprimaryContainer ?? this.mediumprimaryContainer,
-      onMediumprimaryContainer:
-          onMediumprimaryContainer ?? this.onMediumprimaryContainer,
+      mediumprimaryContainer: mediumprimaryContainer ?? this.mediumprimaryContainer,
+      onMediumprimaryContainer: onMediumprimaryContainer ?? this.onMediumprimaryContainer,
       sourceMinusred: sourceMinusred ?? this.sourceMinusred,
       minusred: minusred ?? this.minusred,
       onMinusred: onMinusred ?? this.onMinusred,
@@ -237,14 +267,12 @@ class CustomColors extends ThemeExtension<CustomColors> {
       lightgreen: lightgreen ?? this.lightgreen,
       onLightgreen: onLightgreen ?? this.onLightgreen,
       lightgreenContainer: lightgreenContainer ?? this.lightgreenContainer,
-      onLightgreenContainer:
-          onLightgreenContainer ?? this.onLightgreenContainer,
+      onLightgreenContainer: onLightgreenContainer ?? this.onLightgreenContainer,
       sourceLightyellow: sourceLightyellow ?? this.sourceLightyellow,
       lightyellow: lightyellow ?? this.lightyellow,
       onLightyellow: onLightyellow ?? this.onLightyellow,
-      lightyellowContainer: lightywlloeContainer ?? this.lightyellowContainer,
-      onLightyellowContainer:
-          onLightyellowContainer ?? this.onLightyellowContainer,
+      lightyellowContainer: lightyellowContainer ?? this.lightyellowContainer,
+      onLightyellowContainer: onLightyellowContainer ?? this.onLightyellowContainer,
     );
   }
 
@@ -254,63 +282,56 @@ class CustomColors extends ThemeExtension<CustomColors> {
       return this;
     }
     return CustomColors(
+      sourceLowgreen: Color.lerp(sourceLowgreen, other.sourceLowgreen, t),
+      lowgreen: Color.lerp(lowgreen, other.lowgreen, t),
+      onLowgreen: Color.lerp(onLowgreen, other.onLowgreen, t),
+      lowgreenContainer: Color.lerp(lowgreenContainer, other.lowgreenContainer, t),
+      onLowgreenContainer: Color.lerp(onLowgreenContainer, other.onLowgreenContainer, t),
       sourceSubprimary: Color.lerp(sourceSubprimary, other.sourceSubprimary, t),
       subprimary: Color.lerp(subprimary, other.subprimary, t),
       onSubprimary: Color.lerp(onSubprimary, other.onSubprimary, t),
-      subprimaryContainer:
-          Color.lerp(subprimaryContainer, other.subprimaryContainer, t),
-      onSubprimaryContainer:
-          Color.lerp(onSubprimaryContainer, other.onSubprimaryContainer, t),
-      sourceSubtertiary:
-          Color.lerp(sourceSubtertiary, other.sourceSubtertiary, t),
+      subprimaryContainer: Color.lerp(subprimaryContainer, other.subprimaryContainer, t),
+      onSubprimaryContainer: Color.lerp(onSubprimaryContainer, other.onSubprimaryContainer, t),
+      sourceSubtertiary: Color.lerp(sourceSubtertiary, other.sourceSubtertiary, t),
       subtertiary: Color.lerp(subtertiary, other.subtertiary, t),
       onSubtertiary: Color.lerp(onSubtertiary, other.onSubtertiary, t),
-      subtertiaryContainer:
-          Color.lerp(subtertiaryContainer, other.subtertiaryContainer, t),
-      onSubtertiaryContainer:
-          Color.lerp(onSubtertiaryContainer, other.onSubtertiaryContainer, t),
-      sourceMediumprimary:
-          Color.lerp(sourceMediumprimary, other.sourceMediumprimary, t),
+      subtertiaryContainer: Color.lerp(subtertiaryContainer, other.subtertiaryContainer, t),
+      onSubtertiaryContainer: Color.lerp(onSubtertiaryContainer, other.onSubtertiaryContainer, t),
+      sourceMediumprimary: Color.lerp(sourceMediumprimary, other.sourceMediumprimary, t),
       mediumprimary: Color.lerp(mediumprimary, other.mediumprimary, t),
       onMediumprimary: Color.lerp(onMediumprimary, other.onMediumprimary, t),
-      mediumprimaryContainer:
-          Color.lerp(mediumprimaryContainer, other.mediumprimaryContainer, t),
-      onMediumprimaryContainer: Color.lerp(
-          onMediumprimaryContainer, other.onMediumprimaryContainer, t),
+      mediumprimaryContainer: Color.lerp(mediumprimaryContainer, other.mediumprimaryContainer, t),
+      onMediumprimaryContainer: Color.lerp(onMediumprimaryContainer, other.onMediumprimaryContainer, t),
       sourceMinusred: Color.lerp(sourceMinusred, other.sourceMinusred, t),
       minusred: Color.lerp(minusred, other.minusred, t),
       onMinusred: Color.lerp(onMinusred, other.onMinusred, t),
-      minusredContainer:
-          Color.lerp(minusredContainer, other.minusredContainer, t),
-      onMinusredContainer:
-          Color.lerp(onMinusredContainer, other.onMinusredContainer, t),
+      minusredContainer: Color.lerp(minusredContainer, other.minusredContainer, t),
+      onMinusredContainer: Color.lerp(onMinusredContainer, other.onMinusredContainer, t),
       sourceLightblue: Color.lerp(sourceLightblue, other.sourceLightblue, t),
       lightblue: Color.lerp(lightblue, other.lightblue, t),
       onLightblue: Color.lerp(onLightblue, other.onLightblue, t),
-      lightblueContainer:
-          Color.lerp(lightblueContainer, other.lightblueContainer, t),
-      onLightblueContainer:
-          Color.lerp(onLightblueContainer, other.onLightblueContainer, t),
+      lightblueContainer: Color.lerp(lightblueContainer, other.lightblueContainer, t),
+      onLightblueContainer: Color.lerp(onLightblueContainer, other.onLightblueContainer, t),
       sourceLightgreen: Color.lerp(sourceLightgreen, other.sourceLightgreen, t),
       lightgreen: Color.lerp(lightgreen, other.lightgreen, t),
       onLightgreen: Color.lerp(onLightgreen, other.onLightgreen, t),
-      lightgreenContainer:
-          Color.lerp(lightgreenContainer, other.lightgreenContainer, t),
-      onLightgreenContainer:
-          Color.lerp(onLightgreenContainer, other.onLightgreenContainer, t),
-      sourceLightyellow:
-          Color.lerp(sourceLightyellow, other.sourceLightyellow, t),
+      lightgreenContainer: Color.lerp(lightgreenContainer, other.lightgreenContainer, t),
+      onLightgreenContainer: Color.lerp(onLightgreenContainer, other.onLightgreenContainer, t),
+      sourceLightyellow: Color.lerp(sourceLightyellow, other.sourceLightyellow, t),
       lightyellow: Color.lerp(lightyellow, other.lightyellow, t),
       onLightyellow: Color.lerp(onLightyellow, other.onLightyellow, t),
-      lightyellowContainer:
-          Color.lerp(lightyellowContainer, other.lightyellowContainer, t),
-      onLightyellowContainer:
-          Color.lerp(onLightyellowContainer, other.onLightyellowContainer, t),
+      lightyellowContainer: Color.lerp(lightyellowContainer, other.lightyellowContainer, t),
+      onLightyellowContainer: Color.lerp(onLightyellowContainer, other.onLightyellowContainer, t),
     );
   }
 
   /// Returns an instance of [CustomColors] in which the following custom
   /// colors are harmonized with [dynamic]'s [ColorScheme.primary].
+  ///   * [CustomColors.sourceLowgreen]
+  ///   * [CustomColors.lowgreen]
+  ///   * [CustomColors.onLowgreen]
+  ///   * [CustomColors.lowgreenContainer]
+  ///   * [CustomColors.onLowgreenContainer]
   ///   * [CustomColors.sourceSubprimary]
   ///   * [CustomColors.subprimary]
   ///   * [CustomColors.onSubprimary]
@@ -351,26 +372,26 @@ class CustomColors extends ThemeExtension<CustomColors> {
   ///   * <https://m3.material.io/styles/color/the-color-system/custom-colors#harmonization>
   CustomColors harmonized(ColorScheme dynamic) {
     return copyWith(
+      sourceLowgreen: sourceLowgreen!.harmonizeWith(dynamic.primary),
+      lowgreen: lowgreen!.harmonizeWith(dynamic.primary),
+      onLowgreen: onLowgreen!.harmonizeWith(dynamic.primary),
+      lowgreenContainer: lowgreenContainer!.harmonizeWith(dynamic.primary),
+      onLowgreenContainer: onLowgreenContainer!.harmonizeWith(dynamic.primary),
       sourceSubprimary: sourceSubprimary!.harmonizeWith(dynamic.primary),
       subprimary: subprimary!.harmonizeWith(dynamic.primary),
       onSubprimary: onSubprimary!.harmonizeWith(dynamic.primary),
       subprimaryContainer: subprimaryContainer!.harmonizeWith(dynamic.primary),
-      onSubprimaryContainer:
-          onSubprimaryContainer!.harmonizeWith(dynamic.primary),
+      onSubprimaryContainer: onSubprimaryContainer!.harmonizeWith(dynamic.primary),
       sourceSubtertiary: sourceSubtertiary!.harmonizeWith(dynamic.primary),
       subtertiary: subtertiary!.harmonizeWith(dynamic.primary),
       onSubtertiary: onSubtertiary!.harmonizeWith(dynamic.primary),
-      subtertiaryContainer:
-          subtertiaryContainer!.harmonizeWith(dynamic.primary),
-      onSubtertiaryContainer:
-          onSubtertiaryContainer!.harmonizeWith(dynamic.primary),
+      subtertiaryContainer: subtertiaryContainer!.harmonizeWith(dynamic.primary),
+      onSubtertiaryContainer: onSubtertiaryContainer!.harmonizeWith(dynamic.primary),
       sourceMediumprimary: sourceMediumprimary!.harmonizeWith(dynamic.primary),
       mediumprimary: mediumprimary!.harmonizeWith(dynamic.primary),
       onMediumprimary: onMediumprimary!.harmonizeWith(dynamic.primary),
-      mediumprimaryContainer:
-          mediumprimaryContainer!.harmonizeWith(dynamic.primary),
-      onMediumprimaryContainer:
-          onMediumprimaryContainer!.harmonizeWith(dynamic.primary),
+      mediumprimaryContainer: mediumprimaryContainer!.harmonizeWith(dynamic.primary),
+      onMediumprimaryContainer: onMediumprimaryContainer!.harmonizeWith(dynamic.primary),
       sourceMinusred: sourceMinusred!.harmonizeWith(dynamic.primary),
       minusred: minusred!.harmonizeWith(dynamic.primary),
       onMinusred: onMinusred!.harmonizeWith(dynamic.primary),
@@ -380,21 +401,17 @@ class CustomColors extends ThemeExtension<CustomColors> {
       lightblue: lightblue!.harmonizeWith(dynamic.primary),
       onLightblue: onLightblue!.harmonizeWith(dynamic.primary),
       lightblueContainer: lightblueContainer!.harmonizeWith(dynamic.primary),
-      onLightblueContainer:
-          onLightblueContainer!.harmonizeWith(dynamic.primary),
+      onLightblueContainer: onLightblueContainer!.harmonizeWith(dynamic.primary),
       sourceLightgreen: sourceLightgreen!.harmonizeWith(dynamic.primary),
       lightgreen: lightgreen!.harmonizeWith(dynamic.primary),
       onLightgreen: onLightgreen!.harmonizeWith(dynamic.primary),
       lightgreenContainer: lightgreenContainer!.harmonizeWith(dynamic.primary),
-      onLightgreenContainer:
-          onLightgreenContainer!.harmonizeWith(dynamic.primary),
+      onLightgreenContainer: onLightgreenContainer!.harmonizeWith(dynamic.primary),
       sourceLightyellow: sourceLightyellow!.harmonizeWith(dynamic.primary),
       lightyellow: lightyellow!.harmonizeWith(dynamic.primary),
       onLightyellow: onLightyellow!.harmonizeWith(dynamic.primary),
-      lightywlloeContainer:
-          lightyellowContainer!.harmonizeWith(dynamic.primary),
-      onLightyellowContainer:
-          onLightyellowContainer!.harmonizeWith(dynamic.primary),
+      lightyellowContainer: lightyellowContainer!.harmonizeWith(dynamic.primary),
+      onLightyellowContainer: onLightyellowContainer!.harmonizeWith(dynamic.primary),
     );
   }
 }
