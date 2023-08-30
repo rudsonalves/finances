@@ -54,10 +54,10 @@ class _StatisticsPageState extends State<StatisticsPage>
     Color color;
 
     if (value > 0) {
-      icon = Icons.arrow_upward;
+      icon = Icons.upload;
       color = colorScheme.primary;
     } else if (value < 0) {
-      icon = Icons.arrow_downward;
+      icon = Icons.download;
       color = colorScheme.error;
     } else {
       icon = Icons.horizontal_rule;
@@ -107,7 +107,7 @@ class _StatisticsPageState extends State<StatisticsPage>
               controller: _controller,
             ),
             Positioned(
-              top: 170,
+              top: 270,
               left: 0,
               right: 0,
               bottom: 0,
@@ -190,6 +190,7 @@ class _StatisticsPageState extends State<StatisticsPage>
                                       variationColumn(item.variation),
                                     ],
                                   ),
+                                  onTap: () {},
                                 );
                               },
                             ),
