@@ -36,9 +36,9 @@ class _StatisticCardState extends State<StatisticCard> {
     final locale = AppLocalizations.of(context)!;
 
     return Positioned(
-      left: 24,
-      right: 24,
-      top: 10,
+      left: 8,
+      right: 8,
+      top: 0,
       child: Card(
         color: primary,
         elevation: 5,

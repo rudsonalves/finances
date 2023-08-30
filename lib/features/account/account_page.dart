@@ -152,10 +152,12 @@ class _AccountPageState extends State<AccountPage> {
                 child: AnimatedBuilder(
                   animation: _controller,
                   builder: (context, _) {
+                    // Account State Loading
                     if (_controller.state is AccountStateLoading) {
                       return const CustomCircularProgressIndicator();
                     }
 
+                    // Account State Success
                     if (_controller.state is AccountStateSuccess) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -171,7 +173,9 @@ class _AccountPageState extends State<AccountPage> {
                             money.text(_controller.totalBalance),
                             textAlign: TextAlign.left,
                             style: AppTextStyles.textStyleBold28.copyWith(
-                              color: colorScheme.primary,
+                              color: _controller.totalBalance >= 0
+                                  ? colorScheme.primary
+                                  : colorScheme.error,
                             ),
                           ),
                           Padding(
@@ -213,10 +217,7 @@ class _AccountPageState extends State<AccountPage> {
                       );
                     }
 
-                    if (_controller.state is AccountStateError) {
-                      return Text(locale.transPageError);
-                    }
-
+                    // Account State Error
                     return Text(locale.transPageError);
                   },
                 ),
