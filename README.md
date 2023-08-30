@@ -245,9 +245,20 @@ Com esses gatilhos em vigor, qualquer tentativa de inserir um valor inválido em
 
 # Changes:
 
+## 2023/08/30 - version 0.99.09
+
+* lib/common/constants/themes/app_text_styles.dart:
+  - Added the `textStyleBold10`.
+* lib/features/account/account_page.dart:
+  - Corrected the balance color for negative values.
+* lib/features/statistics/statistic_controller.dart:
+  - Added the calculation of the average of entries for different categories.
+* lib/features/statistics/statistics_page.dart:
+  - Added the `variationColumn` method to draw the variation in movement of a category;
+  - Added an element to present the variations of a given category.
+
 ## 2023/08/29:
 
----
 In this commit, one more color adjustment to the app and the addition of transaction status change were made. See the details of the changes below:
 
 * lib/common/constants/themes/colors/color_schemes.g.dart:
