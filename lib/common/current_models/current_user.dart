@@ -5,7 +5,7 @@ import 'current_language.dart';
 import 'current_theme.dart';
 
 class CurrentUser extends UserDbModel {
-  final UserRepository userRepository = locator.get<UserRepository>();
+  final userRepository = locator.get<UserRepository>();
 
   Future<void> init() async {
     await userRepository.init();

@@ -62,9 +62,9 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     super.build(context);
 
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    final CurrentUser currentUser = locator.get<CurrentUser>();
-    final double textScaleFactor = locator.get<AppScale>().textScaleFactor;
+    final colorScheme = Theme.of(context).colorScheme;
+    final currentUser = locator.get<CurrentUser>();
+    final textScaleFactor = locator.get<AppScale>().textScaleFactor;
     final locale = AppLocalizations.of(context)!;
 
     return Scaffold(

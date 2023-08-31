@@ -18,8 +18,8 @@ class RowOfTwoBottons extends StatefulWidget {
 class _RowOfTwoBottonsState extends State<RowOfTwoBottons> {
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    final AppLocalizations locale = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
+    final locale = AppLocalizations.of(context)!;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

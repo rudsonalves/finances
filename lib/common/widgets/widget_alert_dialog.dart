@@ -13,10 +13,10 @@ class WidgetAlertDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    final Color primary = colorScheme.primary;
-    final Color onPrimary = colorScheme.onPrimary;
-    final AppLocalizations locale = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
+    final primary = colorScheme.primary;
+    final onPrimary = colorScheme.onPrimary;
+    final locale = AppLocalizations.of(context)!;
 
     return AlertDialog(
       title: Text(title),

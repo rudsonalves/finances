@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../common/constants/themes/app_text_styles.dart';
+import '../../common/constants/themes/colors/custom_color.g.dart';
 import '../../common/extensions/money_masked_text.dart';
 import '../../common/widgets/app_top_border.dart';
 import '../../common/widgets/custom_app_bar.dart';
@@ -50,15 +51,16 @@ class _StatisticsPageState extends State<StatisticsPage>
 
   Widget variationColumn(double value) {
     final colorScheme = Theme.of(context).colorScheme;
+    final customColors = Theme.of(context).extension<CustomColors>()!;
     IconData icon;
     Color color;
 
     if (value > 0) {
       icon = Icons.upload;
-      color = colorScheme.primary;
+      color = customColors.lowgreen!;
     } else if (value < 0) {
       icon = Icons.download;
-      color = colorScheme.error;
+      color = customColors.minusred!;
     } else {
       icon = Icons.horizontal_rule;
       color = colorScheme.primary;
@@ -87,7 +89,7 @@ class _StatisticsPageState extends State<StatisticsPage>
 
     final locale = AppLocalizations.of(context)!;
     final money = locator.get<MoneyMaskedText>();
-    final colorScheme = Theme.of(context).colorScheme;
+    final customColors = Theme.of(context).extension<CustomColors>()!;
     final categoryRepository = locator.get<CategoryRepository>();
 
     return Center(
@@ -107,7 +109,7 @@ class _StatisticsPageState extends State<StatisticsPage>
               controller: _controller,
             ),
             Positioned(
-              top: 270,
+              top: 310,
               left: 0,
               right: 0,
               bottom: 0,
@@ -182,8 +184,8 @@ class _StatisticsPageState extends State<StatisticsPage>
                                         style: AppTextStyles.textStyleSemiBold18
                                             .copyWith(
                                                 color: minus
-                                                    ? colorScheme.error
-                                                    : colorScheme.primary,
+                                                    ? customColors.minusred
+                                                    : customColors.lowgreen,
                                                 fontWeight: FontWeight.w700),
                                       ),
                                       const SizedBox(width: 4),

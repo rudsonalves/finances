@@ -245,6 +245,21 @@ Com esses gatilhos em vigor, qualquer tentativa de inserir um valor inválido em
 
 # Changes:
 
+## 2023/08/31 - version 0.99.10
+
+In this commit, a graph for incomes and expenses was added to the StatisticsPage, the colors of these were adjusted, and the indicator icon for incomes/expenses was changed. Additionally, I removed some explicit declarations where "final" is used. However, these changes are not listed below. Here are the modifications:
+
+lib/features/home_page/widgets/transaction_dismissible_tile.dart:
+corrected color of numbers.
+lib/features/statistics/statistic_card/statistic_card.dart:
+added graph for incomes and expenses vs. strDate;
+corrected color of numbers and graph.
+added new icons to indicate decrease and increase in average consumption in categories.
+lib/features/statistics/statistic_controller.dart:
+added getters for strDates.
+pubspec.yaml:
+added the fl_chart package version 0.63.0.
+
 ## 2023/08/30 - version 0.99.09
 
 * lib/common/constants/themes/app_text_styles.dart:

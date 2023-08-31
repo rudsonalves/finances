@@ -9,7 +9,7 @@ class Sizes {
   static const Size _designSize = Size(414, 896);
 
   // base of singleton
-  static final Sizes _instance = Sizes._();
+  static final _instance = Sizes._();
 
   // singleton constructor
   factory Sizes() => _instance;

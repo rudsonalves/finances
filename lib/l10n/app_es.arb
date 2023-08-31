@@ -162,7 +162,7 @@
     "cardPopupMenuCategories": "Categorías",
     "cardPopupMenuTransactionsHelp": "Ayuda de Transacciones",
     "cardPopupMenuLogout": "Cerrar Sesión",
-    "statisticCardBalance": "Saldo: ",
+    "statisticCardBalance": "Balance: ",
     "statisticCardIncomes": "Ingresos",
     "statisticCardExpenses": "Gastos"
 }

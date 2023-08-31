@@ -42,7 +42,7 @@ import 'repositories/icons/sqlite_icons_repository.dart';
 import 'repositories/transfer_repository/sqflite_transfer_repository.dart';
 import 'repositories/transfer_repository/transfer_repository.dart';
 
-final GetIt locator = GetIt.instance;
+final locator = GetIt.instance;
 
 void setupDependencies() {
   try {

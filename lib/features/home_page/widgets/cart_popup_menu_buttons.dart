@@ -75,8 +75,8 @@ class CartPopupMenuButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    final Color primary = colorScheme.primary;
+    final colorScheme = Theme.of(context).colorScheme;
+    final primary = colorScheme.primary;
 
     return Row(
       children: [
