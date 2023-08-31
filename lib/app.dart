@@ -4,7 +4,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import './locator.dart';
 import './common/constants/routes/app_route.dart';
-import './common/models/transaction_db_model.dart';
 import './common/current_models/current_theme.dart';
 import './features/transaction/transaction_page.dart';
 import './common/current_models/current_language.dart';
@@ -68,15 +67,14 @@ class App extends StatelessWidget {
                 AppRoute.splash.name: (context) => AppRoute.splash.page,
                 AppRoute.category.name: (context) => AppRoute.category.page,
                 AppRoute.transaction.name: (context) {
-                  final Map<String, dynamic>? args = ModalRoute.of(context)!
-                      .settings
-                      .arguments as Map<String, dynamic>?;
+                  final args = ModalRoute.of(context)!.settings.arguments
+                      as Map<String, dynamic>?;
 
                   if (args == null) {
                     return const TransactionPage();
                   } else {
-                    final bool addTransaction = args['addTransaction'] ?? true;
-                    final TransactionDbModel? transaction = args['transaction'];
+                    final addTransaction = args['addTransaction'] ?? true;
+                    final transaction = args['transaction'];
                     return TransactionPage(
                       addTransaction: addTransaction,
                       transaction: transaction,

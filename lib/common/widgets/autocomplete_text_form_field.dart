@@ -71,7 +71,7 @@ class _AutocompleteTextFormFieldState extends State<AutocompleteTextFormField> {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Padding(
       padding: const EdgeInsets.only(top: 5, bottom: 10),

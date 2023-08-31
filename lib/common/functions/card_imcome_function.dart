@@ -13,9 +13,8 @@ Widget incomeExpanseShowValue(
 }) {
   MoneyMaskedText money = locator.get<MoneyMaskedText>();
 
-  final ColorScheme colorScheme = Theme.of(context).colorScheme;
-  final CustomColors customColors =
-      Theme.of(context).extension<CustomColors>()!;
+  final colorScheme = Theme.of(context).colorScheme;
+  final customColors = Theme.of(context).extension<CustomColors>()!;
 
   return Row(
     children: [

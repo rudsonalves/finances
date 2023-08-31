@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../constants/themes/app_icons.dart';
 
 class CategoriesIcons {
-  final List<String> _iconsList = AppIcons.iconNames(
+  final _iconsList = AppIcons.iconNames(
     IconsFontFamily.MaterialIcons,
   );
 

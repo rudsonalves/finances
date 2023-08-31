@@ -50,9 +50,9 @@ class _SelectIconRowState extends State<SelectIconRow> {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    final Color onPrimary = colorScheme.onPrimary;
-    final Color primary = colorScheme.primary;
+    final colorScheme = Theme.of(context).colorScheme;
+    final onPrimary = colorScheme.onPrimary;
+    final primary = colorScheme.primary;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),

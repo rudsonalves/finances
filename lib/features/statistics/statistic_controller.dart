@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -17,32 +16,28 @@ class StatisticsController extends ChangeNotifier {
   final Map<String, double> _incomes = {};
   final Map<String, double> _expanses = {};
 
-  Map<String, double> get incomes => _incomes;
-  Map<String, double> get expanses => _expanses;
-
-  Map<String, List<StatisticResult>> get statisticsList => _statisticsList;
-
   List<String> _strDates = [];
 
   int _index = 0;
 
   String get strDate => _strDates[_index];
+  List<String> get strDates => _strDates;
+  Map<String, double> get incomes => _incomes;
+  Map<String, double> get expanses => _expanses;
+  Map<String, List<StatisticResult>> get statisticsList => _statisticsList;
 
   bool _redraw = false;
 
   bool get redraw {
     if (_redraw) {
       _redraw = false;
-      log('redraw was true');
       return true;
     }
-    log('redraw is false');
     return false;
   }
 
   void requestRedraw() {
     _redraw = true;
-    log('redraw was made true');
   }
 
   Future<void> nextMonth() async {

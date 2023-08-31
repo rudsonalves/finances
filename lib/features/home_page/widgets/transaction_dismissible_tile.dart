@@ -170,7 +170,7 @@ class _TransactionDismissibleTileState
             trailing: Text(
               money.text(widget.transaction.transValue),
               style: AppTextStyles.textStyleSemiBold18.copyWith(
-                  color: minus ? colorScheme.error : colorScheme.primary,
+                  color: minus ? customColors.minusred : customColors.lowgreen,
                   fontWeight: FontWeight.w700),
             ),
             onTap: () async {

@@ -18,8 +18,8 @@ Future<void>? statefullAddAccountDialog(
   BuildContext context, {
   AccountDbModel? editAccount,
 }) async {
-  final ColorScheme colorScheme = Theme.of(context).colorScheme;
-  final Color primary = colorScheme.primary;
+  final colorScheme = Theme.of(context).colorScheme;
+  final primary = colorScheme.primary;
   bool addAccount = false;
 
   if (editAccount == null) {
