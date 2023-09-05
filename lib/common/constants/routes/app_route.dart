@@ -1,3 +1,4 @@
+import 'package:finances/features/settings/settings_page.dart';
 import 'package:flutter/material.dart';
 
 import '../../../features/category/category_page.dart';
@@ -48,5 +49,9 @@ class AppRoute {
   static const Route transaction = Route(
     name: '/transaction',
     page: TransactionPage(),
+  );
+  static const Route settings = Route(
+    name: '/settings',
+    page: SettingsPage(),
   );
 }

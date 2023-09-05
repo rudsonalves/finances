@@ -140,6 +140,8 @@ class _TransactionDismissibleTileState
           color: customColors.lightgreenContainer!,
           icon: Icons.edit,
           label: locale.transactionListTileEdit,
+          enable:
+              widget.transaction.transStatus != TransStatus.transactionChecked,
         ),
         secondaryBackground: baseDismissibleContainer(
           context,
@@ -147,6 +149,8 @@ class _TransactionDismissibleTileState
           color: colorScheme.errorContainer,
           icon: Icons.delete,
           label: locale.transactionListTileDelete,
+          enable:
+              widget.transaction.transStatus != TransStatus.transactionChecked,
         ),
         child: Card(
           elevation: widget.transaction.ischecked ? 0 : 1,
@@ -182,6 +186,11 @@ class _TransactionDismissibleTileState
           ),
         ),
         confirmDismiss: (direction) async {
+          // return if transaction.transStatus is transactionChecked
+          if (widget.transaction.transStatus ==
+              TransStatus.transactionChecked) {
+            return false;
+          }
           if (direction == DismissDirection.startToEnd) {
             // Edit
             await Navigator.pushNamed(

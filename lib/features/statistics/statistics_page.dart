@@ -14,11 +14,8 @@ import 'statistic_controller.dart';
 import 'statistic_state.dart';
 
 class StatisticsPage extends StatefulWidget {
-  final void Function() backPage;
-
   const StatisticsPage({
     super.key,
-    required this.backPage,
   });
 
   @override

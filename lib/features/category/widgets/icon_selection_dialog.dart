@@ -31,6 +31,7 @@ class _IconSelectionDialogState extends State<IconSelectionDialog> {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations locale = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return StatefulBuilder(
       builder: (context, setState) {
@@ -38,13 +39,17 @@ class _IconSelectionDialogState extends State<IconSelectionDialog> {
           title: Text(locale.iconSelectionDialogIconSelection),
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 8, left: 16, right: 16),
+              padding: const EdgeInsets.only(
+                top: 8,
+                left: 16,
+                right: 16,
+              ),
               child: Row(
                 children: [
-                  Text(locale.iconSelectionDialogIconFamily),
+                  Text('${locale.iconSelectionDialogIconFamily}: '),
                   Expanded(
-                    child: TextButton(
-                      onPressed: () {
+                    child: InkWell(
+                      onTap: () {
                         setState(() {
                           switch (fontFamily) {
                             case IconsFontFamily.MaterialIcons:
@@ -59,30 +64,65 @@ class _IconSelectionDialogState extends State<IconSelectionDialog> {
                           iconsList = AppIcons.iconNames(fontFamily);
                         });
                       },
-                      child: Text(fontFamily.name),
+                      child: Text(
+                        fontFamily.name,
+                        style: AppTextStyles.textStyleBold14.copyWith(
+                          color: colorScheme.primary,
+                        ),
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
-              child: TextField(
-                decoration: InputDecoration(
-                  labelText: locale.iconSelectionDialogSearch,
-                ),
-                onChanged: (value) {
-                  if (value.isEmpty) {
-                    iconsList = AppIcons.iconNames(fontFamily);
-                  } else {
-                    iconsList = AppIcons.iconNames(fontFamily)
-                        .where(
-                          (iconName) => iconName.contains(value),
-                        )
-                        .toList();
-                  }
-                  setState(() {});
-                },
+              padding: const EdgeInsets.only(
+                bottom: 16,
+                left: 16,
+                right: 16,
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        labelText: locale.iconSelectionDialogSearch,
+                      ),
+                      onChanged: (value) {
+                        if (value.isEmpty) {
+                          iconsList = AppIcons.iconNames(fontFamily);
+                        } else {
+                          iconsList = AppIcons.iconNames(fontFamily)
+                              .where(
+                                (iconName) => iconName.contains(value),
+                              )
+                              .toList();
+                        }
+                        setState(() {});
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 22),
+                  ElevatedButton.icon(
+                    icon: Icon(
+                      Icons.close_sharp,
+                      color: colorScheme.onPrimary,
+                    ),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                        colorScheme.primary,
+                      ),
+                    ),
+                    label: Text(
+                      locale.genericClose,
+                      style: AppTextStyles.textStyleBold14.copyWith(
+                        color: colorScheme.onPrimary,
+                      ),
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
               ),
             ),
             SizedBox(

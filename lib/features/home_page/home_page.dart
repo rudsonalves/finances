@@ -14,7 +14,7 @@ import '../../common/current_models/current_user.dart';
 import '../../common/constants/themes/app_text_styles.dart';
 import '../../common/widgets/custom_circular_progress_indicator.dart';
 import '../../features/home_page/balance_card/balance_card_controller.dart';
-import 'widgets/cart_popup_menu_buttons.dart';
+import 'widgets/home_popup_menu_buttons.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -87,7 +87,7 @@ class _HomePageState extends State<HomePage>
           ],
         ),
         actions: const [
-          CartPopupMenuButtons(),
+          HomePagePopupMenuButtons(),
         ],
       ),
       body: Stack(
@@ -127,14 +127,14 @@ class _HomePageState extends State<HomePage>
                     child: AnimatedBuilder(
                       animation: _controller,
                       builder: (context, _) {
-                        // StateLoading...
+                        // State Loading...
                         if (_controller.state is HomePageStateLoading) {
                           return CustomCircularProgressIndicator(
                             color: Theme.of(context).colorScheme.primary,
                           );
                         }
 
-                        // StateSuccess...
+                        // State Success...
                         if (_controller.state is HomePageStateSuccess) {
                           // isEmpty...
                           if (_controller.transactions.isEmpty) {
@@ -186,7 +186,7 @@ class _HomePageState extends State<HomePage>
                           );
                         }
 
-                        // StateError...
+                        // State Error...
                         return Center(
                           child: Text(
                             locale.homePageError,

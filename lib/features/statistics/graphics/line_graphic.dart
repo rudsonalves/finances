@@ -41,7 +41,7 @@ class LineGraphic extends StatelessWidget {
       children: [
         const SizedBox(height: 4),
         Text(
-          index % 2 == 0 ? xLabels[index + 1] : '',
+          index % 2 == 0 ? xLabels[index] : '',
           style: style,
         ),
       ],

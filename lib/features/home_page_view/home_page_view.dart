@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import '../../locator.dart';
 import '../account/account_controller.dart';
 import '../account/widgets/statefull_add_account_dialog.dart';
+import '../budget/budget_page.dart';
 import '../home_page/home_page.dart';
 import '../account/account_page.dart';
-import '../settings/settings_page.dart';
 import '../statistics/statistic_controller.dart';
 import '../statistics/statistics_page.dart';
 import '../home_page/home_page_controller.dart';
@@ -82,11 +82,11 @@ class _HomePageViewState extends State<HomePageView> {
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: _pageController,
-        children: [
-          const HomePage(),
-          StatisticsPage(backPage: changeToMainPage),
-          AccountPage(backPage: changeToMainPage),
-          SettingsPage(backPage: changeToMainPage),
+        children: const [
+          HomePage(),
+          StatisticsPage(),
+          AccountPage(),
+          BudgetPage(),
         ],
       ),
       floatingActionButton: _floatAppButton

@@ -8,8 +8,8 @@ import '../../../common/constants/routes/app_route.dart';
 import '../../../services/authentication/auth_service.dart';
 import '../../../services/database/database_helper.dart';
 
-class CartPopupMenuButtons extends StatelessWidget {
-  const CartPopupMenuButtons({super.key});
+class HomePagePopupMenuButtons extends StatelessWidget {
+  const HomePagePopupMenuButtons({super.key});
 
   void helpDialog(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
@@ -84,6 +84,8 @@ class CartPopupMenuButtons extends StatelessWidget {
           onSelected: (value) async {
             if (value == 'categories') {
               await Navigator.pushNamed(context, AppRoute.category.name);
+            } else if (value == 'settings') {
+              await Navigator.pushNamed(context, AppRoute.settings.name);
             } else if (value == 'helpHomePage') {
               helpDialog(context);
             } else if (value == 'logout') {
@@ -114,6 +116,21 @@ class CartPopupMenuButtons extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   Text(locale.cardPopupMenuCategories),
+                ],
+              ),
+            ),
+            PopupMenuItem(
+              value: 'settings',
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.settings,
+                    color: primary,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    locale.cardPopupMenuSettings,
+                  )
                 ],
               ),
             ),

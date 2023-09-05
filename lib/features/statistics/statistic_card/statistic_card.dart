@@ -78,8 +78,6 @@ class _StatisticCardState extends State<StatisticCard> {
   List<String> xLabels() {
     final basicLabels = widget.controller.strDates;
 
-    print(basicLabels);
-
     return List<String>.generate(
       basicLabels.length,
       (index) => basicLabels[index].substring(0, 3),

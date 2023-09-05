@@ -108,4 +108,12 @@ const Map<String, int> fontelloIconsCodes = {
   "bill": 59430,
   "woodwork": 59431,
   "services": 59432,
+  "down": 59434,
+  "up": 59433,
+  "down-fat": 59435,
+  "up-fat": 59436,
+  "budget_outlined": 59438,
+  "budget_page": 59437,
+  "budget2": 59439,
+  "budget_outlined2": 59440,
 };

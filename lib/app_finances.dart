@@ -10,8 +10,8 @@ import './common/current_models/current_language.dart';
 import './common/constants/themes/colors/custom_color.g.dart';
 import './common/constants/themes/colors/color_schemes.g.dart';
 
-class App extends StatelessWidget {
-  const App({super.key});
+class AppFinances extends StatelessWidget {
+  const AppFinances({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +66,7 @@ class App extends StatelessWidget {
                 AppRoute.signUp.name: (context) => AppRoute.signUp.page,
                 AppRoute.splash.name: (context) => AppRoute.splash.page,
                 AppRoute.category.name: (context) => AppRoute.category.page,
+                AppRoute.settings.name: (context) => AppRoute.settings.page,
                 AppRoute.transaction.name: (context) {
                   final args = ModalRoute.of(context)!.settings.arguments
                       as Map<String, dynamic>?;
