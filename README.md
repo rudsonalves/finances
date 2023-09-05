@@ -246,6 +246,55 @@ Com esses gatilhos em vigor, qualquer tentativa de inserir um valor inválido em
 
 # Changes:
 
+## 2023/09/05 - version 0.99.12
+
+In this commit, various updates and adjustments were made, including: removal of routing to the CategoryPage; addition of new icons and improvement of dialogs; addition of boolean columns for chart control; enhancements in state management; and performance improvements and bug fixes.
+
+Here is a more detailed breakdown of the changes:
+
+* lib/app_finances.dart:
+* lib/common/constants/routes/app_route.dart:
+  - Routing to CategoryPage() removed.
+* lib/common/constants/themes/icons/fontello_icons.dart:
+* lib/common/constants/themes/icons/fontello_icons_codes.dart:
+  - Some icons were removed.
+* lib/common/functions/function_alert_dialog.dart:
+  - This dialog has been enhanced for the standardization of app dialogs. So far, only some adjustments have been made, but they still need to be applied throughout the app.
+* lib/common/models/user_db_model.dart:
+  - Added columns userGrpShowGrid, userGrpIsCurved, userGrpShowDots, and userGrpAreaChart. These columns are booleans to control the attributes of the StatisticsPage chart.
+* lib/features/budget/budget_controller.dart:
+  - Added the getter categoryNames to replicate the getter of the same name in CategoriesController;
+  - Added a WidgetsBinding.instance.addPostFrameCallback to stack the calls to notifyListeners() in the _changeState method.
+* lib/features/budget/budget_page.dart:
+  - Added an AutomaticKeepAliveClientMixin to BudgetPage so that the page is not redrawn with each access.
+* lib/features/budget/widget/add_budget_dialog.dart:
+  - The controller is now accessed via locator.get<BudgetController>().
+* lib/features/budget/widget/dismissible_budget.dart:
+  - Added blocking for the deletion of categories with transactions.
+* lib/features/category/category_controller.dart:
+* lib/features/category/category_page.dart:
+* lib/features/category/category_state.dart:
+* lib/features/category/widgets/add_category_dialog.dart:
+* lib/features/category/widgets/categories_header.dart:
+* lib/features/category/widgets/dismissible_category.dart:
+  - These codes have been removed. The CategoriesPage has been replaced by the BudgetPage, which performs the same function and is now part of the app's main scope.
+* lib/features/home_page/widgets/home_popup_menu_buttons.dart:
+  - PopupMenuItem related to invoking CategoriesPage has been removed.
+* lib/features/home_page_view/home_page_view.dart:
+  - The call to the AddBudgetDialog (formerly AddCategoryDialog) is now made through the app's floatingActionButton.
+* lib/features/statistics/statistic_card/statistic_card.dart:
+  - The attributes showGrid, isCurved, showDots, and areaChart are now controlled by the current user's attributes.
+* lib/features/statistics/statistics_page.dart:
+  - Replaced Icons.upload and Icons.download with FontelloIcons.up1 and FontelloIcons.down1, respectively.
+* lib/features/transaction/transaction_page.dart:
+  - TransactionPage now directly calls the AddBudgetDialog for adding new categories.
+* lib/locator.dart:
+  - Lazy Singleton CategoryController replaced by BudgetController.
+* lib/services/database/sqflite_helper.dart:
+  - databaseSchemeVersion updated to 1.0.02;
+  - The usersTable had columns userGrpShowGrid, userGrpIsCurved, userGrpShowDots, and userGrpAreaChart added;
+  - After invoking _updateMigration, code was added to close and reopen the database. This was necessary to avoid bugs after updating the tables.
+
 ## 2023/09/04 - version 0.99.11
 
 In this commit, the following changes were made:
