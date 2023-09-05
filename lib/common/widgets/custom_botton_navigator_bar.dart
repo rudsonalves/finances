@@ -1,3 +1,4 @@
+import 'package:finances/common/constants/themes/icons/fontello_icons.dart';
 import 'package:flutter/material.dart';
 
 class CustomBottomNavigatorBar extends StatelessWidget {
@@ -50,7 +51,9 @@ class CustomBottomNavigatorBar extends StatelessWidget {
             ),
             CustomBottomAppBarItem(
               changePage: changePage,
-              icon: page == 3 ? Icons.settings : Icons.settings_outlined,
+              icon: page == 3
+                  ? FontelloIcons.budget2
+                  : FontelloIcons.budgetOutlined2,
               color: page == 3 ? selecteColor : unselecteColor,
               index: 3,
             ),

@@ -8,7 +8,7 @@
     "balanceCardBalance": "Total Balance",
     "balanceCardIncomes": "Incomes",
     "balanceCardExpenses": "Expenses",
-    "balanceCardSwitch": "Confirme transactions",
+    "balanceCardSwitch": "Check transactions",
     "balanceCardError": "An error has occurred! Please try again later.",
     "homePageTransHistory": "Transaction History",
     "homePageNoTransactions": "There is no transictions at this time.",
@@ -162,7 +162,12 @@
     "cardPopupMenuCategories": "Categories",
     "cardPopupMenuTransactionsHelp": "Transactions Help",
     "cardPopupMenuLogout": "Logout",
+    "cardPopupMenuSettings": "Settings",
     "statisticCardBalance": "Balance: ",
     "statisticCardIncomes": "Incomes",
-    "statisticCardExpenses": "Expenses"
+    "statisticCardExpenses": "Expenses",
+    "cardBalanceMenuTip": "Show accounts list",
+    "budgetPageTitle": "Budget/Categories",
+    "budgetPageCategory": "Category",
+    "budgetPageBudget": "Budget"
 }

@@ -8,7 +8,7 @@
     "balanceCardBalance": "Saldo Total",
     "balanceCardIncomes": "Ingresos",
     "balanceCardExpenses": "Gastos",
-    "balanceCardSwitch": "confirmar transacciones",
+    "balanceCardSwitch": "Verificar transacciones",
     "balanceCardError": "¡Se ha producido un error! Por favor, inténtalo de nuevo más tarde.",
     "homePageTransHistory": "Historial de Transacciones",
     "homePageNoTransactions": "No hay transacciones en este momento.",
@@ -157,12 +157,17 @@
     "databaseRecoverRestoreABackup": "Restaurar una Copia de Seguridad",
     "databaseRecoverBasename": "La copia de seguridad {basename} se creó con éxito.",
     "databaseRecoverSorryError": "Lo siento, hubo un error en la operación. Inténtalo más tarde.",
-    "databaseRecoverRetrievedSuccessfully": "Base de Datos Recuperada con Éxito",
+    "databaseRecoverRetrievedSuccessfully": "Base de Datos Recuperada con éxito",
     "databaseRecoverSorryRetrieving": "Lo siento, hubo un error al recuperar la copia de seguridad {selectedFileName}.",
     "cardPopupMenuCategories": "Categorías",
     "cardPopupMenuTransactionsHelp": "Ayuda de Transacciones",
     "cardPopupMenuLogout": "Cerrar Sesión",
+    "cardPopupMenuSettings": "Ajustes",
     "statisticCardBalance": "Balance: ",
     "statisticCardIncomes": "Ingresos",
-    "statisticCardExpenses": "Gastos"
+    "statisticCardExpenses": "Gastos",
+    "cardBalanceMenuTip": "Mostrar lista de cuentas",
+    "budgetPageTitle": "Presupuesto/Categorías",
+    "budgetPageCategory": "Categoría",
+    "budgetPageBudget": "Presupuesto"
 }

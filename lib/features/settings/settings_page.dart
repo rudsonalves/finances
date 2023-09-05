@@ -15,11 +15,8 @@ import 'settings_page_controller.dart';
 import 'settings_page_state.dart';
 
 class SettingsPage extends StatefulWidget {
-  final void Function() backPage;
-
   const SettingsPage({
     super.key,
-    required this.backPage,
   });
 
   @override
@@ -121,6 +118,10 @@ class _SettingsPageState extends State<SettingsPage> {
         title: Text(
           locale.settingsPageTitle,
           style: AppTextStyles.textStyleSemiBold18,
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       body: Stack(

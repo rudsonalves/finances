@@ -46,15 +46,15 @@ class _BalanceCardState extends State<BalanceCard> {
     // TODO: check this
     // log('BalanceClose residue: ${currentBalance.balanceClose}');
 
-    final MaterialStateProperty<Icon?> thumbIcon =
-        MaterialStateProperty.resolveWith<Icon?>(
-      (Set<MaterialState> states) {
-        if (states.contains(MaterialState.selected)) {
-          return const Icon(Icons.check);
-        }
-        return const Icon(Icons.close);
-      },
-    );
+    // final MaterialStateProperty<Icon?> thumbIcon =
+    //     MaterialStateProperty.resolveWith<Icon?>(
+    //   (Set<MaterialState> states) {
+    //     if (states.contains(MaterialState.selected)) {
+    //       return const Icon(Icons.check);
+    //     }
+    //     return const Icon(Icons.close);
+    //   },
+    // );
 
     return Positioned(
       left: 24,
@@ -71,14 +71,14 @@ class _BalanceCardState extends State<BalanceCard> {
           child: AnimatedBuilder(
             animation: widget.controller,
             builder: (context, _) {
-              // StateLoading...
+              // State Loading...
               if (widget.controller.state is BalanceCardStateLoading) {
                 return CustomCircularProgressIndicator(
                   color: colorScheme.onPrimary,
                 );
               }
 
-              // StateSuccess...
+              // State Success...
               if (widget.controller.state is BalanceCardStateSuccess) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,6 +92,7 @@ class _BalanceCardState extends State<BalanceCard> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               PopupMenuButton<int>(
+                                tooltip: locale.cardBalanceMenuTip,
                                 child: Row(
                                   children: [
                                     currentAccount.accountIcon.iconWidget(
@@ -152,14 +153,18 @@ class _BalanceCardState extends State<BalanceCard> {
                         ),
                         Tooltip(
                           message: locale.balanceCardSwitch,
-                          child: Switch(
-                            activeColor: colorScheme.inversePrimary,
-                            inactiveTrackColor: colorScheme.background,
-                            thumbIcon: thumbIcon,
-                            value: widget.controller.transStatusCheck,
-                            onChanged: (value) {
-                              widget.controller.toggleTransStatusCheck();
-                            },
+                          child: IconButton(
+                            icon: Icon(
+                              widget.controller.transStatusCheck
+                                  ? Icons.toggle_on
+                                  : Icons.toggle_off,
+                              color: widget.controller.transStatusCheck
+                                  ? colorScheme.primaryContainer
+                                  : colorScheme.onPrimary,
+                              size: 32,
+                            ),
+                            onPressed: () =>
+                                widget.controller.toggleTransStatusCheck(),
                           ),
                         ),
                       ],
@@ -228,7 +233,7 @@ class _BalanceCardState extends State<BalanceCard> {
                 );
               }
 
-              // StateError...
+              // State Error...
               return Center(
                 child: Text(
                   locale.balanceCardError,

@@ -20,12 +20,15 @@ class SqfliteHelper implements DatabaseHelper {
   /// This is the database scheme current version. To futures upgrades
   /// in database increment this value and add a new update script in
   /// _migrationScripts Map
-  static const _databaseSchemeVersion = 1000;
+  static const _databaseSchemeVersion = 1001;
 
   /// This Map contains the database migration scripts. The last index of this
   /// Map must be equal to the current version of the database.
   static const Map<int, List<String>> _migrationScripts = {
     1000: [],
+    1001: [
+      'ALTER TABLE categoriesTable ADD COLUMN categoryBudget REAL DEFAULT 0'
+    ],
     // 1001: ['DROP INDEX IF EXISTS $iconsNameIndex'],
     // 1002: [],
   };
@@ -91,6 +94,7 @@ class SqfliteHelper implements DatabaseHelper {
   static const categoryId = 'categoryId';
   static const categoryName = 'categoryName';
   static const categoryIcon = 'categoryIcon';
+  static const categoryBudget = 'categoryBudget';
 
   static const transactionsTable = 'transactonsTable';
   static const transactionsDateIndex = 'idxTransactionsDate';
@@ -273,6 +277,7 @@ class SqfliteHelper implements DatabaseHelper {
       ' $categoryId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
       ' $categoryName TEXT UNIQUE NOT NULL,'
       ' $categoryIcon INTEGER NOT NULL,'
+      ' $categoryBudget REAL DEFAULT 0,'
       ' FOREIGN KEY ($categoryIcon)'
       '  REFERENCES $iconsTable ($iconId)'
       '  ON DELETE CASCADE'
@@ -1432,6 +1437,23 @@ class SqfliteHelper implements DatabaseHelper {
     try {
       int count = Sqflite.firstIntValue(await _db.rawQuery(
             'SELECT COUNT(*) FROM $balanceTable WHERE $balanceAccountId = ?',
+            [id],
+          )) ??
+          0;
+      return count;
+    } catch (err) {
+      log('Error: $err');
+      return -1;
+    }
+  }
+
+  /// Returns the number of transactions on the passed id category.
+  @override
+  Future<int> countTransactionForCategoryId(int id) async {
+    if (!_db.isOpen) await _openDatabase();
+    try {
+      int count = Sqflite.firstIntValue(await _db.rawQuery(
+            'SELECT COUNT(*) FROM $transactionsTable WHERE $transCategoryId = ?',
             [id],
           )) ??
           0;

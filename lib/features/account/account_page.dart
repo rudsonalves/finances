@@ -19,10 +19,8 @@ import '../../common/extensions/money_masked_text.dart';
 import '../../common/constants/themes/app_text_styles.dart';
 
 class AccountPage extends StatefulWidget {
-  final void Function() backPage;
   const AccountPage({
     super.key,
-    required this.backPage,
   });
 
   @override

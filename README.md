@@ -122,6 +122,7 @@ Some bugs were noticed and need to be fixed:
 
 - *20230623.3.* Implementation: There are currently two functions in the *lib/common/functions* directory;
 - *20230818.3* Bug: o back está levando para a página de apresentação. Trocar pela página inicial.
+- *20230905.1* Bug: bloquear a deleção de categorias usadas em transações.
 
 These bug fixes and implementations will help improve the user experience and make the app more complete and stable.
 
@@ -244,6 +245,70 @@ Foram criados dois gatilhos (triggers) para validar as entradas das colunas *bal
 Com esses gatilhos em vigor, qualquer tentativa de inserir um valor inválido em *balanceNextId* ou *balancePreviousId* resultará em um erro, e a operação de inserção será interrompida, mantendo assim a integridade referencial desses dados.
 
 # Changes:
+
+## 2023/09/04 - version 0.99.11
+
+In this commit, the following changes were made:
+
+ * android/app/build.gradle:
+   - Preparation for app publication on the Play Store.
+
+ * android/app/src/main/AndroidManifest.xml:
+   - Addition of an icon for the app.
+   - Addition of internet access permission for the app. This is necessary for Firebase authentication.
+
+ * assets/fonts/fontelloicons.ttf:
+   - New icons have been added, most of them for use in the app's design.
+
+ * lib/common/constants/routes/app_route.dart:
+   - Added routing for the SettingsPage.
+
+ * lib/common/constants/themes/icons/fontello_icons_codes.dart:
+   - The icons down, up, down-fat, up-fat, budget_outlined, budget_page, budget2, and budget_outlined2 have been added.
+
+ * lib/common/functions/base_dismissible_container.dart:
+   - The disableColor has been changed to colorScheme.outlineVariant.
+
+ * lib/common/models/category_db_model.dart:
+   - The attribute categoryBudget has been added to the CategoryDbModel class.
+
+ * lib/common/widgets/custom_button_navigator_bar.dart:
+   - The Icons.settings icon has been replaced with FontelloIcons.budget2 for the new BudgetPage.
+
+ * lib/features/category/widgets/icon_selection_dialog.dart:
+   - The layout of this dialog has been reorganized, replacing the TextButton with an InkWell to reduce the space occupied by the row.
+   - The search TextField has been placed within a Row along with a button to close the dialog. This button is not actually necessary but has been added for standardizing the action in the app.
+
+ * lib/features/home_page/balance_card/balance_card.dart:
+   - The Switch in the BalanceCard has been replaced with an IconButton featuring the Icons.toggle_on and Icons.toggle_off icons. This made the button narrower and more discreet in the BalanceCard.
+
+ * lib/features/home_page/widgets/cart_popup_menu_buttons.dart has been moved to home_popup_menu_buttons.dart.
+
+ * lib/features/home_page/widgets/transaction_dismissible_tile.dart:
+   - The TransactionDismissibleTile now disables the edit/delete options if the transaction is checked.
+
+ * lib/features/home_page_view/home_page_view.dart:
+   - StatisticsPage, AccountPage, and SettingsPage no longer have initial parameters.
+   - BudgetPage has been added to the PageView list.
+
+ * lib/features/settings/settings_page.dart:
+   - In addition to removing the backPage parameter, a button has been added to its appBar to return to the app's initial page.
+
+ * lib/features/statistics/graphics/line_graphic.dart:
+   - Adjustment to the labelX of the graph.
+
+ * lib/l10n/app_*.arb:
+   - Translations have been added for the BudgetPage, along with some corrections.
+
+ * lib/services/database/database_helper.dart:
+ * lib/services/database/sqflite_helper.dart:
+   - The databaseSchemeVersion has been updated to version 1.0.01 with a test on the categoriesTable table alteration, including the addition of the categoryBudget column, which is of type real and has a default value of 0.
+   - The method Future<int> countTransactionForCategoryId(int id) has been added to count transactions with the passed CategoryId. This will be used to prevent the deletion of a category being used in a transaction.
+
+ * pubspec.yaml:
+   - The version has been updated to 0.99.11.
+   - The flutter_launcher_icons package has been added to generate the app's icon.
+
 
 ## 2023/08/31 - version 0.99.10
 
