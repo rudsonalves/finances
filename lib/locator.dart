@@ -17,9 +17,9 @@ import 'common/current_models/current_account.dart';
 import './services/authentication/auth_service.dart';
 import './common/current_models/current_balance.dart';
 import 'features/account/account_controller.dart';
+import 'features/budget/budget_controller.dart';
 import 'features/statistics/statistic_controller.dart';
 import 'repositories/account/account_repository.dart';
-import './features/category/category_controller.dart';
 import './common/current_models/current_language.dart';
 import './features/home_page/home_page_controller.dart';
 import './repositories/balance/balance_repository.dart';
@@ -144,10 +144,6 @@ void setupDependencies() {
       () => HomePageController(),
     );
 
-    locator.registerLazySingleton<CategoryController>(
-      () => CategoryController(),
-    );
-
     locator.registerLazySingleton<BalanceCardController>(
       () => BalanceCardController(),
     );
@@ -163,6 +159,10 @@ void setupDependencies() {
 
     locator.registerLazySingleton<StatisticsController>(
       () => StatisticsController(),
+    );
+
+    locator.registerLazySingleton<BudgetController>(
+      () => BudgetController(),
     );
   } catch (err) {
     log('Error: $err');

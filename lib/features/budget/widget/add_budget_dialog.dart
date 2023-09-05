@@ -1,3 +1,4 @@
+import 'package:finances/features/budget/budget_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -8,9 +9,8 @@ import '../../../common/models/category_db_model.dart';
 import '../../../common/models/icons_model.dart';
 import '../../../common/widgets/add_cancel_buttons.dart';
 import '../../../locator.dart';
-import '../../category/category_controller.dart';
-import '../../category/widgets/category_text_form_field.dart';
-import '../../category/widgets/select_icon_row.dart';
+import 'category_text_form_field.dart';
+import 'select_icon_row.dart';
 
 class AddBudgetDialog extends StatefulWidget {
   final bool addCategory;
@@ -71,7 +71,7 @@ class _AddBudgetDialogState extends State<AddBudgetDialog> {
       categoryName: categoryController.text,
     );
     final locale = AppLocalizations.of(context)!;
-    final controller = locator.get<CategoryController>();
+    final controller = locator.get<BudgetController>();
 
     if (categoryId != null) {
       await controller.updateCategory(newCategory);

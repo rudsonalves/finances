@@ -143,6 +143,7 @@
     "accountPageCancel": "Cancelar",
     "genericClose": "Fechar",
     "genericAdd": "Adicionar",
+    "genericAttention": "Atenção",
     "colorButtonBlockedDeletion": "Eliminação Bloqueada",
     "colorButtonAccountHas": "A conta **{accountName}** possui **{numberOfTrans}** transações. Para a eliminar, deves primeiro remover estas transações.",
     "colorButtonPickColor" : "Escolher uma Cor",
@@ -162,12 +163,13 @@
     "cardPopupMenuCategories": "Categorias",
     "cardPopupMenuTransactionsHelp": "Ajuda de Transações",
     "cardPopupMenuLogout": "Sair",
-     "cardPopupMenuSettings": "Configurações",
+    "cardPopupMenuSettings": "Configurações",
     "statisticCardBalance": "Balanço: ",
     "statisticCardIncomes": "Entradas",
     "statisticCardExpenses": "Despesas",
     "cardBalanceMenuTip": "Mostrar lista de contas",
     "budgetPageTitle": "Orçamento/Categorias",
     "budgetPageCategory": "Categoria",
-    "budgetPageBudget": "Orçamento"
+    "budgetPageBudget": "Orçamento",
+    "budgetPageDeleteAlert": "A categoria {categoryName} possui {categoryCount} transações. Não é possível excluir uma categoria que está em uso."
 }

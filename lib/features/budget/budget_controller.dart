@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 
 import '../../common/models/category_db_model.dart';
 import '../../common/models/icons_model.dart';
@@ -15,9 +15,15 @@ class BudgetController extends ChangeNotifier {
 
   List<CategoryDbModel> get categories => _categoryRepository.categories;
 
+  List<String> get categoryNames {
+    return _categoryRepository.categoriesMap.keys.toList();
+  }
+
   void _changeState(BudgetState newState) {
     _state = newState;
-    notifyListeners();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      notifyListeners();
+    });
   }
 
   Future<void> init() async {

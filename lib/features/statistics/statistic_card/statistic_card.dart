@@ -1,3 +1,4 @@
+import 'package:finances/common/current_models/current_user.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -26,12 +27,8 @@ class StatisticCard extends StatefulWidget {
 }
 
 class _StatisticCardState extends State<StatisticCard> {
-  bool showGrid = true;
   bool horizontalGrid = true;
   bool verticalGrid = true;
-  bool isCurved = false;
-  bool showDots = false;
-  bool areaChart = false;
 
   ExtendedDate currentDate = ExtendedDate.now();
 
@@ -91,6 +88,7 @@ class _StatisticCardState extends State<StatisticCard> {
     final primary = colorScheme.primary;
     final money = locator.get<MoneyMaskedText>();
     final locale = AppLocalizations.of(context)!;
+    final user = locator.get<CurrentUser>();
 
     return Positioned(
       left: 4,
@@ -233,7 +231,7 @@ class _StatisticCardState extends State<StatisticCard> {
                                   children: [
                                     Icon(
                                       Icons.grid_4x4,
-                                      color: showGrid
+                                      color: user.userGrpShowGrid
                                           ? colorScheme.primary
                                           : colorScheme.outlineVariant,
                                     ),
@@ -248,7 +246,7 @@ class _StatisticCardState extends State<StatisticCard> {
                                   children: [
                                     Icon(
                                       Icons.show_chart,
-                                      color: isCurved
+                                      color: user.userGrpIsCurved
                                           ? colorScheme.primary
                                           : colorScheme.outlineVariant,
                                     ),
@@ -263,7 +261,7 @@ class _StatisticCardState extends State<StatisticCard> {
                                   children: [
                                     Icon(
                                       Icons.timeline,
-                                      color: showDots
+                                      color: user.userGrpShowDots
                                           ? colorScheme.primary
                                           : colorScheme.outlineVariant,
                                     ),
@@ -278,7 +276,7 @@ class _StatisticCardState extends State<StatisticCard> {
                                   children: [
                                     Icon(
                                       Icons.area_chart,
-                                      color: areaChart
+                                      color: user.userGrpAreaChart
                                           ? colorScheme.primary
                                           : colorScheme.outlineVariant,
                                     ),
@@ -288,28 +286,33 @@ class _StatisticCardState extends State<StatisticCard> {
                                 ),
                               ),
                             ],
-                            onSelected: (value) {
+                            onSelected: (value) async {
                               switch (value) {
                                 case 'Grid':
                                   setState(() {
-                                    showGrid = !showGrid;
+                                    user.userGrpShowGrid =
+                                        !user.userGrpShowGrid;
                                   });
                                   break;
                                 case 'Curve':
                                   setState(() {
-                                    isCurved = !isCurved;
+                                    user.userGrpIsCurved =
+                                        !user.userGrpIsCurved;
                                   });
                                   break;
                                 case 'Dots':
                                   setState(() {
-                                    showDots = !showDots;
+                                    user.userGrpShowDots =
+                                        !user.userGrpShowDots;
                                   });
                                   break;
                                 default:
                                   setState(() {
-                                    areaChart = !areaChart;
+                                    user.userGrpAreaChart =
+                                        !user.userGrpAreaChart;
                                   });
                               }
+                              await user.updateUser();
                             },
                           ),
                         ],
@@ -329,10 +332,10 @@ class _StatisticCardState extends State<StatisticCard> {
                             xLabels: graphicXLabes,
                             drawHorizontalLine: horizontalGrid,
                             drawVerticalLine: verticalGrid,
-                            showGrid: showGrid,
-                            isCurved: isCurved,
-                            showDots: showDots,
-                            areaChart: areaChart,
+                            showGrid: user.userGrpShowGrid,
+                            isCurved: user.userGrpIsCurved,
+                            showDots: user.userGrpShowDots,
+                            areaChart: user.userGrpAreaChart,
                           ),
                         ),
                       ),

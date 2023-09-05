@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import './icon_selection_dialog.dart';
+import 'icon_selection_dialog.dart';
 import '../../../common/models/icons_model.dart';
 import '../../../common/widgets/color_button.dart';
 import '../../../common/constants/themes/app_text_styles.dart';

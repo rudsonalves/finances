@@ -6,6 +6,8 @@ import '../../common/widgets/account_dropdown_form_field.dart';
 import '../../locator.dart';
 import '../../repositories/account/account_repository.dart';
 import '../../services/database/managers/transfers_manager.dart';
+import '../budget/budget_controller.dart';
+import '../budget/widget/add_budget_dialog.dart';
 import './transaction_controller.dart';
 import '../../common/models/extends_date.dart';
 import '../../common/widgets/app_top_border.dart';
@@ -13,7 +15,6 @@ import '../../common/widgets/custom_app_bar.dart';
 import '../../common/widgets/row_of_two_bottons.dart';
 import '../../common/widgets/add_cancel_buttons.dart';
 import '../../common/models/transaction_db_model.dart';
-import '../../common/constants/routes/app_route.dart';
 import '../../common/widgets/date_time_picker_form.dart';
 import '../../common/widgets/basic_text_form_field.dart';
 import '../../common/validate/transaction_validator.dart';
@@ -159,8 +160,17 @@ class _TransactionPageState extends State<TransactionPage> {
   }
 
   void addCategoryAction() async {
-    await Navigator.pushNamed(context, AppRoute.category.name);
+    await showDialog(
+      context: context,
+      builder: (context) => AddBudgetDialog(
+        callBack: addCategoryCallBak,
+      ),
+    );
     setState(() {});
+  }
+
+  Future<void> addCategoryCallBak() async {
+    await locator.get<BudgetController>().getAllCategories();
   }
 
   void changeState(bool state) {

@@ -85,7 +85,6 @@ static const IconData note = IconData(59421, fontFamily: _kFontFam, fontPackage:
 static const IconData music1 = IconData(59422, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 static const IconData music2 = IconData(59423, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 static const IconData shop = IconData(59424, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-static const IconData arrowsCw = IconData(59425, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 static const IconData cwCircle = IconData(59426, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 static const IconData updownCircle = IconData(59427, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 static const IconData mastercard1 = IconData(62249, fontFamily: _kFontFam, fontPackage: _kFontPkg);
@@ -112,13 +111,11 @@ static const IconData alimony = IconData(59429, fontFamily: _kFontFam, fontPacka
 static const IconData bill = IconData(59430, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 static const IconData woodwork = IconData(59431, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 static const IconData services = IconData(59432, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-static const IconData down = IconData(59434, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-static const IconData up = IconData(59433, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-static const IconData downFat = IconData(59435, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-static const IconData upFat = IconData(59436, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 static const IconData budgetOutlined = IconData(59438, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 static const IconData budgetPage = IconData(59437, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 static const IconData budget2 = IconData(59439, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 static const IconData budgetOutlined2 = IconData(59440, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+static const IconData down1 = IconData(59443, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+static const IconData up1 = IconData(59445, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }
 

@@ -143,6 +143,7 @@
     "accountPageCancel": "Cancel",
     "genericClose": "Close",
     "genericAdd": "Add",
+    "genericAttention": "Attention",
     "colorButtonBlockedDeletion": "Blocked Deletion",
     "colorButtonAccountHas": "Account **{accountName}** has **{numberOfTrans}** transactions. To delete it, you must first remove these transactions.",
     "colorButtonPickColor" : "Pick a Color",
@@ -169,5 +170,6 @@
     "cardBalanceMenuTip": "Show accounts list",
     "budgetPageTitle": "Budget/Categories",
     "budgetPageCategory": "Category",
-    "budgetPageBudget": "Budget"
+    "budgetPageBudget": "Budget",
+    "budgetPageDeleteAlert": "Category **{categoryName}** has **{categoryCount}** transactions. It is not possible to delete a category that is in use."
 }
