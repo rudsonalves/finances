@@ -143,6 +143,7 @@
     "accountPageCancel": "Cancelar",
     "genericClose": "Cerrar",
     "genericAdd": "Agregar",
+    "genericAttention": "Atención",
     "colorButtonBlockedDeletion": "Eliminación Bloqueada",
     "colorButtonAccountHas": "La cuenta **{accountName}** tiene **{numberOfTrans}** transacciones. Para eliminarla, primero debes eliminar estas transacciones.",
     "colorButtonPickColor" : "Seleccionar un Color",
@@ -169,5 +170,6 @@
     "cardBalanceMenuTip": "Mostrar lista de cuentas",
     "budgetPageTitle": "Presupuesto/Categorías",
     "budgetPageCategory": "Categoría",
-    "budgetPageBudget": "Presupuesto"
+    "budgetPageBudget": "Presupuesto",
+    "budgetPageDeleteAlert": "La categoría {categoryName} tiene {categoryCount} transacciones. No es posible eliminar una categoría que está en uso."
 }

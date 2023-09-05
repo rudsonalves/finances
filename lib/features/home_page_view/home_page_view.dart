@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import '../../locator.dart';
 import '../account/account_controller.dart';
 import '../account/widgets/statefull_add_account_dialog.dart';
+import '../budget/budget_controller.dart';
 import '../budget/budget_page.dart';
+import '../budget/widget/add_budget_dialog.dart';
 import '../home_page/home_page.dart';
 import '../account/account_page.dart';
 import '../statistics/statistic_controller.dart';
@@ -36,11 +38,13 @@ class _HomePageViewState extends State<HomePageView> {
   void changePage(int page) {
     setState(() {
       _pageIndex = page;
-      _floatAppButton = (page == 0 || page == 2) ? true : false;
+      _floatAppButton = (page != 1) ? true : false;
       if (page == 0) {
         _addFunction = addTransaction;
       } else if (page == 2) {
         _addFunction = addAccount;
+      } else if (page == 3) {
+        _addFunction = addCategory;
       }
       _pageController.jumpToPage(page);
     });
@@ -74,6 +78,19 @@ class _HomePageViewState extends State<HomePageView> {
   Future<void> addAccount() async {
     await statefullAddAccountDialog(context);
     locator.get<AccountController>().getAllBalances();
+  }
+
+  Future<void> addCategory() async {
+    await showDialog(
+      context: context,
+      builder: (context) => AddBudgetDialog(
+        callBack: addCategoryCallBak,
+      ),
+    );
+  }
+
+  Future<void> addCategoryCallBak() async {
+    await locator.get<BudgetController>().getAllCategories();
   }
 
   @override

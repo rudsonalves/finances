@@ -10,7 +10,7 @@ import '../../../common/constants/themes/app_icons.dart';
 import '../../../common/validate/account_validator.dart';
 import '../../../common/widgets/add_cancel_buttons.dart';
 import '../../../common/widgets/basic_text_form_field.dart';
-import '../../../features/category/widgets/select_icon_row.dart';
+import '../../budget/widget/select_icon_row.dart';
 import '../../../common/constants/themes/app_text_styles.dart';
 import '../../../repositories/account/account_repository.dart';
 

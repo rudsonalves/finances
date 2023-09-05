@@ -1,3 +1,4 @@
+import 'package:finances/common/constants/themes/icons/fontello_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -53,10 +54,10 @@ class _StatisticsPageState extends State<StatisticsPage>
     Color color;
 
     if (value > 0) {
-      icon = Icons.upload;
+      icon = FontelloIcons.up1;
       color = customColors.lowgreen!;
     } else if (value < 0) {
-      icon = Icons.download;
+      icon = FontelloIcons.down1;
       color = customColors.minusred!;
     } else {
       icon = Icons.horizontal_rule;

@@ -15,6 +15,10 @@ class UserDbModel {
   int? userMainAccountId;
   String userTheme;
   String userLanguage;
+  bool userGrpShowGrid;
+  bool userGrpIsCurved;
+  bool userGrpShowDots;
+  bool userGrpAreaChart;
 
   UserDbModel({
     this.userId,
@@ -24,6 +28,10 @@ class UserDbModel {
     this.userMainAccountId,
     this.userTheme = 'system',
     this.userLanguage = 'en_US',
+    this.userGrpShowGrid = true,
+    this.userGrpIsCurved = false,
+    this.userGrpShowDots = false,
+    this.userGrpAreaChart = false,
   });
 
   void setFromUserModel(UserModel user) {
@@ -44,6 +52,10 @@ class UserDbModel {
     userMainAccountId = userMap['userMainAccountId'] as int;
     userTheme = userMap['userTheme'] as String;
     userLanguage = userMap['userLanguage'] as String;
+    userGrpShowGrid = userMap['userGrpShowGrid'] as int == 0 ? false : true;
+    userGrpIsCurved = userMap['userGrpIsCurved'] as int == 0 ? false : true;
+    userGrpShowDots = userMap['userGrpShowDots'] as int == 0 ? false : true;
+    userGrpAreaChart = userMap['userGrpAreaChart'] as int == 0 ? false : true;
   }
 
   void copyFromUser(UserDbModel user) {
@@ -54,6 +66,10 @@ class UserDbModel {
     userMainAccountId = user.userMainAccountId;
     userTheme = user.userTheme;
     userLanguage = user.userLanguage;
+    userGrpShowGrid = user.userGrpShowGrid;
+    userGrpIsCurved = user.userGrpIsCurved;
+    userGrpShowDots = user.userGrpShowDots;
+    userGrpAreaChart = user.userGrpAreaChart;
   }
 
   @override
@@ -65,7 +81,11 @@ class UserDbModel {
         ' Logged: $userLogged;'
         ' MainAccountId: $userMainAccountId;'
         ' Theme: $userTheme;'
-        ' Language: $userLanguage'
+        ' Language: $userLanguage;'
+        ' GrpShowGrid: $userGrpShowGrid;'
+        ' GrpIsCurved: $userGrpIsCurved;'
+        ' GrpShowDots: $userGrpShowDots;'
+        ' GrpAreaChart: $userGrpAreaChart'
         ')';
   }
 
@@ -79,6 +99,10 @@ class UserDbModel {
         'userMainAccountId': userMainAccountId,
         'userTheme': userTheme,
         'userLanguage': userLanguage,
+        'userGrpShowGrid': userGrpShowGrid,
+        'userGrpIsCurved': userGrpIsCurved,
+        'userGrpShowDots': userGrpShowDots,
+        'userGrpAreaChart': userGrpAreaChart,
       };
     } else {
       return <String, dynamic>{
@@ -88,6 +112,10 @@ class UserDbModel {
         'userMainAccountId': userMainAccountId,
         'userTheme': userTheme,
         'userLanguage': userLanguage,
+        'userGrpShowGrid': userGrpShowGrid,
+        'userGrpIsCurved': userGrpIsCurved,
+        'userGrpShowDots': userGrpShowDots,
+        'userGrpAreaChart': userGrpAreaChart,
       };
     }
   }
@@ -103,6 +131,10 @@ class UserDbModel {
           : null,
       userTheme: map['userTheme'] as String,
       userLanguage: map['userLanguage'] as String,
+      userGrpShowGrid: map['userGrpShowGrid'] as int == 0 ? false : true,
+      userGrpIsCurved: map['userGrpIsCurved'] as int == 0 ? false : true,
+      userGrpShowDots: map['userGrpShowDots'] as int == 0 ? false : true,
+      userGrpAreaChart: map['userGrpAreaChart'] as int == 0 ? false : true,
     );
   }
 

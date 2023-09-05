@@ -4,8 +4,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../common/constants/themes/app_text_styles.dart';
 import '../../../common/constants/themes/colors/custom_color.g.dart';
 import '../../../common/extensions/money_masked_text.dart';
+import '../../../common/functions/function_alert_dialog.dart';
 import '../../../common/widgets/markdown_text.dart';
 import '../../../locator.dart';
+import '../../../services/database/database_helper.dart';
 import '../budget_controller.dart';
 import '../../../common/functions/base_dismissible_container.dart';
 import 'add_budget_dialog.dart';
@@ -87,7 +89,7 @@ class _DismissibleBudgetState extends State<DismissibleBudget> {
           label: locale.dismissibleCategoryDelete,
         ),
         child: Card(
-          elevation: 0,
+          elevation: 0.7,
           color: colorScheme.onPrimary,
           margin: EdgeInsets.zero,
           child: ListTile(
@@ -137,6 +139,25 @@ class _DismissibleBudgetState extends State<DismissibleBudget> {
                   ],
                 ),
               );
+              return false;
+            }
+
+            final int categoryCount = await locator
+                .get<DatabaseHelper>()
+                .countTransactionForCategoryId(category.categoryId!);
+
+            if (categoryCount > 0) {
+              if (!mounted) return false;
+              await functionAlertDialog(
+                context,
+                title: locale.genericAttention,
+                content: locale.budgetPageDeleteAlert(
+                  categoryCount,
+                  category.categoryName,
+                ),
+                icon: Icons.warning,
+              );
+
               return false;
             }
 

@@ -54,6 +54,7 @@ class DismissibleAccountCard extends StatelessWidget {
           enable: deleteCallBack != null,
         ),
         child: Card(
+          elevation: 0.7,
           margin: EdgeInsets.zero,
           child: ListTile(
             title: Text(

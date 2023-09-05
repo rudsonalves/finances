@@ -1,3 +1,4 @@
+import 'package:finances/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -16,8 +17,12 @@ class BudgetPage extends StatefulWidget {
   State<BudgetPage> createState() => _BudgetPageState();
 }
 
-class _BudgetPageState extends State<BudgetPage> {
-  final _controller = BudgetController();
+class _BudgetPageState extends State<BudgetPage>
+    with AutomaticKeepAliveClientMixin {
+  final _controller = locator.get<BudgetController>();
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -31,12 +36,15 @@ class _BudgetPageState extends State<BudgetPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     final colorScheme = Theme.of(context).colorScheme;
     final primary = colorScheme.primary;
     final locale = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: CustomAppBar(
+        centerTitle: true,
         title: Text(
           locale.budgetPageTitle,
           style: AppTextStyles.textStyleSemiBold18,

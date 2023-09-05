@@ -20,7 +20,7 @@ class SqfliteHelper implements DatabaseHelper {
   /// This is the database scheme current version. To futures upgrades
   /// in database increment this value and add a new update script in
   /// _migrationScripts Map
-  static const _databaseSchemeVersion = 1001;
+  static const _databaseSchemeVersion = 1002;
 
   /// This Map contains the database migration scripts. The last index of this
   /// Map must be equal to the current version of the database.
@@ -28,6 +28,12 @@ class SqfliteHelper implements DatabaseHelper {
     1000: [],
     1001: [
       'ALTER TABLE categoriesTable ADD COLUMN categoryBudget REAL DEFAULT 0'
+    ],
+    1002: [
+      'ALTER TABLE usersTable ADD COLUMN userGrpShowGrid INTEGER DEFAULT 1',
+      'ALTER TABLE usersTable ADD COLUMN userGrpIsCurved INTEGER DEFAULT 0',
+      'ALTER TABLE usersTable ADD COLUMN userGrpShowDots INTEGER DEFAULT 0',
+      'ALTER TABLE usersTable ADD COLUMN userGrpAreaChart INTEGER DEFAULT 0',
     ],
     // 1001: ['DROP INDEX IF EXISTS $iconsNameIndex'],
     // 1002: [],
@@ -54,6 +60,10 @@ class SqfliteHelper implements DatabaseHelper {
   static const userMainAccountId = 'userMainAccountId';
   static const userTheme = 'userTheme';
   static const userLanguage = 'userLanguage';
+  static const userGrpShowGrid = 'userGrpShowGrid';
+  static const userGrpIsCurved = 'userGrpIsCurved';
+  static const userGrpShowDots = 'userGrpShowDots';
+  static const userGrpAreaChart = 'userGrpAreaChart';
 
   static const iconsTable = 'iconsTable';
   static const iconsNameIndex = 'idxIconsName';
@@ -153,8 +163,15 @@ class SqfliteHelper implements DatabaseHelper {
       );
       await batch.commit();
       await _updateMigration(_databaseSchemeVersion);
+
+      await _db.close();
+      _db = await openDatabase(
+        path,
+        version: _dbVersion,
+        onCreate: _onCreate,
+        onConfigure: _onConfiguration,
+      );
     }
-    // await logSchema();
   }
 
   Future<void> _onCreate(Database db, int version) async {
@@ -204,6 +221,10 @@ class SqfliteHelper implements DatabaseHelper {
       ' $userMainAccountId INTEGER,'
       ' $userTheme TEXT NOT NULL,'
       ' $userLanguage TEXT NOT NULL,'
+      ' $userGrpShowGrid INTEGER DEFAULT 1,'
+      ' $userGrpIsCurved INTEGER DEFAULT 0,'
+      ' $userGrpShowDots INTEGER DEFAULT 0,'
+      ' $userGrpAreaChart INTEGER DEFAULT 0,'
       ' FOREIGN KEY ($userMainAccountId)'
       '  REFERENCES $accountTable ($accountId)'
       '  ON DELETE CASCADE'

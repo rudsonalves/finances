@@ -82,9 +82,7 @@ class HomePagePopupMenuButtons extends StatelessWidget {
       children: [
         PopupMenuButton(
           onSelected: (value) async {
-            if (value == 'categories') {
-              await Navigator.pushNamed(context, AppRoute.category.name);
-            } else if (value == 'settings') {
+            if (value == 'settings') {
               await Navigator.pushNamed(context, AppRoute.settings.name);
             } else if (value == 'helpHomePage') {
               helpDialog(context);
@@ -106,19 +104,6 @@ class HomePagePopupMenuButtons extends StatelessWidget {
             color: colorScheme.onPrimary,
           ),
           itemBuilder: (context) => [
-            PopupMenuItem(
-              value: 'categories',
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.edit,
-                    color: primary,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(locale.cardPopupMenuCategories),
-                ],
-              ),
-            ),
             PopupMenuItem(
               value: 'settings',
               child: Row(

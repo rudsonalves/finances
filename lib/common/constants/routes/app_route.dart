@@ -1,7 +1,6 @@
 import 'package:finances/features/settings/settings_page.dart';
 import 'package:flutter/material.dart';
 
-import '../../../features/category/category_page.dart';
 import '../../../features/home_page_view/home_page_view.dart';
 import '../../../features/onboarding/onboarding_page.dart';
 import '../../../features/sign_in/sign_in_page.dart';
@@ -42,10 +41,10 @@ class AppRoute {
     name: '/splash',
     page: SplashPage(),
   );
-  static const Route category = Route(
-    name: '/category',
-    page: CategoryPage(),
-  );
+  // static const Route category = Route(
+  //   name: '/category',
+  //   page: CategoryPage(),
+  // );
   static const Route transaction = Route(
     name: '/transaction',
     page: TransactionPage(),

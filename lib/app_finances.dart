@@ -65,7 +65,6 @@ class AppFinances extends StatelessWidget {
                 AppRoute.signIn.name: (context) => AppRoute.signIn.page,
                 AppRoute.signUp.name: (context) => AppRoute.signUp.page,
                 AppRoute.splash.name: (context) => AppRoute.splash.page,
-                AppRoute.category.name: (context) => AppRoute.category.page,
                 AppRoute.settings.name: (context) => AppRoute.settings.page,
                 AppRoute.transaction.name: (context) {
                   final args = ModalRoute.of(context)!.settings.arguments
