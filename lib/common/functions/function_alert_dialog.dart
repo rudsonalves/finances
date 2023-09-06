@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../constants/themes/app_text_styles.dart';
-import '../widgets/markdown_text.dart';
+import '../widgets/markdown_rich_text.dart';
 
 Future<void> functionAlertDialog(
   BuildContext context, {
@@ -32,7 +32,7 @@ Future<void> functionAlertDialog(
       titleTextStyle: AppTextStyles.textStyleBold24.copyWith(
         color: primary,
       ),
-      content: MarkdownText.richText(
+      content: MarkdownRichText.richText(
         content,
         color: primary,
       ),

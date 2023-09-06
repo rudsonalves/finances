@@ -18,6 +18,9 @@
     "statisticsPageCategory": "Category",
     "statisticsPageValue": "Value",
     "statisticsPageNoStatistics": "No Statistics found!",
+    "statisticsPageLastMonths": "Average of the last months",
+    "statisticsPage12Month": "12 month average",
+    "statisticsPageCategoryBudget": "Use Category Budget",
     "settingsPageTitle": "Settings",
     "settingsPageAppSettings": "App Settings",
     "settingsPageAppTheme": "App theme:",
@@ -171,5 +174,9 @@
     "budgetPageTitle": "Budget/Categories",
     "budgetPageCategory": "Category",
     "budgetPageBudget": "Budget",
-    "budgetPageDeleteAlert": "Category {categoryName} has {categoryCount} transactions. It is not possible to delete a category that is in use."
+    "budgetPageDeleteAlert": "Category {categoryName} has {categoryCount} transactions. It is not possible to delete a category that is in use.",
+    "budgetPageResetValues": "Reset values",
+    "budgetPageLastMonths": "Set to average of the last months",
+    "budgetPage12Month": "Set to 12 month average",
+    "budgetPageTotal": "Total Budget"
 }

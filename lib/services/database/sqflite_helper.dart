@@ -35,6 +35,9 @@ class SqfliteHelper implements DatabaseHelper {
       'ALTER TABLE usersTable ADD COLUMN userGrpShowDots INTEGER DEFAULT 0',
       'ALTER TABLE usersTable ADD COLUMN userGrpAreaChart INTEGER DEFAULT 0',
     ],
+    // 1003: [
+    //   'ALTER TABLE usersTable ADD COLUMN userBudgetRef INTEGER DEFAULT 1',
+    // ],
     // 1001: ['DROP INDEX IF EXISTS $iconsNameIndex'],
     // 1002: [],
   };

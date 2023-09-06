@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 
 import '../../../common/constants/themes/colors/custom_color.g.dart';
-import '../../../common/functions/card_imcome_function.dart';
+import '../../../common/functions/card_income_function.dart';
 import '../../../locator.dart';
 import './balance_cart_state.dart';
 import './balance_card_controller.dart';
@@ -45,16 +45,6 @@ class _BalanceCardState extends State<BalanceCard> {
 
     // TODO: check this
     // log('BalanceClose residue: ${currentBalance.balanceClose}');
-
-    // final MaterialStateProperty<Icon?> thumbIcon =
-    //     MaterialStateProperty.resolveWith<Icon?>(
-    //   (Set<MaterialState> states) {
-    //     if (states.contains(MaterialState.selected)) {
-    //       return const Icon(Icons.check);
-    //     }
-    //     return const Icon(Icons.close);
-    //   },
-    // );
 
     return Positioned(
       left: 24,

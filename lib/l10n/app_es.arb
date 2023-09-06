@@ -18,6 +18,9 @@
     "statisticsPageCategory": "Categoría",
     "statisticsPageValue": "Valor",
     "statisticsPageNoStatistics": "¡No se encontraron estadísticas!",
+    "statisticsPageLastMonths": "Promedio de los últimos meses",
+    "statisticsPage12Month": "Promedio de 12 meses",
+    "statisticsPageCategoryBudget": "Usar el Presupuesto de la Categoría",
     "settingsPageTitle": "Ajustes",
     "settingsPageAppSettings": "Ajustes de la App",
     "settingsPageAppTheme": "Tema de la App:",
@@ -171,5 +174,9 @@
     "budgetPageTitle": "Presupuesto/Categorías",
     "budgetPageCategory": "Categoría",
     "budgetPageBudget": "Presupuesto",
-    "budgetPageDeleteAlert": "La categoría {categoryName} tiene {categoryCount} transacciones. No es posible eliminar una categoría que está en uso."
+    "budgetPageDeleteAlert": "La categoría {categoryName} tiene {categoryCount} transacciones. No es posible eliminar una categoría que está en uso.",
+    "budgetPageResetValues": "Zerar valores",
+    "budgetPageLastMonths": "Establecer en el promedio de los últimos meses",
+    "budgetPage12Month": "Establecer en el promedio de 12 meses",
+    "budgetPageTotal": "Total del Presupuesto"
 }

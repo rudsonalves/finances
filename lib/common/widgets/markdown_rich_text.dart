@@ -13,14 +13,15 @@ class TextItem {
   });
 }
 
-class MarkdownText {
-  MarkdownText._();
+class MarkdownRichText {
+  MarkdownRichText._();
 
   static RichText richText(
     String text, {
     TextStyle normalStyle = AppTextStyles.textStyle14,
     TextStyle boldStyle = AppTextStyles.textStyleBold14,
     Color? color,
+    TextAlign textAlign = TextAlign.start,
   }) {
     List<TextItem> listText = [];
 
@@ -68,6 +69,7 @@ class MarkdownText {
     }
 
     return RichText(
+      textAlign: textAlign,
       text: TextSpan(
         children: listInlineSpan,
       ),

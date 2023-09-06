@@ -26,6 +26,7 @@ class StatisticsPage extends StatefulWidget {
 class _StatisticsPageState extends State<StatisticsPage>
     with AutomaticKeepAliveClientMixin {
   final _controller = locator.get<StatisticsController>();
+  late StatisticMedium statReference;
 
   @override
   bool get wantKeepAlive => true;
@@ -34,6 +35,7 @@ class _StatisticsPageState extends State<StatisticsPage>
   void initState() {
     super.initState();
     _controller.init();
+    statReference = _controller.statReference;
   }
 
   @override
@@ -47,18 +49,23 @@ class _StatisticsPageState extends State<StatisticsPage>
     }
   }
 
-  Widget variationColumn(double value) {
+  Widget variationColumn(double? value) {
     final colorScheme = Theme.of(context).colorScheme;
     final customColors = Theme.of(context).extension<CustomColors>()!;
     IconData icon;
     Color color;
 
-    if (value > 0) {
-      icon = FontelloIcons.up1;
-      color = customColors.lowgreen!;
-    } else if (value < 0) {
-      icon = FontelloIcons.down1;
-      color = customColors.minusred!;
+    if (value != null) {
+      if (value > 0) {
+        icon = FontelloIcons.up1;
+        color = customColors.lowgreen!;
+      } else if (value < 0) {
+        icon = FontelloIcons.down1;
+        color = customColors.minusred!;
+      } else {
+        icon = Icons.horizontal_rule;
+        color = colorScheme.primary;
+      }
     } else {
       icon = Icons.horizontal_rule;
       color = colorScheme.primary;
@@ -72,7 +79,7 @@ class _StatisticsPageState extends State<StatisticsPage>
           size: 18,
         ),
         Text(
-          '${value.toStringAsFixed(0)}%',
+          value != null ? '${value.toStringAsFixed(0)}%' : '-',
           style: AppTextStyles.textStyleBold10.copyWith(
             color: color,
           ),
@@ -99,6 +106,40 @@ class _StatisticsPageState extends State<StatisticsPage>
             locale.statisticsPageTitle,
             style: AppTextStyles.textStyleSemiBold18,
           ),
+          actions: [
+            PopupMenuButton<StatisticMedium>(
+              padding: EdgeInsets.zero,
+              icon: const Icon(
+                Icons.more_horiz,
+              ),
+              itemBuilder: (context) => [
+                CheckedPopupMenuItem<StatisticMedium>(
+                  checked: statReference == StatisticMedium.mediumMonth
+                      ? true
+                      : false,
+                  value: StatisticMedium.mediumMonth,
+                  child: Text(locale.statisticsPageLastMonths),
+                ),
+                CheckedPopupMenuItem<StatisticMedium>(
+                  checked:
+                      statReference == StatisticMedium.medium12 ? true : false,
+                  value: StatisticMedium.medium12,
+                  child: Text(locale.statisticsPage12Month),
+                ),
+                CheckedPopupMenuItem<StatisticMedium>(
+                  checked: statReference == StatisticMedium.categoryBudget
+                      ? true
+                      : false,
+                  value: StatisticMedium.categoryBudget,
+                  child: Text(locale.statisticsPageCategoryBudget),
+                ),
+              ],
+              onSelected: (value) {
+                _controller.setStatisticsReference(value);
+                statReference = _controller.statReference;
+              },
+            )
+          ],
         ),
         body: Stack(
           children: [
