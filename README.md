@@ -246,6 +246,49 @@ Com esses gatilhos em vigor, qualquer tentativa de inserir um valor inválido em
 
 # Changes:
 
+## 2023/09/06 - version 0.99.14
+
+In this commit, I made several implementations to get the budget page up and running. The BudgetPage is complete, with only a few adjustments needed on the statisticsPage and some tweaks throughout the code. The changes in this commit were:
+
+* lib/common/widgets/markdown_rich_text.dart:
+   - Class renamed to MarkdownRichText;
+   - Added alignment to the MarkdownRichText class.
+
+* lib/features/budget/budget_controller.dart:
+   - Added the _totalBudget attribute and its getter;
+   - Added the _sumTotalBudget() method;
+   - Added the updateCategoryBudget(CategoryDbModel category) method.
+
+* lib/features/budget/budget_page.dart:
+   - Added the Future<void> budgetEdit(CategoryDbModel category) method to edit the budgets of all categories;
+   - Added the Future<void> updateBudget(CategoryDbModel category, String budget) method. This method updates the category only if the category.categoryBudget attribute is changed;
+   - Added a PopupMenuButton to select the base for category budgets;
+   - All widget distribution on this page was rearranged to keep "Total Budget" within the AnimatedBuilder.
+
+* lib/features/budget/widget/dismissible_budget.dart:
+   - Added the void Function(CategoryDbModel)? budgetEdit attribute to trigger budget editing from the BudgetPage;
+   - Also corrected some button colors in the dialogs, but it needs a review to check other parts of the code;
+   - The onTap attribute of the ListTile now calls widget.budgetEdit!(category). This is triggered when clicking on a category on the BudgetPage.
+
+* lib/features/statistics/models/statistic_result.dart:
+* lib/features/statistics/models/statistic_total.dart:
+   - Code separated from StatisticalController.
+
+* lib/features/statistics/statistic_controller.dart:
+   - Added a StatisticMedium with attributes none, mediumMonth, medium12, and categoryBudget. These are the bases used in statistics and to build category.categoryBudget;
+   - Added a list of categoryName x StatisticTotal, _totalByCategory, to store totals in each category;
+   - Added the attribute and its getter, _statReferenceType, initially set as StatisticMedium.mediumMonth. This is used to set the statistics reference;
+   - Added the Map<String, double> getReferences(StatisticMedium statReference) method to return a reference. This method was isolated from the _setReferenceByCategory() method so that it can be called externally to apply its values as bases in the budgets;
+   - Added the Future<void> setStatisticsReference(StatisticMedium statReferenceType) method to control the state of the StatisticPage and change the statistical reference values.
+
+* lib/features/statistics/statistics_page.dart:
+   - Added the statReference attribute to the StatisticPage;
+   - Changed some icons to improve the page's presentation;
+   - Added a PopupMenuButton<StatisticMedium> using CheckedPopupMenuItem<StatisticMedium> as items.
+
+* lib/l10n/app_.*.arb:
+   - Added new translations.
+
 ## 2023/09/05 - version 0.99.12
 
 In this commit, various updates and adjustments were made, including: removal of routing to the CategoryPage; addition of new icons and improvement of dialogs; addition of boolean columns for chart control; enhancements in state management; and performance improvements and bug fixes.
