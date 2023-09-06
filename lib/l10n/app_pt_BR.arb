@@ -18,6 +18,9 @@
     "statisticsPageCategory": "Categoria",
     "statisticsPageValue": "Valor",
     "statisticsPageNoStatistics": "Nenhuma estatística encontrada!",
+    "statisticsPageLastMonths": "Média dos últimos meses",
+    "statisticsPage12Month": "Média de 12 meses",
+    "statisticsPageCategoryBudget": "Utilizar Orçamento da Categoria",
     "settingsPageTitle": "Configurações",
     "settingsPageAppSettings": "Configurações do App",
     "settingsPageAppTheme": "Tema do App:",
@@ -171,5 +174,9 @@
     "budgetPageTitle": "Orçamento/Categorias",
     "budgetPageCategory": "Categoria",
     "budgetPageBudget": "Orçamento",
-    "budgetPageDeleteAlert": "A categoria ${categoryName} possui {categoryCount} transações. Não é possível excluir uma categoria que está em uso."
+    "budgetPageDeleteAlert": "A categoria ${categoryName} possui {categoryCount} transações. Não é possível excluir uma categoria que está em uso.",
+    "budgetPageResetValues": "Zerar os values",
+    "budgetPageLastMonths": "Definir para a média dos últimos meses",
+    "budgetPage12Month": "Definir para a média de 12 meses",
+    "budgetPageTotal": "Total do Orçamento"
 }

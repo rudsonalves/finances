@@ -5,7 +5,8 @@ import '../../../common/constants/themes/app_text_styles.dart';
 import '../../../common/constants/themes/colors/custom_color.g.dart';
 import '../../../common/extensions/money_masked_text.dart';
 import '../../../common/functions/function_alert_dialog.dart';
-import '../../../common/widgets/markdown_text.dart';
+import '../../../common/models/category_db_model.dart';
+import '../../../common/widgets/markdown_rich_text.dart';
 import '../../../locator.dart';
 import '../../../services/database/database_helper.dart';
 import '../budget_controller.dart';
@@ -16,12 +17,14 @@ class DismissibleBudget extends StatefulWidget {
   final BudgetController controller;
   final int index;
   final Function? callBack;
+  final void Function(CategoryDbModel)? budgetEdit;
 
   const DismissibleBudget({
     super.key,
     required this.controller,
     required this.index,
     this.callBack,
+    this.budgetEdit,
   });
 
   @override
@@ -39,6 +42,9 @@ class _DismissibleBudgetState extends State<DismissibleBudget> {
     String categoryName,
   ) async {
     final AppLocalizations locale = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
+    final primary = colorScheme.primary;
+    final onPrimary = colorScheme.onPrimary;
 
     return await showDialog<bool>(
       context: context,
@@ -48,13 +54,33 @@ class _DismissibleBudgetState extends State<DismissibleBudget> {
           locale.dismissibleCategorySureDeleteCategory(categoryName),
         ),
         actions: [
-          TextButton(
+          ElevatedButton.icon(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(primary),
+            ),
             onPressed: () => Navigator.pop(context, true),
-            child: Text(locale.dismissibleCategoryDelete),
+            label: Text(
+              locale.dismissibleCategoryDelete,
+              style: TextStyle(color: onPrimary),
+            ),
+            icon: Icon(
+              Icons.delete,
+              color: onPrimary,
+            ),
           ),
-          TextButton(
+          ElevatedButton.icon(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(primary),
+            ),
             onPressed: () => Navigator.pop(context, false),
-            child: Text(locale.dismissibleCategoryCancel),
+            label: Text(
+              locale.dismissibleCategoryCancel,
+              style: TextStyle(color: onPrimary),
+            ),
+            icon: Icon(
+              Icons.cancel,
+              color: onPrimary,
+            ),
           ),
         ],
       ),
@@ -89,7 +115,7 @@ class _DismissibleBudgetState extends State<DismissibleBudget> {
           label: locale.dismissibleCategoryDelete,
         ),
         child: Card(
-          elevation: 0.7,
+          elevation: .5,
           color: colorScheme.onPrimary,
           margin: EdgeInsets.zero,
           child: ListTile(
@@ -99,8 +125,17 @@ class _DismissibleBudgetState extends State<DismissibleBudget> {
             ),
             trailing: Text(
               money.text(category.categoryBudget),
-              style: AppTextStyles.textStyleBold18,
+              style: AppTextStyles.textStyleBold18.copyWith(
+                color: category.categoryBudget < 0
+                    ? customColors.minusred
+                    : colorScheme.primary,
+              ),
             ),
+            onTap: () {
+              if (widget.budgetEdit != null) {
+                widget.budgetEdit!(category);
+              }
+            },
           ),
         ),
         confirmDismiss: (direction) async {
@@ -123,7 +158,7 @@ class _DismissibleBudgetState extends State<DismissibleBudget> {
                 context: context,
                 builder: (context) => AlertDialog(
                   title: Text(locale.dismissibleCategoryReservedCategory),
-                  content: MarkdownText.richText(
+                  content: MarkdownRichText.richText(
                     locale.dismissibleCategoryCategoryIsReserved(
                       category.categoryName,
                     ),

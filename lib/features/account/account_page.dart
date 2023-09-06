@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../common/current_models/current_user.dart';
-import '../../common/widgets/markdown_text.dart';
+import '../../common/widgets/markdown_rich_text.dart';
 import '../../locator.dart';
 import '../../repositories/account/account_repository.dart';
 import '../../services/database/database_helper.dart';
@@ -60,7 +60,7 @@ class _AccountPageState extends State<AccountPage> {
         context: context,
         builder: (context) => AlertDialog(
           title: Text(locale.colorButtonBlockedDeletion),
-          content: MarkdownText.richText(
+          content: MarkdownRichText.richText(
             locale.colorButtonAccountHas(account.accountName, numberOfTrans),
             normalStyle: AppTextStyles.textStyle14,
             boldStyle: AppTextStyles.textStyleBold14,
