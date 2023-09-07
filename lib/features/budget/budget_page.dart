@@ -2,6 +2,7 @@ import 'package:finances/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../common/constants/app_constants.dart';
 import '../../common/constants/themes/app_text_styles.dart';
 import '../../common/constants/themes/colors/custom_color.g.dart';
 import '../../common/extensions/money_masked_text.dart';

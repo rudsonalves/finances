@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import '../../locator.dart';
 import '../../repositories/user/user_repository.dart';
+import '../constants/app_constants.dart';
 import './user_model.dart';
 
 /*
@@ -19,6 +20,7 @@ class UserDbModel {
   bool userGrpIsCurved;
   bool userGrpShowDots;
   bool userGrpAreaChart;
+  StatisticMedium userBudgetRef;
 
   UserDbModel({
     this.userId,
@@ -32,14 +34,16 @@ class UserDbModel {
     this.userGrpIsCurved = false,
     this.userGrpShowDots = false,
     this.userGrpAreaChart = false,
+    this.userBudgetRef = StatisticMedium.mediumMonth,
   });
+
+  final userRepository = locator.get<UserRepository>();
 
   void setFromUserModel(UserModel user) {
     userId = user.id;
     userName = user.name;
     userEmail = user.email;
     userLogged = false;
-    // userMainAccountId;
     userTheme = 'system';
     userLanguage = 'en_US';
   }
@@ -56,6 +60,9 @@ class UserDbModel {
     userGrpIsCurved = userMap['userGrpIsCurved'] as int == 0 ? false : true;
     userGrpShowDots = userMap['userGrpShowDots'] as int == 0 ? false : true;
     userGrpAreaChart = userMap['userGrpAreaChart'] as int == 0 ? false : true;
+    userBudgetRef = StatisticMedium.values
+        .where((item) => item.index == (userMap['userBudgetRef'] as int))
+        .first;
   }
 
   void copyFromUser(UserDbModel user) {
@@ -70,6 +77,7 @@ class UserDbModel {
     userGrpIsCurved = user.userGrpIsCurved;
     userGrpShowDots = user.userGrpShowDots;
     userGrpAreaChart = user.userGrpAreaChart;
+    userBudgetRef = user.userBudgetRef;
   }
 
   @override
@@ -85,7 +93,8 @@ class UserDbModel {
         ' GrpShowGrid: $userGrpShowGrid;'
         ' GrpIsCurved: $userGrpIsCurved;'
         ' GrpShowDots: $userGrpShowDots;'
-        ' GrpAreaChart: $userGrpAreaChart'
+        ' GrpAreaChart: $userGrpAreaChart;'
+        ' BudgetRef: $userBudgetRef'
         ')';
   }
 
@@ -103,6 +112,7 @@ class UserDbModel {
         'userGrpIsCurved': userGrpIsCurved,
         'userGrpShowDots': userGrpShowDots,
         'userGrpAreaChart': userGrpAreaChart,
+        'userBudgetRef': userBudgetRef,
       };
     } else {
       return <String, dynamic>{
@@ -116,6 +126,7 @@ class UserDbModel {
         'userGrpIsCurved': userGrpIsCurved,
         'userGrpShowDots': userGrpShowDots,
         'userGrpAreaChart': userGrpAreaChart,
+        'userBudgetRef': userBudgetRef,
       };
     }
   }
@@ -135,6 +146,9 @@ class UserDbModel {
       userGrpIsCurved: map['userGrpIsCurved'] as int == 0 ? false : true,
       userGrpShowDots: map['userGrpShowDots'] as int == 0 ? false : true,
       userGrpAreaChart: map['userGrpAreaChart'] as int == 0 ? false : true,
+      userBudgetRef: StatisticMedium.values
+          .where((item) => item.index == (map['userBudgetRef'] as int))
+          .first,
     );
   }
 
@@ -144,6 +158,26 @@ class UserDbModel {
       UserDbModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   Future<void> updateUser() async {
-    await locator.get<UserRepository>().updateUser(this);
+    await userRepository.updateUser(this);
+  }
+
+  Future<void> updateUserBudgetRef() async {
+    await userRepository.updateUserBudgetRef(this);
+  }
+
+  Future<void> updateUserGrpShowGrid() async {
+    await userRepository.updateUserGrpShowGrid(this);
+  }
+
+  Future<void> updateUserGrpIsCurved() async {
+    await userRepository.updateUserGrpIsCurved(this);
+  }
+
+  Future<void> updateUserGrpShowDots() async {
+    await userRepository.updateUserGrpShowDots(this);
+  }
+
+  Future<void> updateUserGrpAreaChart() async {
+    await userRepository.updateUserGrpAreaChart(this);
   }
 }

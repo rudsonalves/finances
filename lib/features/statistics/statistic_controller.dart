@@ -1,22 +1,17 @@
 import 'dart:developer';
 
-import 'package:finances/repositories/category/category_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../common/constants/app_constants.dart';
+import '../../common/current_models/current_user.dart';
 import '../../common/models/extends_date.dart';
 import '../../locator.dart';
+import '../../repositories/category/category_repository.dart';
 import '../../services/database/database_helper.dart';
 import 'models/statistic_result.dart';
 import 'models/statistic_total.dart';
 import 'statistic_state.dart';
-
-enum StatisticMedium {
-  none,
-  mediumMonth,
-  medium12,
-  categoryBudget,
-}
 
 class StatisticsController extends ChangeNotifier {
   final helper = locator.get<DatabaseHelper>();
@@ -30,7 +25,9 @@ class StatisticsController extends ChangeNotifier {
   // Lists of categoryName x StatisticTotal
   final Map<String, StatisticTotal> _totalByCategory = {};
 
-  StatisticMedium _statReferenceType = StatisticMedium.mediumMonth;
+  final currentUser = locator.get<CurrentUser>();
+
+  late StatisticMedium _statReferenceType;
 
   StatisticMedium get statReference => _statReferenceType;
 
@@ -130,6 +127,7 @@ class StatisticsController extends ChangeNotifier {
   }
 
   Future<void> init() async {
+    _statReferenceType = currentUser.userBudgetRef;
     await getStatistics();
   }
 
@@ -222,8 +220,10 @@ class StatisticsController extends ChangeNotifier {
     if (_statReferenceType == statReferenceType) return;
 
     try {
-      _statReferenceType = statReferenceType;
       _changeState(StatisticsStateLoading());
+      _statReferenceType = statReferenceType;
+      currentUser.userBudgetRef = statReferenceType;
+      await currentUser.updateUserBudgetRef();
       _buildStatistics();
       _changeState(StatisticsStateSuccess());
     } catch (err) {

@@ -1,9 +1,10 @@
-import 'package:finances/common/constants/themes/icons/fontello_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../common/constants/app_constants.dart';
 import '../../common/constants/themes/app_text_styles.dart';
 import '../../common/constants/themes/colors/custom_color.g.dart';
+import '../../common/constants/themes/icons/fontello_icons.dart';
 import '../../common/extensions/money_masked_text.dart';
 import '../../common/widgets/app_top_border.dart';
 import '../../common/widgets/custom_app_bar.dart';
@@ -136,7 +137,7 @@ class _StatisticsPageState extends State<StatisticsPage>
               ],
               onSelected: (value) {
                 _controller.setStatisticsReference(value);
-                statReference = _controller.statReference;
+                statReference = value;
               },
             )
           ],

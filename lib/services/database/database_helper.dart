@@ -9,7 +9,12 @@ abstract class DatabaseHelper {
   Future<int> insertUser(Map<String, dynamic> userMap);
   Future<Map<String, Object?>?> queryUserId(String id);
   Future<List<Map<String, dynamic>>> queryAllUsers();
-  Future<void> updateUser(Map<String, dynamic> userMap);
+  Future<int> updateUser(Map<String, dynamic> userMap);
+  Future<int> updateUserBudgetRef(String id, int budgetRef);
+  Future<int> updateUserGrpShowGrid(String id, int grpShowGrid);
+  Future<int> updateUserGrpShowDots(String id, int grpShowDots);
+  Future<int> updateUserGrpIsCurved(String id, int grpIsCurved);
+  Future<int> updateUserGrpAreaChart(String id, int grpAreaChart);
 
   Future<int> insertIcon(Map<String, dynamic> iconMap);
   Future<int> updateIcon(Map<String, dynamic> iconMap);

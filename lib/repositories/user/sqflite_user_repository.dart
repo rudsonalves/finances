@@ -54,16 +54,54 @@ class SqfliteUserRepository implements UserRepository {
     await _getUsers();
   }
 
-  // @override
-  // void setCurrentUserByEmail(String email) {
-  //   for (var user in _users.values) {
-  //     if (user.userEmail == email) {
-  //       getIt.get<CurrentUser>().setFromUserMap(user.toMap());
-  //       return;
-  //     }
-  //   }
-  //   throw Exception('Error: User with email "$email" not found!');
-  // }
+  @override
+  Future<void> updateUserBudgetRef(UserDbModel user) async {
+    if (user.userId != null) {
+      await helper.updateUserBudgetRef(user.userId!, user.userBudgetRef.index);
+    } else {
+      throw Exception('Unregistered user');
+    }
+  }
+
+  @override
+  Future<void> updateUserGrpShowGrid(UserDbModel user) async {
+    if (user.userId != null) {
+      await helper.updateUserGrpShowGrid(
+          user.userId!, user.userGrpShowGrid ? 1 : 0);
+    } else {
+      throw Exception('Unregistered user');
+    }
+  }
+
+  @override
+  Future<void> updateUserGrpShowDots(UserDbModel user) async {
+    if (user.userId != null) {
+      await helper.updateUserGrpShowDots(
+          user.userId!, user.userGrpShowDots ? 1 : 0);
+    } else {
+      throw Exception('Unregistered user');
+    }
+  }
+
+  @override
+  Future<void> updateUserGrpIsCurved(UserDbModel user) async {
+    if (user.userId != null) {
+      await helper.updateUserGrpIsCurved(
+          user.userId!, user.userGrpIsCurved ? 1 : 0);
+    } else {
+      throw Exception('Unregistered user');
+    }
+  }
+
+  @override
+  Future<void> updateUserGrpAreaChart(UserDbModel user) async {
+    if (user.userId != null) {
+      await helper.updateUserGrpAreaChart(
+          user.userId!, user.userGrpAreaChart ? 1 : 0);
+    } else {
+      throw Exception('Unregistered user');
+    }
+  }
 
   @override
   Map<String, dynamic> getUserMapById(String id) {

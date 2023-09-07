@@ -1,9 +1,8 @@
 import 'dart:convert';
 
-import 'package:finances/services/database/database_helper.dart';
-
 import '../../locator.dart';
 import '../../repositories/transaction/transaction_repository.dart';
+import '../../services/database/database_helper.dart';
 import './extends_date.dart';
 
 enum TransStatus {

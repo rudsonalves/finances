@@ -20,7 +20,7 @@ class SqfliteHelper implements DatabaseHelper {
   /// This is the database scheme current version. To futures upgrades
   /// in database increment this value and add a new update script in
   /// _migrationScripts Map
-  static const _databaseSchemeVersion = 1002;
+  static const _databaseSchemeVersion = 1003;
 
   /// This Map contains the database migration scripts. The last index of this
   /// Map must be equal to the current version of the database.
@@ -35,9 +35,9 @@ class SqfliteHelper implements DatabaseHelper {
       'ALTER TABLE usersTable ADD COLUMN userGrpShowDots INTEGER DEFAULT 0',
       'ALTER TABLE usersTable ADD COLUMN userGrpAreaChart INTEGER DEFAULT 0',
     ],
-    // 1003: [
-    //   'ALTER TABLE usersTable ADD COLUMN userBudgetRef INTEGER DEFAULT 1',
-    // ],
+    1003: [
+      'ALTER TABLE usersTable ADD COLUMN userBudgetRef INTEGER DEFAULT 2',
+    ],
     // 1001: ['DROP INDEX IF EXISTS $iconsNameIndex'],
     // 1002: [],
   };
@@ -67,6 +67,7 @@ class SqfliteHelper implements DatabaseHelper {
   static const userGrpIsCurved = 'userGrpIsCurved';
   static const userGrpShowDots = 'userGrpShowDots';
   static const userGrpAreaChart = 'userGrpAreaChart';
+  static const userBudgetRef = 'userBudgetRef';
 
   static const iconsTable = 'iconsTable';
   static const iconsNameIndex = 'idxIconsName';
@@ -228,6 +229,7 @@ class SqfliteHelper implements DatabaseHelper {
       ' $userGrpIsCurved INTEGER DEFAULT 0,'
       ' $userGrpShowDots INTEGER DEFAULT 0,'
       ' $userGrpAreaChart INTEGER DEFAULT 0,'
+      ' $userBudgetRef INTEGER DEFAULT 1,'
       ' FOREIGN KEY ($userMainAccountId)'
       '  REFERENCES $accountTable ($accountId)'
       '  ON DELETE CASCADE'
@@ -786,17 +788,99 @@ class SqfliteHelper implements DatabaseHelper {
   }
 
   @override
-  Future<void> updateUser(Map<String, dynamic> userMap) async {
+  Future<int> updateUser(Map<String, dynamic> userMap) async {
     try {
       String id = userMap[userId];
-      await _db.update(
+      int result = await _db.update(
         usersTable,
         userMap,
         where: '$userId = ?',
         whereArgs: [id],
       );
+      return result;
     } catch (err) {
       log('Error: $err');
+      return -1;
+    }
+  }
+
+  @override
+  Future<int> updateUserBudgetRef(String id, int budgetRef) async {
+    try {
+      int result = await _db.update(
+        usersTable,
+        {userBudgetRef: budgetRef},
+        where: '$userId = ?',
+        whereArgs: [id],
+      );
+      return result;
+    } catch (err) {
+      log('Error: $err');
+      return -1;
+    }
+  }
+
+  @override
+  Future<int> updateUserGrpShowGrid(String id, int grpShowGrid) async {
+    try {
+      int result = await _db.update(
+        usersTable,
+        {userGrpShowGrid: grpShowGrid},
+        where: '$userId = ?',
+        whereArgs: [id],
+      );
+      return result;
+    } catch (err) {
+      log('Error: $err');
+      return -1;
+    }
+  }
+
+  @override
+  Future<int> updateUserGrpShowDots(String id, int grpShowDots) async {
+    try {
+      int result = await _db.update(
+        usersTable,
+        {userGrpShowDots: grpShowDots},
+        where: '$userId = ?',
+        whereArgs: [id],
+      );
+      return result;
+    } catch (err) {
+      log('Error: $err');
+      return -1;
+    }
+  }
+
+  @override
+  Future<int> updateUserGrpIsCurved(String id, int grpIsCurved) async {
+    try {
+      int result = await _db.update(
+        usersTable,
+        {userGrpIsCurved: grpIsCurved},
+        where: '$userId = ?',
+        whereArgs: [id],
+      );
+      return result;
+    } catch (err) {
+      log('Error: $err');
+      return -1;
+    }
+  }
+
+  @override
+  Future<int> updateUserGrpAreaChart(String id, int grpAreaChart) async {
+    try {
+      int result = await _db.update(
+        usersTable,
+        {userGrpAreaChart: grpAreaChart},
+        where: '$userId = ?',
+        whereArgs: [id],
+      );
+      return result;
+    } catch (err) {
+      log('Error: $err');
+      return -1;
     }
   }
 

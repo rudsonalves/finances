@@ -246,6 +246,31 @@ Com esses gatilhos em vigor, qualquer tentativa de inserir um valor inválido em
 
 # Changes:
 
+## 2023/09/07 - version 0.99.15
+
+In this commit, changes were made to add the `userBudgetRef` attribute to control the app's statistical reference. At the same time, optimizations were made for writing app control attributes in the `usersTable` table. This was done to optimize the device resource usage when changing these attributes, by updating only the necessary attribute instead of rewriting the entire user record. The details of the changes are described below:
+
+ * `lib/common/constants/app_constants.dart`:
+   - Isolated the `StatisticMedium` enum in this constants module.
+ * `lib/common/models/user_db_model.dart`:
+   - Added the `StatisticMedium userBudgetRef` attribute.
+   - Added methods `Future<void> updateUserBudgetRef()`, `updateUserGrpShowGrid()`, `updateUserGrpIsCurved()`, `updateUserGrpShowDots()`, and `updateUserGrpAreaChart()` for making specific updates in the database.
+ * `lib/features/statistics/statistic_card/statistic_card.dart`:
+   - Graphical attribute updates are now handled by specialized methods `updateUserGrpShowGrid`, `updateUserGrpIsCurved`, `updateUserGrpShowDots`, and `updateUserGrpAreaChart`.
+ * `lib/features/statistics/statistic_controller.dart`:
+   - Removed the `StatisticMedium` enum from this module to `app_constants.dart` as described above.
+   - The `_statReferenceType` attribute is now initialized with the `userBudgetRef` attribute of `currentUser` (via `locator.get<CurrentUser>()`) in the `init()` method of the controller.
+   - Updating `currentUser` in the data layer is done through the `updateUserBudgetRef` method described above.
+ * `lib/repositories/user/sqflite_user_repository.dart`:
+ * `lib/repositories/user/user_repository.dart`:
+   - Added methods `Future<void> updateUserBudgetRef(UserDbModel user)`, `updateUserGrpShowGrid(UserDbModel user)`, `updateUserGrpShowDots(UserDbModel user)`, `updateUserGrpIsCurved(UserDbModel user)`, and `updateUserGrpAreaChart(UserDbModel user)` to update the respective attributes in the database. At this level, the interface between the database and the `UserDbModel` object (and `CurrentUser`) is implemented.
+ * `lib/services/database/database_helper.dart`:
+ * `lib/services/database/sqflite_helper.dart`:
+   - The database has been updated to Schema Version 1.0.03, with the addition of the `userBudgetRef` attribute to the `usersTable` table.
+   - The necessary migration script for adding the `userBudgetRef` column to the `usersTable` table in the database has been added to the migration script list.
+   - The creation of the `usersTable` table has been updated to include the new `userBudgetRef` attribute.
+   - Methods `Future<int> updateUserBudgetRef(String id, int budgetRef)`, `updateUserGrpShowGrid(String id, int grpShowGrid)`, `updateUserGrpShowDots(String id, int grpShowDots)`, `updateUserGrpIsCurved(String id, int grpIsCurved)`, and `updateUserGrpAreaChart(String id, int grpAreaChart)` have been added to effect changes to the database content for user attributes.
+
 ## 2023/09/06 - version 0.99.14
 
 In this commit, I made several implementations to get the budget page up and running. The BudgetPage is complete, with only a few adjustments needed on the statisticsPage and some tweaks throughout the code. The changes in this commit were:
