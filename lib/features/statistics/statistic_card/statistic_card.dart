@@ -1,10 +1,11 @@
-import 'package:finances/common/current_models/current_user.dart';
+import 'package:finances/repositories/category/category_repository.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../common/constants/themes/app_text_styles.dart';
 import '../../../common/constants/themes/colors/custom_color.g.dart';
+import '../../../common/current_models/current_user.dart';
 import '../../../common/extensions/money_masked_text.dart';
 import '../../../common/models/extends_date.dart';
 import '../../../common/widgets/custom_circular_progress_indicator.dart';
@@ -12,14 +13,15 @@ import '../../../locator.dart';
 import '../graphics/line_graphic.dart';
 import '../graphics/model/graphic_line_data.dart';
 import '../statistic_controller.dart';
-import '../statistic_state.dart';
+import 'statistic_card_controller.dart';
+import 'statistic_cart.state.dart';
 
 class StatisticCard extends StatefulWidget {
-  final StatisticsController controller;
+  final StatisticsController pageController;
 
-  const StatisticCard({
+  const StatisticCard(
+    this.pageController, {
     super.key,
-    required this.controller,
   });
 
   @override
@@ -32,48 +34,53 @@ class _StatisticCardState extends State<StatisticCard> {
 
   ExtendedDate currentDate = ExtendedDate.now();
 
-  List<GraphicLineData> incomesExpensesData() {
+  final _controller = locator.get<StatisticCardController>();
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.init();
+  }
+
+  List<GraphicLineData> processesData() {
     final customColors = Theme.of(context).extension<CustomColors>()!;
-
-    final incomes = widget.controller.incomes.values.toList().reversed.toList();
-    final expanses =
-        widget.controller.expanses.values.toList().reversed.toList();
-
     final List<GraphicLineData> graphicData = [];
+    final categories = locator.get<CategoryRepository>().categoriesMap;
 
-    graphicData.add(
-      GraphicLineData(
-        data: List<FlSpot>.generate(
-          incomes.length,
-          (index) => FlSpot(
-            index.toDouble(),
-            incomes[index],
-          ),
-        ),
-        name: 'Incomes',
-        color: customColors.lowgreen!,
-      ),
-    );
+    for (final plotData in _controller.graphicData) {
+      Color color = Colors.black;
+      if (plotData.name == 'Incomes') {
+        color = customColors.lowgreen!;
+      } else if (plotData.name == 'Expenses') {
+        color = customColors.minusred!;
+      } else {
+        if (categories.containsKey(plotData.name)) {
+          color = Color(categories[plotData.name]!.categoryIcon.iconColor);
+        } else {
+          color = Colors.black;
+        }
+      }
 
-    graphicData.add(
-      GraphicLineData(
-        data: List<FlSpot>.generate(
-          expanses.length,
-          (index) => FlSpot(
-            index.toDouble(),
-            expanses[index].abs(),
+      graphicData.add(
+        GraphicLineData(
+          data: List<FlSpot>.generate(
+            plotData.data.length,
+            (index) => FlSpot(
+              index.toDouble(),
+              plotData.data[index],
+            ),
           ),
+          name: plotData.name,
+          color: color,
         ),
-        name: 'Expenses',
-        color: customColors.minusred!,
-      ),
-    );
+      );
+    }
 
     return graphicData;
   }
 
   List<String> xLabels() {
-    final basicLabels = widget.controller.strDates;
+    final basicLabels = widget.pageController.strDates;
 
     return List<String>.generate(
       basicLabels.length,
@@ -104,20 +111,20 @@ class _StatisticCardState extends State<StatisticCard> {
             right: 20,
           ),
           child: AnimatedBuilder(
-            animation: widget.controller,
+            animation: _controller,
             builder: (context, _) {
               // Statistics State Loading
-              if (widget.controller.state is StatisticsStateLoading) {
+              if (_controller.state is StatisticCardStateLoading) {
                 return const CustomCircularProgressIndicator();
               }
 
               // Statistics State Success
-              if (widget.controller.state is StatisticsStateSuccess) {
-                final String strDate = widget.controller.strDate;
-                final double balance = widget.controller.incomes[strDate]! +
-                    widget.controller.expanses[strDate]!;
+              if (_controller.state is StatisticCardStateSuccess) {
+                final String strDate = widget.pageController.strDate;
+                final double balance = widget.pageController.incomes[strDate]! +
+                    widget.pageController.expanses[strDate]!;
 
-                final List<GraphicLineData> graphicData = incomesExpensesData();
+                final List<GraphicLineData> graphicData = processesData();
 
                 final List<String> graphicXLabes = xLabels();
 
@@ -136,13 +143,13 @@ class _StatisticCardState extends State<StatisticCard> {
                               ),
                               onTap: () {
                                 setState(() {
-                                  widget.controller.previusMonth();
+                                  widget.pageController.previusMonth();
                                 });
                               },
                             ),
                           ),
                           Text(
-                            widget.controller.strDate,
+                            widget.pageController.strDate,
                             style: AppTextStyles.textStyleSemiBold14.copyWith(
                               color: primary,
                             ),
@@ -155,7 +162,7 @@ class _StatisticCardState extends State<StatisticCard> {
                               ),
                               onTap: () {
                                 setState(() {
-                                  widget.controller.nextMonth();
+                                  widget.pageController.nextMonth();
                                 });
                               },
                             ),
@@ -174,7 +181,8 @@ class _StatisticCardState extends State<StatisticCard> {
                                 ),
                               ),
                               Text(
-                                money.text(widget.controller.incomes[strDate]!),
+                                money.text(
+                                    widget.pageController.incomes[strDate]!),
                                 style: AppTextStyles.textStyleBold14.copyWith(
                                   color: primary,
                                 ),
@@ -191,8 +199,8 @@ class _StatisticCardState extends State<StatisticCard> {
                                 ),
                               ),
                               Text(
-                                money
-                                    .text(widget.controller.expanses[strDate]!),
+                                money.text(
+                                    widget.pageController.expanses[strDate]!),
                                 style: AppTextStyles.textStyleBold14.copyWith(
                                   color: primary,
                                 ),
@@ -347,7 +355,7 @@ class _StatisticCardState extends State<StatisticCard> {
                 );
               }
 
-              // Statistics State Error
+              // Statistic Card State Error
               return Expanded(
                 child: Center(
                   child: Text(locale.statisticsPageNoStatistics),

@@ -3,17 +3,14 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../common/constants/app_constants.dart';
 import '../../common/constants/themes/app_text_styles.dart';
-import '../../common/constants/themes/colors/custom_color.g.dart';
-import '../../common/extensions/money_masked_text.dart';
 import '../../common/widgets/app_top_border.dart';
 import '../../common/widgets/custom_app_bar.dart';
 import '../../common/widgets/custom_circular_progress_indicator.dart';
 import '../../locator.dart';
-import '../../repositories/category/category_repository.dart';
 import 'statistic_card/statistic_card.dart';
 import 'statistic_controller.dart';
 import 'statistic_state.dart';
-import 'widgets/variation_column.dart';
+import 'widgets/list_tile_statistic.dart';
 
 class StatisticsPage extends StatefulWidget {
   const StatisticsPage({
@@ -55,10 +52,7 @@ class _StatisticsPageState extends State<StatisticsPage>
     super.build(context);
 
     final locale = AppLocalizations.of(context)!;
-    final money = locator.get<MoneyMaskedText>();
-    final customColors = Theme.of(context).extension<CustomColors>()!;
     final colorScheme = Theme.of(context).colorScheme;
-    final categoryRepository = locator.get<CategoryRepository>();
 
     return Center(
       child: Scaffold(
@@ -107,9 +101,7 @@ class _StatisticsPageState extends State<StatisticsPage>
         body: Stack(
           children: [
             const AppTopBorder(),
-            StatisticCard(
-              controller: _controller,
-            ),
+            StatisticCard(_controller),
             Positioned(
               top: 310,
               left: 0,
@@ -157,7 +149,7 @@ class _StatisticsPageState extends State<StatisticsPage>
                           final String strDate = _controller.strDate;
 
                           final statistics =
-                              _controller.statisticsList[strDate]!;
+                              _controller.statisticsMap[strDate]!;
 
                           if (statistics.isEmpty) {
                             return Expanded(
@@ -175,35 +167,8 @@ class _StatisticsPageState extends State<StatisticsPage>
                           return Expanded(
                             child: ListView.builder(
                               itemCount: statistics.length,
-                              itemBuilder: (context, index) {
-                                final item = statistics[index];
-                                final icon = categoryRepository
-                                    .categoriesMap[item.categoryName]!
-                                    .categoryIcon
-                                    .iconWidget();
-                                bool minus = item.totalSum < 0;
-                                return ListTile(
-                                  leading: icon,
-                                  title: Row(
-                                    children: [
-                                      Text(item.categoryName),
-                                      const Spacer(),
-                                      Text(
-                                        money.text(item.totalSum),
-                                        style: AppTextStyles.textStyleSemiBold18
-                                            .copyWith(
-                                                color: minus
-                                                    ? customColors.minusred
-                                                    : customColors.lowgreen,
-                                                fontWeight: FontWeight.w700),
-                                      ),
-                                      const SizedBox(width: 4),
-                                      VariationColumn(item.variation),
-                                    ],
-                                  ),
-                                  onTap: () {},
-                                );
-                              },
+                              itemBuilder: (context, index) =>
+                                  ListTileStatistic(statistics[index]),
                             ),
                           );
                         }

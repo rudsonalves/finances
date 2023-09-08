@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:finances/features/statistics/statistic_card/statistic_card_controller.dart';
 import 'package:get_it/get_it.dart';
 
 import './common/extensions/app_scale.dart';
@@ -159,6 +160,10 @@ void setupDependencies() {
 
     locator.registerLazySingleton<StatisticsController>(
       () => StatisticsController(),
+    );
+
+    locator.registerLazySingleton<StatisticCardController>(
+      () => StatisticCardController(),
     );
 
     locator.registerLazySingleton<BudgetController>(

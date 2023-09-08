@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -15,6 +16,10 @@ import 'statistic_state.dart';
 
 class StatisticsController extends ChangeNotifier {
   final helper = locator.get<DatabaseHelper>();
+  Future<void>? _currentOperation;
+  Completer<void>? _successCompleter;
+
+  bool _starting = true;
 
   // List of date x StatisticResult
   final Map<String, List<StatisticResult>> _statisticsList = {};
@@ -39,7 +44,29 @@ class StatisticsController extends ChangeNotifier {
   List<String> get strDates => _strDates;
   Map<String, double> get incomes => _incomes;
   Map<String, double> get expanses => _expanses;
-  Map<String, List<StatisticResult>> get statisticsList => _statisticsList;
+  Map<String, List<StatisticResult>> get statisticsMap => _statisticsList;
+
+  Future<void> init() async {
+    if (_starting) {
+      _statReferenceType = currentUser.userBudgetRef;
+      await getStatistics();
+      _starting = false;
+    }
+  }
+
+  bool _redraw = false;
+
+  bool get redraw {
+    if (_redraw) {
+      _redraw = false;
+      return true;
+    }
+    return false;
+  }
+
+  void requestRedraw() {
+    _redraw = true;
+  }
 
   void _setReferenceByCategory() {
     final Map<String, double> referencesByCategory =
@@ -87,20 +114,6 @@ class StatisticsController extends ChangeNotifier {
     return referencesByCategory;
   }
 
-  bool _redraw = false;
-
-  bool get redraw {
-    if (_redraw) {
-      _redraw = false;
-      return true;
-    }
-    return false;
-  }
-
-  void requestRedraw() {
-    _redraw = true;
-  }
-
   Future<void> nextMonth() async {
     _changeState(StatisticsStateLoading());
     if (_index < _strDates.length - 1) {
@@ -126,16 +139,18 @@ class StatisticsController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> init() async {
-    _statReferenceType = currentUser.userBudgetRef;
-    await getStatistics();
-  }
-
   Future<void> getStatistics() async {
-    final formatedDate = DateFormat.yMMMM();
+    if (_currentOperation != null) {
+      await _currentOperation;
+    }
+
+    final completer = Completer<void>();
+    _successCompleter = completer;
+    _currentOperation = completer.future;
 
     _changeState(StatisticsStateLoading());
     try {
+      final formatedDate = DateFormat.yMMMM();
       _statisticsList.clear();
       _incomes.clear();
       _expanses.clear();
@@ -166,16 +181,16 @@ class StatisticsController extends ChangeNotifier {
         for (final map in statisticsMap) {
           final result = StatisticResult.fromMap(map);
           _statisticsList[strDate]!.add(result);
-          if (result.totalSum > 0) {
-            incomes += result.totalSum;
+          if (result.monthSum > 0) {
+            incomes += result.monthSum;
           } else {
-            expanses += result.totalSum;
+            expanses += result.monthSum;
           }
           if (_totalByCategory.containsKey(result.categoryName)) {
-            _totalByCategory[result.categoryName]!.addValue(result.totalSum);
+            _totalByCategory[result.categoryName]!.addValue(result.monthSum);
           } else {
             _totalByCategory[result.categoryName] =
-                StatisticTotal.create(result.totalSum);
+                StatisticTotal.create(result.monthSum);
           }
         }
         _incomes[strDate] = incomes;
@@ -187,16 +202,20 @@ class StatisticsController extends ChangeNotifier {
       _buildStatistics();
       _strDates = _strDates.reversed.toList();
       _index = _strDates.length - 1;
+
       _changeState(StatisticsStateSuccess());
+      completer.complete();
     } catch (err) {
       _changeState(StatisticsStateError());
+      completer.completeError(err);
+    } finally {
+      _currentOperation = null;
     }
   }
 
   void _buildStatistics() {
     _setReferenceByCategory();
     for (final month in _statisticsList.keys) {
-      // log('$month:');
       final List<StatisticResult>? statInMonth = _statisticsList[month];
       if (statInMonth == null || statInMonth.isEmpty) {
         continue;
@@ -205,19 +224,24 @@ class StatisticsController extends ChangeNotifier {
         final category = statInMonth[index].categoryName;
         final reference = _totalByCategory[category]!.reference;
         final variation = reference != 0
-            ? 100 * (statInMonth[index].totalSum - reference) / reference
+            ? 100 * (statInMonth[index].monthSum - reference) / reference
             : null;
 
         statInMonth[index].variation = variation;
-
-        // log('Category: $category/${reference.toStringAsFixed(2)}'
-        //     '/${variation != null ? variation.toStringAsFixed(0) : 'NaN'}');
       }
     }
   }
 
   Future<void> setStatisticsReference(StatisticMedium statReferenceType) async {
     if (_statReferenceType == statReferenceType) return;
+
+    if (_currentOperation != null) {
+      await _currentOperation;
+    }
+
+    final completer = Completer<void>();
+    _successCompleter = completer;
+    _currentOperation = completer.future;
 
     try {
       _changeState(StatisticsStateLoading());
@@ -226,9 +250,18 @@ class StatisticsController extends ChangeNotifier {
       await currentUser.updateUserBudgetRef();
       _buildStatistics();
       _changeState(StatisticsStateSuccess());
+      completer.complete();
     } catch (err) {
       log('Error: $err');
       _changeState(StatisticsStateError());
+      completer.completeError(err);
+    } finally {
+      _currentOperation = null;
     }
+  }
+
+  Future<void> waitUntilSuccess() {
+    _successCompleter ??= Completer<void>();
+    return _successCompleter!.future;
   }
 }
