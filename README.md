@@ -246,6 +246,64 @@ Com esses gatilhos em vigor, qualquer tentativa de inserir um valor inválido em
 
 # Changes:
 
+## 2023/09/08 - version 0.99.16
+
+In this commit, version 0.99.16, the ability to display category charts has been added. There are still several adjustments to be made and translations to be fine-tuned. I also took the opportunity to remove some bugs in UserDbModel.toMap that I hadn't noticed in the last update. There are still issues with triggering refresh on different pages due to changes in categories, transactions, and accounts. I should address this in upcoming commits. Here are the details of the main changes:
+
+* lib/common/models/user_db_model.dart:
+   - Added a List<String>? userCategoryList to maintain a list of selected categories to display on the chart on the StatisticsPage;
+   - Fixed a bug in the toMap() method for boolean variables. They now represent 1 for true and 0 for false;
+   - Added specialized methods updateUserLanguage() and updateUserTheme() to update only these attributes in the database.
+
+* lib/common/current_models/current_user.dart:
+   - Added support for updateUserTheme and updateUserLanguage in the setUserTheme and setUserLanguage methods, respectively.
+
+* lib/features/budget/budget_page.dart:
+   - Added a call to StatisticsController.init() in the init() method of the BudgetPage. It was causing an error with the declaration of the internal _statReferenceType attribute of the StatisticsController.
+
+* lib/features/home_page/home_page.dart:
+* lib/features/settings/settings_page.dart:
+   - Aesthetic adjustments.
+
+* lib/features/statistics/statistic_card/statistic_card.dart:
+   - Added an initState() method;
+   - The old incomesExpensesData method was renamed to processesData and generates GraphicLineData for all the charts;
+   - This Card now works with the controller of the StatisticsPage and a personal controller to build the chart.
+
+* lib/features/statistics/statistic_card/statistic_cart.state.dart:
+* lib/features/statistics/statistic_card/statistic_card_controller.dart:
+   - StatisticCard controller. This controller waits for data processing in the StatisticsController to start separating chart data.
+
+* lib/features/statistics/statistic_controller.dart:
+   - Added the attributes Future<void>? _currentOperation and Completer<void>? _successCompleter. These are responsible for signaling when this controller transitions to the StatisticsStateSuccess() status.
+   - The method Future<void> waitUntilSuccess() is responsible for informing that the controller's status has changed to StatisticsStateSuccess().
+
+* lib/features/statistics/statistics_page.dart:
+   - The variationColumn function was removed and converted into a widget;
+   - The entire ListTile widget was replaced with the ListTileStatistic(StatisticResult category) widget.
+
+* lib/features/statistics/widgets/list_tile_statistic.dart:
+   - The ListTile from the StatisticsPage was converted into this widget.
+
+* lib/features/statistics/widgets/variation_column.dart:
+   - The variationColumn function was converted into this widget.
+
+* lib/locator.dart:
+   - Registered the singleton for StatisticCardController().
+
+* lib/repositories/user/sqflite_user_repository.dart:
+* lib/services/database/database_helper.dart:
+   - Added specialized methods Future<void> updateUserLanguage(UserDbModel user) and Future<void> updateUserTheme(UserDbModel user).
+
+* lib/repositories/user/user_repository.dart:
+* lib/services/database/sqflite_helper.dart:
+   - Changed the database Scheme Version to 1.0.04 with the addition of the userCategoryList TEXT column with a default value of "[]";
+   - Updated the _createUsersTable method with the new column;
+   - Added specialized methods Future<int> updateUserLanguage(String id, String language) and Future<int> updateUserTheme(String id, String theme).
+
+* pubspec.yaml:
+   - Updated the app version to 0.99.16.
+
 ## 2023/09/07 - version 0.99.15
 
 In this commit, changes were made to add the `userBudgetRef` attribute to control the app's statistical reference. At the same time, optimizations were made for writing app control attributes in the `usersTable` table. This was done to optimize the device resource usage when changing these attributes, by updating only the necessary attribute instead of rewriting the entire user record. The details of the changes are described below:

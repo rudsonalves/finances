@@ -1,3 +1,0 @@
-Changes:
- * added the attribut balanceTransCount in balance to count the number of transactions carried out in a balance;
- * balance injection has been removed from CurrentBalance code to BalanceRepository as injectBalance method;

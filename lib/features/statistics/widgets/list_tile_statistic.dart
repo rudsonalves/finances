@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:finances/features/statistics/statistic_card/statistic_card_controller.dart';
 import 'package:flutter/material.dart';
 
