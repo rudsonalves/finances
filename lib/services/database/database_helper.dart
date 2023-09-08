@@ -15,6 +15,8 @@ abstract class DatabaseHelper {
   Future<int> updateUserGrpShowDots(String id, int grpShowDots);
   Future<int> updateUserGrpIsCurved(String id, int grpIsCurved);
   Future<int> updateUserGrpAreaChart(String id, int grpAreaChart);
+  Future<int> updateUserLanguage(String id, String language);
+  Future<int> updateUserTheme(String id, String theme);
 
   Future<int> insertIcon(Map<String, dynamic> iconMap);
   Future<int> updateIcon(Map<String, dynamic> iconMap);

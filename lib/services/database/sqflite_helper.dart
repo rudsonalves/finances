@@ -17,40 +17,6 @@ class SqfliteHelper implements DatabaseHelper {
   static const _dbName = 'app_dataBase.db';
   static const _dbVersion = 1;
 
-  /// This is the database scheme current version. To futures upgrades
-  /// in database increment this value and add a new update script in
-  /// _migrationScripts Map
-  static const _databaseSchemeVersion = 1003;
-
-  /// This Map contains the database migration scripts. The last index of this
-  /// Map must be equal to the current version of the database.
-  static const Map<int, List<String>> _migrationScripts = {
-    1000: [],
-    1001: [
-      'ALTER TABLE categoriesTable ADD COLUMN categoryBudget REAL DEFAULT 0'
-    ],
-    1002: [
-      'ALTER TABLE usersTable ADD COLUMN userGrpShowGrid INTEGER DEFAULT 1',
-      'ALTER TABLE usersTable ADD COLUMN userGrpIsCurved INTEGER DEFAULT 0',
-      'ALTER TABLE usersTable ADD COLUMN userGrpShowDots INTEGER DEFAULT 0',
-      'ALTER TABLE usersTable ADD COLUMN userGrpAreaChart INTEGER DEFAULT 0',
-    ],
-    1003: [
-      'ALTER TABLE usersTable ADD COLUMN userBudgetRef INTEGER DEFAULT 2',
-    ],
-    // 1001: ['DROP INDEX IF EXISTS $iconsNameIndex'],
-    // 1002: [],
-  };
-
-  @override
-  String get dbSchemeVersion {
-    String version = _databaseSchemeVersion.toString();
-    int length = version.length;
-    return '${version.substring(0, length - 3)}.'
-        '${version.substring(length - 3, length - 2)}.'
-        '${version.substring(length - 2)}';
-  }
-
   static const versionControlTable = 'versionControl';
   static const versionControlId = 'id';
   static const versionControlVersion = 'version';
@@ -68,6 +34,7 @@ class SqfliteHelper implements DatabaseHelper {
   static const userGrpShowDots = 'userGrpShowDots';
   static const userGrpAreaChart = 'userGrpAreaChart';
   static const userBudgetRef = 'userBudgetRef';
+  static const userCategoryList = 'userCategoryList';
 
   static const iconsTable = 'iconsTable';
   static const iconsNameIndex = 'idxIconsName';
@@ -127,6 +94,45 @@ class SqfliteHelper implements DatabaseHelper {
   static const transferTransId1 = 'transferTransId1';
   static const transferAccount0 = 'transferAccount0';
   static const transferAccount1 = 'transferAccount1';
+
+  /*
+   Database Scheme Version declarations
+   
+   This is the database scheme current version. To futures upgrades
+   in database increment this value and add a new update script in
+   _migrationScripts Map.
+  */
+  static const _databaseSchemeVersion = 1004;
+
+  // This Map contains the database migration scripts. The last index of this
+  // Map must be equal to the current version of the database.
+  static const Map<int, List<String>> _migrationScripts = {
+    1000: [],
+    1001: [
+      'ALTER TABLE categoriesTable ADD COLUMN categoryBudget REAL DEFAULT 0'
+    ],
+    1002: [
+      'ALTER TABLE $usersTable ADD COLUMN $userGrpShowGrid INTEGER DEFAULT 1',
+      'ALTER TABLE $usersTable ADD COLUMN $userGrpIsCurved INTEGER DEFAULT 0',
+      'ALTER TABLE $usersTable ADD COLUMN $userGrpShowDots INTEGER DEFAULT 0',
+      'ALTER TABLE $usersTable ADD COLUMN $userGrpAreaChart INTEGER DEFAULT 0',
+    ],
+    1003: [
+      'ALTER TABLE $usersTable ADD COLUMN $userBudgetRef INTEGER DEFAULT 2',
+    ],
+    1004: [
+      'ALTER TABLE $usersTable ADD COLUMN $userCategoryList TEXT DEFAULT "[]"',
+    ],
+  };
+
+  @override
+  String get dbSchemeVersion {
+    String version = _databaseSchemeVersion.toString();
+    int length = version.length;
+    return '${version.substring(0, length - 3)}.'
+        '${version.substring(length - 3, length - 2)}.'
+        '${version.substring(length - 2)}';
+  }
 
   late Database _db;
 
@@ -229,7 +235,8 @@ class SqfliteHelper implements DatabaseHelper {
       ' $userGrpIsCurved INTEGER DEFAULT 0,'
       ' $userGrpShowDots INTEGER DEFAULT 0,'
       ' $userGrpAreaChart INTEGER DEFAULT 0,'
-      ' $userBudgetRef INTEGER DEFAULT 1,'
+      ' $userBudgetRef INTEGER DEFAULT 2,'
+      ' $userCategoryList TEXT DEFAULT "[]",'
       ' FOREIGN KEY ($userMainAccountId)'
       '  REFERENCES $accountTable ($accountId)'
       '  ON DELETE CASCADE'
@@ -874,6 +881,38 @@ class SqfliteHelper implements DatabaseHelper {
       int result = await _db.update(
         usersTable,
         {userGrpAreaChart: grpAreaChart},
+        where: '$userId = ?',
+        whereArgs: [id],
+      );
+      return result;
+    } catch (err) {
+      log('Error: $err');
+      return -1;
+    }
+  }
+
+  @override
+  Future<int> updateUserLanguage(String id, String language) async {
+    try {
+      int result = await _db.update(
+        usersTable,
+        {userLanguage: language},
+        where: '$userId = ?',
+        whereArgs: [id],
+      );
+      return result;
+    } catch (err) {
+      log('Error: $err');
+      return -1;
+    }
+  }
+
+  @override
+  Future<int> updateUserTheme(String id, String theme) async {
+    try {
+      int result = await _db.update(
+        usersTable,
+        {userTheme: theme},
         where: '$userId = ?',
         whereArgs: [id],
       );

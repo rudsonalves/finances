@@ -179,7 +179,10 @@ class _SettingsPageState extends State<SettingsPage> {
                             children: [
                               Text(
                                 locale.settingsPageAppSettings,
-                                style: AppTextStyles.textStyleSemiBold18,
+                                style:
+                                    AppTextStyles.textStyleSemiBold18.copyWith(
+                                  color: colorScheme.primary,
+                                ),
                               ),
                               const SizedBox(height: 8),
                               ValueListenableBuilder(
@@ -190,7 +193,10 @@ class _SettingsPageState extends State<SettingsPage> {
                                     children: [
                                       Text(
                                         locale.settingsPageAppTheme,
-                                        style: AppTextStyles.textStyleMedium16,
+                                        style: AppTextStyles.textStyleMedium16
+                                            .copyWith(
+                                          color: colorScheme.primary,
+                                        ),
                                       ),
                                       const SizedBox(width: 16),
                                       themeModeDropdown(),
@@ -206,7 +212,10 @@ class _SettingsPageState extends State<SettingsPage> {
                                     children: [
                                       Text(
                                         locale.settingsPageLanguage,
-                                        style: AppTextStyles.textStyleMedium16,
+                                        style: AppTextStyles.textStyleMedium16
+                                            .copyWith(
+                                          color: colorScheme.primary,
+                                        ),
                                       ),
                                       const SizedBox(width: 16),
                                       languageDropdown(),
@@ -214,32 +223,32 @@ class _SettingsPageState extends State<SettingsPage> {
                                   );
                                 },
                               ),
-                              Row(
-                                children: [
-                                  const Text(
-                                    'Create/Restore Backup:',
-                                    style: AppTextStyles.textStyleMedium16,
+                              const SizedBox(height: 32),
+                              Center(
+                                child: Text(
+                                  'App version: $version',
+                                  style:
+                                      AppTextStyles.textStyleMedium16.copyWith(
+                                    color: colorScheme.primary,
                                   ),
-                                  const SizedBox(width: 8),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) =>
-                                            const DatabaseRecover(
-                                          dialogState:
-                                              DialogStates.createRestore,
-                                        ),
-                                      );
-                                    },
-                                    child: const Icon(Icons.backup_table),
-                                  ),
-                                ],
+                                ),
                               ),
                               const SizedBox(height: 16),
-                              Text(
-                                'App version: $version',
-                                style: AppTextStyles.textStyleMedium16,
+                              Center(
+                                child: ElevatedButton.icon(
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) =>
+                                          const DatabaseRecover(
+                                        dialogState: DialogStates.createRestore,
+                                      ),
+                                    );
+                                  },
+                                  icon: const Icon(Icons.backup_table_sharp),
+                                  label: Text(
+                                      locale.settingsPageCreateRestoreBackup),
+                                ),
                               ),
                             ],
                           ),
