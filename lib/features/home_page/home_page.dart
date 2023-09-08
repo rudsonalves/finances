@@ -117,7 +117,7 @@ class _HomePageState extends State<HomePage>
                         Text(
                           locale.homePageTransHistory,
                           style: AppTextStyles.textStyleSemiBold18.copyWith(
-                            fontWeight: FontWeight.w700,
+                            color: colorScheme.primary,
                           ),
                         ),
                       ],

@@ -1,6 +1,0 @@
-In this committee, four changes were made to the project:
-
-- The project was renamed to "finances" and moved to another repository with the same name.
-- Three more colors were added to the project's color palette: lightblue, lightgreen, and lightyellow.
-- The line 'final locale = AppLocalizations.of(context)!' was moved from the beginning of the initState() method in the SignInPage class to inside the anonymous function within _controller.addListener. This was necessary to avoid an error during app execution.
-- The methods 'Future<void> signInButton()' and 'void signUpButton()' were extracted from the build block of the SignUpPage class. This change was purely cosmetic, resulting in a more coherent code organization.

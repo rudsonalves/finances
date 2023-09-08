@@ -26,6 +26,7 @@
     "settingsPageAppTheme": "Tema de la App:",
     "settingsPageLanguage": "Idioma:",
     "settingsPageSettingsError": "¡Error de Ajustes!",
+    "settingsPageCreateRestoreBackup": "Crear/Restaurar Copia de Seguridad",
     "splashPageMsgPart0": "Gestiona tus",
     "splashPageMsgPart1": "Finanzas Personales",
     "splashPageGetStarted": "Empezar",

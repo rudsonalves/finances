@@ -33,6 +33,7 @@ class _BudgetPageState extends State<BudgetPage>
   @override
   void initState() {
     super.initState();
+    _statController.init();
     _controller.init();
   }
 

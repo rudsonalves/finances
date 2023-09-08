@@ -104,6 +104,24 @@ class SqfliteUserRepository implements UserRepository {
   }
 
   @override
+  Future<void> updateUserLanguage(UserDbModel user) async {
+    if (user.userId != null) {
+      await helper.updateUserLanguage(user.userId!, user.userLanguage);
+    } else {
+      throw Exception('Unregistered user');
+    }
+  }
+
+  @override
+  Future<void> updateUserTheme(UserDbModel user) async {
+    if (user.userId != null) {
+      await helper.updateUserTheme(user.userId!, user.userTheme);
+    } else {
+      throw Exception('Unregistered user');
+    }
+  }
+
+  @override
   Map<String, dynamic> getUserMapById(String id) {
     return _users[id]!.toMap();
   }

@@ -26,6 +26,7 @@
     "settingsPageAppTheme": "App theme:",
     "settingsPageLanguage": "Language:",
     "settingsPageSettingsError": "Settings Error!",
+    "settingsPageCreateRestoreBackup": "Create/Restore Backup",
     "splashPageMsgPart0": "Manager Your",
     "splashPageMsgPart1": "Financial Live",
     "splashPageGetStarted": "Get Started",

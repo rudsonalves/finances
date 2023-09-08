@@ -21,6 +21,7 @@ class UserDbModel {
   bool userGrpShowDots;
   bool userGrpAreaChart;
   StatisticMedium userBudgetRef;
+  List<String> userCategoryList;
 
   UserDbModel({
     this.userId,
@@ -35,7 +36,8 @@ class UserDbModel {
     this.userGrpShowDots = false,
     this.userGrpAreaChart = false,
     this.userBudgetRef = StatisticMedium.mediumMonth,
-  });
+    List<String>? userCategoryList,
+  }) : userCategoryList = userCategoryList ?? [];
 
   final userRepository = locator.get<UserRepository>();
 
@@ -63,6 +65,11 @@ class UserDbModel {
     userBudgetRef = StatisticMedium.values
         .where((item) => item.index == (userMap['userBudgetRef'] as int))
         .first;
+    userCategoryList = List<String>.from(
+      jsonDecode(
+        userMap['userCategoryList'],
+      ),
+    );
   }
 
   void copyFromUser(UserDbModel user) {
@@ -78,23 +85,25 @@ class UserDbModel {
     userGrpShowDots = user.userGrpShowDots;
     userGrpAreaChart = user.userGrpAreaChart;
     userBudgetRef = user.userBudgetRef;
+    userCategoryList = user.userCategoryList;
   }
 
   @override
   String toString() {
-    return 'User('
-        'Id: $userId;'
-        ' Name: "$userName";'
-        ' Email: $userEmail;'
-        ' Logged: $userLogged;'
-        ' MainAccountId: $userMainAccountId;'
-        ' Theme: $userTheme;'
-        ' Language: $userLanguage;'
-        ' GrpShowGrid: $userGrpShowGrid;'
-        ' GrpIsCurved: $userGrpIsCurved;'
-        ' GrpShowDots: $userGrpShowDots;'
-        ' GrpAreaChart: $userGrpAreaChart;'
-        ' BudgetRef: $userBudgetRef'
+    return 'User(\n'
+        'Id: $userId\n'
+        ' Name: "$userName"\n'
+        ' Email: $userEmail\n'
+        ' Logged: $userLogged\n'
+        ' MainAccountId: $userMainAccountId\n'
+        ' Theme: $userTheme\n'
+        ' Language: $userLanguage\n'
+        ' GrpShowGrid: $userGrpShowGrid\n'
+        ' GrpIsCurved: $userGrpIsCurved\n'
+        ' GrpShowDots: $userGrpShowDots\n'
+        ' GrpAreaChart: $userGrpAreaChart\n'
+        ' BudgetRef: $userBudgetRef\n'
+        ' CategoryList: $userCategoryList\n'
         ')';
   }
 
@@ -108,11 +117,12 @@ class UserDbModel {
         'userMainAccountId': userMainAccountId,
         'userTheme': userTheme,
         'userLanguage': userLanguage,
-        'userGrpShowGrid': userGrpShowGrid,
-        'userGrpIsCurved': userGrpIsCurved,
-        'userGrpShowDots': userGrpShowDots,
-        'userGrpAreaChart': userGrpAreaChart,
-        'userBudgetRef': userBudgetRef,
+        'userGrpShowGrid': userGrpShowGrid ? 1 : 0,
+        'userGrpIsCurved': userGrpIsCurved ? 1 : 0,
+        'userGrpShowDots': userGrpShowDots ? 1 : 0,
+        'userGrpAreaChart': userGrpAreaChart ? 1 : 0,
+        'userBudgetRef': userBudgetRef.index,
+        'userCategoryList': jsonEncode(userCategoryList),
       };
     } else {
       return <String, dynamic>{
@@ -122,11 +132,12 @@ class UserDbModel {
         'userMainAccountId': userMainAccountId,
         'userTheme': userTheme,
         'userLanguage': userLanguage,
-        'userGrpShowGrid': userGrpShowGrid,
-        'userGrpIsCurved': userGrpIsCurved,
-        'userGrpShowDots': userGrpShowDots,
-        'userGrpAreaChart': userGrpAreaChart,
-        'userBudgetRef': userBudgetRef,
+        'userGrpShowGrid': userGrpShowGrid ? 1 : 0,
+        'userGrpIsCurved': userGrpIsCurved ? 1 : 0,
+        'userGrpShowDots': userGrpShowDots ? 1 : 0,
+        'userGrpAreaChart': userGrpAreaChart ? 1 : 0,
+        'userBudgetRef': userBudgetRef.index,
+        'userCategoryList': jsonEncode(userCategoryList),
       };
     }
   }
@@ -149,6 +160,11 @@ class UserDbModel {
       userBudgetRef: StatisticMedium.values
           .where((item) => item.index == (map['userBudgetRef'] as int))
           .first,
+      userCategoryList: List<String>.from(
+        jsonDecode(
+          map['userCategoryList'],
+        ),
+      ),
     );
   }
 
@@ -179,5 +195,13 @@ class UserDbModel {
 
   Future<void> updateUserGrpAreaChart() async {
     await userRepository.updateUserGrpAreaChart(this);
+  }
+
+  Future<void> updateUserLanguage() async {
+    await userRepository.updateUserLanguage(this);
+  }
+
+  Future<void> updateUserTheme() async {
+    await userRepository.updateUserTheme(this);
   }
 }

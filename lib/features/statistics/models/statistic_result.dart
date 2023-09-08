@@ -2,30 +2,30 @@ import 'dart:convert';
 
 class StatisticResult {
   String categoryName;
-  double totalSum;
+  double monthSum;
   double? variation;
 
   StatisticResult({
-    required this.categoryName,
-    required this.totalSum,
+    this.categoryName = '',
+    this.monthSum = 0.0,
     this.variation,
   });
 
   @override
   String toString() =>
-      'StatisticResult(categoryName: $categoryName, totalSum: $totalSum)';
+      'StatisticResult(categoryName: $categoryName, totalSum: $monthSum)';
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'categoryName': categoryName,
-      'totalSum': totalSum,
+      'totalSum': monthSum,
     };
   }
 
   factory StatisticResult.fromMap(Map<String, dynamic> map) {
     return StatisticResult(
       categoryName: map['categoryName'] as String,
-      totalSum: map['totalSum'] as double,
+      monthSum: map['totalSum'] as double,
     );
   }
 
