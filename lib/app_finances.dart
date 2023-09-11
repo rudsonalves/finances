@@ -81,6 +81,12 @@ class AppFinances extends StatelessWidget {
                     );
                   }
                 },
+                AppRoute.homePage.name: (context) => AppRoute.homePage.page,
+                AppRoute.statisticsPage.name: (context) =>
+                    AppRoute.statisticsPage.page,
+                AppRoute.accountPage.name: (context) =>
+                    AppRoute.accountPage.page,
+                AppRoute.budgetPage.name: (context) => AppRoute.budgetPage.page,
               },
             );
           },

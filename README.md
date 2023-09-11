@@ -131,17 +131,50 @@ These bug fixes and implementations will help improve the user experience and ma
 
 Por *rudsonalves67@gmail.com*
 
-A intenção deste projeto é desenvolver um aplicativo para auxiliar no controle do orçamento do usuário, permitindo a criação e gerenciamento de contas. O projeto foi inspirado no diagrama publicado no Figma, [Financy-App](https://www.figma.com/file/vQzApZhqZFDFp1td5K4asQ/Financy-App?type=design&mode=design&t=EFvH3bvOxfe8hSap-0), e foi inicialmente desenvolvido com base nos vídeos do canal do YouTube [@devkaio](https://www.youtube.com/@devkaio), do qual sou muito grato pelas boas práticas e ideias interessantes que ajudaram a implementar o projeto.
+A intenção deste projeto é desenvolver um aplicativo para auxiliar no controle do orçamento do usuário, permitindo a criação e gerenciamento de contas, controle dos movimentos das contas ordenadas em categorias personalizadas, e o planejamento e execução de orçamento. O projeto foi inspirado no diagrama publicado no Figma, [Financy-App](https://www.figma.com/file/vQzApZhqZFDFp1td5K4asQ/Financy-App?type=design&mode=design&t=EFvH3bvOxfe8hSap-0), e foi inicialmente desenvolvido com base nos vídeos do canal do YouTube [@devkaio](https://www.youtube.com/@devkaio), do qual sou muito grato pelas boas práticas e ideias interessantes que ajudaram a implementar o projeto.
 
-## Desenvolvimento do Código
+## Sobre o Desenvolvimento do Código
 
 Este projeto tem como objetivo aprimorar meus conhecimentos no SDK Flutter e em todo o ecossistema envolvido no desenvolvimento do aplicativo.
 
-No geral, o projeto está sendo desenvolvido seguindo uma arquitetura baseada em funcionalidades, na qual os componentes e módulos relacionados a uma determinada funcionalidade são agrupados em uma estrutura lógica, facilitando a compreensão e a manutenção do código.
+No geral, o projeto está sendo desenvolvido seguindo uma arquitetura baseada em funcionalidades, na qual os componentes e módulos relacionados a uma determinada funcionalidade são agrupados em uma estrutura lógica, facilitando a compreensão e a manutenção do projeto.
 
 As páginas são construídas usando o padrão State, no qual a construção da página é alterada quando seu estado interno muda. Em geral, uma página terá um módulo com uma classe abstrata e suas subclasses estendem essa classe abstrata para definir seus diferentes estados. Um segundo módulo de controle é responsável por gerenciar os estados utilizados na construção da página. O terceiro módulo é responsável pela construção da própria página, dependendo do estado atual.
 
 O Service Locator utilizado é o *get_it*, que fornece uma maneira de centralizar e obter instâncias de serviços necessários ao longo do aplicativo. Ele também é capaz de gerar objetos Singleton e sob demanda, oferecendo uma grande flexibilidade na distribuição e controle dos recursos.
+
+O banco de dados empregado será o SQFLite, uma implementação do SQLite para o flutter muito popular entre seus desenvolvedores.
+
+## Objetivos do App
+
+Os objetivos do Finances é ser uma ferramenta para ajudar o usuário a acompanhar seus gastos e melhor gerenciar a sua vida financeira.
+
+O Finances vai permitir ao usuário administra uma quantidade ilimitada de contas, classificando suas despesas em categorias personalizáveis, com a criação e acompanhamento da execução de seu orçamento.
+
+### Privacidade
+
+A única informação pessoal recolhida pelo finances é uma conta de e-mail e senha (específica para o app) necessários para o cadastro de uma conta no firebase da Google, usado exclusivamente para armazenar estas credenciais.
+
+O Finances foi pensado para ser o menos intrusivo possível, e portanto não retem nenhuma informação pessoal e sensível à segurança ou privacidade do usuário. Todas as informações das movimentações financeiras ficam exclusivamente armazenadas em seu dispositivo, não sendo compartilhadas de forma alguma pelo aplicativo.
+
+## Descrição do App
+
+O Finances trabalho com 4 páginas principais e mais alguma eventual página secundária (no momento apenas a página de configurações e a página sobre). Estas páginas são selecionadas por meio PageView na barra inferior do app. Abaixo segue uma apresentação curta destas páginas.
+
+ * Página de Transações - esta é a página principal do app onde as transações são inseridas, as diferentes contas podem ser selecionadas e o balanço de cada mês pode ser acompanhado;
+ * Página de Estatísticas - nesta página podem ser acompanhadas as estatísticas anual de seus gastos bem como das diferentes categorias declaradas;
+ * Página de Contas - nesta página é onde novas contas podem ser adicionadas/removidas/editadas no app;
+ * Página de Orçamento/Categorias - nesta página é possível adicinar/remover/editar categorias para os pagamentos, bem como definir o orçamento mensal.
+
+ Existe ainda uma quinta página para ajustar as configurações do app. Esta é alcançável através do menu no canto superior direito da Página de Transações. Através desta página é possível selecionar o tema, a linguagem e fazer e recuperar backups de seus dados.
+
+Estas páginas são detalhadas na sequência.
+
+### Página de Transação:
+
+A página de 
+
+"conferência"
 
 ## Planejamento do Projeto
 
@@ -244,7 +277,62 @@ Foram criados dois gatilhos (triggers) para validar as entradas das colunas *bal
 
 Com esses gatilhos em vigor, qualquer tentativa de inserir um valor inválido em *balanceNextId* ou *balancePreviousId* resultará em um erro, e a operação de inserção será interrompida, mantendo assim a integridade referencial desses dados.
 
-# Changes:
+# Commits:
+
+## 2023/09/11 - version 1.0.0+1
+
+In this commit, some initialization errors of the app were fixed, the app's navigation order was changed, and some translations were added. Here are the changes:
+
+* lib/app_finances.dart:
+* lib/common/constants/routes/app_route.dart:
+   - Added routing for the pages HomePage, StatisticsPage, AccountPage, and BudgetPage.
+
+* lib/common/functions/function_alert_dialog.dart:
+* lib/common/widgets/add_cancel_buttons.dart:
+* lib/features/budget/widget/dismissible_budget.dart:
+* lib/features/budget/widget/icon_selection_dialog.dart:
+* lib/features/settings/settings_page.dart:
+   - To better accommodate buttons on smaller screens, replaced ElevatedButton.icon with ElevatedButton.
+
+* lib/common/widgets/custom_bottom_app_bar_item.dart:
+   - Moved the code of CustomBottomAppBarItem to a separate module.
+
+* lib/common/widgets/custom_botton_navigator_bar.dart:
+   - Added some tooltips to the CustomBottomAppBarItems.
+
+* lib/features/budget/budget_controller.dart:
+   - To prevent an error in creating the chart on the BudgetPage, locator.get<StatisticsController>().getStatistics() is now only executed if there is data in the StatisticsController. This was necessary to avoid errors during app initialization without a database.
+
+* lib/features/home_page/balance_card/balance_card_controller.dart:
+* lib/features/home_page/home_page_controller.dar:
+   - The initial date is set to the current date when starting the app without a database.
+
+* lib/features/home_page_view/home_page_view.dart:
+   - Whenever opening the StatisticsPage, a call to statisticeController.getStatistics() is made if the getter statisticeController.redraw returns true.
+
+* /lib/features/home_page_view/home_page_view.dart:
+   - A WillPopScope was added so that the smartphone's Back button always sends the PageView to the HomePage() before exiting the app.
+
+* lib/features/sign_in/sign_in_page.dart:
+* lib/features/sign_up/sign_up_page.dart:
+* lib/features/splash/splash_page.dart:
+   - Fixed app navigation to place AppRoute.home as the last page of the app.
+
+* lib/features/statistics/graphics/line_graphic.dart:
+   - Now the chart is only drawn if the getter locator.get<StatisticsController>().noData returns true. Otherwise, a Container with a message is returned.
+
+* lib/features/statistics/statistic_controller.dart:
+   - Implemented an attribute _noData to signal when some data is collected to generate statistics.
+
+* lib/features/statistics/statistics_page.dart:
+   - The didUpdateWidget method did not work as expected and is currently disabled.
+
+* lib/features/transaction/transaction_page.dart:
+   - Added translations for the phrases in transPageSelectAccTransfer, transPageAccTransfer, and transPageTitle. Finally, the translation of the phrase in accountPageTitle was fixed.
+
+* pubspec.yaml:
+   - Preparing for publication for version 1.0.0+1.
+
 
 ## 2023/09/08 - version 0.99.16
 

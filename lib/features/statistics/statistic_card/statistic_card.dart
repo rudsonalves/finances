@@ -1,4 +1,3 @@
-import 'package:finances/repositories/category/category_repository.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -10,6 +9,7 @@ import '../../../common/extensions/money_masked_text.dart';
 import '../../../common/models/extends_date.dart';
 import '../../../common/widgets/custom_circular_progress_indicator.dart';
 import '../../../locator.dart';
+import '../../../repositories/category/category_repository.dart';
 import '../graphics/line_graphic.dart';
 import '../graphics/model/graphic_line_data.dart';
 import '../statistic_controller.dart';
@@ -127,6 +127,8 @@ class _StatisticCardState extends State<StatisticCard> {
                 final List<GraphicLineData> graphicData = processesData();
 
                 final List<String> graphicXLabes = xLabels();
+
+                bool noData = locator.get<StatisticsController>().noData;
 
                 return SingleChildScrollView(
                   child: Column(
@@ -328,28 +330,47 @@ class _StatisticCardState extends State<StatisticCard> {
                           ),
                         ],
                       ),
-                      AspectRatio(
-                        aspectRatio: 1.9,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            top: 0,
-                            bottom: 0,
-                            left: 8,
-                            right: 12,
-                          ),
-                          child: LineGraphic(
-                            fontColor: primary,
-                            data: graphicData,
-                            xLabels: graphicXLabes,
-                            drawHorizontalLine: horizontalGrid,
-                            drawVerticalLine: verticalGrid,
-                            showGrid: currentUser.userGrpShowGrid,
-                            isCurved: currentUser.userGrpIsCurved,
-                            showDots: currentUser.userGrpShowDots,
-                            areaChart: currentUser.userGrpAreaChart,
+                      if (!noData)
+                        AspectRatio(
+                          aspectRatio: 1.9,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              top: 0,
+                              bottom: 0,
+                              left: 8,
+                              right: 12,
+                            ),
+                            child: LineGraphic(
+                              fontColor: primary,
+                              data: graphicData,
+                              xLabels: graphicXLabes,
+                              drawHorizontalLine: horizontalGrid,
+                              drawVerticalLine: verticalGrid,
+                              showGrid: currentUser.userGrpShowGrid,
+                              isCurved: currentUser.userGrpIsCurved,
+                              showDots: currentUser.userGrpShowDots,
+                              areaChart: currentUser.userGrpAreaChart,
+                            ),
                           ),
                         ),
-                      ),
+                      if (noData)
+                        Container(
+                          height: 170,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: primary,
+                              width: 2,
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              locale.statisticsPageNoStatistics,
+                              style: AppTextStyles.textStyleBold14.copyWith(
+                                color: primary,
+                              ),
+                            ),
+                          ),
+                        )
                     ],
                   ),
                 );

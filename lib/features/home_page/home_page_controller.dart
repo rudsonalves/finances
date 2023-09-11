@@ -44,7 +44,12 @@ class HomePageController extends ChangeNotifier {
       _transactions = await TransactionsManager.getNTransFromDate(
         maxItens: maxTransactions,
       );
-      await _updateLastDate();
+      if (_transactions.isNotEmpty) {
+        await _updateLastDate();
+      } else {
+        await _updateLastDate(ExtendedDate.nowDate());
+      }
+
       _changeState(HomePageStateSuccess());
     } catch (err) {
       _changeState(HomePageStateError());
@@ -57,8 +62,12 @@ class HomePageController extends ChangeNotifier {
     getTransactions();
   }
 
-  Future<void> _updateLastDate() async {
-    _lastDate = _transactions.last.transDate.onlyDate;
+  Future<void> _updateLastDate([ExtendedDate? date]) async {
+    if (date != null) {
+      _lastDate = date.onlyDate;
+    } else {
+      _lastDate = _transactions.last.transDate.onlyDate;
+    }
     final balance = await locator
         .get<BalanceRepository>()
         .getBalanceInDate(date: _lastDate!);

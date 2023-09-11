@@ -1,5 +1,8 @@
-import 'package:finances/common/constants/themes/icons/fontello_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../constants/themes/icons/fontello_icons.dart';
+import 'custom_bottom_app_bar_item.dart';
 
 class CustomBottomNavigatorBar extends StatelessWidget {
   final bool floatAppButton;
@@ -18,6 +21,7 @@ class CustomBottomNavigatorBar extends StatelessWidget {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     Color selecteColor = colorScheme.primary;
     Color unselecteColor = colorScheme.outlineVariant;
+    final locale = AppLocalizations.of(context)!;
 
     return BottomAppBar(
       shape: (floatAppButton) ? const CircularNotchedRectangle() : null,
@@ -29,12 +33,14 @@ class CustomBottomNavigatorBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             CustomBottomAppBarItem(
+              tooltip: locale.transPageTitle,
               changePage: changePage,
               icon: page == 0 ? Icons.home : Icons.home_outlined,
               color: page == 0 ? selecteColor : unselecteColor,
               index: 0,
             ),
             CustomBottomAppBarItem(
+              tooltip: locale.statisticsPageTitle,
               changePage: changePage,
               icon: page == 1 ? Icons.assessment : Icons.assessment_outlined,
               color: page == 1 ? selecteColor : unselecteColor,
@@ -42,6 +48,7 @@ class CustomBottomNavigatorBar extends StatelessWidget {
             ),
             if (floatAppButton) const SizedBox(width: 40),
             CustomBottomAppBarItem(
+              tooltip: locale.accountPageTitle,
               changePage: changePage,
               icon: page == 2
                   ? Icons.account_balance
@@ -50,43 +57,16 @@ class CustomBottomNavigatorBar extends StatelessWidget {
               index: 2,
             ),
             CustomBottomAppBarItem(
+              tooltip: locale.budgetPageTitle,
               changePage: changePage,
               icon: page == 3
-                  ? FontelloIcons.budget2
-                  : FontelloIcons.budgetOutlined2,
+                  ? FontelloIcons.budgetOutlined2
+                  : FontelloIcons.budget2,
               color: page == 3 ? selecteColor : unselecteColor,
               index: 3,
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class CustomBottomAppBarItem extends StatelessWidget {
-  final IconData icon;
-  final Color color;
-  final int index;
-  final void Function(int) changePage;
-
-  const CustomBottomAppBarItem({
-    super.key,
-    required this.changePage,
-    required this.icon,
-    required this.index,
-    required this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: () {
-        changePage(index);
-      },
-      icon: Icon(
-        icon,
-        color: color,
       ),
     );
   }

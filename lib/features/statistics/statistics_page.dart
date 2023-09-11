@@ -36,16 +36,17 @@ class _StatisticsPageState extends State<StatisticsPage>
     statReference = _controller.statReference;
   }
 
-  @override
-  void didUpdateWidget(StatisticsPage statisticsPageWidget) {
-    super.didUpdateWidget(statisticsPageWidget);
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   FocusScope.of(context).addListener(_onFocusChanged);
+  // }
 
-    if (_controller.redraw) {
-      if (mounted) {
-        _controller.getStatistics();
-      }
-    }
-  }
+  // void _onFocusChanged() {
+  //   if (_controller.redraw) {
+  //     _controller.getStatistics();
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

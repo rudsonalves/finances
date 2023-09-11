@@ -12,7 +12,7 @@ import '../../../repositories/transaction/transaction_repository.dart';
 class BalanceCardController extends ChangeNotifier {
   final transactionRepository = locator.get<TransactionRepository>();
   final accountRepository = locator.get<AccountRepository>();
-  ExtendedDate _balanceDate = ExtendedDate(1980, 1, 1);
+  ExtendedDate _balanceDate = ExtendedDate.nowDate();
   bool _transStatusCheck = false;
 
   bool get transStatusCheck => _transStatusCheck;

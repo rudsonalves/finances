@@ -129,8 +129,6 @@ class LineGraphic extends StatelessWidget {
 
     (minY, maxY) = calculateYScale();
 
-    // List<String> xLabels = locator.get<StatisticsController>().strDates;
-
     return LineChart(
       LineChartData(
         gridData: FlGridData(

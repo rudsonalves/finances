@@ -104,17 +104,14 @@ class _IconSelectionDialogState extends State<IconSelectionDialog> {
                     ),
                   ),
                   const SizedBox(width: 22),
-                  ElevatedButton.icon(
-                    icon: Icon(
-                      Icons.close_sharp,
-                      color: colorScheme.onPrimary,
-                    ),
+                  ElevatedButton(
+                    // icon: Icon(Icons.close_sharp, color: colorScheme.onPrimary),
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
                         colorScheme.primary,
                       ),
                     ),
-                    label: Text(
+                    child: Text(
                       locale.genericClose,
                       style: AppTextStyles.textStyleBold14.copyWith(
                         color: colorScheme.onPrimary,

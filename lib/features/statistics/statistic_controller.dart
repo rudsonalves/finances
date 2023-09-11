@@ -34,6 +34,10 @@ class StatisticsController extends ChangeNotifier {
 
   late StatisticMedium _statReferenceType;
 
+  bool _noData = true;
+
+  bool get noData => _noData;
+
   StatisticMedium get statReference => _statReferenceType;
 
   List<String> _strDates = [];
@@ -199,7 +203,12 @@ class StatisticsController extends ChangeNotifier {
         count++;
         dateIndex = dateIndex.previousMonth();
       }
-      _buildStatistics();
+      if (_totalByCategory.isNotEmpty) {
+        _noData = false;
+        _buildStatistics();
+      } else {
+        _noData = true;
+      }
       _strDates = _strDates.reversed.toList();
       _index = _strDates.length - 1;
 
