@@ -37,19 +37,19 @@ Future<void> functionAlertDialog(
         color: primary,
       ),
       actions: [
-        ElevatedButton.icon(
+        ElevatedButton(
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(primary),
           ),
           onPressed: () => Navigator.pop(context),
-          label: Text(
+          child: Text(
             locale.genericClose,
             style: TextStyle(color: onPrimary),
           ),
-          icon: Icon(
-            Icons.close,
-            color: onPrimary,
-          ),
+          // icon: Icon(
+          //   Icons.close,
+          //   color: onPrimary,
+          // ),
         ),
       ],
     ),

@@ -54,33 +54,27 @@ class _DismissibleBudgetState extends State<DismissibleBudget> {
           locale.dismissibleCategorySureDeleteCategory(categoryName),
         ),
         actions: [
-          ElevatedButton.icon(
+          ElevatedButton(
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(primary),
             ),
             onPressed: () => Navigator.pop(context, true),
-            label: Text(
+            child: Text(
               locale.dismissibleCategoryDelete,
               style: TextStyle(color: onPrimary),
             ),
-            icon: Icon(
-              Icons.delete,
-              color: onPrimary,
-            ),
+            // icon: Icon(Icons.delete, color: onPrimary),
           ),
-          ElevatedButton.icon(
+          ElevatedButton(
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(primary),
             ),
             onPressed: () => Navigator.pop(context, false),
-            label: Text(
+            child: Text(
               locale.dismissibleCategoryCancel,
               style: TextStyle(color: onPrimary),
             ),
-            icon: Icon(
-              Icons.cancel,
-              color: onPrimary,
-            ),
+            // icon: Icon(Icons.cancel, color: onPrimary),
           ),
         ],
       ),

@@ -48,6 +48,12 @@ class _HomePageViewState extends State<HomePageView> {
       }
       _pageController.jumpToPage(page);
     });
+    if (page == 1) {
+      final statisticeController = locator.get<StatisticsController>();
+      if (statisticeController.redraw) {
+        statisticeController.getStatistics();
+      }
+    }
   }
 
   @override
@@ -95,25 +101,34 @@ class _HomePageViewState extends State<HomePageView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: PageView(
-        physics: const NeverScrollableScrollPhysics(),
-        controller: _pageController,
-        children: const [
-          HomePage(),
-          StatisticsPage(),
-          AccountPage(),
-          BudgetPage(),
-        ],
-      ),
-      floatingActionButton: _floatAppButton
-          ? CustomFloatingActionButton(onPressed: _addFunction)
-          : null,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: CustomBottomNavigatorBar(
-        page: _pageIndex,
-        floatAppButton: _floatAppButton,
-        changePage: changePage,
+    return WillPopScope(
+      onWillPop: () async {
+        if (_pageIndex != 0) {
+          changeToMainPage();
+          return false;
+        }
+        return true;
+      },
+      child: Scaffold(
+        body: PageView(
+          physics: const NeverScrollableScrollPhysics(),
+          controller: _pageController,
+          children: const [
+            HomePage(),
+            StatisticsPage(),
+            AccountPage(),
+            BudgetPage(),
+          ],
+        ),
+        floatingActionButton: _floatAppButton
+            ? CustomFloatingActionButton(onPressed: _addFunction)
+            : null,
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: CustomBottomNavigatorBar(
+          page: _pageIndex,
+          floatAppButton: _floatAppButton,
+          changePage: changePage,
+        ),
       ),
     );
   }

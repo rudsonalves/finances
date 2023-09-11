@@ -51,10 +51,9 @@ class _SignInPageState extends State<SignInPage> {
         // SignIn State Success
         if (_controller.state is SignInStateSuccess) {
           Navigator.pop(context);
-          Navigator.pushReplacementNamed(
-            context,
-            AppRoute.home.name,
-          );
+          // Navigator.pushReplacementNamed(context, AppRoute.home.name);
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil(AppRoute.home.name, (route) => false);
         }
 
         // SignIn State Error

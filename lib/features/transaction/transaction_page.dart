@@ -307,9 +307,8 @@ class _TransactionPageState extends State<TransactionPage> {
                               ),
                               if (_categoryId == 1)
                                 AccountDropdownFormField(
-                                  hintText:
-                                      'Select an account for the fransfer',
-                                  labelText: 'Account for transfer',
+                                  hintText: locale.transPageSelectAccTransfer,
+                                  labelText: locale.transPageAccTransfer,
                                   controller: _accountController,
                                 ),
                               // Date x Time

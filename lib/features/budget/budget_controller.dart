@@ -57,7 +57,9 @@ class BudgetController extends ChangeNotifier {
     _changeState(BudgetStateLoading());
 
     try {
-      await locator.get<StatisticsController>().getStatistics();
+      if (!_statController.noData) {
+        await _statController.getStatistics();
+      }
       _sumTotalBudget();
       _changeState(BudgetStateSuccess());
     } catch (err) {

@@ -235,7 +235,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               ),
                               const SizedBox(height: 16),
                               Center(
-                                child: ElevatedButton.icon(
+                                child: ElevatedButton(
                                   onPressed: () {
                                     showDialog(
                                       context: context,
@@ -245,8 +245,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                       ),
                                     );
                                   },
-                                  icon: const Icon(Icons.backup_table_sharp),
-                                  label: Text(
+                                  // icon: const Icon(Icons.backup_table_sharp),
+                                  child: Text(
                                       locale.settingsPageCreateRestoreBackup),
                                 ),
                               ),

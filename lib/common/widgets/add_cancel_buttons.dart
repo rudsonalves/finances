@@ -24,21 +24,21 @@ class AddCancelButtons extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        ElevatedButton.icon(
-          label: Text(
-            addLabel != null ? addLabel! : locale.addCancelButtonsAdd,
-          ),
+        ElevatedButton(
           onPressed: addCallback,
           style: AppButtonStyles.primaryButtonColor(context),
-          icon: Icon(addIcon != null ? addIcon! : Icons.add),
-        ),
-        ElevatedButton.icon(
-          label: Text(
-            locale.addCancelButtonsCancel,
+          child: Text(
+            addLabel != null ? addLabel! : locale.addCancelButtonsAdd,
           ),
+          // icon: Icon(addIcon != null ? addIcon! : Icons.add),
+        ),
+        ElevatedButton(
           onPressed: cancelCallback,
           style: AppButtonStyles.primaryButtonColor(context),
-          icon: const Icon(Icons.cancel),
+          child: Text(
+            locale.addCancelButtonsCancel,
+          ),
+          // icon: const Icon(Icons.cancel),
         ),
       ],
     );
