@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:finances/features/statistics/statistic_card/statistic_card_controller.dart';
 import 'package:get_it/get_it.dart';
 
 import './common/extensions/app_scale.dart';
@@ -19,6 +18,7 @@ import './services/authentication/auth_service.dart';
 import './common/current_models/current_balance.dart';
 import 'features/account/account_controller.dart';
 import 'features/budget/budget_controller.dart';
+import 'features/statistics/statistic_card/statistic_card_controller.dart';
 import 'features/statistics/statistic_controller.dart';
 import 'repositories/account/account_repository.dart';
 import './common/current_models/current_language.dart';
@@ -153,7 +153,6 @@ void setupDependencies() {
       () => AccountController(),
     );
 
-    // TODO: change to registerFactory
     locator.registerLazySingleton<TransactionController>(
       () => TransactionController(),
     );
