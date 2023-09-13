@@ -85,8 +85,8 @@ void setupDependencies() {
       () => CategoriesIcons(),
     );
 
-    locator.registerFactory<MoneyMaskedText>(
-      () => getMoneyMaskedText(),
+    locator.registerLazySingleton<MoneyMaskedText>(
+      () => MoneyMaskedText.getMoneyMaskedText(),
     );
 
     locator.registerLazySingleton<AppScale>(

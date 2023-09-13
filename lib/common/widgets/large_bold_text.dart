@@ -15,7 +15,7 @@ class LargeBoldText extends StatelessWidget {
     return Text(
       text,
       textAlign: TextAlign.center,
-      style: AppTextStyles.textStyleBold38.copyWith(
+      style: AppTextStyles.textStyleBold32.copyWith(
         color: Theme.of(context).colorScheme.primary,
       ),
     );

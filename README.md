@@ -172,7 +172,7 @@ Estas páginas são detalhadas na sequência.
 
 ### Página de Transação:
 
-A página de 
+A página de Transação permite adicionar, remover e editar as transações. A edição e remoção de uma transação é feita deslizando a transação para direita ou para a esquerda
 
 "conferência"
 

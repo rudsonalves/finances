@@ -1,4 +1,3 @@
-import 'package:finances/features/statistics/statistic_card/statistic_card_controller.dart';
 import 'package:flutter/material.dart';
 
 import '../../../common/constants/themes/app_text_styles.dart';
@@ -8,6 +7,7 @@ import '../../../common/extensions/money_masked_text.dart';
 import '../../../locator.dart';
 import '../../../repositories/category/category_repository.dart';
 import '../models/statistic_result.dart';
+import '../statistic_card/statistic_card_controller.dart';
 import 'variation_column.dart';
 
 class ListTileStatistic extends StatefulWidget {

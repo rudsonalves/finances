@@ -15,6 +15,12 @@ class AppTextStyles {
     fontWeight: FontWeight.w700,
   );
 
+  static const TextStyle textStyleBold32 = TextStyle(
+    fontFamily: 'Inter',
+    fontSize: 32,
+    fontWeight: FontWeight.w700,
+  );
+
   static const TextStyle textStyleBold30 = TextStyle(
     fontFamily: 'Inter',
     fontSize: 30,

@@ -37,22 +37,12 @@ class _BudgetPageState extends State<BudgetPage>
     _controller.init();
   }
 
-  // @override
-  // void didUpdateWidget(BudgetPage statisticsPageWidget) {
-  //   super.didUpdateWidget(statisticsPageWidget);
-
-  //   if (_controller.redraw) {
-  //     if (mounted) {
-  //       _controller.getAllCategories();
-  //     }
-  //   }
-  // }
-
   void callBack() {
     _controller.getAllCategories();
   }
 
-  Future<void> budgetEdit(CategoryDbModel category) async {
+  Future<void> budgetEdit(
+      BuildContext context, CategoryDbModel category) async {
     final mediumMonth =
         _statController.getReferences(StatisticMedium.mediumMonth);
     final medium12 = _statController.getReferences(StatisticMedium.medium12);
@@ -61,10 +51,12 @@ class _BudgetPageState extends State<BudgetPage>
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final primary = colorScheme.primary;
     final budgetController = TextEditingController();
+    final AppLocalizations locale = AppLocalizations.of(context)!;
 
     final categories = _controller.categories;
-    int index = categories
-        .indexWhere((cat) => category.categoryName == cat.categoryName);
+    int index = categories.indexWhere(
+      (cat) => category.categoryName == cat.categoryName,
+    );
     bool continueEditing = true;
 
     while (continueEditing) {
@@ -92,7 +84,7 @@ class _BudgetPageState extends State<BudgetPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Medium last months: '),
+                Text('${locale.budgetEditDialogLastMonths}: '),
                 Text(
                   money.text(medium),
                   style: AppTextStyles.textStyleBold14.copyWith(
@@ -104,7 +96,7 @@ class _BudgetPageState extends State<BudgetPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('12 month average: '),
+                Text('${locale.budgetEditDialog12Month}: '),
                 Text(
                   money.text(medium1),
                   style: AppTextStyles.textStyleBold14.copyWith(
@@ -119,9 +111,9 @@ class _BudgetPageState extends State<BudgetPage>
               textAlign: TextAlign.center,
               keyboardType: TextInputType.number,
               controller: budgetController,
-              decoration: const InputDecoration(
-                labelText: 'Budget',
-                border: OutlineInputBorder(
+              decoration: InputDecoration(
+                labelText: locale.budgetEditDialogBudget,
+                border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(
                     Radius.circular(15),
                   ),
@@ -135,7 +127,7 @@ class _BudgetPageState extends State<BudgetPage>
               children: [
                 Expanded(
                   child: IconButton.filled(
-                    tooltip: 'Previus',
+                    tooltip: locale.budgetEditDialogPrevius,
                     icon: const Icon(Icons.arrow_back_ios),
                     onPressed: () {
                       if (index > 0) {
@@ -147,7 +139,7 @@ class _BudgetPageState extends State<BudgetPage>
                 ),
                 const SizedBox(width: 8),
                 IconButton.filled(
-                  tooltip: 'Update',
+                  tooltip: locale.budgetEditDialogUpdate,
                   onPressed: () {
                     updateBudget(category, budgetController.text);
                     continueEditing = false;
@@ -157,7 +149,7 @@ class _BudgetPageState extends State<BudgetPage>
                 const SizedBox(width: 8),
                 Expanded(
                   child: IconButton.filled(
-                    tooltip: 'Next',
+                    tooltip: locale.budgetEditDialogNext,
                     icon: const Icon(Icons.arrow_forward_ios),
                     onPressed: () {
                       if (index < categories.length - 1) {
@@ -320,7 +312,8 @@ class _BudgetPageState extends State<BudgetPage>
                                   controller: _controller,
                                   index: index,
                                   callBack: callBack,
-                                  budgetEdit: budgetEdit,
+                                  budgetEdit: (edit) =>
+                                      budgetEdit(context, edit),
                                 ),
                               ),
                             ),

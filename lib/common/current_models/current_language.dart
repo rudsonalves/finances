@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../constants/laguage_constants.dart';
 import '../models/language_model.dart';
 
 class CurrentLanguage extends LanguageModel {
@@ -9,7 +10,9 @@ class CurrentLanguage extends LanguageModel {
 
   @override
   void setFromLocaleCode(String localeCode) {
-    super.setFromLocaleCode(localeCode);
-    locale$.value = getLocale();
+    if (languageAttributes.containsKey(localeCode)) {
+      super.setFromLocaleCode(localeCode);
+      locale$.value = getLocale();
+    }
   }
 }
