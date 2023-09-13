@@ -30,7 +30,6 @@ class AddCancelButtons extends StatelessWidget {
           child: Text(
             addLabel != null ? addLabel! : locale.addCancelButtonsAdd,
           ),
-          // icon: Icon(addIcon != null ? addIcon! : Icons.add),
         ),
         ElevatedButton(
           onPressed: cancelCallback,
@@ -38,7 +37,6 @@ class AddCancelButtons extends StatelessWidget {
           child: Text(
             locale.addCancelButtonsCancel,
           ),
-          // icon: const Icon(Icons.cancel),
         ),
       ],
     );

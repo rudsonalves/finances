@@ -46,36 +46,8 @@ Future<void> functionAlertDialog(
             locale.genericClose,
             style: TextStyle(color: onPrimary),
           ),
-          // icon: Icon(
-          //   Icons.close,
-          //   color: onPrimary,
-          // ),
         ),
       ],
     ),
   );
-
-  // return await showDialog(
-  //   context: context,
-  //   builder: (context) => AlertDialog(
-  //     title: Text(
-  //       title,
-  //       textAlign: TextAlign.center,
-  //     ),
-  //     content: SingleChildScrollView(
-  //       child: Column(
-  //         children: [
-  //           Text(content),
-  //           const SizedBox(height: 12),
-  //           TextButton(
-  //             onPressed: () {
-  //               Navigator.pop(context);
-  //             },
-  //             child: Text(locale.genericClose),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   ),
-  // );
 }

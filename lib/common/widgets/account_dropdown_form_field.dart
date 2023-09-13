@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../common/current_models/current_account.dart';
 import '../../locator.dart';
@@ -27,6 +28,7 @@ class AccountDropdownFormField extends StatelessWidget {
     final currentAccount = locator.get<CurrentAccount>();
     final accountRepository = locator.get<AccountRepository>();
     final items = accountRepository.accountsMap.keys.toList();
+    final locale = AppLocalizations.of(context)!;
     items.remove(currentAccount.accountId);
 
     return Padding(
@@ -38,9 +40,7 @@ class AccountDropdownFormField extends StatelessWidget {
         decoration: InputDecoration(
           suffixIcon: suffixIcon,
           floatingLabelBehavior: FloatingLabelBehavior.always,
-          hintText: items.isEmpty
-              ? 'Create a new account to make transfers'
-              : hintText,
+          hintText: items.isEmpty ? locale.accountDropdownFormHint : hintText,
           labelText: labelText.toUpperCase(),
           border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(

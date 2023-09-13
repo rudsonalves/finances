@@ -27,6 +27,7 @@
     "settingsPageLanguage": "Idioma:",
     "settingsPageSettingsError": "¡Error de Ajustes!",
     "settingsPageCreateRestoreBackup": "Crear/Restaurar Copia de Seguridad",
+    "settingsPageAppVersion": "Version de App",
     "splashPageMsgPart0": "Gestiona tus",
     "splashPageMsgPart1": "Finanzas Personales",
     "splashPageGetStarted": "Empezar",
@@ -182,5 +183,12 @@
     "budgetPageResetValues": "Zerar valores",
     "budgetPageLastMonths": "Establecer en el promedio de los últimos meses",
     "budgetPage12Month": "Establecer en el promedio de 12 meses",
-    "budgetPageTotal": "Total del Presupuesto"
+    "budgetPageTotal": "Total del Presupuesto",
+    "budgetEditDialogLastMonths": "Media de los últimos meses",
+		"budgetEditDialog12Month": "Media de 12 meses",
+		"budgetEditDialogBudget": "Presupuesto",
+		"budgetEditDialogPrevius": "Anterior",
+		"budgetEditDialogUpdate": "Actualizar",
+  	"budgetEditDialogNext": "Siguiente",
+		"accountDropdownFormHint": "Crea una nueva cuenta para realizar transferencias"
 }

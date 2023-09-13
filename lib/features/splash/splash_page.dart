@@ -30,7 +30,6 @@ class _SplashPageState extends State<SplashPage> {
     _splashController.addListener(() {
       locator.get<AppScale>().init(context);
       if (_splashController.state is SplashStateSuccess) {
-        // Navigator.pushReplacementNamed(context, AppRoute.home.name);
         Navigator.of(context)
             .pushNamedAndRemoveUntil(AppRoute.home.name, (route) => false);
       } else {

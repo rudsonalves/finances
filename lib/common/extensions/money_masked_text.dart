@@ -1,51 +1,15 @@
 import '../../locator.dart';
+import '../constants/laguage_constants.dart';
 import '../current_models/current_user.dart';
 
-MoneyMaskedText getMoneyMaskedText() {
-  switch (locator.get<CurrentUser>().userLanguage) {
-    case 'pt':
-      return MoneyMaskedText(
-        decimalSeparator: '.',
-        thousandSeparator: ',',
-        leftSymbol: '',
-        rightSymbol: ' €',
-      );
-    case 'pt_BR':
-      return MoneyMaskedText(
-        decimalSeparator: ',',
-        thousandSeparator: '.',
-        leftSymbol: 'R\$ ',
-        rightSymbol: '',
-      );
-    case 'es':
-      return MoneyMaskedText(
-        decimalSeparator: '.',
-        thousandSeparator: ',',
-        leftSymbol: '',
-        rightSymbol: ' €',
-      );
-    case 'en':
-      return MoneyMaskedText(
-        decimalSeparator: '.',
-        thousandSeparator: ',',
-        leftSymbol: '£ ',
-        rightSymbol: '',
-      );
-    case 'en_US':
-      return MoneyMaskedText();
-    default:
-      return MoneyMaskedText();
-  }
-}
-
 class MoneyMaskedText {
-  final String decimalSeparator;
-  final String thousandSeparator;
-  final String leftSymbol;
-  final String rightSymbol;
-  final int precision;
-  final bool preffixSignal;
-  final bool nosignal;
+  String decimalSeparator;
+  String thousandSeparator;
+  String leftSymbol;
+  String rightSymbol;
+  int precision;
+  bool preffixSignal;
+  bool nosignal;
 
   MoneyMaskedText({
     this.decimalSeparator = '.',
@@ -56,6 +20,36 @@ class MoneyMaskedText {
     this.preffixSignal = true,
     this.nosignal = true,
   });
+
+  void setLanguage() {
+    final language = locator.get<CurrentUser>().userLanguage;
+
+    final LanguageConstants currence =
+        (languageAttributes.containsKey(language))
+            ? languageAttributes[language]!
+            : languageAttributes['en_US']!;
+
+    decimalSeparator = currence.decimalSeparator;
+    thousandSeparator = currence.thousandSeparator;
+    leftSymbol = currence.leftSymbol;
+    rightSymbol = currence.rightSymbol;
+  }
+
+  static MoneyMaskedText getMoneyMaskedText() {
+    final language = locator.get<CurrentUser>().userLanguage;
+
+    final LanguageConstants currence =
+        (languageAttributes.containsKey(language))
+            ? languageAttributes[language]!
+            : languageAttributes['en_US']!;
+
+    return MoneyMaskedText(
+      decimalSeparator: currence.decimalSeparator,
+      thousandSeparator: currence.thousandSeparator,
+      leftSymbol: currence.leftSymbol,
+      rightSymbol: currence.rightSymbol,
+    );
+  }
 
   String _getOnlyNumbers(String text) => text.replaceAll(RegExp(r'[^\d]'), '');
 

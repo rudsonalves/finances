@@ -92,9 +92,10 @@ class HomePagePopupMenuButtons extends StatelessWidget {
               user.userLogged = false;
               await locator.get<DatabaseHelper>().updateUser(user.toMap());
               if (context.mounted) {
-                Navigator.popUntil(
+                Navigator.pushNamedAndRemoveUntil(
                   context,
-                  ModalRoute.withName(AppRoute.onboard.name),
+                  AppRoute.onboard.name,
+                  (route) => false,
                 );
               }
             }

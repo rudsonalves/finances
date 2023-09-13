@@ -63,7 +63,6 @@ class _DismissibleBudgetState extends State<DismissibleBudget> {
               locale.dismissibleCategoryDelete,
               style: TextStyle(color: onPrimary),
             ),
-            // icon: Icon(Icons.delete, color: onPrimary),
           ),
           ElevatedButton(
             style: ButtonStyle(
@@ -74,7 +73,6 @@ class _DismissibleBudgetState extends State<DismissibleBudget> {
               locale.dismissibleCategoryCancel,
               style: TextStyle(color: onPrimary),
             ),
-            // icon: Icon(Icons.cancel, color: onPrimary),
           ),
         ],
       ),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../common/constants/laguage_constants.dart';
 import '../../common/widgets/custom_circular_progress_indicator.dart';
 import '../../locator.dart';
-import '../../common/models/language_model.dart';
 import '../../common/widgets/app_top_border.dart';
 import '../../common/widgets/custom_app_bar.dart';
 import '../../common/current_models/current_user.dart';
@@ -45,13 +45,13 @@ class _SettingsPageState extends State<SettingsPage> {
           currentUser.setUserLanguage(codeLang);
         }
       },
-      items: supportedLanguages.keys
+      items: languageAttributes.keys
           .map(
             (code) => DropdownMenuItem(
               value: code,
               child: Text(
-                '${supportedLanguages[code]!['flag']!}'
-                '  ${supportedLanguages[code]!['name']!}',
+                '${languageAttributes[code]!.flag}'
+                '  ${languageAttributes[code]!.language}',
                 style: AppTextStyles.textStyleMedium16,
               ),
             ),
@@ -226,7 +226,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               const SizedBox(height: 32),
                               Center(
                                 child: Text(
-                                  'App version: $version',
+                                  '${locale.settingsPageAppSettings}: $version',
                                   style:
                                       AppTextStyles.textStyleMedium16.copyWith(
                                     color: colorScheme.primary,

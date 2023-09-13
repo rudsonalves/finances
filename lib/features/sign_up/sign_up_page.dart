@@ -48,7 +48,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
         if (_controller.state is SignUpStateSuccess) {
           Navigator.pop(context);
-          // Navigator.pushReplacementNamed(context, AppRoute.home.name);
           Navigator.of(context)
               .pushNamedAndRemoveUntil(AppRoute.home.name, (route) => false);
         }

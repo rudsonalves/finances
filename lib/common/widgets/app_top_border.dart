@@ -50,7 +50,6 @@ class WaveClipper extends CustomClipper<Path> {
 
   @override
   bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
-    // debugPrint(oldClipper.toString());
     return true;
   }
 }

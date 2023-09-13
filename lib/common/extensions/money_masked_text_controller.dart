@@ -6,51 +6,27 @@ import 'package:flutter/widgets.dart';
 */
 
 import '../../locator.dart';
+import '../constants/laguage_constants.dart';
 import '../current_models/current_user.dart';
 
 MoneyMaskedTextController getMoneyMaskedTextController(initialValue) {
-  switch (locator.get<CurrentUser>().userLanguage) {
-    case 'pt':
-      return MoneyMaskedTextController(
-        initialValue: initialValue,
-        decimalSeparator: '.',
-        thousandSeparator: ',',
-        leftSymbol: '',
-        rightSymbol: ' €',
-      );
-    case 'pt_BR':
-      return MoneyMaskedTextController(
-        initialValue: initialValue,
-        decimalSeparator: ',',
-        thousandSeparator: '.',
-        leftSymbol: 'R\$ ',
-        rightSymbol: '',
-      );
-    case 'es':
-      return MoneyMaskedTextController(
-        initialValue: initialValue,
-        decimalSeparator: '.',
-        thousandSeparator: ',',
-        leftSymbol: '',
-        rightSymbol: ' €',
-      );
-    case 'en':
-      return MoneyMaskedTextController(
-        initialValue: initialValue,
-        decimalSeparator: '.',
-        thousandSeparator: ',',
-        leftSymbol: '£ ',
-        rightSymbol: '',
-      );
-    case 'en_US':
-      return MoneyMaskedTextController(
-        initialValue: initialValue,
-      );
-    default:
-      return MoneyMaskedTextController(
-        initialValue: initialValue,
-      );
+  final language = locator.get<CurrentUser>().userLanguage;
+
+  final LanguageConstants languageConstants;
+
+  if (languageAttributes.containsKey(language)) {
+    languageConstants = languageAttributes[language]!;
+  } else {
+    languageConstants = languageAttributes['en_US']!;
   }
+
+  return MoneyMaskedTextController(
+    initialValue: initialValue,
+    decimalSeparator: languageConstants.decimalSeparator,
+    thousandSeparator: languageConstants.thousandSeparator,
+    leftSymbol: languageConstants.leftSymbol,
+    rightSymbol: languageConstants.rightSymbol,
+  );
 }
 
 /// A [TextEditingController] extended to apply masks to currency values

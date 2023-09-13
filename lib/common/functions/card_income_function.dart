@@ -11,7 +11,7 @@ Widget incomeExpanseShowValue(
   required double value,
   required IconData icon,
 }) {
-  MoneyMaskedText money = locator.get<MoneyMaskedText>();
+  final MoneyMaskedText money = locator.get<MoneyMaskedText>();
 
   final colorScheme = Theme.of(context).colorScheme;
   final customColors = Theme.of(context).extension<CustomColors>()!;

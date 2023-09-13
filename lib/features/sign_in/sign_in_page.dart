@@ -51,7 +51,6 @@ class _SignInPageState extends State<SignInPage> {
         // SignIn State Success
         if (_controller.state is SignInStateSuccess) {
           Navigator.pop(context);
-          // Navigator.pushReplacementNamed(context, AppRoute.home.name);
           Navigator.of(context)
               .pushNamedAndRemoveUntil(AppRoute.home.name, (route) => false);
         }
@@ -122,7 +121,7 @@ class _SignInPageState extends State<SignInPage> {
                 children: [
                   BasicTextFormField(
                     labelText: locale.signInPageEmail,
-                    hintText: 'sample@email.com',
+                    hintText: 'albert@email.com',
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     validator: validate.emailValidator,
