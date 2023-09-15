@@ -10,6 +10,7 @@
 .svn/
 migrate_working_dir/
 untranslated_messages.txt
+docs/testadores.txt
 
 # IntelliJ related
 *.iml
@@ -44,3 +45,9 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+
+# Ignore Gradle project-specific cache directory
+.gradle
+
+# Ignore Gradle build output directory
+build

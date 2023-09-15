@@ -131,48 +131,52 @@ These bug fixes and implementations will help improve the user experience and ma
 
 Por *rudsonalves67@gmail.com*
 
-A intenção deste projeto é desenvolver um aplicativo para auxiliar no controle do orçamento do usuário, permitindo a criação e gerenciamento de contas, controle dos movimentos das contas ordenadas em categorias personalizadas, e o planejamento e execução de orçamento. O projeto foi inspirado no diagrama publicado no Figma, [Financy-App](https://www.figma.com/file/vQzApZhqZFDFp1td5K4asQ/Financy-App?type=design&mode=design&t=EFvH3bvOxfe8hSap-0), e foi inicialmente desenvolvido com base nos vídeos do canal do YouTube [@devkaio](https://www.youtube.com/@devkaio), do qual sou muito grato pelas boas práticas e ideias interessantes que ajudaram a implementar o projeto.
+O propósito deste projeto é criar um aplicativo que auxilie os usuários no controle de seu orçamento. Ele permite a criação e gerenciamento de contas, o acompanhamento dos movimentos financeiros organizados em categorias personalizadas e a elaboração e execução de orçamentos. Este projeto foi inspirado no diagrama disponível no Figma, [Financy-App](https://www.figma.com/file/vQzApZhqZFDFp1td5K4asQ/Financy-App?type=design&mode=design&t=EFvH3bvOxfe8hSap-0), e inicialmente desenvolvido com base nos vídeos do canal do YouTube [@devkaio](https://www.youtube.com/@devkaio). Sou imensamente grato por suas práticas recomendadas e ideias inovadoras que contribuíram para a implementação deste projeto.
 
 ## Sobre o Desenvolvimento do Código
 
 Este projeto tem como objetivo aprimorar meus conhecimentos no SDK Flutter e em todo o ecossistema envolvido no desenvolvimento do aplicativo.
 
-No geral, o projeto está sendo desenvolvido seguindo uma arquitetura baseada em funcionalidades, na qual os componentes e módulos relacionados a uma determinada funcionalidade são agrupados em uma estrutura lógica, facilitando a compreensão e a manutenção do projeto.
+No geral, o projeto está sendo desenvolvido seguindo uma arquitetura baseada em funcionalidades, na qual os componentes e módulos relacionados a uma determinada funcionalidade são agrupados de forma lógica, facilitando a compreensão e a manutenção do projeto.
 
-As páginas são construídas usando o padrão State, no qual a construção da página é alterada quando seu estado interno muda. Em geral, uma página terá um módulo com uma classe abstrata e suas subclasses estendem essa classe abstrata para definir seus diferentes estados. Um segundo módulo de controle é responsável por gerenciar os estados utilizados na construção da página. O terceiro módulo é responsável pela construção da própria página, dependendo do estado atual.
+As páginas são construídas usando o padrão State, no qual a construção da página é alterada quando seu estado interno muda. Em geral, uma página terá um módulo com uma classe abstrata, e suas subclasses estendem essa classe abstrata para definir diferentes estados. Um segundo módulo de controle é responsável por gerenciar os estados utilizados na construção da página. O terceiro módulo é responsável pela construção da própria página, dependendo do estado atual.
 
-O Service Locator utilizado é o *get_it*, que fornece uma maneira de centralizar e obter instâncias de serviços necessários ao longo do aplicativo. Ele também é capaz de gerar objetos Singleton e sob demanda, oferecendo uma grande flexibilidade na distribuição e controle dos recursos.
+O Service Locator utilizado é o *get_it*, que oferece uma maneira de centralizar e obter instâncias de serviços necessários em todo o aplicativo. Ele também é capaz de gerar objetos Singleton e sob demanda, proporcionando flexibilidade na distribuição e controle dos recursos.
 
-O banco de dados empregado será o SQFLite, uma implementação do SQLite para o flutter muito popular entre seus desenvolvedores.
+O banco de dados empregado será o SQFLite, uma implementação do SQLite para o Flutter amplamente popular entre os desenvolvedores.
 
 ## Objetivos do App
 
-Os objetivos do Finances é ser uma ferramenta para ajudar o usuário a acompanhar seus gastos e melhor gerenciar a sua vida financeira.
+O Finances tem como objetivo ser uma ferramenta que ajude os usuários a acompanhar seus gastos e gerenciar melhor sua vida financeira.
 
-O Finances vai permitir ao usuário administra uma quantidade ilimitada de contas, classificando suas despesas em categorias personalizáveis, com a criação e acompanhamento da execução de seu orçamento.
+O Finances permitirá aos usuários administrar uma quantidade ilimitada de contas, classificando suas despesas em categorias personalizáveis e criando e acompanhando a execução de seu orçamento.
 
 ### Privacidade
 
-A única informação pessoal recolhida pelo finances é uma conta de e-mail e senha (específica para o app) necessários para o cadastro de uma conta no firebase da Google, usado exclusivamente para armazenar estas credenciais.
+A única informação pessoal coletada pelo Finances é um endereço de e-mail e senha específicos para o aplicativo, necessários para o cadastro de uma conta no Firebase da Google. Isso é usado exclusivamente para armazenar essas credenciais.
 
-O Finances foi pensado para ser o menos intrusivo possível, e portanto não retem nenhuma informação pessoal e sensível à segurança ou privacidade do usuário. Todas as informações das movimentações financeiras ficam exclusivamente armazenadas em seu dispositivo, não sendo compartilhadas de forma alguma pelo aplicativo.
+O Finances foi projetado para ser o menos intrusivo possível, não retendo nenhuma informação pessoal ou sensível relacionada à segurança ou privacidade do usuário. Todas as informações das movimentações financeiras são armazenadas exclusivamente no dispositivo do usuário e não são compartilhadas de forma alguma pelo aplicativo.
 
 ## Descrição do App
 
-O Finances trabalho com 4 páginas principais e mais alguma eventual página secundária (no momento apenas a página de configurações e a página sobre). Estas páginas são selecionadas por meio PageView na barra inferior do app. Abaixo segue uma apresentação curta destas páginas.
+O Finances conta com quatro páginas principais e algumas páginas secundárias eventuais (até o momento, apenas a página de configurações e a página "Sobre"). Essas páginas são selecionadas por meio de um PageView na barra inferior do aplicativo. Abaixo, segue uma breve apresentação dessas páginas.
 
- * Página de Transações - esta é a página principal do app onde as transações são inseridas, as diferentes contas podem ser selecionadas e o balanço de cada mês pode ser acompanhado;
- * Página de Estatísticas - nesta página podem ser acompanhadas as estatísticas anual de seus gastos bem como das diferentes categorias declaradas;
- * Página de Contas - nesta página é onde novas contas podem ser adicionadas/removidas/editadas no app;
- * Página de Orçamento/Categorias - nesta página é possível adicinar/remover/editar categorias para os pagamentos, bem como definir o orçamento mensal.
+* Página de Transações - Esta é a página principal do aplicativo, onde as transações são inseridas, as diferentes contas podem ser selecionadas e o balanço de cada mês pode ser acompanhado.
+* Página de Estatísticas - Nesta página, é possível acompanhar as estatísticas anuais de seus gastos, bem como das diferentes categorias declaradas.
+* Página de Contas - Nesta página, você pode adicionar, remover ou editar novas contas no aplicativo.
+* Página de Orçamento/Categorias - Aqui, é possível adicionar, remover ou editar categorias para os pagamentos, além de definir o orçamento mensal.
 
- Existe ainda uma quinta página para ajustar as configurações do app. Esta é alcançável através do menu no canto superior direito da Página de Transações. Através desta página é possível selecionar o tema, a linguagem e fazer e recuperar backups de seus dados.
+Existe também uma quinta página para ajustar as configurações do aplicativo. Você pode acessá-la através do menu no canto superior direito da Página de Transações. Por meio dessa página, é possível selecionar o tema, a linguagem e fazer backup e recuperação de seus dados.
 
 Estas páginas são detalhadas na sequência.
 
 ### Página de Transação:
 
-A página de Transação permite adicionar, remover e editar as transações. A edição e remoção de uma transação é feita deslizando a transação para direita ou para a esquerda
+A página de Transação permite adicionar, remover e editar as transações. 
+
+A adição de novas transações é feita pressionando o botão (+) na base da página inicial
+
+A edição e remoção de uma transação é feita deslizando a transação para direit (editar) ou para a esquerda (deletar).
 
 "conferência"
 
