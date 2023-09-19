@@ -199,6 +199,7 @@ class _BudgetPageState extends State<BudgetPage>
         ),
         actions: [
           PopupMenuButton<StatisticMedium>(
+            tooltip: locale.budgetPageResetsMenu,
             padding: EdgeInsets.zero,
             icon: const Icon(
               Icons.more_horiz,

@@ -27,6 +27,7 @@ class _HomePageViewState extends State<HomePageView> {
   final PageController _pageController = PageController();
   bool _floatAppButton = true;
   int _pageIndex = 0;
+  bool _canPop = true;
   void Function()? _addFunction;
 
   @override
@@ -39,7 +40,9 @@ class _HomePageViewState extends State<HomePageView> {
     setState(() {
       _pageIndex = page;
       _floatAppButton = (page != 1) ? true : false;
+      _canPop = false;
       if (page == 0) {
+        _canPop = true;
         _addFunction = addTransaction;
       } else if (page == 2) {
         _addFunction = addAccount;
@@ -49,9 +52,9 @@ class _HomePageViewState extends State<HomePageView> {
       _pageController.jumpToPage(page);
     });
     if (page == 1) {
-      final statisticeController = locator.get<StatisticsController>();
-      if (statisticeController.redraw) {
-        statisticeController.getStatistics();
+      final statController = locator.get<StatisticsController>();
+      if (statController.redraw) {
+        statController.getStatistics(true);
       }
     }
   }
@@ -60,6 +63,7 @@ class _HomePageViewState extends State<HomePageView> {
   void initState() {
     super.initState();
     _pageIndex = 0;
+    _canPop = true;
     _addFunction = addTransaction;
     _floatAppButton = true;
   }
@@ -67,6 +71,7 @@ class _HomePageViewState extends State<HomePageView> {
   void changeToMainPage() {
     setState(() {
       _pageIndex = 0;
+      _canPop = true;
       _addFunction = addTransaction;
       _floatAppButton = true;
       _pageController.jumpToPage(0);
@@ -101,13 +106,12 @@ class _HomePageViewState extends State<HomePageView> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: _canPop,
+      onPopInvoked: (didPop) async {
         if (_pageIndex != 0) {
           changeToMainPage();
-          return false;
         }
-        return true;
       },
       child: Scaffold(
         body: PageView(

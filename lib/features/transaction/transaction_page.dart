@@ -116,8 +116,8 @@ class _TransactionPageState extends State<TransactionPage> {
       }
 
       final TransactionDbModel transaction = TransactionDbModel(
-        transId:
-            widget.transaction != null ? widget.transaction!.transId : null,
+        transId: widget.transaction?.transId,
+        // widget.transaction != null ? widget.transaction!.transId : null,
         transDescription: _descController.text,
         transCategoryId: _categoryRepository.getIdByName(
           _categoryController.text,
@@ -260,6 +260,7 @@ class _TransactionPageState extends State<TransactionPage> {
                               ),
                               // Description
                               AutocompleteTextFormField(
+                                capitalization: TextCapitalization.sentences,
                                 labelText: locale.transPageDescription,
                                 validator: transValidator.descriptionValidator,
                                 controller: _descController,

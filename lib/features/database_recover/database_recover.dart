@@ -71,11 +71,11 @@ class _DatabaseRecoverState extends State<DatabaseRecover> {
     setState(() {});
   }
 
-  List<Widget> dialogMessage() {
-    return [
-      const SizedBox(height: 16),
-      Text(_message),
-    ];
+  Widget dialogMessage() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Text(_message),
+    );
   }
 
   List<Widget> dialogCreateBackup(AppLocalizations locale) {
@@ -109,11 +109,34 @@ class _DatabaseRecoverState extends State<DatabaseRecover> {
     ];
   }
 
-  List<Widget> dialogDivider(AppLocalizations locale) {
-    return [
-      const SizedBox(height: 8),
-      const Divider(),
-    ];
+  Widget dialogDivider(AppLocalizations locale) {
+    return const Divider(
+      height: 16,
+    );
+  }
+
+  List<Widget> _buildDialogContent(AppLocalizations locale) {
+    final contentWidgets = <Widget>[];
+
+    if (_message.isNotEmpty) {
+      contentWidgets.add(dialogMessage());
+    } else {
+      if ([DialogStates.create, DialogStates.createRestore]
+          .contains(widget.dialogState)) {
+        contentWidgets.addAll(dialogCreateBackup(locale));
+      }
+
+      if (widget.dialogState == DialogStates.createRestore) {
+        contentWidgets.add(dialogDivider(locale));
+      }
+
+      if ([DialogStates.restore, DialogStates.createRestore]
+          .contains(widget.dialogState)) {
+        contentWidgets.addAll(dialogRestoreBackup(locale));
+      }
+    }
+
+    return contentWidgets;
   }
 
   @override
@@ -147,15 +170,7 @@ class _DatabaseRecoverState extends State<DatabaseRecover> {
           ),
         ),
         children: [
-          if ([DialogStates.create, DialogStates.createRestore]
-              .contains(widget.dialogState))
-            ...dialogCreateBackup(locale),
-          if (widget.dialogState == DialogStates.createRestore)
-            ...dialogDivider(locale),
-          if ([DialogStates.restore, DialogStates.createRestore]
-              .contains(widget.dialogState))
-            ...dialogRestoreBackup(locale),
-          if (_message.isNotEmpty) ...dialogMessage(),
+          ..._buildDialogContent(locale),
           Row(
             children: [
               const Spacer(

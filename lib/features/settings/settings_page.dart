@@ -10,7 +10,6 @@ import '../../common/current_models/current_user.dart';
 import '../../common/current_models/current_theme.dart';
 import '../../common/current_models/current_language.dart';
 import '../../common/constants/themes/app_text_styles.dart';
-import '../database_recover/database_recover.dart';
 import 'settings_page_controller.dart';
 import 'settings_page_state.dart';
 
@@ -224,32 +223,29 @@ class _SettingsPageState extends State<SettingsPage> {
                                 },
                               ),
                               const SizedBox(height: 32),
-                              Center(
-                                child: Text(
-                                  '${locale.settingsPageAppSettings}: $version',
-                                  style:
-                                      AppTextStyles.textStyleMedium16.copyWith(
-                                    color: colorScheme.primary,
-                                  ),
+                              Text(
+                                '${locale.settingsPageAppVersion}: $version',
+                                style: AppTextStyles.textStyleMedium16.copyWith(
+                                  color: colorScheme.primary,
                                 ),
                               ),
-                              const SizedBox(height: 16),
-                              Center(
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) =>
-                                          const DatabaseRecover(
-                                        dialogState: DialogStates.createRestore,
-                                      ),
-                                    );
-                                  },
-                                  // icon: const Icon(Icons.backup_table_sharp),
-                                  child: Text(
-                                      locale.settingsPageCreateRestoreBackup),
-                                ),
-                              ),
+                              // const SizedBox(height: 16),
+                              // Center(
+                              //   child: ElevatedButton(
+                              //     onPressed: () {
+                              //       showDialog(
+                              //         context: context,
+                              //         builder: (context) =>
+                              //             const DatabaseRecover(
+                              //           dialogState: DialogStates.createRestore,
+                              //         ),
+                              //       );
+                              //     },
+                              //     // icon: const Icon(Icons.backup_table_sharp),
+                              //     child: Text(
+                              //         locale.settingsPageCreateRestoreBackup),
+                              //   ),
+                              // ),
                             ],
                           ),
                         );

@@ -51,6 +51,7 @@ class BudgetController extends ChangeNotifier {
   Future<void> init() async {
     await _categoryRepository.init();
     await getAllCategories();
+    _state = BudgetStateSuccess();
   }
 
   Future<void> getAllCategories() async {
@@ -58,7 +59,8 @@ class BudgetController extends ChangeNotifier {
 
     try {
       if (!_statController.noData) {
-        await _statController.getStatistics();
+        await _statController.getStatistics(false);
+        _statController.requestRedraw();
       }
       _sumTotalBudget();
       _changeState(BudgetStateSuccess());

@@ -229,6 +229,7 @@ class _StatisticCardState extends State<StatisticCard> {
                           ),
                           const Spacer(),
                           PopupMenuButton<String>(
+                            tooltip: locale.statisticsPageChartSettings,
                             padding: EdgeInsets.zero,
                             icon: Icon(
                               Icons.more_outlined,

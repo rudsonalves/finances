@@ -152,7 +152,7 @@ class SqfliteHelper implements DatabaseHelper {
     final Directory directory = await getApplicationDocumentsDirectory();
     final String path = join(directory.path, _dbName);
 
-    // TODO: remove this line
+    // Only to reset database
     // databaseFactory.deleteDatabase(path);
 
     _db = await openDatabase(

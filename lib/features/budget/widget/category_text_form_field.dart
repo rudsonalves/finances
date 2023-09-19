@@ -22,6 +22,7 @@ class CategoryTextFormField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: TextFormField(
+        textCapitalization: TextCapitalization.sentences,
         initialValue: initialValue,
         controller: controller,
         validator: validator,

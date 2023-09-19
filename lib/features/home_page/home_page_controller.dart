@@ -37,6 +37,11 @@ class HomePageController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void init() {
+    _state = HomePageStateSuccess();
+    getTransactions();
+  }
+
   Future<void> getTransactions() async {
     _changeState(HomePageStateLoading());
     try {

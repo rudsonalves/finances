@@ -60,7 +60,6 @@ class MockAuthService implements AuthService {
 
   @override
   Future<bool> recoverPassword(String email) {
-    // TODO: implement recoverPassword
     throw UnimplementedError();
   }
 }

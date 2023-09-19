@@ -65,11 +65,13 @@ Future<void>? statefullAddAccountDialog(
             child: Column(
               children: [
                 BasicTextFormField(
+                  capitalization: TextCapitalization.words,
                   validator: validator.nameValidator,
                   labelText: locale.statefullAccountDialogName,
                   controller: nameController,
                 ),
                 BasicTextFormField(
+                  capitalization: TextCapitalization.sentences,
                   validator: validator.descriptionValidator,
                   labelText: locale.statefullAccountDialogDescrip,
                   controller: descriptionController,

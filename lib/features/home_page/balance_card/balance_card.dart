@@ -43,9 +43,6 @@ class _BalanceCardState extends State<BalanceCard> {
     final currentAccount = locator.get<CurrentAccount>();
     final formattedDate = DateFormat('MMMM y', locale.localeName);
 
-    // TODO: check this
-    // log('BalanceClose residue: ${currentBalance.balanceClose}');
-
     return Positioned(
       left: 24,
       right: 24,
@@ -146,12 +143,12 @@ class _BalanceCardState extends State<BalanceCard> {
                           child: IconButton(
                             icon: Icon(
                               widget.controller.transStatusCheck
-                                  ? Icons.toggle_on
-                                  : Icons.toggle_off,
+                                  ? Icons.lock_open
+                                  : Icons.lock,
                               color: widget.controller.transStatusCheck
-                                  ? colorScheme.primaryContainer
-                                  : colorScheme.onPrimary,
-                              size: 32,
+                                  ? colorScheme.onPrimary
+                                  : colorScheme.primaryContainer,
+                              size: 22,
                             ),
                             onPressed: () =>
                                 widget.controller.toggleTransStatusCheck(),

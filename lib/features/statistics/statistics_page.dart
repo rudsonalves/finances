@@ -54,6 +54,7 @@ class _StatisticsPageState extends State<StatisticsPage>
           ),
           actions: [
             PopupMenuButton<StatisticMedium>(
+              tooltip: locale.statisticsPageStatisticalRef,
               padding: EdgeInsets.zero,
               icon: const Icon(
                 Icons.more_horiz,

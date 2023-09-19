@@ -55,6 +55,7 @@ class StatisticsController extends ChangeNotifier {
       _statReferenceType = currentUser.userBudgetRef;
       await getStatistics();
       _starting = false;
+      _state = StatisticsStateSuccess();
     }
   }
 
@@ -69,6 +70,7 @@ class StatisticsController extends ChangeNotifier {
   }
 
   void requestRedraw() {
+    if (_noData) return;
     _redraw = true;
   }
 
@@ -143,7 +145,7 @@ class StatisticsController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getStatistics() async {
+  Future<void> getStatistics([bool doState = true]) async {
     if (_currentOperation != null) {
       await _currentOperation;
     }
@@ -152,7 +154,7 @@ class StatisticsController extends ChangeNotifier {
     _successCompleter = completer;
     _currentOperation = completer.future;
 
-    _changeState(StatisticsStateLoading());
+    if (doState) _changeState(StatisticsStateLoading());
     try {
       final formatedDate = DateFormat.yMMMM();
       _statisticsList.clear();
@@ -212,10 +214,10 @@ class StatisticsController extends ChangeNotifier {
       _strDates = _strDates.reversed.toList();
       _index = _strDates.length - 1;
 
-      _changeState(StatisticsStateSuccess());
+      if (doState) _changeState(StatisticsStateSuccess());
       completer.complete();
     } catch (err) {
-      _changeState(StatisticsStateError());
+      if (doState) _changeState(StatisticsStateError());
       completer.completeError(err);
     } finally {
       _currentOperation = null;

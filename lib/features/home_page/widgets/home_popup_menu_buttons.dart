@@ -7,6 +7,7 @@ import '../../../locator.dart';
 import '../../../common/constants/routes/app_route.dart';
 import '../../../services/authentication/auth_service.dart';
 import '../../../services/database/database_helper.dart';
+import '../../database_recover/database_recover.dart';
 
 class HomePagePopupMenuButtons extends StatelessWidget {
   const HomePagePopupMenuButtons({super.key});
@@ -98,6 +99,13 @@ class HomePagePopupMenuButtons extends StatelessWidget {
                   (route) => false,
                 );
               }
+            } else if (value == 'backup') {
+              showDialog(
+                context: context,
+                builder: (context) => const DatabaseRecover(
+                  dialogState: DialogStates.createRestore,
+                ),
+              );
             }
           },
           child: Icon(
@@ -116,6 +124,21 @@ class HomePagePopupMenuButtons extends StatelessWidget {
                   const SizedBox(width: 8),
                   Text(
                     locale.cardPopupMenuSettings,
+                  )
+                ],
+              ),
+            ),
+            PopupMenuItem(
+              value: 'backup',
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.upload_file,
+                    color: primary,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    locale.cardPopupMenuBackup,
                   )
                 ],
               ),

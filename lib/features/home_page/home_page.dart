@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     super.initState();
-    _controller.getTransactions();
+    _controller.init();
     _balanceController.getBalance();
   }
 

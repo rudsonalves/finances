@@ -150,7 +150,7 @@ class TransactionsManager {
     );
 
     await transDayRepository.deleteTransDayId(transaction.transId!);
-    // TODO: verificar se é necessário apagar a transação.
+    // CHECK THIS: verificar se é necessário apagar a transação.
     await transRepository.deleteTrans(transaction);
   }
 
