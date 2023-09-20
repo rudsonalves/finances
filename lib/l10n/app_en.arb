@@ -50,6 +50,7 @@
     "signInPageTryAgain": "Try again",
     "signInPageProblemRequest": "There was a problem with your request. Check the email you entered or try again later.",
     "signInPageRecover": "Recover!",
+    "signInPageError": "Sorry, an unexpected error occurred. Please try again later.",
     "signUpPageMsgPart0": "Where is Your",
     "signUpPageMsgPart1": "Money Going?",
     "signUpPageYourName": "Your Name",
@@ -153,6 +154,7 @@
     "accountPageCancel": "Cancel",
     "genericClose": "Close",
     "genericAdd": "Add",
+    "genericYes": "Yes",
     "genericAttention": "Attention",
     "colorButtonBlockedDeletion": "Blocked Deletion",
     "colorButtonAccountHas": "Account **{accountName}** has **{numberOfTrans}** transactions. To delete it, you must first remove these transactions.",
@@ -194,5 +196,6 @@
 		"budgetEditDialogPrevius": "Previus",
 		"budgetEditDialogUpdate": "Update",
 		"budgetEditDialogNext": "Next",
-		"accountDropdownFormHint": "Create a new account to make transfers"
+		"accountDropdownFormHint": "Create a new account to make transfers",
+    "transactionsHelpLock": "To lock/unlock transaction checking"
 }

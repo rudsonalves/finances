@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../locator.dart';
+import '../../repositories/category/category_repository.dart';
 import './sign_in_state.dart';
 import '../../common/models/user_model.dart';
 import '../../repositories/user/user_repository.dart';
@@ -55,6 +56,32 @@ class SignInController extends ChangeNotifier {
         // start curretn balance
         await locator.get<CurrentBalance>().start();
 
+        _changeState(SignInStateSuccess());
+      } else {
+        throw Exception('Sorry! An unexpected error occurred.');
+      }
+    } catch (err) {
+      _changeState(SignInStateError(err.toString()));
+    }
+  }
+
+  Future<void> createLocalUser(UserModel userModel) async {
+    _changeState(SignInStateLoading());
+
+    try {
+      final UserModel user = await _service.signIn(
+        email: userModel.email!,
+        password: userModel.password!,
+      );
+
+      if (user.id != null) {
+        final currentUser = locator.get<CurrentUser>();
+        currentUser.setFromUserModel(user);
+        currentUser.userLogged = true;
+        currentUser.addUser();
+        await locator.get<CurrentAccount>().init();
+        await locator.get<CurrentBalance>().start();
+        await locator.get<CategoryRepository>().firstCategory();
         _changeState(SignInStateSuccess());
       } else {
         throw Exception('Sorry! An unexpected error occurred.');

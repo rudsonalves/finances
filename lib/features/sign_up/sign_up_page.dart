@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../common/models/user_model.dart';
 import '../../common/widgets/primary_button.dart';
+import '../../common/widgets/secondary_button.dart';
 import '../../features/sign_up/sign_up_state.dart';
 import '../../common/validate/sign_validator.dart';
 import '../../common/widgets/large_bold_text.dart';
@@ -58,7 +59,10 @@ class _SignUpPageState extends State<SignUpPage> {
           customModelBottomSheet(
             context,
             content: error.message,
-            buttonText: AppLocalizations.of(context)!.signUpPageTryAgain,
+            buttonText: SecondaryButton(
+              onTap: () => Navigator.pop(context),
+              label: AppLocalizations.of(context)!.signInPageTryAgain,
+            ),
           );
         }
       },

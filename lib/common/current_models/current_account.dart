@@ -45,6 +45,12 @@ class CurrentAccount extends AccountDbModel {
       currentUser.updateUser();
     }
 
+    // print(currentUser.toString());
+    // for (final id in accountRepository.accountsMap.keys) {
+    //   print('id: $id');
+    //   print(accountRepository.accountsMap[id].toString());
+    // }
+
     setFromAccountDbModel(
         accountRepository.accountsMap[currentUser.userMainAccountId]!);
   }

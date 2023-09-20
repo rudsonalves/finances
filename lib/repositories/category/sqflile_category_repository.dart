@@ -49,6 +49,7 @@ class SqflileCategoryRepository implements CategoryRepository {
 
   @override
   Future<void> firstCategory() async {
+    await init();
     if (_categories.isEmpty) {
       final transferCategory = CategoryDbModel(
         categoryName: 'Transfers',
