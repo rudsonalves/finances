@@ -50,6 +50,7 @@
     "signInPageTryAgain": "Réessayer",
     "signInPageProblemRequest": "Il y a eu un problème avec votre demande. Vérifiez l'adresse e-mail que vous avez saisie ou essayez à nouveau plus tard.",
     "signInPageRecover": "Récupérer !",
+    "signInPageError": "Désolé, une erreur inattendue s'est produite. Veuillez réessayer plus tard.",
     "signUpPageMsgPart0": "Où est votre",
     "signUpPageMsgPart1": "Argent ?",
     "signUpPageYourName": "Votre nom",
@@ -152,6 +153,7 @@
     "accountPageDelete": "Supprimer",
     "accountPageCancel": "Annuler",
     "genericClose": "Fermer",
+    "genericYes": "Oui",
     "genericAdd": "Ajouter",
     "genericAttention": "Attention",
     "colorButtonBlockedDeletion": "Suppression bloquée",
@@ -194,5 +196,6 @@
     "budgetEditDialogPrevius": "Précédent",
     "budgetEditDialogUpdate": "Mettre à jour",
     "budgetEditDialogNext": "Suivant",
-    "accountDropdownFormHint": "Créer un nouveau compte pour effectuer des transferts"
+    "accountDropdownFormHint": "Créer un nouveau compte pour effectuer des transferts",
+    "transactionsHelpLock": "Pour verrouiller/déverrouiller la vérification des transactions"
 }

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../constants/themes/app_text_styles.dart';
-import './secondary_button.dart';
 
 Future<dynamic> customModelBottomSheet(
   BuildContext context, {
   required String content,
-  required String buttonText,
+  required Widget buttonText,
   String? secondMessage,
   Widget? secondWidget,
 }) {
@@ -20,14 +19,12 @@ Future<dynamic> customModelBottomSheet(
           children: [
             Text(
               content,
-              style: AppTextStyles.textStyleSemiBold18.copyWith(
+              textAlign: TextAlign.center,
+              style: AppTextStyles.textStyleSemiBold16.copyWith(
                 color: Theme.of(context).colorScheme.primary,
               ),
             ),
-            SecondaryButton(
-              onTap: () => Navigator.pop(context),
-              label: buttonText,
-            ),
+            buttonText,
             if (secondMessage != null) const SizedBox(height: 16),
             if (secondMessage != null)
               Text(

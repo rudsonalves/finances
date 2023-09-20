@@ -50,6 +50,7 @@
     "signInPageTryAgain": "Riprova",
     "signInPageProblemRequest": "C'è stato un problema con la tua richiesta. Controlla l'email che hai inserito o riprova più tardi.",
     "signInPageRecover": "Recupera!",
+    "signInPageError": "Spiacente, si è verificato un errore imprevisto. Riprova più tardi.",
     "signUpPageMsgPart0": "Dove va il tuo",
     "signUpPageMsgPart1": "Denaro?",
     "signUpPageYourName": "Il tuo Nome",
@@ -152,6 +153,7 @@
     "accountPageDelete": "Elimina",
     "accountPageCancel": "Annulla",
     "genericClose": "Chiudi",
+    "genericYes": "Sì",
     "genericAdd": "Aggiungi",
     "genericAttention": "Attenzione",
     "colorButtonBlockedDeletion": "Eliminazione Bloccata",
@@ -194,6 +196,7 @@
     "budgetEditDialogPrevius": "Precedente",
     "budgetEditDialogUpdate": "Aggiorna",
     "budgetEditDialogNext": "Successivo",
-    "accountDropdownFormHint": "Crea un nuovo account per effettuare trasferimenti"
+    "accountDropdownFormHint": "Crea un nuovo account per effettuare trasferimenti",
+    "transactionsHelpLock": "Per bloccare/sbloccare il controllo delle transazioni"
 }
 

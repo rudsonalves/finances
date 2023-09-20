@@ -14,12 +14,13 @@ class HomePagePopupMenuButtons extends StatelessWidget {
 
   void helpDialog(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
+    final primary = Theme.of(context).colorScheme.primary;
 
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(
-          locale.transactionListTileHelp,
+          locale.cardPopupMenuTransactionsHelp,
           textAlign: TextAlign.center,
         ),
         alignment: Alignment.center,
@@ -30,42 +31,41 @@ class HomePagePopupMenuButtons extends StatelessWidget {
               locale.transactionListTileSwipeControls,
               style: AppTextStyles.textStyleBold16,
             ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                const Icon(Icons.swipe_right),
-                const SizedBox(width: 8),
-                Text(locale.transactionListTileEditTransaction),
-              ],
+            ListTile(
+              leading: Icon(
+                Icons.swipe_right,
+                color: primary,
+              ),
+              title: Text(locale.transactionListTileEditTransaction),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.swipe_left,
+                color: primary,
+              ),
+              title: Text(locale.transactionListTileDeleteTransaction),
             ),
             const SizedBox(height: 8),
-            Row(
-              children: [
-                const Icon(Icons.swipe_left),
-                const SizedBox(width: 8),
-                Text(locale.transactionListTileDeleteTransaction),
-              ],
-            ),
-            const SizedBox(height: 16),
             Text(
               locale.transactionListTileButtons,
               style: AppTextStyles.textStyleBold16,
             ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                const Icon(Icons.add),
-                const SizedBox(width: 8),
-                Text(locale.transactionListTileAddNewTransaction),
-              ],
+            ListTile(
+              leading: Icon(
+                Icons.add,
+                color: primary,
+              ),
+              title: Text(locale.transactionListTileAddNewTransaction),
             ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                const Icon(Icons.more_horiz),
-                const SizedBox(width: 8),
-                Text(locale.transactionListTileMoreOptions),
-              ],
+            ListTile(
+              leading: Icon(
+                Icons.lock,
+                color: primary,
+              ),
+              title: Text(
+                locale.transactionsHelpLock,
+                maxLines: 2,
+              ),
             ),
           ],
         ),

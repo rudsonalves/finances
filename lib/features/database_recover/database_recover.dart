@@ -4,7 +4,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:restart_app/restart_app.dart';
 
+import '../../common/constants/routes/app_route.dart';
 import '../../common/constants/themes/app_text_styles.dart';
 import '../../repositories/backup/backup_repository.dart';
 import '../../repositories/backup/sqflite_backup_repository.dart';
@@ -39,11 +41,13 @@ class _DatabaseRecoverState extends State<DatabaseRecover> {
         PlatformFile selectedFile = result.files.first;
         selectedFileName = selectedFile.name;
 
-        backupRepository.restoreBackup(selectedFile.path!);
+        await backupRepository.restoreBackup(selectedFile.path!);
 
         setState(() {
           _message = locale.databaseRecoverRetrievedSuccessfully;
         });
+
+        await Restart.restartApp(webOrigin: AppRoute.onboard.name);
       }
     } catch (err) {
       setState(() {

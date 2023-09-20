@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../common/constants/themes/colors/custom_color.g.dart';
+import '../../common/widgets/secondary_button.dart';
 import '../../locator.dart';
-import '../database_recover/database_recover.dart';
 import './sign_in_state.dart';
 import './sign_in_controller.dart';
 import '../../common/widgets/primary_button.dart';
@@ -65,27 +65,37 @@ class _SignInPageState extends State<SignInPage> {
               .contains(RegExp(r".*Local data don't have this user.$"))) {
             customModelBottomSheet(
               context,
-              content: error.message,
-              buttonText: AppLocalizations.of(context)!.signInPageTryAgain,
-              secondMessage: locale.signInPageWantImport,
-              secondWidget: OutlinedButton(
-                onPressed: () async {
-                  Navigator.pop(context);
-                  await showDialog(
-                    context: context,
-                    builder: (context) => const DatabaseRecover(
-                      dialogState: DialogStates.restore,
-                    ),
-                  );
-                },
-                child: Text(locale.signInPageRescueData),
+              content: 'User not found in local data. You can start with an'
+                  ' empty database and import your data later if you have a'
+                  ' backup.\n\nDo you want to start with an empty database?',
+              buttonText: ButtonBar(
+                alignment: MainAxisAlignment.spaceAround,
+                children: [
+                  OutlinedButton(
+                    onPressed: () async {
+                      UserModel user = UserModel(
+                        email: _emailController.text,
+                        password: _pwdController.text,
+                      );
+                      await _controller.createLocalUser(user);
+                    },
+                    child: Text(locale.genericYes),
+                  ),
+                  OutlinedButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text(locale.signInPageTryAgain),
+                  ),
+                ],
               ),
             );
           } else {
             customModelBottomSheet(
               context,
-              content: error.message,
-              buttonText: AppLocalizations.of(context)!.signInPageTryAgain,
+              content: locale.signInPageError,
+              buttonText: SecondaryButton(
+                onTap: () => Navigator.pop(context),
+                label: locale.signInPageTryAgain,
+              ),
             );
           }
         }

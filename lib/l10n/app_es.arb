@@ -50,6 +50,7 @@
     "signInPageTryAgain": "Inténtalo de nuevo",
     "signInPageProblemRequest": "Hubo un problema con tu solicitud. Revisa el correo electrónico que ingresaste o inténtalo de nuevo más tarde.",
     "signInPageRecover": "¡Recuperar!",
+    "signInPageError": "Lo siento, se produjo un error inesperado. Por favor, inténtalo de nuevo más tarde.",
     "signUpPageMsgPart0": "¿A dónde se dirige tu",
     "signUpPageMsgPart1": "dinero?",
     "signUpPageYourName": "Tu Nombre",
@@ -152,6 +153,7 @@
     "accountPageDelete": "Eliminar",
     "accountPageCancel": "Cancelar",
     "genericClose": "Cerrar",
+    "genericYes": "Sí",
     "genericAdd": "Agregar",
     "genericAttention": "Atención",
     "colorButtonBlockedDeletion": "Eliminación Bloqueada",
@@ -194,5 +196,6 @@
 		"budgetEditDialogPrevius": "Anterior",
 		"budgetEditDialogUpdate": "Actualizar",
   	"budgetEditDialogNext": "Siguiente",
-		"accountDropdownFormHint": "Crea una nueva cuenta para realizar transferencias"
+		"accountDropdownFormHint": "Crea una nueva cuenta para realizar transferencias",
+    "transactionsHelpLock": "Para bloquear/desbloquear la verificación de transacciones"
 }

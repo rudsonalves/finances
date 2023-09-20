@@ -50,6 +50,7 @@
     "signInPageTryAgain": "Erneut versuchen",
     "signInPageProblemRequest": "Es ist ein Problem mit Ihrer Anfrage aufgetreten. Überprüfen Sie die von Ihnen eingegebene E-Mail-Adresse oder versuchen Sie es später erneut.",
     "signInPageRecover": "Retten!",
+    "signInPageError": "Entschuldigung, es ist ein unerwarteter Fehler aufgetreten. Bitte versuchen Sie es später erneut.",
     "signUpPageMsgPart0": "Wo ist Ihr",
     "signUpPageMsgPart1": "Geld?",
     "signUpPageYourName": "Ihr Name",
@@ -152,6 +153,7 @@
     "accountPageDelete": "Löschen",
     "accountPageCancel": "Abbrechen",
     "genericClose": "Schließen",
+    "genericYes": "Ja",
     "genericAdd": "Hinzufügen",
     "genericAttention": "Achtung",
     "colorButtonBlockedDeletion": "Löschung blockiert",
@@ -194,5 +196,6 @@
     "budgetEditDialogPrevius": "Zurück",
     "budgetEditDialogUpdate": "Aktualisieren",
     "budgetEditDialogNext": "Weiter",
-    "accountDropdownFormHint": "Neues Konto erstellen, um Überweisungen zu tätigen"
+    "accountDropdownFormHint": "Neues Konto erstellen, um Überweisungen zu tätigen",
+    "transactionsHelpLock": "Zum Sperren/Freigeben der Transaktionsüberprüfung"
 }
