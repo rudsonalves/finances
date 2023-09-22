@@ -283,6 +283,75 @@ Com esses gatilhos em vigor, qualquer tentativa de inserir um valor inválido em
 
 # Commits:
 
+## 2023/09/22 - version 1.0.0+9:
+
+Version 1.0.0+9 brings various accessibility improvements and minor adjustments to the app. It includes redesigning the app icon, adding documentation for Google Play, and enhancing the accessibility of many app elements. These enhancements make the app more user-friendly and accessible, particularly for users with disabilities or those who rely on assistive technologies. Additionally, new translations have been added to improve the app's language support, and the Lazy Singleton for the BudgetController object has been registered in the app's locator. These updates aim to enhance the overall user experience and accessibility of the application.
+
+* assets/icons/finances_logo2.svg:
+   - Slight redesign of the app icon.
+* docs/Google.md:
+   - Added documentation for Google Play.
+* lib/common/functions/card_income_function.dart:
+   - Added accessibility to the cardIncomeFunction.
+* lib/common/functions/function_alert_dialog.dart:
+* lib/common/widgets/add_cancel_buttons.dart: 
+* lib/common/widgets/widget_alert_dialog.dart:
+* lib/features/database_recover/database_recover.dart:
+   - Employed AppButtonStyles.primaryButtonColor for dialog standardization.
+* lib/common/models/user_name_notifier.dart:
+   - Added UserNameNotifier class to facilitate user name changes throughout the app.
+* lib/common/widgets/basic_text_form_field.dart:
+   - Added accessibility to the BasicTextFormField class.
+* lib/common/widgets/custom_bottom_app_bar_item.dart:
+   - Added accessibility to the CustomBottomAppBarItem class.
+* lib/common/widgets/custom_floating_action_button.dart:
+   - Added accessibility to the CustomFloatingActionButton class.
+* lib/common/widgets/custom_modal_bottom_sheet.dart:
+   - Added accessibility to the CustomModalBottomSheet class.
+* lib/common/widgets/custom_text_button.dart:
+   - Added accessibility to the CustomTextButton class;
+   - Made some layout adjustments.
+* lib/common/widgets/large_bold_text.dart:
+   - Added accessibility to the LargeBoldText class.
+* lib/common/widgets/password_text_form_field.dart:
+   - Added accessibility to the PasswordTextFormField class.
+* lib/common/widgets/primary_button.dart:
+   - Added accessibility to the PrimaryButton class.
+* lib/common/widgets/secondary_button.dart:
+   - Added accessibility to the SecondaryButton class.
+* lib/features/account/widgets/dismissible_account_card.dart:
+   - Added accessibility to the DismissibleAccountCard class.
+* lib/features/budget/budget_page.dart:
+   - Added accessibility to the BudgetPage class.
+* lib/features/budget/widget/dismissible_budget.dart:
+   - Added accessibility to the DismissibleBudget class.
+* lib/features/budget/widget/icon_selection_dialog.dart:
+   - Layout changes.
+* lib/features/home_page/balance_card/balance_card.dart:
+   - Added accessibility to the BalanceCard class.
+* lib/features/home_page/home_page.dart:
+   - Added accessibility to the HomePage class.
+* lib/features/home_page/widgets/transaction_dismissible_tile.dart:
+   - Added accessibility to the TransactionDismissibleTile class.
+* lib/features/onboarding/onboarding_page.dart:
+   - Added accessibility to the OnboardingPage class.
+* lib/features/settings/settings_page.dart:
+   - Some layout changes;
+   - Added user name editing;
+   - Added accessibility to the SettingsPage class.
+* lib/features/sign_in/sign_in_page.dart:
+   - Added accessibility to the SignInPage class.
+* lib/features/sign_up/sign_up_page.dart:
+   - Added accessibility to the SignUpPage class.
+* lib/features/splash/splash_page.dart:
+   - Added accessibility to the SplashPage class.
+* lib/features/statistics/widgets/list_tile_statistic.dart:
+   - Added accessibility to the ListTileStatistic class.
+* lib/l10n/app_?.arb:
+   - Added new translations.
+* lib/locator.dart:
+   - Registered the Lazy Singleton of the BudgetController() object.
+
 ## 2023/09/19 - version 1.0.0+3
 
 * lib/features/account/widgets/statefull_add_account_dialog.dart:
