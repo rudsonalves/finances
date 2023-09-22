@@ -262,18 +262,26 @@ class _BudgetPageState extends State<BudgetPage>
                             padding: const EdgeInsets.symmetric(horizontal: 22),
                             child: Row(
                               children: [
-                                Text(
-                                  '${locale.budgetPageTotal}: ',
-                                  style: AppTextStyles.textStyleBold18.copyWith(
-                                    color: primary,
+                                Semantics(
+                                  label: locale.budgetPageTotal,
+                                  child: Text(
+                                    '${locale.budgetPageTotal}: ',
+                                    style:
+                                        AppTextStyles.textStyleBold18.copyWith(
+                                      color: primary,
+                                    ),
                                   ),
                                 ),
-                                Text(
-                                  money.text(_controller.totalBudget),
-                                  style: AppTextStyles.textStyleBold18.copyWith(
-                                    color: _controller.totalBudget < 0
-                                        ? customColors.minusred
-                                        : colorScheme.primary,
+                                Semantics(
+                                  label: _controller.totalBudget.toString(),
+                                  child: Text(
+                                    money.text(_controller.totalBudget),
+                                    style:
+                                        AppTextStyles.textStyleBold18.copyWith(
+                                      color: _controller.totalBudget < 0
+                                          ? customColors.minusred
+                                          : colorScheme.primary,
+                                    ),
                                   ),
                                 ),
                               ],

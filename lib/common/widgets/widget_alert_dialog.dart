@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../constants/themes/app_button_styles.dart';
+
 class WidgetAlertDialog extends StatelessWidget {
   final String title;
   final String content;
@@ -13,10 +15,8 @@ class WidgetAlertDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final primary = colorScheme.primary;
-    final onPrimary = colorScheme.onPrimary;
     final locale = AppLocalizations.of(context)!;
+    final buttonStyle = AppButtonStyles.primaryButtonColor(context);
 
     return AlertDialog(
       title: Text(title),
@@ -27,10 +27,7 @@ class WidgetAlertDialog extends StatelessWidget {
             Text(content),
             const SizedBox(height: 12),
             ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(primary),
-                foregroundColor: MaterialStateProperty.all(onPrimary),
-              ),
+              style: buttonStyle,
               onPressed: () {
                 Navigator.pop(context);
               },

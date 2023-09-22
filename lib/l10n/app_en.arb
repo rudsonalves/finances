@@ -197,5 +197,7 @@
 		"budgetEditDialogUpdate": "Update",
 		"budgetEditDialogNext": "Next",
 		"accountDropdownFormHint": "Create a new account to make transfers",
-    "transactionsHelpLock": "To lock/unlock transaction checking"
+    "transactionsHelpLock": "To lock/unlock transaction checking",
+    "signInPageUserNotFound": "User not found in local data. You can start with an empty database and import your data later if you have a backup.\n\nDo you want to start with an empty database?",
+    "settingsPageDialogTitle": "Change your name"
 }

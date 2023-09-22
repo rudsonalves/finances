@@ -32,28 +32,36 @@ class BasicTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Padding(
       padding: const EdgeInsets.only(top: 5, bottom: 10),
-      child: TextFormField(
-        initialValue: initialValue,
-        controller: controller,
-        keyboardType: keyboardType,
-        textInputAction: textInputAction,
-        textCapitalization: capitalization,
-        validator: validator,
-        onChanged: onchanged,
-        focusNode: focusNode,
-        decoration: InputDecoration(
-          suffixIcon: suffixIcon,
-          prefixText: prefixText,
-          hintText: hintText,
-          border: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(15),
+      child: Semantics(
+        label: labelText,
+        child: TextFormField(
+          initialValue: initialValue,
+          controller: controller,
+          keyboardType: keyboardType,
+          textInputAction: textInputAction,
+          textCapitalization: capitalization,
+          validator: validator,
+          onChanged: onchanged,
+          focusNode: focusNode,
+          decoration: InputDecoration(
+            suffixIcon: suffixIcon,
+            prefixText: prefixText,
+            hintText: hintText,
+            hintStyle: TextStyle(
+              color: colorScheme.outlineVariant,
             ),
+            border: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(15),
+              ),
+            ),
+            labelText: labelText.toUpperCase(),
+            floatingLabelBehavior: FloatingLabelBehavior.always,
           ),
-          labelText: labelText.toUpperCase(),
-          floatingLabelBehavior: FloatingLabelBehavior.always,
         ),
       ),
     );

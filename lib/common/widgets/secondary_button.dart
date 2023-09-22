@@ -29,10 +29,13 @@ class SecondaryButton extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                label,
-                style: AppTextStyles.textStyleSemiBold18.copyWith(
-                  color: primary,
+              Semantics(
+                label: label,
+                child: Text(
+                  label,
+                  style: AppTextStyles.textStyleSemiBold18.copyWith(
+                    color: primary,
+                  ),
                 ),
               ),
             ],

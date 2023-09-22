@@ -12,11 +12,14 @@ class LargeBoldText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      textAlign: TextAlign.center,
-      style: AppTextStyles.textStyleBold32.copyWith(
-        color: Theme.of(context).colorScheme.primary,
+    return Semantics(
+      label: text,
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: AppTextStyles.textStyleBold32.copyWith(
+          color: Theme.of(context).colorScheme.primary,
+        ),
       ),
     );
   }

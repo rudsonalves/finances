@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-// import '../../features/transaction_dialog/transaction_dialog.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomFloatingActionButton extends StatelessWidget {
   final void Function()? onPressed;
@@ -14,12 +13,16 @@ class CustomFloatingActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     Color primary = Theme.of(context).colorScheme.primary;
     Color onPrimary = Theme.of(context).colorScheme.onPrimary;
+    final locale = AppLocalizations.of(context)!;
 
-    return FloatingActionButton(
-      backgroundColor: primary,
-      foregroundColor: onPrimary,
-      onPressed: onPressed,
-      child: const Icon(Icons.add),
+    return Semantics(
+      label: locale.genericAdd,
+      child: FloatingActionButton(
+        backgroundColor: primary,
+        foregroundColor: onPrimary,
+        onPressed: onPressed,
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }

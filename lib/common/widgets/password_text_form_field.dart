@@ -25,32 +25,40 @@ class _PasswordTextFormFieldState extends State<PasswordTextFormField> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Padding(
       padding: const EdgeInsets.only(top: 5, bottom: 10),
-      child: TextFormField(
-        controller: widget.controller,
-        obscureText: isHidden,
-        textInputAction: widget.textInputAction,
-        validator: widget.validator,
-        decoration: InputDecoration(
-          border: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(15),
+      child: Semantics(
+        label: widget.labelText,
+        child: TextFormField(
+          controller: widget.controller,
+          obscureText: isHidden,
+          textInputAction: widget.textInputAction,
+          validator: widget.validator,
+          decoration: InputDecoration(
+            hintStyle: TextStyle(
+              color: colorScheme.outlineVariant,
             ),
-          ),
-          labelText: widget.labelText.toUpperCase(),
-          hintText: widget.hintText,
-          floatingLabelBehavior: FloatingLabelBehavior.always,
-          suffixIcon: Focus(
-            descendantsAreFocusable: false,
-            canRequestFocus: false,
-            child: IconButton(
-              icon: Icon(isHidden ? Icons.visibility : Icons.visibility_off),
-              onPressed: () {
-                setState(() {
-                  isHidden = !isHidden;
-                });
-              },
+            border: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(15),
+              ),
+            ),
+            labelText: widget.labelText.toUpperCase(),
+            hintText: widget.hintText,
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            suffixIcon: Focus(
+              descendantsAreFocusable: false,
+              canRequestFocus: false,
+              child: IconButton(
+                icon: Icon(isHidden ? Icons.visibility : Icons.visibility_off),
+                onPressed: () {
+                  setState(() {
+                    isHidden = !isHidden;
+                  });
+                },
+              ),
             ),
           ),
         ),

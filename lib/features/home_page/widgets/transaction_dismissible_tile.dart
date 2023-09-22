@@ -155,34 +155,41 @@ class _TransactionDismissibleTileState
         child: Card(
           elevation: widget.transaction.ischecked ? 0 : 1,
           margin: EdgeInsets.zero,
-          child: ListTile(
-            leading: category.categoryIcon.iconWidget(size: 28),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  maxLines: 2,
-                  widget.transaction.transDescription,
-                  style: AppTextStyles.textStyle16,
-                ),
-                Text(
-                  widget.transaction.transDate.toString(),
-                  style: AppTextStyles.textStyle11,
-                ),
-              ],
+          child: Semantics(
+            label: '${category.categoryName} '
+                '${widget.transaction.transDescription} '
+                '${widget.transaction.transDate} '
+                '${widget.transaction.transValue}',
+            child: ListTile(
+              leading: category.categoryIcon.iconWidget(size: 28),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    maxLines: 2,
+                    widget.transaction.transDescription,
+                    style: AppTextStyles.textStyle16,
+                  ),
+                  Text(
+                    widget.transaction.transDate.toString(),
+                    style: AppTextStyles.textStyle11,
+                  ),
+                ],
+              ),
+              trailing: Text(
+                money.text(widget.transaction.transValue),
+                style: AppTextStyles.textStyleSemiBold18.copyWith(
+                    color:
+                        minus ? customColors.minusred : customColors.lowgreen,
+                    fontWeight: FontWeight.w700),
+              ),
+              onTap: () async {
+                if (balanceCardController.transStatusCheck) {
+                  await widget.transaction.toggleTransStatus();
+                  setState(() {});
+                }
+              },
             ),
-            trailing: Text(
-              money.text(widget.transaction.transValue),
-              style: AppTextStyles.textStyleSemiBold18.copyWith(
-                  color: minus ? customColors.minusred : customColors.lowgreen,
-                  fontWeight: FontWeight.w700),
-            ),
-            onTap: () async {
-              if (balanceCardController.transStatusCheck) {
-                await widget.transaction.toggleTransStatus();
-                setState(() {});
-              }
-            },
           ),
         ),
         confirmDismiss: (direction) async {

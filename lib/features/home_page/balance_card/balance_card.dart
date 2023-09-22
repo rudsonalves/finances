@@ -78,58 +78,65 @@ class _BalanceCardState extends State<BalanceCard> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              PopupMenuButton<int>(
-                                tooltip: locale.cardBalanceMenuTip,
-                                child: Row(
-                                  children: [
-                                    currentAccount.accountIcon.iconWidget(
-                                      size: 20,
-                                      color: customColors.sourceLightyellow,
-                                    ),
-                                    const SizedBox(width: 6),
-                                    Text(
-                                      currentAccount.accountName,
-                                      maxLines: 1,
-                                      style: AppTextStyles.textStyleSemiBold14
-                                          .copyWith(
+                              Semantics(
+                                label: currentAccount.accountName,
+                                child: PopupMenuButton<int>(
+                                  tooltip: locale.cardBalanceMenuTip,
+                                  child: Row(
+                                    children: [
+                                      currentAccount.accountIcon.iconWidget(
+                                        size: 20,
                                         color: customColors.sourceLightyellow,
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                onSelected: (accountId) {
-                                  final account =
-                                      widget.controller.accountsMap[accountId]!;
-                                  widget.balanceCallBack(account);
-                                },
-                                itemBuilder: (BuildContext context) {
-                                  return widget.controller.accountsList
-                                      .map((account) {
-                                    return PopupMenuItem(
-                                      value: account.accountId,
-                                      child: Row(
-                                        children: [
-                                          account.accountIcon
-                                              .iconWidget(size: 16),
-                                          const SizedBox(width: 8),
-                                          Text(account.accountName),
-                                        ],
+                                      const SizedBox(width: 6),
+                                      Text(
+                                        currentAccount.accountName,
+                                        maxLines: 1,
+                                        style: AppTextStyles.textStyleSemiBold14
+                                            .copyWith(
+                                          color: customColors.sourceLightyellow,
+                                        ),
                                       ),
-                                    );
-                                  }).toList();
-                                },
+                                    ],
+                                  ),
+                                  onSelected: (accountId) {
+                                    final account = widget
+                                        .controller.accountsMap[accountId]!;
+                                    widget.balanceCallBack(account);
+                                  },
+                                  itemBuilder: (BuildContext context) {
+                                    return widget.controller.accountsList
+                                        .map((account) {
+                                      return PopupMenuItem(
+                                        value: account.accountId,
+                                        child: Row(
+                                          children: [
+                                            account.accountIcon
+                                                .iconWidget(size: 16),
+                                            const SizedBox(width: 8),
+                                            Text(account.accountName),
+                                          ],
+                                        ),
+                                      );
+                                    }).toList();
+                                  },
+                                ),
                               ),
                               Row(
                                 children: [
-                                  Text(
-                                    money.text(currentBalance.balanceClose),
-                                    textAlign: TextAlign.left,
-                                    style:
-                                        AppTextStyles.textStyleBold22.copyWith(
-                                      color:
-                                          currentBalance.balanceClose < -0.005
-                                              ? customColors.sourceMinusred
-                                              : colorScheme.onPrimary,
+                                  Semantics(
+                                    label:
+                                        currentBalance.balanceClose.toString(),
+                                    child: Text(
+                                      money.text(currentBalance.balanceClose),
+                                      textAlign: TextAlign.left,
+                                      style: AppTextStyles.textStyleBold22
+                                          .copyWith(
+                                        color:
+                                            currentBalance.balanceClose < -0.005
+                                                ? customColors.sourceMinusred
+                                                : colorScheme.onPrimary,
+                                      ),
                                     ),
                                   ),
                                   const Spacer(),

@@ -46,6 +46,8 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context)!;
+
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -59,11 +61,14 @@ class _SplashPageState extends State<SplashPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              AppLocalizations.of(context)!.appName,
-              textAlign: TextAlign.center,
-              style: AppTextStyles.textStyleBold50.copyWith(
-                color: Theme.of(context).colorScheme.onPrimary,
+            Semantics(
+              label: locale.appName,
+              child: Text(
+                locale.appName,
+                textAlign: TextAlign.center,
+                style: AppTextStyles.textStyleBold50.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
               ),
             ),
             const CustomCircularProgressIndicator(),

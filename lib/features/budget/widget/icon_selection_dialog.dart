@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../common/constants/themes/app_button_styles.dart';
 import '../../../common/models/icons_model.dart';
 import '../../../common/constants/themes/app_icons.dart';
 import '../../../common/constants/themes/app_text_styles.dart';
@@ -32,6 +33,7 @@ class _IconSelectionDialogState extends State<IconSelectionDialog> {
   Widget build(BuildContext context) {
     final AppLocalizations locale = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
+    final buttonStyle = AppButtonStyles.primaryButtonColor(context);
 
     return StatefulBuilder(
       builder: (context, setState) {
@@ -47,31 +49,38 @@ class _IconSelectionDialogState extends State<IconSelectionDialog> {
               child: Row(
                 children: [
                   Text('${locale.iconSelectionDialogIconFamily}: '),
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        setState(() {
-                          switch (fontFamily) {
-                            case IconsFontFamily.MaterialIcons:
-                              fontFamily = IconsFontFamily.TrademarkIcons;
-                              break;
-                            case IconsFontFamily.TrademarkIcons:
-                              fontFamily = IconsFontFamily.FontelloIcons;
-                              break;
-                            default:
-                              fontFamily = IconsFontFamily.MaterialIcons;
-                          }
-                          iconsList = AppIcons.iconNames(fontFamily);
-                        });
-                      },
-                      child: Text(
-                        fontFamily.name,
-                        style: AppTextStyles.textStyleBold14.copyWith(
-                          color: colorScheme.primary,
+                  const Spacer(),
+                  OutlinedButton(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
                       ),
                     ),
+                    onPressed: () {
+                      setState(() {
+                        switch (fontFamily) {
+                          case IconsFontFamily.MaterialIcons:
+                            fontFamily = IconsFontFamily.TrademarkIcons;
+                            break;
+                          case IconsFontFamily.TrademarkIcons:
+                            fontFamily = IconsFontFamily.FontelloIcons;
+                            break;
+                          default:
+                            fontFamily = IconsFontFamily.MaterialIcons;
+                        }
+                        iconsList = AppIcons.iconNames(fontFamily);
+                      });
+                    },
+                    child: Text(
+                      fontFamily.name,
+                      style: AppTextStyles.textStyleBold14.copyWith(
+                        color: colorScheme.primary,
+                      ),
+                    ),
                   ),
+                  const Spacer(),
                 ],
               ),
             ),
@@ -105,11 +114,7 @@ class _IconSelectionDialogState extends State<IconSelectionDialog> {
                   ),
                   const SizedBox(width: 22),
                   ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(
-                        colorScheme.primary,
-                      ),
-                    ),
+                    style: buttonStyle,
                     child: Text(
                       locale.genericClose,
                       style: AppTextStyles.textStyleBold14.copyWith(

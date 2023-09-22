@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../common/constants/themes/colors/custom_color.g.dart';
@@ -65,25 +66,29 @@ class _SignInPageState extends State<SignInPage> {
               .contains(RegExp(r".*Local data don't have this user.$"))) {
             customModelBottomSheet(
               context,
-              content: 'User not found in local data. You can start with an'
-                  ' empty database and import your data later if you have a'
-                  ' backup.\n\nDo you want to start with an empty database?',
+              content: locale.signInPageUserNotFound,
               buttonText: ButtonBar(
                 alignment: MainAxisAlignment.spaceAround,
                 children: [
-                  OutlinedButton(
-                    onPressed: () async {
-                      UserModel user = UserModel(
-                        email: _emailController.text,
-                        password: _pwdController.text,
-                      );
-                      await _controller.createLocalUser(user);
-                    },
-                    child: Text(locale.genericYes),
+                  Semantics(
+                    label: locale.genericYes,
+                    child: OutlinedButton(
+                      onPressed: () async {
+                        UserModel user = UserModel(
+                          email: _emailController.text,
+                          password: _pwdController.text,
+                        );
+                        await _controller.createLocalUser(user);
+                      },
+                      child: Text(locale.genericYes),
+                    ),
                   ),
-                  OutlinedButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: Text(locale.signInPageTryAgain),
+                  Semantics(
+                    label: locale.signInPageTryAgain,
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text(locale.signInPageTryAgain),
+                    ),
                   ),
                 ],
               ),
@@ -111,10 +116,82 @@ class _SignInPageState extends State<SignInPage> {
     _controller.dispose();
   }
 
+  Future<void> recoverPassword() async {
+    final locale = AppLocalizations.of(context)!;
+    final customColors = Theme.of(context).extension<CustomColors>()!;
+    bool sucess = await _controller.recoverPassword(_emailController.text);
+
+    if (sucess) {
+      if (context.mounted) {
+        String message =
+            locale.signInPageResetPasswordMessage(_emailController.text);
+
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Semantics(
+              label: locale.signInPageResetPassword,
+              child: Text(locale.signInPageResetPassword),
+            ),
+            icon: Icon(
+              Icons.lock_reset,
+              color: customColors.sourceLightyellow,
+              size: 64,
+            ),
+            content: Semantics(
+              label: message,
+              child: Text(message),
+            ),
+            actions: [
+              Semantics(
+                label: locale.genericClose,
+                child: TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(locale.genericClose),
+                ),
+              ),
+            ],
+          ),
+        );
+      }
+    } else {
+      if (context.mounted) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Semantics(
+              label: locale.signInPageResetPassword,
+              child: Text(locale.signInPageResetPassword),
+            ),
+            icon: Icon(
+              Icons.error,
+              color: customColors.sourceMinusred,
+              size: 64,
+            ),
+            content: Semantics(
+              label: locale.signInPageProblemRequest,
+              child: Text(
+                locale.signInPageProblemRequest,
+              ),
+            ),
+            actions: [
+              Semantics(
+                label: locale.genericClose,
+                child: TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(locale.genericClose),
+                ),
+              ),
+            ],
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
-    final customColors = Theme.of(context).extension<CustomColors>()!;
     final validate = SignValidator(locale);
 
     return Scaffold(
@@ -131,7 +208,7 @@ class _SignInPageState extends State<SignInPage> {
                 children: [
                   BasicTextFormField(
                     labelText: locale.signInPageEmail,
-                    hintText: 'albert@email.com',
+                    hintText: 'your.email@server.com',
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     validator: validate.emailValidator,
@@ -145,70 +222,10 @@ class _SignInPageState extends State<SignInPage> {
                     },
                   ),
                   if (showMessage)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          locale.signInPageForgotPassword,
-                          textAlign: TextAlign.end,
-                        ),
-                        TextButton(
-                          onPressed: () async {
-                            bool sucess = await _controller
-                                .recoverPassword(_emailController.text);
-                            if (sucess) {
-                              if (context.mounted) {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    title: Text(locale.signInPageResetPassword),
-                                    icon: Icon(
-                                      Icons.lock_reset,
-                                      color: customColors.sourceLightyellow,
-                                      size: 64,
-                                    ),
-                                    content: Text(
-                                      locale.signInPageResetPasswordMessage(
-                                        _emailController.text,
-                                      ),
-                                    ),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        child: Text(locale.genericClose),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }
-                            } else {
-                              if (context.mounted) {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    title: Text(locale.signInPageResetPassword),
-                                    icon: Icon(
-                                      Icons.error,
-                                      color: customColors.sourceMinusred,
-                                      size: 64,
-                                    ),
-                                    content: Text(
-                                      locale.signInPageProblemRequest,
-                                    ),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        child: Text(locale.genericClose),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }
-                            }
-                          },
-                          child: Text(locale.signInPageRecover),
-                        ),
-                      ],
+                    CustomTextButton(
+                      labelMessage: locale.signInPageForgotPassword,
+                      labelButton: locale.signInPageResetPassword,
+                      onPressed: recoverPassword,
                     ),
                   PasswordTextFormField(
                     labelText: locale.signInPagePassword,

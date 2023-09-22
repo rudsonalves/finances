@@ -197,6 +197,8 @@
     "budgetEditDialogUpdate": "Aggiorna",
     "budgetEditDialogNext": "Successivo",
     "accountDropdownFormHint": "Crea un nuovo account per effettuare trasferimenti",
-    "transactionsHelpLock": "Per bloccare/sbloccare il controllo delle transazioni"
+    "transactionsHelpLock": "Per bloccare/sbloccare il controllo delle transazioni",
+    "signInPageUserNotFound": "Utente non trovato nei dati locali. Puoi iniziare con un database vuoto e importare i tuoi dati successivamente se hai un backup.\n\nVuoi iniziare con un database vuoto?",
+    "settingsPageDialogTitle": "Cambia il tuo nome"
 }
 

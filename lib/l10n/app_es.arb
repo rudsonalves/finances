@@ -197,5 +197,7 @@
 		"budgetEditDialogUpdate": "Actualizar",
   	"budgetEditDialogNext": "Siguiente",
 		"accountDropdownFormHint": "Crea una nueva cuenta para realizar transferencias",
-    "transactionsHelpLock": "Para bloquear/desbloquear la verificación de transacciones"
+    "transactionsHelpLock": "Para bloquear/desbloquear la verificación de transacciones",
+    "signInPageUserNotFound": "Usuario no encontrado en los datos locales. Puede empezar con una base de datos vacía e importar sus datos más tarde si tiene una copia de seguridad.\n\n¿Quiere empezar con una base de datos vacía?",
+    "settingsPageDialogTitle": "Cambiar tu nombre"
 }

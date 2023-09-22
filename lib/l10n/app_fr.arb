@@ -197,5 +197,7 @@
     "budgetEditDialogUpdate": "Mettre à jour",
     "budgetEditDialogNext": "Suivant",
     "accountDropdownFormHint": "Créer un nouveau compte pour effectuer des transferts",
-    "transactionsHelpLock": "Pour verrouiller/déverrouiller la vérification des transactions"
+    "transactionsHelpLock": "Pour verrouiller/déverrouiller la vérification des transactions",
+    "signInPageUserNotFound": "Utilisateur introuvable dans les données locales. Vous pouvez commencer avec une base de données vide et importer vos données ultérieurement si vous avez une sauvegarde.\n\nVoulez-vous commencer avec une base de données vide?",
+    "settingsPageDialogTitle": "Changer votre nom"
 }

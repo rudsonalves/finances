@@ -21,28 +21,39 @@ class CustomTextButton extends StatelessWidget {
     Color outline = colorScheme.outline;
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: TextButton(
+      padding: const EdgeInsets.only(bottom: 16, top: 8),
+      child: ElevatedButton(
         onPressed: onPressed,
         style: TextButton.styleFrom(
-            padding: const EdgeInsets.all(0),
-            minimumSize: const Size(14, 14),
+            padding: const EdgeInsets.only(
+              top: 8,
+              left: 16,
+              right: 16,
+              bottom: 8,
+            ),
+            // minimumSize: const Size(14, 14),
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             alignment: Alignment.centerLeft),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              labelMessage,
-              style: AppTextStyles.textStyle14.copyWith(
-                color: outline,
+            Semantics(
+              label: labelMessage,
+              child: Text(
+                labelMessage,
+                style: AppTextStyles.textStyleSemiBold14.copyWith(
+                  color: outline,
+                ),
               ),
             ),
-            Text(
-              ' $labelButton',
-              style: AppTextStyles.textStyle14.copyWith(
-                color: primary,
+            Semantics(
+              label: labelButton,
+              child: Text(
+                ' $labelButton',
+                style: AppTextStyles.textStyleSemiBold16.copyWith(
+                  color: primary,
+                ),
               ),
             ),
           ],

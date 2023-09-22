@@ -26,21 +26,33 @@ class OnboardingPage extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              LargeBoldText(locale.splashPageMsgPart0),
-              LargeBoldText(locale.splashPageMsgPart1),
-              PrimaryButton(
+              Semantics(
+                label: locale.splashPageMsgPart0,
+                child: LargeBoldText(locale.splashPageMsgPart0),
+              ),
+              Semantics(
+                  label: locale.splashPageMsgPart1,
+                  child: LargeBoldText(locale.splashPageMsgPart1)),
+              Semantics(
                 label: locale.splashPageGetStarted,
-                onTap: () => Navigator.pushReplacementNamed(
-                  context,
-                  AppRoute.signUp.name,
+                child: PrimaryButton(
+                  label: locale.splashPageGetStarted,
+                  onTap: () => Navigator.pushReplacementNamed(
+                    context,
+                    AppRoute.signUp.name,
+                  ),
                 ),
               ),
-              CustomTextButton(
-                labelMessage: locale.splashPageHaveAccount,
-                labelButton: locale.splashPageLogIn,
-                onPressed: () => Navigator.pushReplacementNamed(
-                  context,
-                  AppRoute.signIn.name,
+              Semantics(
+                label:
+                    '${locale.splashPageHaveAccount} ${locale.splashPageLogIn}',
+                child: CustomTextButton(
+                  labelMessage: locale.splashPageHaveAccount,
+                  labelButton: locale.splashPageLogIn,
+                  onPressed: () => Navigator.pushReplacementNamed(
+                    context,
+                    AppRoute.signIn.name,
+                  ),
                 ),
               ),
             ],

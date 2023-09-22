@@ -1,7 +1,10 @@
+import 'package:finances/common/models/user_name_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../common/constants/laguage_constants.dart';
+import '../../common/constants/themes/app_button_styles.dart';
+import '../../common/widgets/basic_text_form_field.dart';
 import '../../common/widgets/custom_circular_progress_indicator.dart';
 import '../../locator.dart';
 import '../../common/widgets/app_top_border.dart';
@@ -26,12 +29,21 @@ class _SettingsPageState extends State<SettingsPage> {
   final currentUser = locator.get<CurrentUser>();
   final currentTheme = locator.get<CurrentTheme>();
   final currentLanguage = locator.get<CurrentLanguage>();
+  final currentUserName = locator.get<UserNameNotifier>();
   final controller = SettingsPageController();
+  final userNameController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     controller.init();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    userNameController.dispose();
+    controller.dispose();
   }
 
   Widget languageDropdown() {
@@ -105,11 +117,47 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  AlertDialog editNameDialog(
+    AppLocalizations locale,
+  ) {
+    final buttonStyle = AppButtonStyles.primaryButtonColor(context);
+
+    return AlertDialog(
+      title: Text(locale.settingsPageDialogTitle),
+      content: BasicTextFormField(
+        controller: userNameController,
+        labelText: locale.signUpPageYourName,
+      ),
+      actions: [
+        ElevatedButton(
+          style: buttonStyle,
+          onPressed: () async {
+            final navigator = Navigator.of(context);
+
+            if (userNameController.text.isNotEmpty &&
+                currentUserName.userName != userNameController.text) {
+              await currentUserName.changeName(userNameController.text);
+            }
+            navigator.pop();
+          },
+          child: Text(locale.transPageButtonUpdate),
+        ),
+        ElevatedButton(
+          onPressed: () => Navigator.pop(context),
+          style: buttonStyle,
+          child: Text(locale.genericClose),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final primary = colorScheme.primary;
     final locale = AppLocalizations.of(context)!;
+
+    userNameController.text = currentUserName.userName;
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -147,9 +195,21 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      Text(
-                        currentUser.userName!,
-                        style: AppTextStyles.textStyleSemiBold18,
+                      TextButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => editNameDialog(locale),
+                          );
+                        },
+                        child: AnimatedBuilder(
+                            animation: currentUserName,
+                            builder: (context, _) {
+                              return Text(
+                                userNameController.text,
+                                style: AppTextStyles.textStyleSemiBold18,
+                              );
+                            }),
                       ),
                       Text(
                         currentUser.userEmail!,
@@ -229,23 +289,6 @@ class _SettingsPageState extends State<SettingsPage> {
                                   color: colorScheme.primary,
                                 ),
                               ),
-                              // const SizedBox(height: 16),
-                              // Center(
-                              //   child: ElevatedButton(
-                              //     onPressed: () {
-                              //       showDialog(
-                              //         context: context,
-                              //         builder: (context) =>
-                              //             const DatabaseRecover(
-                              //           dialogState: DialogStates.createRestore,
-                              //         ),
-                              //       );
-                              //     },
-                              //     // icon: const Icon(Icons.backup_table_sharp),
-                              //     child: Text(
-                              //         locale.settingsPageCreateRestoreBackup),
-                              //   ),
-                              // ),
                             ],
                           ),
                         );

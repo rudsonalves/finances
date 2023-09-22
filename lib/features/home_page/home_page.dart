@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../common/models/user_name_notifier.dart';
 import '../../locator.dart';
 import './home_page_state.dart';
 import './home_page_controller.dart';
@@ -30,6 +32,7 @@ class _HomePageState extends State<HomePage>
   final _controller = locator.get<HomePageController>();
   final _balanceController = locator.get<BalanceCardController>();
   final ScrollController _listViewController = ScrollController();
+  final _userNameNotifier = locator.get<UserNameNotifier>();
 
   ExtendedDate lastDate = ExtendedDate(1980, 1, 1);
 
@@ -41,6 +44,7 @@ class _HomePageState extends State<HomePage>
     super.initState();
     _controller.init();
     _balanceController.getBalance();
+    _userNameNotifier.init();
   }
 
   String greetingText() {
@@ -72,18 +76,25 @@ class _HomePageState extends State<HomePage>
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              greetingText(),
-              style: AppTextStyles.textStyle14.copyWith(
-                color: colorScheme.onPrimary,
+            Semantics(
+              label: greetingText(),
+              child: Text(
+                greetingText(),
+                style: AppTextStyles.textStyle14.copyWith(
+                  color: colorScheme.onPrimary,
+                ),
               ),
             ),
-            Text(
-              currentUser.userName!,
-              style: AppTextStyles.textStyleSemiBold20.copyWith(
-                color: colorScheme.onPrimary,
-              ),
-            ),
+            AnimatedBuilder(
+                animation: _userNameNotifier,
+                builder: (context, _) {
+                  return Text(
+                    currentUser.userName!,
+                    style: AppTextStyles.textStyleSemiBold20.copyWith(
+                      color: colorScheme.onPrimary,
+                    ),
+                  );
+                }),
           ],
         ),
         actions: const [
@@ -114,10 +125,13 @@ class _HomePageState extends State<HomePage>
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          locale.homePageTransHistory,
-                          style: AppTextStyles.textStyleSemiBold18.copyWith(
-                            color: colorScheme.primary,
+                        Semantics(
+                          label: locale.homePageTransHistory,
+                          child: Text(
+                            locale.homePageTransHistory,
+                            style: AppTextStyles.textStyleSemiBold18.copyWith(
+                              color: colorScheme.primary,
+                            ),
                           ),
                         ),
                       ],
@@ -171,14 +185,17 @@ class _HomePageState extends State<HomePage>
                                     top: 4,
                                     bottom: 8,
                                   ),
-                                  child: ElevatedButton(
-                                    onPressed: _controller.lastDate != null
-                                        ? loadMoreTransactions
-                                        : null,
-                                    style: ElevatedButton.styleFrom(
-                                      elevation: 5,
+                                  child: Semantics(
+                                    label: locale.homePageSeeMore,
+                                    child: ElevatedButton(
+                                      onPressed: _controller.lastDate != null
+                                          ? loadMoreTransactions
+                                          : null,
+                                      style: ElevatedButton.styleFrom(
+                                        elevation: 5,
+                                      ),
+                                      child: Text(locale.homePageSeeMore),
                                     ),
-                                    child: Text(locale.homePageSeeMore),
                                   ),
                                 );
                               }
@@ -188,8 +205,11 @@ class _HomePageState extends State<HomePage>
 
                         // State Error...
                         return Center(
-                          child: Text(
-                            locale.homePageError,
+                          child: Semantics(
+                            label: locale.homePageError,
+                            child: Text(
+                              locale.homePageError,
+                            ),
                           ),
                         );
                       },

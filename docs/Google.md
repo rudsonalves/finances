@@ -8,7 +8,7 @@ Finances: Manage budget, track expenses
 
 # 3. Descrição completa
 
-"Finances" is a comprehensive financial management application developed by rudsonalves67@gmail.com. Its primary purpose is to empower users with efficient budget control, allowing them to create and manage accounts, track financial transactions sorted into customizable categories, and plan and execute budgets. This project drew inspiration from the Figma diagram named [Financy-App](https://www.figma.com/file/vQzApZhqZFDFp1td5K4asQ/Financy-App?type=design&mode=design&t=EFvH3bvOxfe8hSap-0) and initially took shape with insights from the YouTube channel [@devkaio](https://www.youtube.com/@devkaio), whose best practices and innovative ideas significantly contributed to its implementation.
+"Finances" is a comprehensive financial management application developed by rudsonalves67@gmail.com. Its primary purpose is to empower users with efficient budget control, allowing them to create and manage accounts, track financial transactions sorted into customizable categories, and plan and execute budgets. 
 
 ## App Objectives
 
@@ -44,6 +44,12 @@ Pages are constructed following the State pattern, where a page's construction c
 The "get_it" Service Locator is utilized, offering centralized access to necessary service instances throughout the application. It also facilitates Singleton and on-demand object generation, providing flexibility in resource distribution and control.
 
 The chosen database is SQFLite, a widely popular SQLite implementation for Flutter among developers.
+
+## Thanks
+
+My thanks to [@devkaio](https://www.youtube.com/@devkaio), whose best practices and innovative ideas contributed significantly to its implementation.
+
+To my former brother-in-law and great friend Sirhan Bortolini for the meaningful and warm debates, without which the project would not have reached the desired maturity.
 
 # 4. Ícone do aplicativo
 

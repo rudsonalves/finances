@@ -58,10 +58,13 @@ class PrimaryButton extends StatelessWidget {
             borderRadius: borderRadiusCircular,
             onTap: onTap,
             child: Center(
-              child: Text(
-                label,
-                style: AppTextStyles.textStyleSemiBold18.copyWith(
-                  color: onPrimary,
+              child: Semantics(
+                label: label,
+                child: Text(
+                  label,
+                  style: AppTextStyles.textStyleSemiBold18.copyWith(
+                    color: onPrimary,
+                  ),
                 ),
               ),
             ),

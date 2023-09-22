@@ -197,5 +197,7 @@
     "budgetEditDialogUpdate": "Aktualisieren",
     "budgetEditDialogNext": "Weiter",
     "accountDropdownFormHint": "Neues Konto erstellen, um Überweisungen zu tätigen",
-    "transactionsHelpLock": "Zum Sperren/Freigeben der Transaktionsüberprüfung"
+    "transactionsHelpLock": "Zum Sperren/Freigeben der Transaktionsüberprüfung",
+    "signInPageUserNotFound": "Benutzer nicht in den lokalen Daten gefunden. Sie können mit einer leeren Datenbank beginnen und Ihre Daten später importieren, wenn Sie eine Sicherung haben.\n\nMöchten Sie mit einer leeren Datenbank beginnen?",
+    "settingsPageDialogTitle": "Ändere deinen Namen"
 }

@@ -20,20 +20,21 @@ class AddCancelButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
+    final buttonStyle = AppButtonStyles.primaryButtonColor(context);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         ElevatedButton(
           onPressed: addCallback,
-          style: AppButtonStyles.primaryButtonColor(context),
+          style: buttonStyle,
           child: Text(
             addLabel != null ? addLabel! : locale.addCancelButtonsAdd,
           ),
         ),
         ElevatedButton(
           onPressed: cancelCallback,
-          style: AppButtonStyles.primaryButtonColor(context),
+          style: buttonStyle,
           child: Text(
             locale.addCancelButtonsCancel,
           ),

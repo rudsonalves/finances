@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../constants/themes/app_button_styles.dart';
 import '../constants/themes/app_text_styles.dart';
 import '../widgets/markdown_rich_text.dart';
 
@@ -14,6 +15,7 @@ Future<void> functionAlertDialog(
   final colorScheme = Theme.of(context).colorScheme;
   final primary = colorScheme.primary;
   final onPrimary = colorScheme.onPrimary;
+  final buttonStyle = AppButtonStyles.primaryButtonColor(context);
 
   return await showDialog(
     context: context,
@@ -38,9 +40,7 @@ Future<void> functionAlertDialog(
       ),
       actions: [
         ElevatedButton(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(primary),
-          ),
+          style: buttonStyle,
           onPressed: () => Navigator.pop(context),
           child: Text(
             locale.genericClose,

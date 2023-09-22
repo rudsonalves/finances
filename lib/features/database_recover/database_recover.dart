@@ -7,6 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:restart_app/restart_app.dart';
 
 import '../../common/constants/routes/app_route.dart';
+import '../../common/constants/themes/app_button_styles.dart';
 import '../../common/constants/themes/app_text_styles.dart';
 import '../../repositories/backup/backup_repository.dart';
 import '../../repositories/backup/sqflite_backup_repository.dart';
@@ -148,7 +149,7 @@ class _DatabaseRecoverState extends State<DatabaseRecover> {
     final colorScheme = Theme.of(context).colorScheme;
     final locale = AppLocalizations.of(context)!;
     final primary = colorScheme.primary;
-    final onPrimary = colorScheme.onPrimary;
+    final buttonStyle = AppButtonStyles.primaryButtonColor(context);
 
     final String title;
     switch (widget.dialogState) {
@@ -183,10 +184,7 @@ class _DatabaseRecoverState extends State<DatabaseRecover> {
               Expanded(
                 flex: 1,
                 child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(primary),
-                    foregroundColor: MaterialStatePropertyAll(onPrimary),
-                  ),
+                  style: buttonStyle,
                   onPressed: () => Navigator.pop(context),
                   child: Text(locale.genericClose),
                 ),

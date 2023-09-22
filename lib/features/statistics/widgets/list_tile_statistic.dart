@@ -36,33 +36,37 @@ class _ListTileStatisticState extends State<ListTileStatistic> {
     final minus = widget.category.monthSum < 0;
     final customColors = Theme.of(context).extension<CustomColors>()!;
 
-    return Card(
-      elevation: currentUser.userCategoryList.contains(categoryName) ? 1 : 0,
-      child: ListTile(
-        leading: icon,
-        title: Row(
-          children: [
-            Text(categoryName),
-            const Spacer(),
-            Text(
-              money.text(widget.category.monthSum),
-              style: AppTextStyles.textStyleSemiBold18.copyWith(
-                  color: minus ? customColors.minusred : customColors.lowgreen,
-                  fontWeight: FontWeight.w700),
-            ),
-            const SizedBox(width: 4),
-            VariationColumn(widget.category.variation),
-          ],
+    return Semantics(
+      label: '${widget.category.categoryName} ${widget.category.monthSum}',
+      child: Card(
+        elevation: currentUser.userCategoryList.contains(categoryName) ? 1 : 0,
+        child: ListTile(
+          leading: icon,
+          title: Row(
+            children: [
+              Text(categoryName),
+              const Spacer(),
+              Text(
+                money.text(widget.category.monthSum),
+                style: AppTextStyles.textStyleSemiBold18.copyWith(
+                    color:
+                        minus ? customColors.minusred : customColors.lowgreen,
+                    fontWeight: FontWeight.w700),
+              ),
+              const SizedBox(width: 4),
+              VariationColumn(widget.category.variation),
+            ],
+          ),
+          onTap: () {
+            setState(() {
+              if (currentUser.userCategoryList.contains(categoryName)) {
+                controller.removeInCategoryList(categoryName);
+              } else {
+                controller.addInCategoryList(categoryName);
+              }
+            });
+          },
         ),
-        onTap: () {
-          setState(() {
-            if (currentUser.userCategoryList.contains(categoryName)) {
-              controller.removeInCategoryList(categoryName);
-            } else {
-              controller.addInCategoryList(categoryName);
-            }
-          });
-        },
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:finances/common/models/user_name_notifier.dart';
 import 'package:get_it/get_it.dart';
 
 import './common/extensions/app_scale.dart';
@@ -167,6 +168,10 @@ void setupDependencies() {
 
     locator.registerLazySingleton<BudgetController>(
       () => BudgetController(),
+    );
+
+    locator.registerLazySingleton<UserNameNotifier>(
+      () => UserNameNotifier(),
     );
   } catch (err) {
     log('Error: $err');

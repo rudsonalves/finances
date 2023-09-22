@@ -117,14 +117,14 @@ class _SignUpPageState extends State<SignUpPage> {
                 children: [
                   BasicTextFormField(
                     labelText: locale.signUpPageYourName,
-                    hintText: 'Albert Einstein',
+                    hintText: 'Your Name',
                     capitalization: TextCapitalization.words,
                     controller: _nameController,
                     validator: validate.nameValidator,
                   ),
                   BasicTextFormField(
                     labelText: locale.signUpPageEmail,
-                    hintText: 'albert@email.com',
+                    hintText: 'your.email@server.com',
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     validator: validate.emailValidator,
