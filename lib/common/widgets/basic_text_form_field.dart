@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../constants/themes/colors/custom_colors.dart';
+import '../constants/themes/colors/app_colors.dart';
 
 class BasicTextFormField extends StatelessWidget {
   final String labelText;
@@ -53,7 +53,7 @@ class BasicTextFormField extends StatelessWidget {
           prefixText: prefixText,
           hintText: hintText,
           hintStyle: const TextStyle(
-            color: CustomColors.unselectedText,
+            color: AppColors.unselectedText,
           ),
           border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(

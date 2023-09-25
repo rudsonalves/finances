@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../constants/themes/colors/custom_colors.dart';
+import '../constants/themes/colors/app_colors.dart';
 
 Container baseDismissibleContainer(
   BuildContext context, {
@@ -20,7 +20,7 @@ Container baseDismissibleContainer(
   late Widget rowIcon;
 
   Color enableColor = colorScheme.shadow;
-  Color disableColor = CustomColors.unselectedText;
+  Color disableColor = AppColors.unselectedText;
 
   if (label != null) {
     if (alignLeft.contains(alignment)) {

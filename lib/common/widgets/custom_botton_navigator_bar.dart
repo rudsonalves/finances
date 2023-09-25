@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../constants/themes/colors/custom_colors.dart';
+import '../constants/themes/colors/app_colors.dart';
 import '../constants/themes/icons/fontello_icons.dart';
 import 'custom_bottom_app_bar_item.dart';
 
@@ -21,7 +21,7 @@ class CustomBottomNavigatorBar extends StatelessWidget {
   Widget build(BuildContext context) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     Color selecteColor = colorScheme.primary;
-    Color unselecteColor = CustomColors.unselectedText;
+    Color unselecteColor = AppColors.unselectedText;
     final locale = AppLocalizations.of(context)!;
 
     return BottomAppBar(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../constants/themes/colors/custom_colors.dart';
+import '../constants/themes/colors/app_colors.dart';
 
 class PasswordTextFormField extends StatefulWidget {
   final String labelText;
@@ -39,7 +39,7 @@ class _PasswordTextFormFieldState extends State<PasswordTextFormField> {
         validator: widget.validator,
         decoration: InputDecoration(
           hintStyle: const TextStyle(
-            color: CustomColors.unselectedText,
+            color: AppColors.unselectedText,
           ),
           border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(
