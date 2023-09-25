@@ -13,7 +13,8 @@ import '../../locator.dart';
 import '../statistics/statistic_controller.dart';
 import 'budget_controller.dart';
 import 'budget_state.dart';
-import 'widget/dismissible_budget.dart';
+import 'widget/change_budget_dialog.dart';
+import 'widget/dismissible_category.dart';
 
 class BudgetPage extends StatefulWidget {
   const BudgetPage({super.key});
@@ -42,141 +43,65 @@ class _BudgetPageState extends State<BudgetPage>
   }
 
   Future<void> budgetEdit(
-      BuildContext context, CategoryDbModel category) async {
+    BuildContext context,
+    CategoryDbModel category,
+  ) async {
     final mediumMonth =
         _statController.getReferences(StatisticMedium.mediumMonth);
-    final medium12 = _statController.getReferences(StatisticMedium.medium12);
-    final money = locator.get<MoneyMaskedText>();
-    final colorScheme = Theme.of(context).colorScheme;
-    final customColors = Theme.of(context).extension<CustomColors>()!;
-    final primary = colorScheme.primary;
-    final budgetController = TextEditingController();
-    final AppLocalizations locale = AppLocalizations.of(context)!;
+    final medium12Months =
+        _statController.getReferences(StatisticMedium.medium12);
 
     final categories = _controller.categories;
     int index = categories.indexWhere(
       (cat) => category.categoryName == cat.categoryName,
     );
     bool continueEditing = true;
+    final navigator = Navigator.of(context);
+    final dialogContext = context;
 
     while (continueEditing) {
-      category = categories[index];
-
-      String categoryName = category.categoryName;
-      budgetController.text = category.categoryBudget.toStringAsFixed(2);
-      double medium = mediumMonth[categoryName] ?? 0;
-      double medium1 = medium12[categoryName] ?? 0;
+      final categoryBudget = categories[index];
+      String categoryName = categoryBudget.categoryName;
+      final medium = mediumMonth[categoryName] ?? 0;
+      final medium12 = medium12Months[categoryName] ?? 0;
 
       await showDialog(
-        context: context,
-        builder: (context) => SimpleDialog(
-          contentPadding: const EdgeInsets.only(
-            top: 8,
-            right: 16,
-            left: 16,
-            bottom: 16,
-          ),
-          title: Text(
-            categoryName,
-            textAlign: TextAlign.center,
-          ),
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('${locale.budgetEditDialogLastMonths}: '),
-                Text(
-                  money.text(medium),
-                  style: AppTextStyles.textStyleBold14.copyWith(
-                    color: medium < 0 ? customColors.minusred : primary,
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('${locale.budgetEditDialog12Month}: '),
-                Text(
-                  money.text(medium1),
-                  style: AppTextStyles.textStyleBold14.copyWith(
-                    color: medium1 < 0 ? customColors.minusred : primary,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              style: AppTextStyles.textStyleBold16,
-              textAlign: TextAlign.center,
-              keyboardType: TextInputType.number,
-              controller: budgetController,
-              decoration: InputDecoration(
-                labelText: locale.budgetEditDialogBudget,
-                border: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(15),
-                  ),
-                ),
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: IconButton.filled(
-                    tooltip: locale.budgetEditDialogPrevius,
-                    icon: const Icon(Icons.arrow_back_ios),
-                    onPressed: () {
-                      if (index > 0) {
-                        index--;
-                      }
-                      updateBudget(category, budgetController.text);
-                    },
-                  ),
-                ),
-                const SizedBox(width: 8),
-                IconButton.filled(
-                  tooltip: locale.budgetEditDialogUpdate,
-                  onPressed: () {
-                    updateBudget(category, budgetController.text);
-                    continueEditing = false;
-                  },
-                  icon: const Icon(Icons.update),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: IconButton.filled(
-                    tooltip: locale.budgetEditDialogNext,
-                    icon: const Icon(Icons.arrow_forward_ios),
-                    onPressed: () {
-                      if (index < categories.length - 1) {
-                        index++;
-                      }
-                      updateBudget(category, budgetController.text);
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ],
+        context: dialogContext,
+        builder: (dialogContext) => ChangeBudgetDialog(
+          category: categoryBudget,
+          medium: medium,
+          medium12: medium12,
+          previousIndex: (value) async {
+            if (index > 0) {
+              index--;
+            }
+            await updateBudget(categoryBudget, value);
+            navigator.pop();
+          },
+          closeUpdate: (value) async {
+            continueEditing = false;
+            await updateBudget(categoryBudget, value);
+            navigator.pop();
+          },
+          nextIndex: (value) async {
+            if (index < categories.length - 1) {
+              index++;
+            }
+            await updateBudget(categoryBudget, value);
+            navigator.pop();
+          },
         ),
       );
     }
   }
 
-  Future<void> updateBudget(CategoryDbModel category, String budget) async {
-    double? value = double.tryParse(budget);
-    if (value != null) {
-      if (category.categoryBudget != value) {
-        category.categoryBudget = value;
-        await _controller.updateCategoryBudget(category);
-      }
-
-      if (!mounted) return;
-      Navigator.pop(context);
+  Future<void> updateBudget(
+    CategoryDbModel category,
+    double budgetValue,
+  ) async {
+    if (category.categoryBudget != budgetValue) {
+      category.categoryBudget = budgetValue;
+      await _controller.updateCategoryBudget(category);
     }
   }
 
@@ -309,7 +234,7 @@ class _BudgetPageState extends State<BudgetPage>
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: categories.length,
                                 itemBuilder: (context, index) =>
-                                    DismissibleBudget(
+                                    DismissibleCategory(
                                   controller: _controller,
                                   index: index,
                                   callBack: callBack,

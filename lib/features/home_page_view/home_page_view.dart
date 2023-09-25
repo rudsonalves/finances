@@ -5,7 +5,7 @@ import '../account/account_controller.dart';
 import '../account/widgets/statefull_add_account_dialog.dart';
 import '../budget/budget_controller.dart';
 import '../budget/budget_page.dart';
-import '../budget/widget/add_budget_dialog.dart';
+import '../budget/widget/add_category_dialog.dart';
 import '../home_page/home_page.dart';
 import '../account/account_page.dart';
 import '../statistics/statistic_controller.dart';
@@ -94,7 +94,7 @@ class _HomePageViewState extends State<HomePageView> {
   Future<void> addCategory() async {
     await showDialog(
       context: context,
-      builder: (context) => AddBudgetDialog(
+      builder: (context) => AddCategoryDialog(
         callBack: addCategoryCallBak,
       ),
     );

@@ -12,15 +12,15 @@ import '../../../locator.dart';
 import '../../../services/database/database_helper.dart';
 import '../budget_controller.dart';
 import '../../../common/functions/base_dismissible_container.dart';
-import 'add_budget_dialog.dart';
+import 'add_category_dialog.dart';
 
-class DismissibleBudget extends StatefulWidget {
+class DismissibleCategory extends StatefulWidget {
   final BudgetController controller;
   final int index;
   final Function? callBack;
   final void Function(CategoryDbModel)? budgetEdit;
 
-  const DismissibleBudget({
+  const DismissibleCategory({
     super.key,
     required this.controller,
     required this.index,
@@ -29,10 +29,10 @@ class DismissibleBudget extends StatefulWidget {
   });
 
   @override
-  State<DismissibleBudget> createState() => _DismissibleBudgetState();
+  State<DismissibleCategory> createState() => _DismissibleCategoryState();
 }
 
-class _DismissibleBudgetState extends State<DismissibleBudget> {
+class _DismissibleCategoryState extends State<DismissibleCategory> {
   @override
   void dispose() {
     super.dispose();
@@ -132,7 +132,7 @@ class _DismissibleBudgetState extends State<DismissibleBudget> {
             // Edit direction
             await showDialog(
               context: context,
-              builder: (context) => AddBudgetDialog(
+              builder: (context) => AddCategoryDialog(
                 addCategory: false,
                 editCategory: category,
                 callBack: widget.callBack,

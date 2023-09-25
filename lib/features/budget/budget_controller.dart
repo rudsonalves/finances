@@ -117,7 +117,7 @@ class BudgetController extends ChangeNotifier {
   Future<void> updateCategoryBudget(CategoryDbModel category) async {
     _changeState(BudgetStateLoading());
     try {
-      await _categoryRepository.updateCategory(category);
+      await _categoryRepository.updateCategoryBudget(category);
       _sumTotalBudget();
       _changeState(BudgetStateSuccess());
     } catch (err) {

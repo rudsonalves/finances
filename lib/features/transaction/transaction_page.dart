@@ -9,7 +9,7 @@ import '../../locator.dart';
 import '../../repositories/account/account_repository.dart';
 import '../../services/database/managers/transfers_manager.dart';
 import '../budget/budget_controller.dart';
-import '../budget/widget/add_budget_dialog.dart';
+import '../budget/widget/add_category_dialog.dart';
 import './transaction_controller.dart';
 import '../../common/models/extends_date.dart';
 import '../../common/widgets/app_top_border.dart';
@@ -119,7 +119,6 @@ class _TransactionPageState extends State<TransactionPage> {
 
       final TransactionDbModel transaction = TransactionDbModel(
         transId: widget.transaction?.transId,
-        // widget.transaction != null ? widget.transaction!.transId : null,
         transDescription: _descController.text,
         transCategoryId: _categoryRepository.getIdByName(
           _categoryController.text,
@@ -164,7 +163,7 @@ class _TransactionPageState extends State<TransactionPage> {
   void addCategoryAction() async {
     await showDialog(
       context: context,
-      builder: (context) => AddBudgetDialog(
+      builder: (context) => AddCategoryDialog(
         callBack: addCategoryCallBak,
       ),
     );

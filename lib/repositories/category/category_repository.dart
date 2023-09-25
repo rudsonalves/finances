@@ -10,6 +10,7 @@ abstract class CategoryRepository {
   Future<void> getCategories();
   Future<void> addCategory(CategoryDbModel category);
   Future<void> updateCategory(CategoryDbModel category);
+  Future<void> updateCategoryBudget(CategoryDbModel category);
   Future<void> deleteCategory(CategoryDbModel category);
   Future<void> firstCategory();
 }

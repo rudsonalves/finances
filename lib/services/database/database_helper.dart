@@ -33,6 +33,7 @@ abstract class DatabaseHelper {
   Future<int> insertCategory(Map<String, dynamic> categoryMap);
   Future<List<Map<String, dynamic>>> queryAllCategories();
   Future<void> updateCategory(Map<String, dynamic> categoryMap);
+  Future<void> updateCategoryBudget(int id, double budget);
   Future<void> deleteCategoryId(int id);
 
   Future<int> insertBalance(Map<String, dynamic> balanceMap);

@@ -113,4 +113,14 @@ class SqflileCategoryRepository implements CategoryRepository {
     await helper.updateCategory(category.toMap());
     await getCategories();
   }
+
+  @override
+  Future<void> updateCategoryBudget(CategoryDbModel category) async {
+    await helper.updateCategoryBudget(
+      category.categoryId!,
+      category.categoryBudget,
+    );
+    _categories[category.categoryName] = category;
+    // await getCategories();
+  }
 }

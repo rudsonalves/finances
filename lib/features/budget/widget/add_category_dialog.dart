@@ -13,12 +13,12 @@ import '../budget_controller.dart';
 import 'category_text_form_field.dart';
 import 'select_icon_row.dart';
 
-class AddBudgetDialog extends StatefulWidget {
+class AddCategoryDialog extends StatefulWidget {
   final bool addCategory;
   final CategoryDbModel? editCategory;
   final Function? callBack;
 
-  const AddBudgetDialog({
+  const AddCategoryDialog({
     Key? key,
     this.addCategory = true,
     this.editCategory,
@@ -26,10 +26,10 @@ class AddBudgetDialog extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<AddBudgetDialog> createState() => _AddBudgetDialogState();
+  State<AddCategoryDialog> createState() => _AddCategoryDialogState();
 }
 
-class _AddBudgetDialogState extends State<AddBudgetDialog> {
+class _AddCategoryDialogState extends State<AddCategoryDialog> {
   final _categoryController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey();
   bool _categoryIsIncome = false;
