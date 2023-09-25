@@ -277,7 +277,7 @@ Some bugs were noticed and need to be fixed:
 - *20230923.3* Bug: Seleção de idioma não está operando corretamente no boot de novos usuários;
 - *20230923.5* Bug: Na adição de orçamento o sinal (-) funciona com doble-click. Trocar por CheckButton;
 - *20230923.7* Bug: Adicionar um tutorial apresentando o app no primeiro boot;
-
+- *20230925.1* Bug: agendar um refresh da página de estatísticas quando uma nova transação ou conta for alterada/adicionada.
 These bug fixes and implementations will help improve the user experience and make the app more complete and stable.
 
 
