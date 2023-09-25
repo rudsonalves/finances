@@ -34,7 +34,8 @@ class _ColorButtonState extends State<ColorButton> {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
 
-    return ElevatedButton(
+    return IconButton(
+      tooltip: locale.openColorSelectionDialog,
       onPressed: () async {
         return await showDialog(
           context: context,
@@ -49,13 +50,10 @@ class _ColorButtonState extends State<ColorButton> {
           ),
         );
       },
-      style: ElevatedButton.styleFrom(
-        fixedSize: const Size(50, 50),
-        shape: const CircleBorder(),
-      ),
-      child: CircleAvatar(
-        radius: 32,
-        backgroundColor: pickerColor,
+      icon: Icon(
+        Icons.radio_button_checked,
+        color: pickerColor,
+        size: 46,
       ),
     );
   }

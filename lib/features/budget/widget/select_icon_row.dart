@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'icon_selection_dialog.dart';
 import '../../../common/models/icons_model.dart';
@@ -53,38 +54,47 @@ class _SelectIconRowState extends State<SelectIconRow> {
     final colorScheme = Theme.of(context).colorScheme;
     final onPrimary = colorScheme.onPrimary;
     final primary = colorScheme.primary;
+    final locale = AppLocalizations.of(context)!;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+      child: Column(
         children: [
-          CircleAvatar(
-            radius: 32,
-            child: IconButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(onPrimary),
-                foregroundColor: MaterialStateProperty.all(primary),
-                iconColor: MaterialStateProperty.all(primary),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+            child: Text(
+              locale.selectionIconRowQuestion,
+              style: AppTextStyles.textStyleSemiBold14.copyWith(
+                color: primary,
               ),
-              onPressed: () async {
-                await openIconSelectionDialog(context);
-                setState(() {});
-              },
-              icon: widget.iconModel.iconWidget(size: 32),
+              textAlign: TextAlign.center,
             ),
           ),
-          const SizedBox(width: 8),
-          Text(
-            'Selected Icon',
-            style: AppTextStyles.textStyleMedium16.copyWith(
-              color: primary,
-            ),
-          ),
-          const SizedBox(width: 8),
-          ColorButton(
-            currentColor: Color(widget.iconModel.iconColor),
-            callBack: changeIconColor,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircleAvatar(
+                radius: 28,
+                child: IconButton(
+                  tooltip: locale.openIconSelectionDialog,
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(onPrimary),
+                    foregroundColor: MaterialStateProperty.all(primary),
+                    iconColor: MaterialStateProperty.all(primary),
+                  ),
+                  onPressed: () async {
+                    await openIconSelectionDialog(context);
+                    setState(() {});
+                  },
+                  icon: widget.iconModel.iconWidget(size: 24),
+                ),
+              ),
+              const SizedBox(width: 50),
+              ColorButton(
+                currentColor: Color(widget.iconModel.iconColor),
+                callBack: changeIconColor,
+              ),
+            ],
           ),
         ],
       ),

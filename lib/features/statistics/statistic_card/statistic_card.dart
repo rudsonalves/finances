@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../common/constants/themes/app_text_styles.dart';
+import '../../../common/constants/themes/colors/custom_colors.dart';
 import '../../../common/constants/themes/colors/custom_color.g.dart';
 import '../../../common/current_models/current_user.dart';
 import '../../../common/extensions/money_masked_text.dart';
@@ -138,16 +139,19 @@ class _StatisticCardState extends State<StatisticCard> {
                       Row(
                         children: [
                           Expanded(
-                            child: InkWell(
-                              child: Icon(
-                                Icons.arrow_back_ios,
-                                color: primary,
+                            child: Tooltip(
+                              message: locale.statisticCardPreviusMonth,
+                              child: InkWell(
+                                child: Icon(
+                                  Icons.arrow_back_ios,
+                                  color: primary,
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    widget.pageController.previusMonth();
+                                  });
+                                },
                               ),
-                              onTap: () {
-                                setState(() {
-                                  widget.pageController.previusMonth();
-                                });
-                              },
                             ),
                           ),
                           Text(
@@ -157,16 +161,19 @@ class _StatisticCardState extends State<StatisticCard> {
                             ),
                           ),
                           Expanded(
-                            child: InkWell(
-                              child: Icon(
-                                Icons.arrow_forward_ios,
-                                color: primary,
+                            child: Tooltip(
+                              message: locale.statisticCardNextMonth,
+                              child: InkWell(
+                                child: Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: primary,
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    widget.pageController.nextMonth();
+                                  });
+                                },
                               ),
-                              onTap: () {
-                                setState(() {
-                                  widget.pageController.nextMonth();
-                                });
-                              },
                             ),
                           ),
                         ],
@@ -244,7 +251,7 @@ class _StatisticCardState extends State<StatisticCard> {
                                       Icons.grid_4x4,
                                       color: currentUser.userGrpShowGrid
                                           ? colorScheme.primary
-                                          : colorScheme.outlineVariant,
+                                          : CustomColors.unselectedText,
                                     ),
                                     const SizedBox(width: 8),
                                     const Text('Grid'),
@@ -259,7 +266,7 @@ class _StatisticCardState extends State<StatisticCard> {
                                       Icons.show_chart,
                                       color: currentUser.userGrpIsCurved
                                           ? colorScheme.primary
-                                          : colorScheme.outlineVariant,
+                                          : CustomColors.unselectedText,
                                     ),
                                     const SizedBox(width: 8),
                                     const Text('Curve'),
@@ -274,7 +281,7 @@ class _StatisticCardState extends State<StatisticCard> {
                                       Icons.timeline,
                                       color: currentUser.userGrpShowDots
                                           ? colorScheme.primary
-                                          : colorScheme.outlineVariant,
+                                          : CustomColors.unselectedText,
                                     ),
                                     const SizedBox(width: 8),
                                     const Text('Show dots'),
@@ -289,7 +296,7 @@ class _StatisticCardState extends State<StatisticCard> {
                                       Icons.area_chart,
                                       color: currentUser.userGrpAreaChart
                                           ? colorScheme.primary
-                                          : colorScheme.outlineVariant,
+                                          : CustomColors.unselectedText,
                                     ),
                                     const SizedBox(width: 8),
                                     const Text('Area chart'),

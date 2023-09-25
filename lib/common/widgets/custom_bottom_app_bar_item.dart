@@ -18,17 +18,14 @@ class CustomBottomAppBarItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Semantics(
-      label: tooltip,
-      child: IconButton(
-        tooltip: tooltip,
-        onPressed: () {
-          changePage(index);
-        },
-        icon: Icon(
-          icon,
-          color: color,
-        ),
+    return IconButton(
+      tooltip: tooltip,
+      onPressed: () {
+        changePage(index);
+      },
+      icon: Icon(
+        icon,
+        color: color,
       ),
     );
   }

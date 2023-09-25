@@ -115,18 +115,6 @@ With these triggers in place, any attempt to insert an invalid value in *balance
 
  integrity of this data.
 
-
-# Bug Fixes and Implementations
-
-Some bugs were noticed and need to be fixed:
-
-- *20230623.3.* Implementation: There are currently two functions in the *lib/common/functions* directory;
-- *20230818.3* Bug: o back está levando para a página de apresentação. Trocar pela página inicial.
-- *20230905.1* Bug: bloquear a deleção de categorias usadas em transações.
-
-These bug fixes and implementations will help improve the user experience and make the app more complete and stable.
-
-
 # Aplicativo de Finanças (pt_BR)
 
 Por *rudsonalves67@gmail.com*
@@ -280,6 +268,18 @@ Esta tabela mantém as definições de ícones (nome, fontFamily, cor), usadas e
 Foram criados dois gatilhos (triggers) para validar as entradas das colunas *balanceNextId* e *balancePreviousId* na tabela *balanceTable*. No corpo dos gatilhos, é verificado se o valor inserido em *balanceNextId* ou *balancePreviousId* é nulo ou corresponde a um *balanceId* válido na tabela *balanceTable*. Caso contrário, um erro é gerado.
 
 Com esses gatilhos em vigor, qualquer tentativa de inserir um valor inválido em *balanceNextId* ou *balancePreviousId* resultará em um erro, e a operação de inserção será interrompida, mantendo assim a integridade referencial desses dados.
+
+# Bug Fixes and Implementations
+
+Some bugs were noticed and need to be fixed:
+
+- *20230923.1* Bug: negativo na página de Orçamento/categorias;
+- *20230923.3* Bug: Seleção de idioma não está operando corretamente no boot de novos usuários;
+- *20230923.5* Bug: Na adição de orçamento o sinal (-) funciona com doble-click. Trocar por CheckButton;
+- *20230923.7* Bug: Adicionar um tutorial apresentando o app no primeiro boot;
+
+These bug fixes and implementations will help improve the user experience and make the app more complete and stable.
+
 
 # Commits:
 

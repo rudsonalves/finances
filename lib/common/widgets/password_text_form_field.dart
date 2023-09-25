@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../constants/themes/colors/custom_colors.dart';
 
 class PasswordTextFormField extends StatefulWidget {
   final String labelText;
@@ -25,40 +28,38 @@ class _PasswordTextFormFieldState extends State<PasswordTextFormField> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final locale = AppLocalizations.of(context)!;
 
     return Padding(
       padding: const EdgeInsets.only(top: 5, bottom: 10),
-      child: Semantics(
-        label: widget.labelText,
-        child: TextFormField(
-          controller: widget.controller,
-          obscureText: isHidden,
-          textInputAction: widget.textInputAction,
-          validator: widget.validator,
-          decoration: InputDecoration(
-            hintStyle: TextStyle(
-              color: colorScheme.outlineVariant,
+      child: TextFormField(
+        controller: widget.controller,
+        obscureText: isHidden,
+        textInputAction: widget.textInputAction,
+        validator: widget.validator,
+        decoration: InputDecoration(
+          hintStyle: const TextStyle(
+            color: CustomColors.unselectedText,
+          ),
+          border: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(15),
             ),
-            border: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(15),
-              ),
-            ),
-            labelText: widget.labelText.toUpperCase(),
-            hintText: widget.hintText,
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            suffixIcon: Focus(
-              descendantsAreFocusable: false,
-              canRequestFocus: false,
-              child: IconButton(
-                icon: Icon(isHidden ? Icons.visibility : Icons.visibility_off),
-                onPressed: () {
-                  setState(() {
-                    isHidden = !isHidden;
-                  });
-                },
-              ),
+          ),
+          labelText: widget.labelText.toUpperCase(),
+          hintText: widget.hintText,
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          suffixIcon: Focus(
+            descendantsAreFocusable: false,
+            canRequestFocus: false,
+            child: IconButton(
+              tooltip: locale.passwordWidgetShowPassword,
+              icon: Icon(isHidden ? Icons.visibility : Icons.visibility_off),
+              onPressed: () {
+                setState(() {
+                  isHidden = !isHidden;
+                });
+              },
             ),
           ),
         ),

@@ -25,35 +25,30 @@ class CustomTextButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: TextButton.styleFrom(
-            padding: const EdgeInsets.only(
-              top: 8,
-              left: 16,
-              right: 16,
-              bottom: 8,
-            ),
-            // minimumSize: const Size(14, 14),
-            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            alignment: Alignment.centerLeft),
+          padding: const EdgeInsets.only(
+            top: 8,
+            left: 16,
+            right: 16,
+            bottom: 8,
+          ),
+          // minimumSize: const Size(14, 48),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          alignment: Alignment.centerLeft,
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Semantics(
-              label: labelMessage,
-              child: Text(
-                labelMessage,
-                style: AppTextStyles.textStyleSemiBold14.copyWith(
-                  color: outline,
-                ),
+            Text(
+              labelMessage,
+              style: AppTextStyles.textStyleSemiBold14.copyWith(
+                color: outline,
               ),
             ),
-            Semantics(
-              label: labelButton,
-              child: Text(
-                ' $labelButton',
-                style: AppTextStyles.textStyleSemiBold16.copyWith(
-                  color: primary,
-                ),
+            Text(
+              ' $labelButton',
+              style: AppTextStyles.textStyleSemiBold16.copyWith(
+                color: primary,
               ),
             ),
           ],

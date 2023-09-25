@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../constants/themes/colors/custom_colors.dart';
+
 class BasicTextFormField extends StatelessWidget {
   final String labelText;
   final String? prefixText;
+  final TextStyle? style;
   final TextEditingController controller;
   final TextInputType keyboardType;
   final TextInputAction textInputAction;
@@ -18,6 +21,7 @@ class BasicTextFormField extends StatelessWidget {
     super.key,
     required this.labelText,
     required this.controller,
+    this.style,
     this.keyboardType = TextInputType.name,
     this.textInputAction = TextInputAction.next,
     this.hintText,
@@ -32,36 +36,32 @@ class BasicTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
     return Padding(
       padding: const EdgeInsets.only(top: 5, bottom: 10),
-      child: Semantics(
-        label: labelText,
-        child: TextFormField(
-          initialValue: initialValue,
-          controller: controller,
-          keyboardType: keyboardType,
-          textInputAction: textInputAction,
-          textCapitalization: capitalization,
-          validator: validator,
-          onChanged: onchanged,
-          focusNode: focusNode,
-          decoration: InputDecoration(
-            suffixIcon: suffixIcon,
-            prefixText: prefixText,
-            hintText: hintText,
-            hintStyle: TextStyle(
-              color: colorScheme.outlineVariant,
-            ),
-            border: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(15),
-              ),
-            ),
-            labelText: labelText.toUpperCase(),
-            floatingLabelBehavior: FloatingLabelBehavior.always,
+      child: TextFormField(
+        style: style,
+        initialValue: initialValue,
+        controller: controller,
+        keyboardType: keyboardType,
+        textInputAction: textInputAction,
+        textCapitalization: capitalization,
+        validator: validator,
+        onChanged: onchanged,
+        focusNode: focusNode,
+        decoration: InputDecoration(
+          suffixIcon: suffixIcon,
+          prefixText: prefixText,
+          hintText: hintText,
+          hintStyle: const TextStyle(
+            color: CustomColors.unselectedText,
           ),
+          border: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(15),
+            ),
+          ),
+          labelText: labelText.toUpperCase(),
+          floatingLabelBehavior: FloatingLabelBehavior.always,
         ),
       ),
     );

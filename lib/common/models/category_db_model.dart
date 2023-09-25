@@ -9,12 +9,14 @@ class CategoryDbModel {
   String categoryName;
   IconModel categoryIcon;
   double categoryBudget;
+  bool categoryIsIncome;
 
   CategoryDbModel({
     this.categoryId,
     required this.categoryName,
     required this.categoryIcon,
     this.categoryBudget = 0.0,
+    this.categoryIsIncome = false,
   });
 
   @override
@@ -24,7 +26,8 @@ class CategoryDbModel {
       ' Image: "${categoryIcon.iconName}" '
       '(FontFamily: ${categoryIcon.iconFontFamily.name}; '
       'Color: ${categoryIcon.iconColor});'
-      ' Budget: $categoryBudget'
+      ' Budget: $categoryBudget;'
+      ' IsIncome: $categoryIsIncome'
       ')';
 
   Map<String, dynamic> toMap() {
@@ -34,12 +37,14 @@ class CategoryDbModel {
         'categoryName': categoryName,
         'categoryIcon': categoryIcon.iconId!,
         'categoryBudget': categoryBudget,
+        'categoryIsIncome': categoryIsIncome ? 1 : 0,
       };
     } else {
       return <String, dynamic>{
         'categoryName': categoryName,
         'categoryIcon': categoryIcon.iconId!,
         'categoryBudget': categoryBudget,
+        'categoryIsIncome': categoryIsIncome ? 1 : 0,
       };
     }
   }
@@ -53,6 +58,7 @@ class CategoryDbModel {
       categoryName: map['categoryName'] as String,
       categoryIcon: categoryIcon,
       categoryBudget: map['categoryBudget'] as double,
+      categoryIsIncome: (map['categoryIsIncome'] as int) == 1,
     );
   }
 

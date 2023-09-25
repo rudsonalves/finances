@@ -7,6 +7,7 @@ import '../../../common/constants/themes/colors/custom_color.g.dart';
 import '../../../common/models/category_db_model.dart';
 import '../../../common/models/icons_model.dart';
 import '../../../common/widgets/add_cancel_buttons.dart';
+import '../../../common/widgets/row_of_two_bottons.dart';
 import '../../../locator.dart';
 import '../budget_controller.dart';
 import 'category_text_form_field.dart';
@@ -29,34 +30,37 @@ class AddBudgetDialog extends StatefulWidget {
 }
 
 class _AddBudgetDialogState extends State<AddBudgetDialog> {
-  final categoryController = TextEditingController();
+  final _categoryController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey();
+  bool _categoryIsIncome = false;
 
-  late IconModel iconModel;
-  int? categoryId;
+  late IconModel _iconModel;
+  int? _categoryId;
 
   @override
   void initState() {
     super.initState();
 
     if (widget.editCategory != null) {
-      categoryController.text = widget.editCategory!.categoryName;
-      categoryId = widget.editCategory!.categoryId;
-      iconModel = widget.editCategory!.categoryIcon;
+      _categoryController.text = widget.editCategory!.categoryName;
+      _categoryId = widget.editCategory!.categoryId;
+      _iconModel = widget.editCategory!.categoryIcon;
+      _categoryIsIncome = widget.editCategory!.categoryIsIncome;
     } else {
-      categoryController.text = '';
-      iconModel = IconModel(
+      _categoryController.text = '';
+      _iconModel = IconModel(
         iconName: 'attach money',
         iconFontFamily: IconsFontFamily.MaterialIcons,
         iconColor: 0xFF14A01B,
       );
+      _categoryIsIncome = false;
     }
   }
 
   @override
   void dispose() {
     super.dispose();
-    categoryController.dispose();
+    _categoryController.dispose();
     if (widget.callBack != null) widget.callBack!();
   }
 
@@ -66,14 +70,15 @@ class _AddBudgetDialogState extends State<AddBudgetDialog> {
 
   Future<void> addCallback() async {
     CategoryDbModel newCategory = CategoryDbModel(
-      categoryId: categoryId,
-      categoryIcon: iconModel,
-      categoryName: categoryController.text,
+      categoryId: _categoryId,
+      categoryIcon: _iconModel,
+      categoryName: _categoryController.text,
+      categoryIsIncome: _categoryIsIncome,
     );
     final locale = AppLocalizations.of(context)!;
     final controller = locator.get<BudgetController>();
 
-    if (categoryId != null) {
+    if (_categoryId != null) {
       await controller.updateCategory(newCategory);
       if (!context.mounted) return;
       Navigator.pop(context);
@@ -103,6 +108,12 @@ class _AddBudgetDialogState extends State<AddBudgetDialog> {
     }
   }
 
+  void changeState(bool state) {
+    setState(() {
+      _categoryIsIncome = state;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
@@ -122,7 +133,7 @@ class _AddBudgetDialogState extends State<AddBudgetDialog> {
         Form(
           key: formKey,
           child: CategoryTextFormField(
-            controller: categoryController,
+            controller: _categoryController,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return locale.addCategoryDialogCannotEmpty;
@@ -131,12 +142,26 @@ class _AddBudgetDialogState extends State<AddBudgetDialog> {
             },
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+          child: Text(
+            locale.categoryDialogQuestion,
+            style: AppTextStyles.textStyleSemiBold14.copyWith(
+              color: primary,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        RowOfTwoBottons(
+          income: _categoryIsIncome,
+          changeState: changeState,
+        ),
         SelectIconRow(
-          iconModel: iconModel,
+          iconModel: _iconModel,
           iconCallback: (IconModel newIcon) {
             setState(() {
-              iconModel.iconName = newIcon.iconName;
-              iconModel.iconFontFamily = newIcon.iconFontFamily;
+              _iconModel.iconName = newIcon.iconName;
+              _iconModel.iconFontFamily = newIcon.iconFontFamily;
             });
           },
         ),

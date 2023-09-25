@@ -199,5 +199,16 @@
 		"accountDropdownFormHint": "Create a new account to make transfers",
     "transactionsHelpLock": "To lock/unlock transaction checking",
     "signInPageUserNotFound": "User not found in local data. You can start with an empty database and import your data later if you have a backup.\n\nDo you want to start with an empty database?",
-    "settingsPageDialogTitle": "Change your name"
+    "settingsPageDialogTitle": "Change your name",
+    "passwordWidgetShowPassword": "Show password",
+    "transPageNewCategory": "New Category",
+    "transPageNewSelectDate": "Select Date and Time",
+    "statisticCardNextMonth": "Next Month",
+    "statisticCardPreviusMonth": "Previous Month",
+    "openIconSelectionDialog": "Open Icon Selection Dialog",
+    "openColorSelectionDialog": "Open Color Selection Dialog",
+    "balanceCardLockTrans": "Lock Transactions",
+    "balanceCardUnLockTrans": "Unlock Transactions",
+    "selectionIconRowQuestion": "Icon and color selection",
+    "categoryDialogQuestion": "Primary use:"
 }
