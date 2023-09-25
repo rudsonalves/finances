@@ -91,7 +91,7 @@
     "transPageError": "Désolé, il y a une erreur. Essayez plus tard !",
     "addCancelButtonsAdd": "Ajouter",
     "addCancelButtonsCancel": "Annuler",
-    "rowOfTwoBottonsIncome": "Recette",
+    "rowOfTwoBottonsIncome": "Revenu",
     "rowOfTwoBottonsExpense": "Dépense",
     "widgetAlertDialogClose": "Fermer",
     "categoriesHeaderTitle": "Catégories",
@@ -199,5 +199,16 @@
     "accountDropdownFormHint": "Créer un nouveau compte pour effectuer des transferts",
     "transactionsHelpLock": "Pour verrouiller/déverrouiller la vérification des transactions",
     "signInPageUserNotFound": "Utilisateur introuvable dans les données locales. Vous pouvez commencer avec une base de données vide et importer vos données ultérieurement si vous avez une sauvegarde.\n\nVoulez-vous commencer avec une base de données vide?",
-    "settingsPageDialogTitle": "Changer votre nom"
+    "settingsPageDialogTitle": "Changer votre nom",
+    "passwordWidgetShowPassword": "Afficher le mot de passe",
+    "transPageNewCategory": "Nouvelle Catégorie",
+    "transPageNewSelectDate": "Sélectionner la Date et l'Heure",
+    "statisticCardNextMonth": "Mois Suivant",
+    "statisticCardPreviusMonth": "Mois Précédent",
+    "openIconSelectionDialog": "Ouvrir la boîte de dialogue de sélection d'icône",
+    "openColorSelectionDialog": "Ouvrir la boîte de dialogue de sélection de couleur",
+    "balanceCardLockTrans": "Verrouiller les transactions",
+    "balanceCardUnLockTrans": "Déverrouiller les transactions",
+    "selectionIconRowQuestion": "Sélection d'icône et de couleur",
+    "categoryDialogQuestion": "Utilisation principale:"
 }

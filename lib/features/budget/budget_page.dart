@@ -1,4 +1,3 @@
-import 'package:finances/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -10,6 +9,7 @@ import '../../common/models/category_db_model.dart';
 import '../../common/widgets/app_top_border.dart';
 import '../../common/widgets/custom_app_bar.dart';
 import '../../common/widgets/custom_circular_progress_indicator.dart';
+import '../../locator.dart';
 import '../statistics/statistic_controller.dart';
 import 'budget_controller.dart';
 import 'budget_state.dart';
@@ -262,26 +262,18 @@ class _BudgetPageState extends State<BudgetPage>
                             padding: const EdgeInsets.symmetric(horizontal: 22),
                             child: Row(
                               children: [
-                                Semantics(
-                                  label: locale.budgetPageTotal,
-                                  child: Text(
-                                    '${locale.budgetPageTotal}: ',
-                                    style:
-                                        AppTextStyles.textStyleBold18.copyWith(
-                                      color: primary,
-                                    ),
+                                Text(
+                                  '${locale.budgetPageTotal}: ',
+                                  style: AppTextStyles.textStyleBold18.copyWith(
+                                    color: primary,
                                   ),
                                 ),
-                                Semantics(
-                                  label: _controller.totalBudget.toString(),
-                                  child: Text(
-                                    money.text(_controller.totalBudget),
-                                    style:
-                                        AppTextStyles.textStyleBold18.copyWith(
-                                      color: _controller.totalBudget < 0
-                                          ? customColors.minusred
-                                          : colorScheme.primary,
-                                    ),
+                                Text(
+                                  money.text(_controller.totalBudget),
+                                  style: AppTextStyles.textStyleBold18.copyWith(
+                                    color: _controller.totalBudget < 0
+                                        ? customColors.minusred
+                                        : colorScheme.primary,
                                   ),
                                 ),
                               ],

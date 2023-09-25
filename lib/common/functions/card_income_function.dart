@@ -33,22 +33,16 @@ Widget incomeExpanseShowValue(
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Semantics(
-            label: text,
-            child: Text(
-              text,
-              style: AppTextStyles.textStyleMedium14.copyWith(
-                color: colorScheme.onPrimary,
-              ),
+          Text(
+            text,
+            style: AppTextStyles.textStyleMedium14.copyWith(
+              color: colorScheme.onPrimary,
             ),
           ),
-          Semantics(
-            label: value.toString(),
-            child: Text(
-              money.text(value),
-              style: AppTextStyles.textStyleSemiBold16.copyWith(
-                color: colorScheme.onPrimary,
-              ),
+          Text(
+            money.text(value),
+            style: AppTextStyles.textStyleSemiBold16.copyWith(
+              color: colorScheme.onPrimary,
             ),
           ),
         ],

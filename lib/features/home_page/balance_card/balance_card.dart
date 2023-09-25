@@ -78,65 +78,58 @@ class _BalanceCardState extends State<BalanceCard> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Semantics(
-                                label: currentAccount.accountName,
-                                child: PopupMenuButton<int>(
-                                  tooltip: locale.cardBalanceMenuTip,
-                                  child: Row(
-                                    children: [
-                                      currentAccount.accountIcon.iconWidget(
-                                        size: 20,
+                              PopupMenuButton<int>(
+                                tooltip: locale.cardBalanceMenuTip,
+                                child: Row(
+                                  children: [
+                                    currentAccount.accountIcon.iconWidget(
+                                      size: 20,
+                                      color: customColors.sourceLightyellow,
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      currentAccount.accountName,
+                                      maxLines: 1,
+                                      style: AppTextStyles.textStyleSemiBold14
+                                          .copyWith(
                                         color: customColors.sourceLightyellow,
                                       ),
-                                      const SizedBox(width: 6),
-                                      Text(
-                                        currentAccount.accountName,
-                                        maxLines: 1,
-                                        style: AppTextStyles.textStyleSemiBold14
-                                            .copyWith(
-                                          color: customColors.sourceLightyellow,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  onSelected: (accountId) {
-                                    final account = widget
-                                        .controller.accountsMap[accountId]!;
-                                    widget.balanceCallBack(account);
-                                  },
-                                  itemBuilder: (BuildContext context) {
-                                    return widget.controller.accountsList
-                                        .map((account) {
-                                      return PopupMenuItem(
-                                        value: account.accountId,
-                                        child: Row(
-                                          children: [
-                                            account.accountIcon
-                                                .iconWidget(size: 16),
-                                            const SizedBox(width: 8),
-                                            Text(account.accountName),
-                                          ],
-                                        ),
-                                      );
-                                    }).toList();
-                                  },
+                                    ),
+                                  ],
                                 ),
+                                onSelected: (accountId) {
+                                  final account =
+                                      widget.controller.accountsMap[accountId]!;
+                                  widget.balanceCallBack(account);
+                                },
+                                itemBuilder: (BuildContext context) {
+                                  return widget.controller.accountsList
+                                      .map((account) {
+                                    return PopupMenuItem(
+                                      value: account.accountId,
+                                      child: Row(
+                                        children: [
+                                          account.accountIcon
+                                              .iconWidget(size: 16),
+                                          const SizedBox(width: 8),
+                                          Text(account.accountName),
+                                        ],
+                                      ),
+                                    );
+                                  }).toList();
+                                },
                               ),
                               Row(
                                 children: [
-                                  Semantics(
-                                    label:
-                                        currentBalance.balanceClose.toString(),
-                                    child: Text(
-                                      money.text(currentBalance.balanceClose),
-                                      textAlign: TextAlign.left,
-                                      style: AppTextStyles.textStyleBold22
-                                          .copyWith(
-                                        color:
-                                            currentBalance.balanceClose < -0.005
-                                                ? customColors.sourceMinusred
-                                                : colorScheme.onPrimary,
-                                      ),
+                                  Text(
+                                    money.text(currentBalance.balanceClose),
+                                    textAlign: TextAlign.left,
+                                    style:
+                                        AppTextStyles.textStyleBold22.copyWith(
+                                      color:
+                                          currentBalance.balanceClose < -0.005
+                                              ? customColors.sourceMinusred
+                                              : colorScheme.onPrimary,
                                     ),
                                   ),
                                   const Spacer(),
@@ -148,6 +141,9 @@ class _BalanceCardState extends State<BalanceCard> {
                         Tooltip(
                           message: locale.balanceCardSwitch,
                           child: IconButton(
+                            tooltip: widget.controller.transStatusCheck
+                                ? locale.balanceCardLockTrans
+                                : locale.balanceCardUnLockTrans,
                             icon: Icon(
                               widget.controller.transStatusCheck
                                   ? Icons.lock_open
@@ -169,18 +165,22 @@ class _BalanceCardState extends State<BalanceCard> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              ExtendedDate date = widget.controller.balanceDate;
-                              final newDate = date.previousMonth();
-                              widget.controller.setBalanceDate(newDate);
-                            },
-                            child: Icon(
-                              Icons.arrow_back_ios,
-                              color: colorScheme.onPrimary,
-                              size: 18,
+                          child: Tooltip(
+                            message: locale.statisticCardPreviusMonth,
+                            child: InkWell(
+                              onTap: () {
+                                ExtendedDate date =
+                                    widget.controller.balanceDate;
+                                final newDate = date.previousMonth();
+                                widget.controller.setBalanceDate(newDate);
+                              },
+                              child: Icon(
+                                Icons.arrow_back_ios,
+                                color: colorScheme.onPrimary,
+                                size: 18,
+                              ),
+                              // ),
                             ),
-                            // ),
                           ),
                         ),
                         Text(
@@ -190,16 +190,20 @@ class _BalanceCardState extends State<BalanceCard> {
                           ),
                         ),
                         Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              ExtendedDate date = widget.controller.balanceDate;
-                              final newDate = date.nextMonth();
-                              widget.controller.setBalanceDate(newDate);
-                            },
-                            child: Icon(
-                              Icons.arrow_forward_ios,
-                              color: colorScheme.onPrimary,
-                              size: 18,
+                          child: Tooltip(
+                            message: locale.statisticCardNextMonth,
+                            child: InkWell(
+                              onTap: () {
+                                ExtendedDate date =
+                                    widget.controller.balanceDate;
+                                final newDate = date.nextMonth();
+                                widget.controller.setBalanceDate(newDate);
+                              },
+                              child: Icon(
+                                Icons.arrow_forward_ios,
+                                color: colorScheme.onPrimary,
+                                size: 18,
+                              ),
                             ),
                           ),
                         ),

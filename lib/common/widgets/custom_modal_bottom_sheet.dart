@@ -17,26 +17,20 @@ Future<dynamic> customModelBottomSheet(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Semantics(
-              label: content,
-              child: Text(
-                content,
-                textAlign: TextAlign.center,
-                style: AppTextStyles.textStyleSemiBold16.copyWith(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+            Text(
+              content,
+              textAlign: TextAlign.center,
+              style: AppTextStyles.textStyleSemiBold16.copyWith(
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
             buttonText,
             if (secondMessage != null) const SizedBox(height: 16),
             if (secondMessage != null)
-              Semantics(
-                label: secondMessage,
-                child: Text(
-                  secondMessage,
-                  style: AppTextStyles.textStyleSemiBold16.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+              Text(
+                secondMessage,
+                style: AppTextStyles.textStyleSemiBold16.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
             if (secondWidget != null) secondWidget,

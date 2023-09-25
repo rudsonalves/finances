@@ -91,8 +91,8 @@
     "transPageError": "Entschuldigung, ein Fehler ist aufgetreten. Bitte versuchen Sie es später noch einmal!",
     "addCancelButtonsAdd": "Hinzufügen",
     "addCancelButtonsCancel": "Abbrechen",
-    "rowOfTwoBottonsIncome": "Einkommen",
-    "rowOfTwoBottonsExpense": "Ausgabe",
+    "rowOfTwoBottonsIncome": "Einnahmen",
+    "rowOfTwoBottonsExpense": "Ausgaben",
     "widgetAlertDialogClose": "Schließen",
     "categoriesHeaderTitle": "Kategorien",
     "categoriesHeaderSlide": "Gleiten",
@@ -199,5 +199,16 @@
     "accountDropdownFormHint": "Neues Konto erstellen, um Überweisungen zu tätigen",
     "transactionsHelpLock": "Zum Sperren/Freigeben der Transaktionsüberprüfung",
     "signInPageUserNotFound": "Benutzer nicht in den lokalen Daten gefunden. Sie können mit einer leeren Datenbank beginnen und Ihre Daten später importieren, wenn Sie eine Sicherung haben.\n\nMöchten Sie mit einer leeren Datenbank beginnen?",
-    "settingsPageDialogTitle": "Ändere deinen Namen"
+    "settingsPageDialogTitle": "Ändere deinen Namen",
+    "passwordWidgetShowPassword": "Passwort anzeigen",
+    "transPageNewCategory": "Neue Kategorie",
+    "transPageNewSelectDate": "Datum und Uhrzeit auswählen",
+    "statisticCardNextMonth": "Nächster Monat",
+    "statisticCardPreviusMonth": "Vorheriger Monat",
+    "openIconSelectionDialog": "Symbolauswahl öffnen Dialog",
+    "openColorSelectionDialog": "Farbauswahl öffnen Dialog",
+    "balanceCardLockTrans": "Transaktionen sperren",
+    "balanceCardUnLockTrans": "Transaktionen freischalten",
+    "selectionIconRowQuestion": "Symbol- und Farbauswahl",
+    "categoryDialogQuestion": "Haupteinsatz:"
 }

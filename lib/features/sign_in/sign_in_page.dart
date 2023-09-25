@@ -70,25 +70,19 @@ class _SignInPageState extends State<SignInPage> {
               buttonText: ButtonBar(
                 alignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Semantics(
-                    label: locale.genericYes,
-                    child: OutlinedButton(
-                      onPressed: () async {
-                        UserModel user = UserModel(
-                          email: _emailController.text,
-                          password: _pwdController.text,
-                        );
-                        await _controller.createLocalUser(user);
-                      },
-                      child: Text(locale.genericYes),
-                    ),
+                  OutlinedButton(
+                    onPressed: () async {
+                      UserModel user = UserModel(
+                        email: _emailController.text,
+                        password: _pwdController.text,
+                      );
+                      await _controller.createLocalUser(user);
+                    },
+                    child: Text(locale.genericYes),
                   ),
-                  Semantics(
-                    label: locale.signInPageTryAgain,
-                    child: OutlinedButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: Text(locale.signInPageTryAgain),
-                    ),
+                  OutlinedButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text(locale.signInPageTryAgain),
                   ),
                 ],
               ),
@@ -129,26 +123,17 @@ class _SignInPageState extends State<SignInPage> {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Semantics(
-              label: locale.signInPageResetPassword,
-              child: Text(locale.signInPageResetPassword),
-            ),
+            title: Text(locale.signInPageResetPassword),
             icon: Icon(
               Icons.lock_reset,
               color: customColors.sourceLightyellow,
               size: 64,
             ),
-            content: Semantics(
-              label: message,
-              child: Text(message),
-            ),
+            content: Text(message),
             actions: [
-              Semantics(
-                label: locale.genericClose,
-                child: TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text(locale.genericClose),
-                ),
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text(locale.genericClose),
               ),
             ],
           ),
@@ -159,28 +144,19 @@ class _SignInPageState extends State<SignInPage> {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Semantics(
-              label: locale.signInPageResetPassword,
-              child: Text(locale.signInPageResetPassword),
-            ),
+            title: Text(locale.signInPageResetPassword),
             icon: Icon(
               Icons.error,
               color: customColors.sourceMinusred,
               size: 64,
             ),
-            content: Semantics(
-              label: locale.signInPageProblemRequest,
-              child: Text(
-                locale.signInPageProblemRequest,
-              ),
+            content: Text(
+              locale.signInPageProblemRequest,
             ),
             actions: [
-              Semantics(
-                label: locale.genericClose,
-                child: TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text(locale.genericClose),
-                ),
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text(locale.genericClose),
               ),
             ],
           ),
@@ -197,8 +173,8 @@ class _SignInPageState extends State<SignInPage> {
     return Scaffold(
       body: ListView(
         children: [
-          LargeBoldText(locale.signInPageMsgPart0),
-          LargeBoldText(locale.signInPageMsgPart1),
+          LargeBoldText('${locale.signInPageMsgPart0} '
+              '${locale.signInPageMsgPart1}'),
           Image.asset('assets/images/signin.png'),
           Form(
             key: _formKey,

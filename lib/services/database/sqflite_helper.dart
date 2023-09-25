@@ -76,6 +76,7 @@ class SqfliteHelper implements DatabaseHelper {
   static const categoryName = 'categoryName';
   static const categoryIcon = 'categoryIcon';
   static const categoryBudget = 'categoryBudget';
+  static const categoryIsIncome = 'categoryIsIncome';
 
   static const transactionsTable = 'transactonsTable';
   static const transactionsDateIndex = 'idxTransactionsDate';
@@ -102,7 +103,7 @@ class SqfliteHelper implements DatabaseHelper {
    in database increment this value and add a new update script in
    _migrationScripts Map.
   */
-  static const _databaseSchemeVersion = 1004;
+  static const _databaseSchemeVersion = 1005;
 
   // This Map contains the database migration scripts. The last index of this
   // Map must be equal to the current version of the database.
@@ -122,6 +123,9 @@ class SqfliteHelper implements DatabaseHelper {
     ],
     1004: [
       'ALTER TABLE $usersTable ADD COLUMN $userCategoryList TEXT DEFAULT "[]"',
+    ],
+    1005: [
+      'ALTER TABLE $categoriesTable ADD COLUMN $categoryIsIncome INTEGER DEFAULT 0',
     ],
   };
 
@@ -311,6 +315,7 @@ class SqfliteHelper implements DatabaseHelper {
       ' $categoryName TEXT UNIQUE NOT NULL,'
       ' $categoryIcon INTEGER NOT NULL,'
       ' $categoryBudget REAL DEFAULT 0,'
+      ' $categoryIsIncome INTEGER DEFAULT 0,'
       ' FOREIGN KEY ($categoryIcon)'
       '  REFERENCES $iconsTable ($iconId)'
       '  ON DELETE CASCADE'

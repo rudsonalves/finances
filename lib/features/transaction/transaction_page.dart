@@ -1,6 +1,8 @@
+import 'package:finances/common/current_models/current_account.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../common/constants/themes/colors/custom_color.g.dart';
 import '../../common/models/account_db_model.dart';
 import '../../common/widgets/account_dropdown_form_field.dart';
 import '../../locator.dart';
@@ -184,6 +186,10 @@ class _TransactionPageState extends State<TransactionPage> {
     final locale = AppLocalizations.of(context)!;
     final transValidator = TransactionValidator(locale);
     final homePageController = locator.get<HomePageController>();
+    final customColors = Theme.of(context).extension<CustomColors>()!;
+    final primary = Theme.of(context).colorScheme.primary;
+    final currentAccount = locator.get<CurrentAccount>();
+
     if (widget.transaction != null) {
       _categoryId = widget.transaction!.transCategoryId;
     }
@@ -236,6 +242,15 @@ class _TransactionPageState extends State<TransactionPage> {
                           key: _formKey,
                           child: Column(
                             children: [
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 8),
+                                child: Text(
+                                  currentAccount.accountName,
+                                  style: AppTextStyles.textStyleBold18.copyWith(
+                                    color: primary,
+                                  ),
+                                ),
+                              ),
                               RowOfTwoBottons(
                                 income: _income,
                                 changeState: changeState,
@@ -244,12 +259,20 @@ class _TransactionPageState extends State<TransactionPage> {
                               // Amount
                               BasicTextFormField(
                                 labelText: locale.transPageAmount,
+                                style: AppTextStyles.textStyleBold16.copyWith(
+                                  color: !_income
+                                      ? customColors.minusred
+                                      : customColors.lowgreen,
+                                ),
                                 validator: transValidator.amountValidator,
                                 controller: _amountController,
                                 keyboardType: TextInputType.number,
                                 focusNode: _focusNodeBasicTextFormField,
                                 suffixIcon: ExcludeSemantics(
                                   child: IconButton(
+                                    tooltip: _income
+                                        ? locale.rowOfTwoBottonsIncome
+                                        : locale.rowOfTwoBottonsExpense,
                                     autofocus: false,
                                     icon: _income
                                         ? const Icon(Icons.thumb_up)
@@ -294,15 +317,21 @@ class _TransactionPageState extends State<TransactionPage> {
                                 controller: _categoryController,
                                 validator: transValidator.categoryValidator,
                                 suffixIcon: IconButton(
+                                  tooltip: locale.transPageNewCategory,
                                   onPressed: addCategoryAction,
                                   icon: const Icon(Icons.add),
                                 ),
                                 onChanged: (categoryName) {
                                   if (categoryName != null) {
-                                    setState(() {
-                                      _categoryId = _categoryRepository
-                                          .getIdByName(categoryName);
-                                    });
+                                    final category = locator
+                                        .get<CategoryRepository>()
+                                        .categoriesMap[categoryName];
+                                    if (category != null) {
+                                      setState(() {
+                                        _categoryId = category.categoryId!;
+                                        _income = category.categoryIsIncome;
+                                      });
+                                    }
                                   }
                                 },
                               ),
@@ -313,9 +342,12 @@ class _TransactionPageState extends State<TransactionPage> {
                                   controller: _accountController,
                                 ),
                               // Date x Time
-                              DateTimePickerForm(
-                                controller: _dateController,
-                                labelText: locale.transPageDate,
+                              Semantics(
+                                label: locale.transPageNewSelectDate,
+                                child: DateTimePickerForm(
+                                  controller: _dateController,
+                                  labelText: locale.transPageDate,
+                                ),
                               ),
                               const SizedBox(height: 20),
                               AddCancelButtons(

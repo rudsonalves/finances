@@ -25,34 +25,40 @@ class _RowOfTwoBottonsState extends State<RowOfTwoBottons> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
-          child: TextButton(
+          child: TextButton.icon(
+            icon: widget.income
+                ? const Icon(Icons.task_alt)
+                : const Icon(Icons.radio_button_unchecked),
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(
                 widget.income
                     ? colorScheme.secondaryContainer
-                    : colorScheme.onInverseSurface,
+                    : Colors.transparent,
               ),
             ),
             onPressed: () {
               widget.changeState(true);
             },
-            child: Text(locale.rowOfTwoBottonsIncome),
+            label: Text(locale.rowOfTwoBottonsIncome),
           ),
         ),
         const SizedBox(width: 16),
         Expanded(
-          child: TextButton(
+          child: TextButton.icon(
+            icon: !widget.income
+                ? const Icon(Icons.task_alt)
+                : const Icon(Icons.radio_button_unchecked),
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(
                 widget.income
-                    ? colorScheme.onInverseSurface
+                    ? Colors.transparent
                     : colorScheme.secondaryContainer,
               ),
             ),
             onPressed: () {
               widget.changeState(false);
             },
-            child: Text(locale.rowOfTwoBottonsExpense),
+            label: Text(locale.rowOfTwoBottonsExpense),
           ),
         ),
       ],

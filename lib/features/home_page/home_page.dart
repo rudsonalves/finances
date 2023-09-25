@@ -76,13 +76,10 @@ class _HomePageState extends State<HomePage>
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Semantics(
-              label: greetingText(),
-              child: Text(
-                greetingText(),
-                style: AppTextStyles.textStyle14.copyWith(
-                  color: colorScheme.onPrimary,
-                ),
+            Text(
+              greetingText(),
+              style: AppTextStyles.textStyle14.copyWith(
+                color: colorScheme.onPrimary,
               ),
             ),
             AnimatedBuilder(
@@ -125,13 +122,10 @@ class _HomePageState extends State<HomePage>
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Semantics(
-                          label: locale.homePageTransHistory,
-                          child: Text(
-                            locale.homePageTransHistory,
-                            style: AppTextStyles.textStyleSemiBold18.copyWith(
-                              color: colorScheme.primary,
-                            ),
+                        Text(
+                          locale.homePageTransHistory,
+                          style: AppTextStyles.textStyleSemiBold18.copyWith(
+                            color: colorScheme.primary,
                           ),
                         ),
                       ],
@@ -185,17 +179,14 @@ class _HomePageState extends State<HomePage>
                                     top: 4,
                                     bottom: 8,
                                   ),
-                                  child: Semantics(
-                                    label: locale.homePageSeeMore,
-                                    child: ElevatedButton(
-                                      onPressed: _controller.lastDate != null
-                                          ? loadMoreTransactions
-                                          : null,
-                                      style: ElevatedButton.styleFrom(
-                                        elevation: 5,
-                                      ),
-                                      child: Text(locale.homePageSeeMore),
+                                  child: ElevatedButton(
+                                    onPressed: _controller.lastDate != null
+                                        ? loadMoreTransactions
+                                        : null,
+                                    style: ElevatedButton.styleFrom(
+                                      elevation: 5,
                                     ),
+                                    child: Text(locale.homePageSeeMore),
                                   ),
                                 );
                               }
@@ -205,11 +196,8 @@ class _HomePageState extends State<HomePage>
 
                         // State Error...
                         return Center(
-                          child: Semantics(
-                            label: locale.homePageError,
-                            child: Text(
-                              locale.homePageError,
-                            ),
+                          child: Text(
+                            locale.homePageError,
                           ),
                         );
                       },

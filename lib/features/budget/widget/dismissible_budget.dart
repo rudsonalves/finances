@@ -87,122 +87,119 @@ class _DismissibleBudgetState extends State<DismissibleBudget> {
 
     return Padding(
       padding: const EdgeInsets.all(4),
-      child: Semantics(
-        label: '${category.categoryName} ${category.categoryBudget}',
-        child: Dismissible(
-          key: UniqueKey(),
-          background: baseDismissibleContainer(
-            context,
-            alignment: Alignment.centerLeft,
-            color: customColors.lightgreenContainer!,
-            icon: Icons.edit,
-            label: locale.dismissibleCategoryEdit,
-          ),
-          secondaryBackground: baseDismissibleContainer(
-            context,
-            alignment: Alignment.centerRight,
-            color: colorScheme.errorContainer,
-            icon: Icons.delete,
-            label: locale.dismissibleCategoryDelete,
-          ),
-          child: Card(
-            elevation: .5,
-            color: colorScheme.onPrimary,
-            margin: EdgeInsets.zero,
-            child: ListTile(
-              leading: category.categoryIcon.iconWidget(size: 32),
-              title: Text(
-                category.categoryName,
-              ),
-              trailing: Text(
-                money.text(category.categoryBudget),
-                style: AppTextStyles.textStyleBold18.copyWith(
-                  color: category.categoryBudget < 0
-                      ? customColors.minusred
-                      : colorScheme.primary,
-                ),
-              ),
-              onTap: () {
-                if (widget.budgetEdit != null) {
-                  widget.budgetEdit!(category);
-                }
-              },
+      child: Dismissible(
+        key: UniqueKey(),
+        background: baseDismissibleContainer(
+          context,
+          alignment: Alignment.centerLeft,
+          color: customColors.lightgreenContainer!,
+          icon: Icons.edit,
+          label: locale.dismissibleCategoryEdit,
+        ),
+        secondaryBackground: baseDismissibleContainer(
+          context,
+          alignment: Alignment.centerRight,
+          color: colorScheme.errorContainer,
+          icon: Icons.delete,
+          label: locale.dismissibleCategoryDelete,
+        ),
+        child: Card(
+          elevation: .5,
+          color: colorScheme.onPrimary,
+          margin: EdgeInsets.zero,
+          child: ListTile(
+            leading: category.categoryIcon.iconWidget(size: 32),
+            title: Text(
+              category.categoryName,
             ),
+            trailing: Text(
+              money.text(category.categoryBudget),
+              style: AppTextStyles.textStyleBold18.copyWith(
+                color: category.categoryBudget < 0
+                    ? customColors.minusred
+                    : colorScheme.primary,
+              ),
+            ),
+            onTap: () {
+              if (widget.budgetEdit != null) {
+                widget.budgetEdit!(category);
+              }
+            },
           ),
-          confirmDismiss: (direction) async {
-            if (direction == DismissDirection.startToEnd) {
-              // Edit direction
+        ),
+        confirmDismiss: (direction) async {
+          if (direction == DismissDirection.startToEnd) {
+            // Edit direction
+            await showDialog(
+              context: context,
+              builder: (context) => AddBudgetDialog(
+                addCategory: false,
+                editCategory: category,
+                callBack: widget.callBack,
+              ),
+            );
+            return false;
+          }
+          if (direction == DismissDirection.endToStart) {
+            // Delete direction
+            if (category.categoryId == 1) {
               await showDialog(
                 context: context,
-                builder: (context) => AddBudgetDialog(
-                  addCategory: false,
-                  editCategory: category,
-                  callBack: widget.callBack,
+                builder: (context) => AlertDialog(
+                  title: Text(locale.dismissibleCategoryReservedCategory),
+                  content: MarkdownRichText.richText(
+                    locale.dismissibleCategoryCategoryIsReserved(
+                      category.categoryName,
+                    ),
+                    normalStyle: AppTextStyles.textStyle14,
+                    boldStyle: AppTextStyles.textStyleBold14,
+                    color: colorScheme.onSecondaryContainer,
+                  ),
+                  actions: [
+                    TextButton(
+                      child: Text(locale.genericClose),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ],
                 ),
               );
               return false;
             }
-            if (direction == DismissDirection.endToStart) {
-              // Delete direction
-              if (category.categoryId == 1) {
-                await showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: Text(locale.dismissibleCategoryReservedCategory),
-                    content: MarkdownRichText.richText(
-                      locale.dismissibleCategoryCategoryIsReserved(
-                        category.categoryName,
-                      ),
-                      normalStyle: AppTextStyles.textStyle14,
-                      boldStyle: AppTextStyles.textStyleBold14,
-                      color: colorScheme.onSecondaryContainer,
-                    ),
-                    actions: [
-                      TextButton(
-                        child: Text(locale.genericClose),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                    ],
-                  ),
-                );
-                return false;
-              }
 
-              final int categoryCount = await locator
-                  .get<DatabaseHelper>()
-                  .countTransactionForCategoryId(category.categoryId!);
+            final int categoryCount = await locator
+                .get<DatabaseHelper>()
+                .countTransactionForCategoryId(category.categoryId!);
 
-              if (categoryCount > 0) {
-                if (!mounted) return false;
-                await functionAlertDialog(
-                  context,
-                  title: locale.genericAttention,
-                  content: locale.budgetPageDeleteAlert(
-                    categoryCount,
-                    category.categoryName,
-                  ),
-                  icon: Icons.warning,
-                );
-
-                return false;
-              }
-
+            if (categoryCount > 0) {
               if (!mounted) return false;
-              bool? result = await removeCategoryDialog(
+              await functionAlertDialog(
                 context,
-                category.categoryName,
+                title: locale.genericAttention,
+                content: locale.budgetPageDeleteAlert(
+                  categoryCount,
+                  category.categoryName,
+                ),
+                icon: Icons.warning,
               );
 
-              if (result == true) {
-                await widget.controller.removeCategory(category);
-                if (widget.callBack != null) widget.callBack!();
-                return true;
-              }
               return false;
             }
+
+            if (!mounted) return false;
+            bool? result = await removeCategoryDialog(
+              context,
+              category.categoryName,
+            );
+
+            if (result == true) {
+              await widget.controller.removeCategory(category);
+              if (widget.callBack != null) widget.callBack!();
+              return true;
+            }
             return false;
-          },
-        ),
+          }
+          return false;
+        },
       ),
     );
   }
