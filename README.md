@@ -273,17 +273,48 @@ Com esses gatilhos em vigor, qualquer tentativa de inserir um valor inválido em
 
 Some bugs were noticed and need to be fixed:
 
-- *20230923.1* Bug: negativo na página de Orçamento/categorias;
 - *20230923.3* Bug: Seleção de idioma não está operando corretamente no boot de novos usuários;
-- *20230923.5* Bug: Na adição de orçamento o sinal (-) funciona com doble-click. Trocar por CheckButton;
 - *20230923.7* Bug: Adicionar um tutorial apresentando o app no primeiro boot;
 - *20230925.1* Bug: agendar um refresh da página de estatísticas quando uma nova transação ou conta for alterada/adicionada.
-These bug fixes and implementations will help improve the user experience and make the app more complete and stable.
 
 
 # Commits:
 
-## 2023/09/25 - version 1.0.0+10:
+## 2023/09/25 - version 1.0.0+11
+
+In this commit, several changes have been made to the code to improve budget and category management within the app. These changes aim to simplify and optimize the budget update process, as well as enhance code organization. Key changes include the use of the updateCategoryBudget method in the CategoryRepository to update budget changes, renaming of classes and files related to budgets and categories, and some modifications to translations. The detailed changes can be found below.
+
+ * lib/features/budget/budget_controller.dart:
+   - Using the `updateCategoryBudget(category)` method in the `CategoryRepository` to update budget changes.
+
+ * lib/features/budget/budget_page.dart:
+   - The `budgetEdit` method has been altered to manage the budget appropriately. Among the changes, the removal of `SimpleDialog` in favor of a dedicated class can be highlighted.
+   - Renamed `DismissibleBudget` to `DismissibleCategory`.
+
+ * lib/features/budget/widget/add_budget_dialog.dart:
+   - Renamed to `add_category_dialog.dart`.
+
+ * lib/features/budget/widget/dismissible_budget.dart:
+   - Renamed to `dismissible_category.dart`.
+
+ * lib/features/home_page_view/home_page_view.dart:
+   - Renamed `AddBudgetDialog` to `AddCategoryDialog`.
+
+ * lib/features/transaction/transaction_page.dart:
+   - Renamed `AddBudgetDialog` to `AddCategoryDialog`.
+
+ * lib/l10n/app_?.arb:
+   - Some changes to translations.
+
+ * lib/repositories/category/category_repository.dart:
+   - Added the method `Future<void> updateCategoryBudget(CategoryDbModel category)`.
+
+ * lib/services/database/database_helper.dart: * 
+   - Added the method `Future<void> updateCategoryBudget(int id, double budget)`.
+
+Please let me know if you need any further assistance or modifications.
+
+## 2023/09/24 - version 1.0.0+10:
 
 In this commit, changes were made to improve code usability, accessibility, and efficiency. See the details below:
 

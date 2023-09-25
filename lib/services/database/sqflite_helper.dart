@@ -1142,6 +1142,21 @@ class SqfliteHelper implements DatabaseHelper {
   }
 
   @override
+  Future<void> updateCategoryBudget(int id, double budget) async {
+    if (!_db.isOpen) await _openDatabase();
+    try {
+      await _db.update(
+        categoriesTable,
+        {categoryBudget: budget},
+        where: '$categoryId = ?',
+        whereArgs: [id],
+      );
+    } catch (err) {
+      log('Error: $err');
+    }
+  }
+
+  @override
   Future<void> deleteCategoryId(int id) async {
     if (!_db.isOpen) await _openDatabase();
     try {
