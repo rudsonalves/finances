@@ -283,6 +283,63 @@ These bug fixes and implementations will help improve the user experience and ma
 
 # Commits:
 
+## 2023/09/25 - version 1.0.0+10:
+
+In this commit, changes were made to improve code usability, accessibility, and efficiency. See the details below:
+
+ * lib/common/constants/themes/colors/custom_color.dart:
+   - The `CustomColors` class was created to simplify the addition of custom colors.
+ * lib/common/functions/base_dismissible_container.dart:
+ * lib/common/widgets/custom_button_navigator_bar.dart:
+   - Updated the gray tone for disabled text to improve contrast.
+ * lib/common/functions/card_income_function.dart:
+ * lib/common/widgets/basic_text_form_field.dart:
+ * lib/common/widgets/custom_bottom_app_bar_item.dart:
+ * lib/common/widgets/custom_floating_action_button.dart:
+ * lib/common/widgets/custom_modal_bottom_sheet.dart:
+ * lib/common/widgets/custom_text_button.dart:
+ * lib/common/widgets/large_bold_text.dart:
+ * lib/common/widgets/password_text_form_field.dart:
+ * lib/common/widgets/primary_button.dart:
+ * lib/common/widgets/secondary_button.dart:
+ * lib/features/account/widgets/dismissible_account_card.dart:
+ * lib/features/budget/budget_page.dart:
+ * lib/features/budget/widget/dismissible_budget.dart:
+ * lib/features/home_page/balance_card/balance_card.dart:
+ * lib/features/home_page/home_page.dart:
+ * lib/features/home_page/widgets/transaction_dismissible_tile.dart:
+ * lib/features/onboarding/onboarding_page.dart:
+ * lib/features/sign_in/sign_in_page.dart:
+ * lib/features/splash/splash_page.dart:
+ * lib/features/statistics/widgets/list_tile_statistic.dart:
+   - Removed calls to the Semantics widget. These widgets already have accessibility by default, so Semantics are not necessary here.
+ * lib/common/models/category_db_model.dart:
+   - Added support for the new attribute `categoryIsIncome`.
+ * lib/common/widgets/color_button.dart:
+   - Some simplifications were made in this widget.
+ * lib/common/widgets/row_of_two_buttons.dart:
+   - Replaced TextButtons with TextButton.icon to emphasize selection;
+   - Used the color `Colors.transparent` instead of `colorScheme.onInverseSurface`.
+ * lib/features/budget/widget/add_budget_dialog.dart:
+   - Added support for the new attribute `categoryIsIncome`.
+ * lib/features/budget/widget/select_icon_row.dart:
+   - Adjustments to the `SelectIconRow` class.
+ * lib/features/sign_up/sign_up_page.dart:
+   - Layout adjustments for text presentation.
+ * lib/features/statistics/statistic_card/statistic_card.dart:
+   - Added a Tooltip to improve app accessibility;
+   - Updated the gray tone for disabled text to improve contrast.
+ * lib/features/transaction/transaction_page.dart:
+   - Added a Tooltip to improve app accessibility;
+   - Improved dialog presentation;
+   - Added support for the `category.categoryIsIncome` attribute;
+   - Removed unnecessary Semantics.
+ * lib/l10n/app_?.arb:
+   - Added 11 new translations and some corrections.
+ * lib/services/database/sqflite_helper.dart:
+   - Advanced the database scheme to Version 1.0.05;
+   - Added the `categoryIsIncome` column to the `categoriesTable` as `INTEGER DEFAULT 0`.
+
 ## 2023/09/22 - version 1.0.0+9:
 
 Version 1.0.0+9 brings various accessibility improvements and minor adjustments to the app. It includes redesigning the app icon, adding documentation for Google Play, and enhancing the accessibility of many app elements. These enhancements make the app more user-friendly and accessible, particularly for users with disabilities or those who rely on assistive technologies. Additionally, new translations have been added to improve the app's language support, and the Lazy Singleton for the BudgetController object has been registered in the app's locator. These updates aim to enhance the overall user experience and accessibility of the application.
