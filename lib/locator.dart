@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:finances/common/models/user_name_notifier.dart';
 import 'package:get_it/get_it.dart';
 
 import './common/extensions/app_scale.dart';
@@ -17,6 +16,8 @@ import './common/current_models/current_theme.dart';
 import 'common/current_models/current_account.dart';
 import './services/authentication/auth_service.dart';
 import './common/current_models/current_balance.dart';
+import 'common/models/app_locale.dart';
+import 'common/models/user_name_notifier.dart';
 import 'features/account/account_controller.dart';
 import 'features/budget/budget_controller.dart';
 import 'features/statistics/statistic_card/statistic_card_controller.dart';
@@ -172,6 +173,10 @@ void setupDependencies() {
 
     locator.registerLazySingleton<UserNameNotifier>(
       () => UserNameNotifier(),
+    );
+
+    locator.registerLazySingleton<AppLocale>(
+      () => AppLocale(),
     );
   } catch (err) {
     log('Error: $err');

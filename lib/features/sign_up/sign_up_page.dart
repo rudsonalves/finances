@@ -38,6 +38,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
     _controller.addListener(
       () {
+        // SignUp State Loading
         if (_controller.state is SignUpStateLoading) {
           showDialog(
             context: context,
@@ -47,12 +48,14 @@ class _SignUpPageState extends State<SignUpPage> {
           );
         }
 
+        // SignUp State Success
         if (_controller.state is SignUpStateSuccess) {
           Navigator.pop(context);
           Navigator.of(context)
               .pushNamedAndRemoveUntil(AppRoute.home.name, (route) => false);
         }
 
+        // SignUp State Error
         if (_controller.state is SignUpStateError) {
           final SignUpStateError error = _controller.state as SignUpStateError;
           Navigator.pop(context);
@@ -80,6 +83,8 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Future<void> signInButton() async {
+    final locale = AppLocalizations.of(context)!;
+
     final valit =
         _formKey.currentState != null && _formKey.currentState!.validate();
 
@@ -89,7 +94,7 @@ class _SignUpPageState extends State<SignUpPage> {
         email: _emailController.text,
         password: _pwdController.text,
       );
-      await _controller.doSignUp(user);
+      await _controller.doSignUp(user, locale);
     }
   }
 

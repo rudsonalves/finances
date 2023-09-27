@@ -210,5 +210,8 @@
     "balanceCardLockTrans": "Lock Transactions",
     "balanceCardUnLockTrans": "Unlock Transactions",
     "selectionIconRowQuestion": "Icon and color selection",
-    "categoryDialogQuestion": "Primary use:"
+    "categoryDialogQuestion": "Primary use:",
+    "mainAccounName": "Main Account",
+    "categoryNameTransfers": "Transfers",
+    "categoryNameInputs": "Inputs"
 }

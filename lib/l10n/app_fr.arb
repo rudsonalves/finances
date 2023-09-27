@@ -210,5 +210,8 @@
     "balanceCardLockTrans": "Verrouiller les transactions",
     "balanceCardUnLockTrans": "Déverrouiller les transactions",
     "selectionIconRowQuestion": "Sélection d'icône et de couleur",
-    "categoryDialogQuestion": "Utilisation principale:"
+    "categoryDialogQuestion": "Utilisation principale:",
+    "mainAccounName": "Compte Principal",
+    "categoryNameTransfers": "Transferts",
+    "categoryNameInputs": "Entrées"
 }

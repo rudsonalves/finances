@@ -1,3 +1,5 @@
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../../common/models/icons_model.dart';
 import '../../common/constants/themes/app_icons.dart';
 import '../../locator.dart';
@@ -48,11 +50,11 @@ class SqflileCategoryRepository implements CategoryRepository {
   }
 
   @override
-  Future<void> firstCategory() async {
+  Future<void> firstCategory(AppLocalizations locale) async {
     await init();
     if (_categories.isEmpty) {
       final transferCategory = CategoryDbModel(
-        categoryName: 'Transfers',
+        categoryName: locale.categoryNameTransfers,
         categoryIcon: IconModel(
           iconName: 'shuffle',
           iconFontFamily: IconsFontFamily.FontelloIcons,
@@ -61,7 +63,7 @@ class SqflileCategoryRepository implements CategoryRepository {
       );
       await addCategory(transferCategory);
       final depositCategory = CategoryDbModel(
-        categoryName: 'Inputs',
+        categoryName: locale.categoryNameInputs,
         categoryIcon: IconModel(
           iconName: 'monetization on',
           iconFontFamily: IconsFontFamily.MaterialIcons,
