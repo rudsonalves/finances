@@ -280,7 +280,7 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
-Version: 1.0.0+12
+## Version: 1.0.0+12
 
 In this commit, several enhancements and improvements were made. Notable changes include translating the accountName to the system language, optimizing the order of buttons in the BottomNavigationBar for better usability, and refining the handling of language localization using AppLocale. Additionally, more translations were added, and the firstCategory method now accepts an AppLocalizations locale for generating translations related to system language preferences.
 
