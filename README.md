@@ -280,6 +280,43 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
+Version: 1.0.0+12
+
+In this commit, several enhancements and improvements were made. Notable changes include translating the accountName to the system language, optimizing the order of buttons in the BottomNavigationBar for better usability, and refining the handling of language localization using AppLocale. Additionally, more translations were added, and the firstCategory method now accepts an AppLocalizations locale for generating translations related to system language preferences.
+
+* lib/common/current_models/current_account.dart:
+   - The `accountName` is now translated to the system language using `locator.get<AppLocale>`, which seems to work well during system initialization.
+
+* lib/common/widgets/custom_botton_navigator_bar.dart:
+
+* lib/features/home_page_view/home_page_view.dart:
+   - Changed the order of buttons in the `BottonNavigatorBar`. The new order is more suitable for the system's usage cycle.
+
+* lib/features/sign_in/sign_in_page.dart:
+
+* lib/features/sign_in/sign_in_controller.dart:
+   - The `createLocalUser` method now takes the `AppLocalizations` `locale` as a parameter to pass to the `firstCategory` method of `CategoryRepository`.
+
+* lib/features/sign_up/sign_up_page.dart:
+
+* lib/features/sign_up/sign_up_controller.dart:
+   - The `doSignUp` method now receives the `AppLocalizations` `locale` for the user's default language selection and also passes it to the `firstCategory` method of `CategoryRepository`.
+
+* lib/features/splash/splash_controller.dart:
+   - The `isUserLogged` method has been changed to a `Future` method.
+
+* lib/features/splash/splash_page.dart:
+   - The `locator.get<AppLocale>()` object is initialized in this widget because it's the first place where a valid context can be obtained. This is done in the `didChangeDependencies` method and then in the `build` of the widget. This was necessary because it seemed that the initialization failed in some instances.
+
+* lib/l10n/app_?.arb:
+   - Updates and additions of more translations.
+
+* lib/locator.dart:
+   - Registered a Lazy Singleton of the `AppLocale` object. This is used for app internationalization during initialization.
+
+* lib/repositories/category/category_repository.dart:
+   - The `firstCategory` method now receives an `AppLocalizations` `locale` to generate translations for the system's language for the 'Transfers' and 'Inputs' categories.
+
 ## 2023/09/25 - version 1.0.0+11
 
 In this commit, several changes have been made to the code to improve budget and category management within the app. These changes aim to simplify and optimize the budget update process, as well as enhance code organization. Key changes include the use of the updateCategoryBudget method in the CategoryRepository to update budget changes, renaming of classes and files related to budgets and categories, and some modifications to translations. The detailed changes can be found below.
@@ -311,8 +348,6 @@ In this commit, several changes have been made to the code to improve budget and
 
  * lib/services/database/database_helper.dart: * 
    - Added the method `Future<void> updateCategoryBudget(int id, double budget)`.
-
-Please let me know if you need any further assistance or modifications.
 
 ## 2023/09/24 - version 1.0.0+10:
 
