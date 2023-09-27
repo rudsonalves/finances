@@ -1,7 +1,10 @@
 import 'dart:developer';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
+import '../../common/constants/laguage_constants.dart';
+import '../../common/current_models/current_language.dart';
 import '../../locator.dart';
 import './sign_up_state.dart';
 import '../../common/current_models/current_user.dart';
@@ -28,7 +31,7 @@ class SignUpController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> doSignUp(UserModel userModel) async {
+  Future<void> doSignUp(UserModel userModel, AppLocalizations locale) async {
     _changeState(SignUpStateLoading());
 
     try {
@@ -43,16 +46,22 @@ class SignUpController extends ChangeNotifier {
         // Create user in local database.
         //
         // Create user informations
+        final currentLanguage = locator.get<CurrentLanguage>();
+        final String langCode = currentLanguage.locale.toString();
+        final language =
+            languageAttributes.containsKey(langCode) ? langCode : 'en_US';
+
         final currentUser = locator.get<CurrentUser>();
         currentUser.setFromUserModel(user);
         currentUser.userLogged = true;
+        currentUser.userLanguage = language;
         currentUser.addUser();
         // Create a first account and set as currentAccount
         await locator.get<CurrentAccount>().init();
         // Create a initial balance
         await locator.get<CurrentBalance>().start();
         // Create the category from transfer between accounts
-        await locator.get<CategoryRepository>().firstCategory();
+        await locator.get<CategoryRepository>().firstCategory(locale);
         _changeState(SignUpStateSuccess());
       } else {
         throw Exception();

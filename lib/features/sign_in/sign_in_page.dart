@@ -75,7 +75,7 @@ class _SignInPageState extends State<SignInPage> {
                         email: _emailController.text,
                         password: _pwdController.text,
                       );
-                      await _controller.createLocalUser(user);
+                      await _controller.createLocalUser(user, locale);
                     },
                     child: Text(locale.genericYes),
                   ),

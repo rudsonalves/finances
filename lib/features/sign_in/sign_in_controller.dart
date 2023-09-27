@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../common/constants/laguage_constants.dart';
+import '../../common/current_models/current_language.dart';
 import '../../locator.dart';
 import '../../repositories/category/category_repository.dart';
 import './sign_in_state.dart';
@@ -65,8 +68,15 @@ class SignInController extends ChangeNotifier {
     }
   }
 
-  Future<void> createLocalUser(UserModel userModel) async {
+  Future<void> createLocalUser(
+    UserModel userModel,
+    AppLocalizations locale,
+  ) async {
     _changeState(SignInStateLoading());
+    final currentLanguage = locator.get<CurrentLanguage>();
+    final String langCode = currentLanguage.locale.toString();
+    final language =
+        languageAttributes.containsKey(langCode) ? langCode : 'en_US';
 
     try {
       final UserModel user = await _service.signIn(
@@ -78,10 +88,11 @@ class SignInController extends ChangeNotifier {
         final currentUser = locator.get<CurrentUser>();
         currentUser.setFromUserModel(user);
         currentUser.userLogged = true;
+        currentUser.userLanguage = language;
         currentUser.addUser();
         await locator.get<CurrentAccount>().init();
         await locator.get<CurrentBalance>().start();
-        await locator.get<CategoryRepository>().firstCategory();
+        await locator.get<CategoryRepository>().firstCategory(locale);
         _changeState(SignInStateSuccess());
       } else {
         throw Exception('Sorry! An unexpected error occurred.');

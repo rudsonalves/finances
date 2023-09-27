@@ -25,7 +25,7 @@ class SplashController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void isUserLogged() async {
+  Future<void> isUserLogged() async {
     _changeState(SplashStateLoading());
     await Future.delayed(const Duration(seconds: 1));
     var userRepository = locator.get<UserRepository>();

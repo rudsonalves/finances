@@ -210,5 +210,8 @@
     "balanceCardLockTrans": "Transaktionen sperren",
     "balanceCardUnLockTrans": "Transaktionen freischalten",
     "selectionIconRowQuestion": "Symbol- und Farbauswahl",
-    "categoryDialogQuestion": "Haupteinsatz:"
+    "categoryDialogQuestion": "Haupteinsatz:",
+    "mainAccounName": "Hauptkonto",
+    "categoryNameTransfers": "Überweisungen",
+    "categoryNameInputs": "Einzahlungen"
 }

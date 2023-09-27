@@ -1,4 +1,5 @@
 import '../../locator.dart';
+import '../models/app_locale.dart';
 import './current_user.dart';
 import '../models/icons_model.dart';
 import '../models/account_db_model.dart';
@@ -32,7 +33,7 @@ class CurrentAccount extends AccountDbModel {
     if (currentUser.userMainAccountId == null) {
       // create first Account
       final account = AccountDbModel(
-        accountName: 'main',
+        accountName: locator.get<AppLocale>().locale.mainAccounName,
         accountUserId: locator.get<CurrentUser>().userId!,
         accountIcon: IconModel(
           iconName: 'wallet',
@@ -44,12 +45,6 @@ class CurrentAccount extends AccountDbModel {
       account.accountId = id;
       currentUser.updateUser();
     }
-
-    // print(currentUser.toString());
-    // for (final id in accountRepository.accountsMap.keys) {
-    //   print('id: $id');
-    //   print(accountRepository.accountsMap[id].toString());
-    // }
 
     setFromAccountDbModel(
         accountRepository.accountsMap[currentUser.userMainAccountId]!);

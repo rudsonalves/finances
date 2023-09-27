@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../common/models/app_locale.dart';
 import '../../locator.dart';
 import '../../common/extensions/sizes.dart';
 import '../../common/extensions/app_scale.dart';
@@ -45,8 +45,18 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    locator.get<AppLocale>().initializeLocale(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final locale = AppLocalizations.of(context)!;
+    final appLocale = locator.get<AppLocale>();
+    if (!appLocale.started) {
+      appLocale.initializeLocale(context);
+    }
+    final locale = appLocale.locale;
 
     return Scaffold(
       body: Container(

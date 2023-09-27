@@ -1,3 +1,5 @@
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../../common/models/category_db_model.dart';
 
 abstract class CategoryRepository {
@@ -12,5 +14,5 @@ abstract class CategoryRepository {
   Future<void> updateCategory(CategoryDbModel category);
   Future<void> updateCategoryBudget(CategoryDbModel category);
   Future<void> deleteCategory(CategoryDbModel category);
-  Future<void> firstCategory();
+  Future<void> firstCategory(AppLocalizations locale);
 }

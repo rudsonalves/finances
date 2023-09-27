@@ -39,14 +39,14 @@ class _HomePageViewState extends State<HomePageView> {
   void changePage(int page) {
     setState(() {
       _pageIndex = page;
-      _floatAppButton = (page != 1) ? true : false;
+      _floatAppButton = (page != 3) ? true : false;
       _canPop = false;
       if (page == 0) {
         _canPop = true;
         _addFunction = addTransaction;
-      } else if (page == 2) {
+      } else if (page == 1) {
         _addFunction = addAccount;
-      } else if (page == 3) {
+      } else if (page == 2) {
         _addFunction = addCategory;
       }
       _pageController.jumpToPage(page);
@@ -119,9 +119,9 @@ class _HomePageViewState extends State<HomePageView> {
           controller: _pageController,
           children: const [
             HomePage(),
-            StatisticsPage(),
             AccountPage(),
             BudgetPage(),
+            StatisticsPage(),
           ],
         ),
         floatingActionButton: _floatAppButton
