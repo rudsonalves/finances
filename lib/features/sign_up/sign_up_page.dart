@@ -111,8 +111,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return Scaffold(
       body: ListView(
         children: [
-          LargeBoldText('${locale.signUpPageMsgPart0} '
-              '${locale.signUpPageMsgPart1}'),
+          LargeBoldText(locale.signUpPageMsg0),
           Image.asset('assets/images/signup.png'),
           Form(
             key: _formKey,

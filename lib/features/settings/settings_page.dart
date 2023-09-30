@@ -1,8 +1,10 @@
 import 'package:finances/common/models/user_name_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:restart_app/restart_app.dart';
 
 import '../../common/constants/laguage_constants.dart';
+import '../../common/constants/routes/app_route.dart';
 import '../../common/constants/themes/app_button_styles.dart';
 import '../../common/widgets/basic_text_form_field.dart';
 import '../../common/widgets/custom_circular_progress_indicator.dart';
@@ -47,6 +49,8 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Widget languageDropdown() {
+    final locale = AppLocalizations.of(context)!;
+
     return DropdownButton<String>(
       elevation: 5,
       value: currentLanguage.localeCode,
@@ -55,6 +59,29 @@ class _SettingsPageState extends State<SettingsPage> {
           currentLanguage.setFromLocaleCode(codeLang);
           currentUser.setUserLanguage(codeLang);
         }
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(locale.settingsPageRestart),
+            content: Text(locale.settingsPageLangReboot),
+            actions: [
+              ElevatedButton(
+                onPressed: () async {
+                  await Restart.restartApp(webOrigin: AppRoute.onboard.name);
+                },
+                child: Text(
+                  locale.genericYes,
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text(
+                  locale.genericClose,
+                ),
+              ),
+            ],
+          ),
+        );
       },
       items: languageAttributes.keys
           .map(
@@ -117,9 +144,7 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  AlertDialog editNameDialog(
-    AppLocalizations locale,
-  ) {
+  AlertDialog editNameDialog(AppLocalizations locale) {
     final buttonStyle = AppButtonStyles.primaryButtonColor(context);
 
     return AlertDialog(

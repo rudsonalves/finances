@@ -94,9 +94,10 @@ class BudgetController extends ChangeNotifier {
 
       for (final categoryName in references.keys) {
         final category = categories[categoryName];
-        double reference = references[categoryName]!;
-        category!.categoryBudget = reference;
-        await _categoryRepository.updateCategory(category);
+        double signal = category!.categoryIsIncome ? 1 : -1;
+        double reference = signal * references[categoryName]!.abs();
+        category.categoryBudget = reference;
+        await _categoryRepository.updateCategoryBudget(category);
       }
       _sumTotalBudget();
       _changeState(BudgetStateSuccess());

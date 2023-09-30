@@ -26,8 +26,7 @@ class OnboardingPage extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              LargeBoldText('${locale.splashPageMsgPart0} '
-                  '${locale.splashPageMsgPart1}'),
+              LargeBoldText(locale.splashPageMsg0),
               PrimaryButton(
                 label: locale.splashPageGetStarted,
                 onTap: () => Navigator.pushReplacementNamed(

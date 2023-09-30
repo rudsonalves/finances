@@ -1,77 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../common/constants/themes/app_text_styles.dart';
 import '../../../common/current_models/current_user.dart';
 import '../../../locator.dart';
 import '../../../common/constants/routes/app_route.dart';
 import '../../../services/authentication/auth_service.dart';
 import '../../../services/database/database_helper.dart';
 import '../../database_recover/database_recover.dart';
+import '../../help_manager/main_manager.dart';
 
 class HomePagePopupMenuButtons extends StatelessWidget {
   const HomePagePopupMenuButtons({super.key});
-
-  void helpDialog(BuildContext context) {
-    final locale = AppLocalizations.of(context)!;
-    final primary = Theme.of(context).colorScheme.primary;
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(
-          locale.cardPopupMenuTransactionsHelp,
-          textAlign: TextAlign.center,
-        ),
-        alignment: Alignment.center,
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              locale.transactionListTileSwipeControls,
-              style: AppTextStyles.textStyleBold16,
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.swipe_right,
-                color: primary,
-              ),
-              title: Text(locale.transactionListTileEditTransaction),
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.swipe_left,
-                color: primary,
-              ),
-              title: Text(locale.transactionListTileDeleteTransaction),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              locale.transactionListTileButtons,
-              style: AppTextStyles.textStyleBold16,
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.add,
-                color: primary,
-              ),
-              title: Text(locale.transactionListTileAddNewTransaction),
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.lock,
-                color: primary,
-              ),
-              title: Text(
-                locale.transactionsHelpLock,
-                maxLines: 2,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +25,7 @@ class HomePagePopupMenuButtons extends StatelessWidget {
             if (value == 'settings') {
               await Navigator.pushNamed(context, AppRoute.settings.name);
             } else if (value == 'helpHomePage') {
-              helpDialog(context);
+              managerTutorial(context, 1);
             } else if (value == 'logout') {
               await locator.get<AuthService>().signOut();
               var user = locator.get<CurrentUser>();

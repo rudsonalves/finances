@@ -6,6 +6,7 @@ import '../../common/widgets/markdown_rich_text.dart';
 import '../../locator.dart';
 import '../../repositories/account/account_repository.dart';
 import '../../services/database/database_helper.dart';
+import '../help_manager/main_manager.dart';
 import '../home_page/balance_card/balance_card_controller.dart';
 import 'account_state.dart';
 import '../../common/widgets/custom_circular_progress_indicator.dart';
@@ -123,6 +124,12 @@ class _AccountPageState extends State<AccountPage> {
           locale.accountPageTitle,
           style: AppTextStyles.textStyleSemiBold18,
         ),
+        actions: [
+          IconButton(
+            onPressed: () => managerTutorial(context, 5),
+            icon: const Icon(Icons.help_outline),
+          ),
+        ],
       ),
       body: Stack(
         children: [
