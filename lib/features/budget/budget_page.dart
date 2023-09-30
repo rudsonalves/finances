@@ -4,12 +4,14 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../common/constants/app_constants.dart';
 import '../../common/constants/themes/app_text_styles.dart';
 import '../../common/constants/themes/colors/custom_color.g.dart';
+import '../../common/constants/themes/icons/fontello_icons.dart';
 import '../../common/extensions/money_masked_text.dart';
 import '../../common/models/category_db_model.dart';
 import '../../common/widgets/app_top_border.dart';
 import '../../common/widgets/custom_app_bar.dart';
 import '../../common/widgets/custom_circular_progress_indicator.dart';
 import '../../locator.dart';
+import '../help_manager/main_manager.dart';
 import '../statistics/statistic_controller.dart';
 import 'budget_controller.dart';
 import 'budget_state.dart';
@@ -123,30 +125,68 @@ class _BudgetPageState extends State<BudgetPage>
           style: AppTextStyles.textStyleSemiBold18,
         ),
         actions: [
-          PopupMenuButton<StatisticMedium>(
-            tooltip: locale.budgetPageResetsMenu,
+          PopupMenuButton<int>(
             padding: EdgeInsets.zero,
             icon: const Icon(
               Icons.more_horiz,
             ),
             itemBuilder: (context) => [
-              PopupMenuItem<StatisticMedium>(
-                value: StatisticMedium.none,
-                child: Text(locale.budgetPageResetValues),
+              PopupMenuItem<int>(
+                value: 0,
+                child: ListTile(
+                  leading: Icon(
+                    Icons.help_outline,
+                    color: primary,
+                  ),
+                  title: Text(locale.transactionListTileHelp),
+                ),
               ),
-              PopupMenuItem<StatisticMedium>(
-                value: StatisticMedium.mediumMonth,
-                child: Text(locale.budgetPageLastMonths),
-              ),
-              PopupMenuItem<StatisticMedium>(
-                value: StatisticMedium.medium12,
-                child: Text(locale.budgetPage12Month),
+              PopupMenuItem<int>(
+                value: 1,
+                child: PopupMenuButton<StatisticMedium>(
+                  padding: EdgeInsets.zero,
+                  elevation: 10,
+                  child: SizedBox(
+                    width: 200,
+                    child: ListTile(
+                      leading: Icon(
+                        FontelloIcons.budgetOutlined2,
+                        color: primary,
+                      ),
+                      title: Text(locale.budgetPageBudget),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios,
+                        color: primary,
+                      ),
+                    ),
+                  ),
+                  itemBuilder: (context) => [
+                    PopupMenuItem<StatisticMedium>(
+                      value: StatisticMedium.none,
+                      child: Text(locale.budgetPageResetValues),
+                    ),
+                    PopupMenuItem<StatisticMedium>(
+                      value: StatisticMedium.mediumMonth,
+                      child: Text(locale.budgetPageLastMonths),
+                    ),
+                    PopupMenuItem<StatisticMedium>(
+                      value: StatisticMedium.medium12,
+                      child: Text(locale.budgetPage12Month),
+                    ),
+                  ],
+                  onSelected: (value) {
+                    _controller.setAllBudgets(value);
+                    Navigator.of(context).pop();
+                  },
+                ),
               ),
             ],
             onSelected: (value) {
-              _controller.setAllBudgets(value);
+              if (value == 0) {
+                managerTutorial(context, 10);
+              }
             },
-          )
+          ),
         ],
       ),
       body: Stack(

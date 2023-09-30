@@ -172,8 +172,7 @@ class _SignInPageState extends State<SignInPage> {
     return Scaffold(
       body: ListView(
         children: [
-          LargeBoldText('${locale.signInPageMsgPart0} '
-              '${locale.signInPageMsgPart1}'),
+          LargeBoldText(locale.signInPageMsg0),
           Image.asset('assets/images/signin.png'),
           Form(
             key: _formKey,

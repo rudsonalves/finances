@@ -1,4 +1,3 @@
-import 'package:finances/features/settings/settings_page.dart';
 import 'package:flutter/material.dart';
 
 import '../../../features/account/account_page.dart';
@@ -6,6 +5,7 @@ import '../../../features/budget/budget_page.dart';
 import '../../../features/home_page/home_page.dart';
 import '../../../features/home_page_view/home_page_view.dart';
 import '../../../features/onboarding/onboarding_page.dart';
+import '../../../features/settings/settings_page.dart';
 import '../../../features/sign_in/sign_in_page.dart';
 import '../../../features/sign_up/sign_up_page.dart';
 import '../../../features/splash/splash_page.dart';
