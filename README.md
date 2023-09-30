@@ -280,6 +280,61 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
+## 2023/09/30 - Version: 1.0.0+15
+
+In this commit, several help/tutorial pages were added, and some adjustments were made to the menus of the main pages to incorporate a help system. The changes are detailed below:
+ * assets/images/*
+ * assets/images_svg/*
+   - Addition of various images for creating help/tutorial pages. These images are currently in pt_BR but will be regenerated in en_US for the final product.
+ * lib/common/constants/help_manager.dart:
+   - This help manager is a singleton responsible for presenting help pages. It still needs to be integrated to control the tutorial pages exposed in the app.
+ * lib/features/help_manager/main_manager.dart:
+   - This module has a MainHelpManager class to expose the help pages and a managerTutorial(BuildContext context, [int index = 0]) function to control this exposure.
+ * lib/features/help_manager/pages/page_model.dart:
+   - This abstract class PageModel defines the signatures of all help pages presented below.
+ * lib/features/help_manager/pages/accounts_delete_help.dart:
+ * lib/features/help_manager/pages/accounts_edit_help.dart:
+ * lib/features/help_manager/pages/accounts_help.dart:
+ * lib/features/help_manager/main_manager.dart:
+ * lib/features/help_manager/pages/accounts_delete_help.dart:
+ * lib/features/help_manager/pages/accounts_edit_help.dart:
+ * lib/features/help_manager/pages/accounts_help.dart:
+ * lib/features/help_manager/pages/budget_set_help.dart:
+ * lib/features/help_manager/pages/categories_budget_help.dart:
+ * lib/features/help_manager/pages/categories_edit_help.dart:
+ * lib/features/help_manager/pages/categories_help.dart:
+ * lib/features/help_manager/pages/icons_color_help.dart:
+ * lib/features/help_manager/pages/icons_selection_help.dart:
+ * lib/features/help_manager/pages/presentation_help.dart:
+ * lib/features/help_manager/pages/statistics_card.dart:
+ * lib/features/help_manager/pages/statistics_help.dart:
+ * lib/features/help_manager/pages/statistics_menu.dart:
+ * lib/features/help_manager/pages/statistics_move_help.dart:
+ * lib/features/help_manager/pages/transactions_add_help.dart:
+ * lib/features/help_manager/pages/transactions_card_help.dart:
+ * lib/features/help_manager/pages/transactions_edit_help.dart:
+ * lib/features/help_manager/pages/transactions_help.dart:
+   - These are the help pages built for the app.
+ * lib/features/home_page/widgets/home_popup_menu_buttons.dart:
+   - Removal of the helpDialog method. This is no longer used;
+   - Use of managerTutorial(context, 1) to present the help on page 1;
+ * lib/features/onboarding/onboarding_page.dart:
+ * lib/features/sign_in/sign_in_page.dart:
+ * lib/features/sign_up/sign_up_page.dar:
+   - locale.???PageMsgPart0 and locale.???PageMsgPart1 messages have been consolidated into locale.???PageMsg0.
+ * lib/features/settings/settings_page.dart:
+   - Addition of a dialog to restart the app in case of a language change.
+ * lib/features/statistics/statistics_page.dart:
+   - Menu change to accommodate an option for the help dialog. 
+ * lib/l10n/app_?.arb:
+   - Merging messages ???PageMsgPart0 and ???PageMsgPart1 into a single ???PageMsg0;
+   - Addition of messages for the help pages;
+   - Addition and correction of other messages.
+ * lib/repositories/category/sqflile_category_repository.dart:
+   - Adjustment in the updateCategoryBudget method to update the local value of categoryBudget in the _categories[category.categoryName]!.categoryBudget map. This speeds up map updates without the need to access the database again.
+ * pubspec.yaml:
+  - version: 1.0.0+15
+
 ## Version: 1.0.0+12
 
 In this commit, several enhancements and improvements were made. Notable changes include translating the accountName to the system language, optimizing the order of buttons in the BottomNavigationBar for better usability, and refining the handling of language localization using AppLocale. Additionally, more translations were added, and the firstCategory method now accepts an AppLocalizations locale for generating translations related to system language preferences.
