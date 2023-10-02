@@ -278,7 +278,7 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
-## 2023/10/02 - Versão 1.0.0+18:
+## 2023/10/02 - Versão 1.0.1+20:
 
 In this commit, the app's name was changed to "Manage Your Finances," a bug related to the recalculation of statistics on the StatisticsPage was fixed, and some icons from MaterialIcons were removed while others were added from FontelloIcons.
 
