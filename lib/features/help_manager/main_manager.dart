@@ -41,7 +41,7 @@ enum HelpCommand {
   next,
 }
 
-void managerTutorial(BuildContext context, [int index = 0]) async {
+Future<void> managerTutorial(BuildContext context, [int index = 0]) async {
   StatusButtons buttons = StatusButtons(false, true, true);
   final Color primary = Theme.of(context).colorScheme.primary;
   final locale = AppLocalizations.of(context)!;

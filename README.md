@@ -273,12 +273,40 @@ Com esses gatilhos em vigor, qualquer tentativa de inserir um valor inválido em
 
 Some bugs were noticed and need to be fixed:
 
-- *20230923.7* Bug: Adicionar um tutorial apresentando o app no primeiro boot;
-- *20230925.1* Bug: agendar um refresh da página de estatísticas quando uma nova transação ou conta for alterada/adicionada.
-- *20230925.1* Impleemntation: Melhorar o ícone do orçamento. 
-
+- *20231002.1* adjust: Fiz a besteira de implementar pelo nome da categoria alguns códigos (como CategoryController, StatisticsController, alguns como RepositorCategory). Isto gera um problema, pois al alterar o nome de uma categoria tenho de refazer todos estes registros para que não gerem problemas. Trocar estas indexações para os ids das categorias. Al fazer isto não será mais necessário solicitar um reCalculate ao StatisticsPage por alteração em nomes de categorias.
 
 # Commits:
+
+## 2023/10/02 - Versão 1.0.0+16:
+
+Neste commit foi alterado o nome do app para "Controle suas Financas", corrijido um bug de recálculo das estatíticas da StatisticsPage, cortado alguns ícones do MaterialIcons e adiconado alguns no FontelloIcons.
+
+ * lib/common/constants/themes/icons/fontello_icons.dart:
+ * lib/common/constants/themes/icons/fontello_icons_codes.dart:
+   - adição de mais alguns ícones.
+ * lib/common/constants/themes/icons/material_icons_codes.dart:
+   - removido uma séries de ícnoes menos úteis.
+ * lib/common/widgets/custom_botton_navigator_bar.dart:
+ * lib/features/budget/budget_page.dart:
+ * lib/features/statistics/widgets/variation_column.dart:
+   - ajustes de nomes de ícones.
+ * lib/features/help_manager/main_manager.dart:
+   - método managerTutorial foi transformado ém um método Future.
+ * lib/features/home_page/home_page.dart:
+   - adicionado atributo _showTutorial para apresentar o tutorial ao iniciar o app com banco de dados vazio. O agendamento para a apresentação do tutorial é feito com a adição de um WidgetsBinding.instance.addPostFrameCallback, fazendo uma chamada ao 
+   managerTutorial na página 0.
+ * lib/features/home_page/widgets/transaction_dismissible_tile.dart:
+   - não é mais necessário chamar o statController.getStatistics;
+   - adicionado um locator.get<StatisticsController>().requestRecalculate() para a alteração nas categorias.
+ * lib/features/budget/budget_controller.dart:
+ * lib/features/statistics/statistic_controller.dart:
+   - o init() agora é chamado a cada entrada na página StatisticsPage o que mudou algumas oprações neste controller;
+   - os atributos e métodos redraw mudaram para recalculate, pois agora se referem a uma solicitação para recalcular as estatíticas e não redesenhar a página;
+   - adicionado o método calculateStatistics() para agrupar o processo de cálculos das estatíticas.
+ * lib/features/statistics/statistics_page.dart:
+   - StatisticsPageState deixou de ser uma AutomaticKeepAliveClientMixin e passa a ser redesenhada a cada entrada na página. Ao menos neste momento.
+ * lib/l10n/app_??.arb:
+   - altração no nome do app. 
 
 ## 2023/09/30 - Version: 1.0.0+15
 
@@ -335,7 +363,7 @@ In this commit, several help/tutorial pages were added, and some adjustments wer
  * pubspec.yaml:
   - version: 1.0.0+15
 
-## Version: 1.0.0+12
+## 2023/09/27 - Version: 1.0.0+12
 
 In this commit, several enhancements and improvements were made. Notable changes include translating the accountName to the system language, optimizing the order of buttons in the BottomNavigationBar for better usability, and refining the handling of language localization using AppLocale. Additionally, more translations were added, and the firstCategory method now accepts an AppLocalizations locale for generating translations related to system language preferences.
 

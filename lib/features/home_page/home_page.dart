@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../common/models/user_name_notifier.dart';
 import '../../locator.dart';
+import '../help_manager/main_manager.dart';
 import './home_page_state.dart';
 import './home_page_controller.dart';
 import './balance_card/balance_card.dart';
@@ -34,6 +35,8 @@ class _HomePageState extends State<HomePage>
   final _userNameNotifier = locator.get<UserNameNotifier>();
 
   ExtendedDate lastDate = ExtendedDate(1980, 1, 1);
+
+  bool _showTutorial = true;
 
   @override
   bool get wantKeepAlive => true;
@@ -145,9 +148,20 @@ class _HomePageState extends State<HomePage>
                         if (_controller.state is HomePageStateSuccess) {
                           // isEmpty...
                           if (_controller.transactions.isEmpty) {
+                            if (_showTutorial) {
+                              WidgetsBinding.instance.addPostFrameCallback(
+                                (_) => managerTutorial(context, 0),
+                              );
+                              _showTutorial = false;
+                            }
                             return Center(
-                              child: Text(
-                                locale.homePageNoTransactions,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    locale.homePageNoTransactions,
+                                  ),
+                                ],
                               ),
                             );
                           }

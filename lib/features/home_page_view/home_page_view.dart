@@ -37,6 +37,10 @@ class _HomePageViewState extends State<HomePageView> {
   }
 
   void changePage(int page) {
+    // 0 HomePage(),
+    // 1 AccountPage(),
+    // 2 BudgetPage(),
+    // 3 StatisticsPage(),
     setState(() {
       _pageIndex = page;
       _floatAppButton = (page != 3) ? true : false;
@@ -51,12 +55,10 @@ class _HomePageViewState extends State<HomePageView> {
       }
       _pageController.jumpToPage(page);
     });
-    if (page == 1) {
-      final statController = locator.get<StatisticsController>();
-      if (statController.redraw) {
-        statController.getStatistics(true);
-      }
-    }
+    // if (page == 3) {
+    //   final statController = locator.get<StatisticsController>();
+    //   statController.getStatistics(true);
+    // }
   }
 
   @override
@@ -83,7 +85,7 @@ class _HomePageViewState extends State<HomePageView> {
     await locator.get<HomePageController>().getTransactions().then(
           (value) => locator.get<BalanceCardController>().getBalance(),
         );
-    locator.get<StatisticsController>().requestRedraw();
+    locator.get<StatisticsController>().requestRecalculate();
   }
 
   Future<void> addAccount() async {
@@ -98,6 +100,7 @@ class _HomePageViewState extends State<HomePageView> {
         callBack: addCategoryCallBak,
       ),
     );
+    locator.get<StatisticsController>().requestRecalculate();
   }
 
   Future<void> addCategoryCallBak() async {

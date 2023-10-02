@@ -150,7 +150,7 @@ class _BudgetPageState extends State<BudgetPage>
                     width: 200,
                     child: ListTile(
                       leading: Icon(
-                        FontelloIcons.budgetOutlined2,
+                        FontelloIcons.budgetPig,
                         color: primary,
                       ),
                       title: Text(locale.budgetPageBudget),

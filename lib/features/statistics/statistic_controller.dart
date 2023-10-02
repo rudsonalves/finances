@@ -19,7 +19,7 @@ class StatisticsController extends ChangeNotifier {
   Future<void>? _currentOperation;
   Completer<void>? _successCompleter;
 
-  bool _starting = true;
+  // bool _starting = true;
 
   // List of date x StatisticResult
   final Map<String, List<StatisticResult>> _statisticsList = {};
@@ -50,28 +50,32 @@ class StatisticsController extends ChangeNotifier {
   Map<String, double> get expanses => _expanses;
   Map<String, List<StatisticResult>> get statisticsMap => _statisticsList;
 
-  Future<void> init() async {
-    if (_starting) {
-      _statReferenceType = currentUser.userBudgetRef;
-      await getStatistics();
-      _starting = false;
-      _state = StatisticsStateSuccess();
-    }
+  StatisticsState _state = StatisticsStateInitial();
+
+  StatisticsState get state => _state;
+
+  void _changeState(StatisticsState newState) {
+    _state = newState;
+    notifyListeners();
   }
 
-  bool _redraw = false;
+  bool _requestRecalculate = true;
 
-  bool get redraw {
-    if (_redraw) {
-      _redraw = false;
-      return true;
-    }
-    return false;
-  }
+  bool get recalculateRequested => _requestRecalculate;
 
-  void requestRedraw() {
+  void requestRecalculate() {
     if (_noData) return;
-    _redraw = true;
+    _requestRecalculate = true;
+    // log('Request redraw...');
+  }
+
+  Future<void> init() async {
+    // if (_starting) {
+    _statReferenceType = currentUser.userBudgetRef;
+    await getStatistics();
+    // _starting = false;
+    // _state = StatisticsStateSuccess();
+    // }
   }
 
   void _setReferenceByCategory() {
@@ -136,15 +140,6 @@ class StatisticsController extends ChangeNotifier {
     _changeState(StatisticsStateSuccess());
   }
 
-  StatisticsState _state = StatisticsStateInitial();
-
-  StatisticsState get state => _state;
-
-  void _changeState(StatisticsState newState) {
-    _state = newState;
-    notifyListeners();
-  }
-
   Future<void> getStatistics([bool doState = true]) async {
     if (_currentOperation != null) {
       await _currentOperation;
@@ -156,63 +151,11 @@ class StatisticsController extends ChangeNotifier {
 
     if (doState) _changeState(StatisticsStateLoading());
     try {
-      final formatedDate = DateFormat.yMMMM();
-      _statisticsList.clear();
-      _incomes.clear();
-      _expanses.clear();
-      _strDates.clear();
-      _totalByCategory.clear();
-
-      ExtendedDate dateIndex = ExtendedDate.now();
-      int startDate;
-      int endDate;
-
-      int count = 0;
-      while (count < 12) {
-        (startDate, endDate) =
-            ExtendedDate.getMillisecondsIntervalOfMonth(dateIndex);
-
-        final statisticsMap = await helper.getTransactionSumsByCategory(
-          startDate: startDate,
-          endDate: endDate,
-        );
-        final String strDate = formatedDate.format(dateIndex);
-        double incomes = 0.0;
-        double expanses = 0.0;
-        _statisticsList[strDate] = [];
-        _strDates.add(strDate);
-
-        if (statisticsMap == null) throw Exception('No statistics found!');
-
-        for (final map in statisticsMap) {
-          final result = StatisticResult.fromMap(map);
-          _statisticsList[strDate]!.add(result);
-          if (result.monthSum > 0) {
-            incomes += result.monthSum;
-          } else {
-            expanses += result.monthSum;
-          }
-          if (_totalByCategory.containsKey(result.categoryName)) {
-            _totalByCategory[result.categoryName]!.addValue(result.monthSum);
-          } else {
-            _totalByCategory[result.categoryName] =
-                StatisticTotal.create(result.monthSum);
-          }
-        }
-        _incomes[strDate] = incomes;
-        _expanses[strDate] = expanses;
-
-        count++;
-        dateIndex = dateIndex.previousMonth();
+      if (recalculateRequested) {
+        _requestRecalculate = false;
+        // log('StatisticsController: Calculate...');
+        await calculateStatistics();
       }
-      if (_totalByCategory.isNotEmpty) {
-        _noData = false;
-        _buildStatistics();
-      } else {
-        _noData = true;
-      }
-      _strDates = _strDates.reversed.toList();
-      _index = _strDates.length - 1;
 
       if (doState) _changeState(StatisticsStateSuccess());
       completer.complete();
@@ -222,6 +165,66 @@ class StatisticsController extends ChangeNotifier {
     } finally {
       _currentOperation = null;
     }
+  }
+
+  Future<void> calculateStatistics() async {
+    final formatedDate = DateFormat.yMMMM();
+    _statisticsList.clear();
+    _incomes.clear();
+    _expanses.clear();
+    _strDates.clear();
+    _totalByCategory.clear();
+
+    ExtendedDate dateIndex = ExtendedDate.now();
+    int startDate;
+    int endDate;
+
+    int count = 0;
+    while (count < 12) {
+      (startDate, endDate) =
+          ExtendedDate.getMillisecondsIntervalOfMonth(dateIndex);
+
+      final statisticsMap = await helper.getTransactionSumsByCategory(
+        startDate: startDate,
+        endDate: endDate,
+      );
+      final String strDate = formatedDate.format(dateIndex);
+      double incomes = 0.0;
+      double expanses = 0.0;
+      _statisticsList[strDate] = [];
+      _strDates.add(strDate);
+
+      if (statisticsMap == null) throw Exception('No statistics found!');
+
+      for (final map in statisticsMap) {
+        final result = StatisticResult.fromMap(map);
+        _statisticsList[strDate]!.add(result);
+        if (result.monthSum > 0) {
+          incomes += result.monthSum;
+        } else {
+          expanses += result.monthSum;
+        }
+        if (_totalByCategory.containsKey(result.categoryName)) {
+          _totalByCategory[result.categoryName]!.addValue(result.monthSum);
+        } else {
+          _totalByCategory[result.categoryName] =
+              StatisticTotal.create(result.monthSum);
+        }
+      }
+      _incomes[strDate] = incomes;
+      _expanses[strDate] = expanses;
+
+      count++;
+      dateIndex = dateIndex.previousMonth();
+    }
+    if (_totalByCategory.isNotEmpty) {
+      _noData = false;
+      _buildStatistics();
+    } else {
+      _noData = true;
+    }
+    _strDates = _strDates.reversed.toList();
+    _index = _strDates.length - 1;
   }
 
   void _buildStatistics() {
