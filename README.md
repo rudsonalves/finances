@@ -274,6 +274,7 @@ Com esses gatilhos em vigor, qualquer tentativa de inserir um valor inválido em
 Some bugs were noticed and need to be fixed:
 
 - *20231002.1* adjust: Fiz a besteira de implementar pelo nome da categoria alguns códigos (como CategoryController, StatisticsController, alguns como RepositorCategory). Isto gera um problema, pois al alterar o nome de uma categoria tenho de refazer todos estes registros para que não gerem problemas. Trocar estas indexações para os ids das categorias. Al fazer isto não será mais necessário solicitar um reCalculate ao StatisticsPage por alteração em nomes de categorias.
+- *20231002.2* implementation: implemnetar um sistema de logger para o app. 
 
 # Commits:
 

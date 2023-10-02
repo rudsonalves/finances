@@ -64,6 +64,7 @@ class SqflileCategoryRepository implements CategoryRepository {
       await addCategory(transferCategory);
       final depositCategory = CategoryDbModel(
         categoryName: locale.categoryNameInputs,
+        categoryIsIncome: true,
         categoryIcon: IconModel(
           iconName: 'monetization on',
           iconFontFamily: IconsFontFamily.MaterialIcons,

@@ -64,18 +64,13 @@ class StatisticsController extends ChangeNotifier {
   bool get recalculateRequested => _requestRecalculate;
 
   void requestRecalculate() {
-    if (_noData) return;
     _requestRecalculate = true;
     // log('Request redraw...');
   }
 
   Future<void> init() async {
-    // if (_starting) {
     _statReferenceType = currentUser.userBudgetRef;
     await getStatistics();
-    // _starting = false;
-    // _state = StatisticsStateSuccess();
-    // }
   }
 
   void _setReferenceByCategory() {

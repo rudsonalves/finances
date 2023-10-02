@@ -23,12 +23,8 @@ class StatisticsPage extends StatefulWidget {
 }
 
 class _StatisticsPageState extends State<StatisticsPage> {
-  // with AutomaticKeepAliveClientMixin {
   final _controller = locator.get<StatisticsController>();
   late StatisticMedium statReference;
-
-  // @override
-  // bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -38,16 +34,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
     // log('StatisticsPageState: initState...');
   }
 
-  // @override
-  // void dispose() {
-  //   _controller.dispose();
-  //   super.dispose();
-  // }
-
   @override
   Widget build(BuildContext context) {
-    // super.build(context);
-
     final locale = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
     final primary = colorScheme.primary;
