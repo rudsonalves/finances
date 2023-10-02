@@ -60,7 +60,7 @@ class BudgetController extends ChangeNotifier {
     try {
       if (!_statController.noData) {
         await _statController.getStatistics(false);
-        _statController.requestRedraw();
+        _statController.requestRecalculate();
       }
       _sumTotalBudget();
       _changeState(BudgetStateSuccess());

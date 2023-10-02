@@ -124,6 +124,5 @@ class SqflileCategoryRepository implements CategoryRepository {
     );
     _categories[category.categoryName]!.categoryBudget =
         category.categoryBudget;
-    // await getCategories();
   }
 }

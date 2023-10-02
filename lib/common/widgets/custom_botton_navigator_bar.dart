@@ -54,8 +54,8 @@ class CustomBottomNavigatorBar extends StatelessWidget {
               tooltip: locale.budgetPageTitle,
               changePage: changePage,
               icon: page == 2
-                  ? FontelloIcons.budget2
-                  : FontelloIcons.budgetOutlined2,
+                  ? FontelloIcons.budgetPage
+                  : FontelloIcons.budgetOutlined,
               color: page == 2 ? selecteColor : unselecteColor,
               index: 2,
             ),

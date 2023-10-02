@@ -21,10 +21,10 @@ class VariationColumn extends StatelessWidget {
 
     if (value != null) {
       if (value! > 0) {
-        icon = FontelloIcons.up1;
+        icon = FontelloIcons.up;
         color = customColors.lowgreen!;
       } else if (value! < 0) {
-        icon = FontelloIcons.down1;
+        icon = FontelloIcons.down;
         color = customColors.minusred!;
       } else {
         icon = Icons.horizontal_rule;

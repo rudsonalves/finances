@@ -201,7 +201,7 @@ class _TransactionDismissibleTileState
                 'transaction': widget.transaction,
               },
             );
-            locator.get<StatisticsController>().requestRedraw();
+            locator.get<StatisticsController>().requestRecalculate();
             homePageController.getTransactions();
             balanceCardController.getBalance();
             return false;
@@ -219,7 +219,7 @@ class _TransactionDismissibleTileState
                 } else {
                   await TransfersManager.removeTransfer(widget.transaction);
                 }
-                locator.get<StatisticsController>().requestRedraw();
+                locator.get<StatisticsController>().requestRecalculate();
                 homePageController.getTransactions();
                 balanceCardController.getBalance();
                 return true;
