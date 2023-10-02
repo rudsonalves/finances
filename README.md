@@ -278,36 +278,35 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
-## 2023/10/02 - Versão 1.0.0+16:
+## 2023/10/02 - Versão 1.0.0+17:
 
-Neste commit foi alterado o nome do app para "Controle suas Financas", corrijido um bug de recálculo das estatíticas da StatisticsPage, cortado alguns ícones do MaterialIcons e adiconado alguns no FontelloIcons.
+In this commit, the app's name was changed to "Manage Your Finances," a bug related to the recalculation of statistics on the StatisticsPage was fixed, and some icons from MaterialIcons were removed while others were added from FontelloIcons.
 
  * lib/common/constants/themes/icons/fontello_icons.dart:
  * lib/common/constants/themes/icons/fontello_icons_codes.dart:
-   - adição de mais alguns ícones.
- * lib/common/constants/themes/icons/material_icons_codes.dart:
-   - removido uma séries de ícnoes menos úteis.
- * lib/common/widgets/custom_botton_navigator_bar.dart:
+   - Added more icons.
+   - lib/common/constants/themes/icons/material_icons_codes.dart:
+   - Removed a series of less useful icons.
+ * lib/common/widgets/custom_button_navigator_bar.dart:
  * lib/features/budget/budget_page.dart:
  * lib/features/statistics/widgets/variation_column.dart:
-   - ajustes de nomes de ícones.
+   - Adjusted icon names.
  * lib/features/help_manager/main_manager.dart:
-   - método managerTutorial foi transformado ém um método Future.
+   - The method managerTutorial has been transformed into a Future method.
  * lib/features/home_page/home_page.dart:
-   - adicionado atributo _showTutorial para apresentar o tutorial ao iniciar o app com banco de dados vazio. O agendamento para a apresentação do tutorial é feito com a adição de um WidgetsBinding.instance.addPostFrameCallback, fazendo uma chamada ao 
-   managerTutorial na página 0.
+   - Added the attribute _showTutorial to display the tutorial when starting the app with an empty database. The scheduling for the tutorial presentation is done by adding a WidgetsBinding.instance.addPostFrameCallback, calling managerTutorial on page 0.
  * lib/features/home_page/widgets/transaction_dismissible_tile.dart:
-   - não é mais necessário chamar o statController.getStatistics;
-   - adicionado um locator.get<StatisticsController>().requestRecalculate() para a alteração nas categorias.
+   - No longer necessary to call statController.getStatistics;
+   - Added a locator.get<StatisticsController>().requestRecalculate() for changes in categories.
  * lib/features/budget/budget_controller.dart:
  * lib/features/statistics/statistic_controller.dart:
-   - o init() agora é chamado a cada entrada na página StatisticsPage o que mudou algumas oprações neste controller;
-   - os atributos e métodos redraw mudaram para recalculate, pois agora se referem a uma solicitação para recalcular as estatíticas e não redesenhar a página;
-   - adicionado o método calculateStatistics() para agrupar o processo de cálculos das estatíticas.
+   - init() is now called each time on entering the StatisticsPage, which changed some operations in this controller;
+   - The attributes and methods redraw have been changed to recalculate, as they now refer to a request to recalculate statistics and not to redraw the page;
+Added the method calculateStatistics() to group the statistics calculation process.
  * lib/features/statistics/statistics_page.dart:
-   - StatisticsPageState deixou de ser uma AutomaticKeepAliveClientMixin e passa a ser redesenhada a cada entrada na página. Ao menos neste momento.
+   - StatisticsPageState is no longer an AutomaticKeepAliveClientMixin and is redrawn on each entry to the page. At least for now.
  * lib/l10n/app_??.arb:
-   - altração no nome do app. 
+   - Changed the app's name.
 
 ## 2023/09/30 - Version: 1.0.0+15
 
