@@ -1,4 +1,3 @@
-import 'package:finances/common/models/user_name_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:restart_app/restart_app.dart';
@@ -6,6 +5,7 @@ import 'package:restart_app/restart_app.dart';
 import '../../common/constants/laguage_constants.dart';
 import '../../common/constants/routes/app_route.dart';
 import '../../common/constants/themes/app_button_styles.dart';
+import '../../common/models/user_name_notifier.dart';
 import '../../common/widgets/basic_text_form_field.dart';
 import '../../common/widgets/custom_circular_progress_indicator.dart';
 import '../../locator.dart';
@@ -50,9 +50,11 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Widget languageDropdown() {
     final locale = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return DropdownButton<String>(
       elevation: 5,
+      dropdownColor: colorScheme.onInverseSurface,
       value: currentLanguage.localeCode,
       onChanged: (codeLang) {
         if (codeLang != null) {
@@ -99,8 +101,11 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Widget themeModeDropdown() {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return DropdownButton<ThemeMode>(
       elevation: 5,
+      dropdownColor: colorScheme.onInverseSurface,
       value: currentTheme.themeMode$.value,
       onChanged: (themeMode) {
         if (themeMode != null) {
@@ -212,11 +217,12 @@ class _SettingsPageState extends State<SettingsPage> {
                   alignment: Alignment.topCenter,
                   child: Column(
                     children: [
-                      const CircleAvatar(
+                      CircleAvatar(
                         radius: 50,
-                        child: Icon(
-                          Icons.person,
-                          size: 80,
+                        child: Image.asset(
+                          'assets/images/finances_icon.png',
+                          width: 70,
+                          fit: BoxFit.fitWidth,
                         ),
                       ),
                       const SizedBox(height: 8),

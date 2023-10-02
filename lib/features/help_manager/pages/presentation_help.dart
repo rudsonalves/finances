@@ -23,7 +23,7 @@ class PresentationHelp implements PageModel {
         locale.helpPresentation2,
       ],
       [
-        Icon(FontelloIcons.budgetOutlined2, color: color),
+        Icon(FontelloIcons.budgetOutlined, color: color),
         locale.helpPresentation3,
       ],
       [
