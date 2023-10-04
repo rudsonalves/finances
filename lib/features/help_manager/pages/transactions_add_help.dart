@@ -34,6 +34,7 @@ class TransactionsAddHelp implements PageModel {
       locale.helpTransactionsAdd4,
       locale.helpTransactionsAdd5,
       locale.helpTransactionsAdd6,
+      locale.helpTransactionsAdd7,
     ];
 
     return TransactionsAddHelp(title, messages);

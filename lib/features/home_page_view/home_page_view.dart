@@ -55,10 +55,6 @@ class _HomePageViewState extends State<HomePageView> {
       }
       _pageController.jumpToPage(page);
     });
-    // if (page == 3) {
-    //   final statController = locator.get<StatisticsController>();
-    //   statController.getStatistics(true);
-    // }
   }
 
   @override

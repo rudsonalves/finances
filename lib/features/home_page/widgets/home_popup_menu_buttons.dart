@@ -25,7 +25,7 @@ class HomePagePopupMenuButtons extends StatelessWidget {
             if (value == 'settings') {
               await Navigator.pushNamed(context, AppRoute.settings.name);
             } else if (value == 'helpHomePage') {
-              managerTutorial(context, 1);
+              managerTutorial(context, transactionsHelp);
             } else if (value == 'logout') {
               await locator.get<AuthService>().signOut();
               var user = locator.get<CurrentUser>();

@@ -88,7 +88,7 @@ class _AddCategoryDialogState extends State<AddCategoryDialog> {
       if (!categoriesNames.contains(newCategory.categoryName)) {
         await controller.addCategory(newCategory);
         if (!context.mounted) return;
-        Navigator.pop(context);
+        Navigator.pop(context, newCategory);
       } else {
         final customColors = Theme.of(context).extension<CustomColors>()!;
 

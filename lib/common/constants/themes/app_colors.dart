@@ -16,11 +16,14 @@ class AppColors {
   }
 
   static List<Color> getMediumColorsGradient(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     final customColors = Theme.of(context).extension<CustomColors>()!;
 
     return [
       customColors.sourceMediumprimary!,
-      customColors.sourceSubprimary!,
+      colorScheme.onPrimary.withAlpha(155),
+      //Colors.transparent,
+      //customColors.sourceSubprimary!,
     ];
   }
 

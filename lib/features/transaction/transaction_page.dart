@@ -4,12 +4,14 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../common/constants/themes/colors/custom_color.g.dart';
 import '../../common/models/account_db_model.dart';
+import '../../common/models/category_db_model.dart';
 import '../../common/widgets/account_dropdown_form_field.dart';
 import '../../locator.dart';
 import '../../repositories/account/account_repository.dart';
 import '../../services/database/managers/transfers_manager.dart';
 import '../budget/budget_controller.dart';
 import '../budget/widget/add_category_dialog.dart';
+import '../help_manager/main_manager.dart';
 import './transaction_controller.dart';
 import '../../common/models/extends_date.dart';
 import '../../common/widgets/app_top_border.dart';
@@ -57,7 +59,7 @@ class _TransactionPageState extends State<TransactionPage> {
 
   final _controller = locator.get<TransactionController>();
   final _categoryRepository = locator.get<CategoryRepository>();
-  int _categoryId = 0;
+  int? _categoryId;
 
   @override
   void initState() {
@@ -161,13 +163,33 @@ class _TransactionPageState extends State<TransactionPage> {
   }
 
   void addCategoryAction() async {
-    await showDialog(
+    final CategoryDbModel? newCategory = await showDialog(
       context: context,
       builder: (context) => AddCategoryDialog(
         callBack: addCategoryCallBak,
       ),
     );
+
+    if (newCategory != null) {
+      _categoryId = newCategory.categoryId;
+      _categoryController.text = newCategory.categoryName;
+    }
+
     setState(() {});
+  }
+
+  void editCategoryAction() async {
+    if (_categoryId != null) {
+      final category = _categoryRepository.getCategoryId(_categoryId!);
+      await showDialog(
+        context: context,
+        builder: (context) => AddCategoryDialog(
+          addCategory: false,
+          editCategory: category,
+          callBack: addCategoryCallBak,
+        ),
+      );
+    }
   }
 
   Future<void> addCategoryCallBak() async {
@@ -206,6 +228,15 @@ class _TransactionPageState extends State<TransactionPage> {
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () => Navigator.pop(context),
         ),
+        actions: [
+          IconButton(
+            onPressed: () => managerTutorial(
+              context,
+              newTransactionsHelp,
+            ),
+            icon: const Icon(Icons.help_outline),
+          ),
+        ],
       ),
       body: Stack(
         children: [
@@ -293,18 +324,14 @@ class _TransactionPageState extends State<TransactionPage> {
                                   int? categoryId = homePageController
                                       .cacheDescriptions[description];
                                   if (categoryId != null) {
-                                    final cat = locator
-                                        .get<CategoryRepository>()
-                                        .categories
-                                        .firstWhere(
-                                          (category) =>
-                                              category.categoryId == categoryId,
-                                        );
-                                    _categoryController.text = cat.categoryName;
+                                    final category = _categoryRepository
+                                        .getCategoryId(categoryId);
+                                    _categoryController.text =
+                                        category.categoryName;
                                     setState(() {
                                       _categoryId = categoryId;
                                       _categoryController.text =
-                                          cat.categoryName;
+                                          category.categoryName;
                                     });
                                   }
                                 },
@@ -315,15 +342,20 @@ class _TransactionPageState extends State<TransactionPage> {
                                 labelText: locale.transPageCategory,
                                 controller: _categoryController,
                                 validator: transValidator.categoryValidator,
-                                suffixIcon: IconButton(
-                                  tooltip: locale.transPageNewCategory,
-                                  onPressed: addCategoryAction,
-                                  icon: const Icon(Icons.add),
+                                suffixIcon: InkWell(
+                                  onTap: addCategoryAction,
+                                  onLongPress: editCategoryAction,
+                                  child: Ink(
+                                    //message: locale.transPageNewCategory,
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const Icon(Icons.add),
+                                  ),
                                 ),
                                 onChanged: (categoryName) {
                                   if (categoryName != null) {
-                                    final category = locator
-                                        .get<CategoryRepository>()
+                                    final category = _categoryRepository
                                         .categoriesMap[categoryName];
                                     if (category != null) {
                                       setState(() {

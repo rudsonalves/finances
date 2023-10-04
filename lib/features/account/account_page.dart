@@ -126,7 +126,7 @@ class _AccountPageState extends State<AccountPage> {
         ),
         actions: [
           IconButton(
-            onPressed: () => managerTutorial(context, 5),
+            onPressed: () => managerTutorial(context, accountsHelp),
             icon: const Icon(Icons.help_outline),
           ),
         ],
