@@ -274,11 +274,16 @@ Com esses gatilhos em vigor, qualquer tentativa de inserir um valor inválido em
 Some bugs were noticed and need to be fixed:
 
 - *20231002.1* adjust: Fiz a besteira de implementar pelo nome da categoria alguns códigos (como CategoryController, StatisticsController, alguns como RepositorCategory). Isto gera um problema, pois al alterar o nome de uma categoria tenho de refazer todos estes registros para que não gerem problemas. Trocar estas indexações para os ids das categorias. Al fazer isto não será mais necessário solicitar um reCalculate ao StatisticsPage por alteração em nomes de categorias.
-- *20231002.2* implementation: implemnetar um sistema de logger para o app. 
+- *20231002.2* implementation: implemnetar um sistema de logger para o app.
+- *20231004.1* bug: Lançamentos futuros (Gastos programados não aparecem no histórico);
 
 # Commits:
 
-## 2023/10/02 - Versão 1.0.1+20:
+## 2023/10/04 - Version 1.0.1+27:
+
+
+
+## 2023/10/02 - Version 1.0.1+20:
 
 In this commit, the app's name was changed to "Manage Your Finances," a bug related to the recalculation of statistics on the StatisticsPage was fixed, and some icons from MaterialIcons were removed while others were added from FontelloIcons.
 

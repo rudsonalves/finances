@@ -98,6 +98,7 @@ class SqflileCategoryRepository implements CategoryRepository {
     if (result < 0) {
       throw Exception('addCategory return id $result');
     }
+    category.categoryId = result;
     await getCategories();
   }
 

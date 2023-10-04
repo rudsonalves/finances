@@ -41,6 +41,7 @@ class AccountController extends ChangeNotifier {
         final balance = await AccountManager.getAccountTodayBalance(account);
         _balances.add(balance.balanceClose);
       }
+      // await Future.delayed(const Duration(microseconds: 50));
       _changeState(AccountStateSuccess());
       return;
     } catch (err) {

@@ -1,3 +1,4 @@
+import 'package:finances/features/help_manager/pages/introduction_help.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -41,30 +42,40 @@ enum HelpCommand {
   next,
 }
 
+const introductionHelp = 0;
+const transactionsHelp = 2;
+const newTransactionsHelp = 5;
+const accountsHelp = 6;
+const iconsSelectionsHelp = 9;
+const categoriesHelp = 11;
+const budgetSetHelp = 14;
+const statisticsHelp = 15;
+
 Future<void> managerTutorial(BuildContext context, [int index = 0]) async {
   StatusButtons buttons = StatusButtons(false, true, true);
   final Color primary = Theme.of(context).colorScheme.primary;
   final locale = AppLocalizations.of(context)!;
 
   final List<PageModel> pages = [
-    PresentationHelp.create(locale, primary), // 0
-    TransactionsHelp.create(locale, primary), // 1
-    TransactionsCardHelp.create(locale, primary), // 2
-    TransactionsEditHelp.create(locale, primary), // 3
-    TransactionsAddHelp.create(locale, primary), // 4
-    AccountsHelp.create(locale, primary), // 5
-    AccountsEditHelp.create(locale, primary), // 6
-    AccountsDeleteHelp.create(locale, primary), // 7
-    IconsSelectionsHelp.create(locale, primary), // 8
-    IconsColorHelp.create(locale, primary), // 9
-    CategoriesHelp.create(locale, primary), // 10
-    CategoriesEditHelp.create(locale, primary), // 11
-    CategoriesBudgetHelp.create(locale, primary), // 12
-    BudgetSetHelp.create(locale, primary), // 13
-    StatisticsHelp.create(locale, primary), // 14
-    StatisticsMoveHelp.create(locale, primary), // 15
-    StatisticsCardHelp.create(locale, primary), // 16
-    StatisticsMenuHelp.create(locale, primary), // 17
+    IntroductionHelp.create(locale, primary), // 0
+    PresentationHelp.create(locale, primary), // 1
+    TransactionsHelp.create(locale, primary), // 2
+    TransactionsCardHelp.create(locale, primary), // 3
+    TransactionsEditHelp.create(locale, primary), // 4
+    TransactionsAddHelp.create(locale, primary), // 5
+    AccountsHelp.create(locale, primary), // 6
+    AccountsEditHelp.create(locale, primary), // 7
+    AccountsDeleteHelp.create(locale, primary), // 8
+    IconsSelectionsHelp.create(locale, primary), // 9
+    IconsColorHelp.create(locale, primary), // 10
+    CategoriesHelp.create(locale, primary), // 11
+    CategoriesEditHelp.create(locale, primary), // 12
+    CategoriesBudgetHelp.create(locale, primary), // 13
+    BudgetSetHelp.create(locale, primary), // 14
+    StatisticsHelp.create(locale, primary), // 15
+    StatisticsMoveHelp.create(locale, primary), // 16
+    StatisticsCardHelp.create(locale, primary), // 17
+    StatisticsMenuHelp.create(locale, primary), // 18
   ];
 
   HelpCommand? command = HelpCommand.next;

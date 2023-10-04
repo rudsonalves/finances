@@ -150,7 +150,8 @@ class _HomePageState extends State<HomePage>
                           if (_controller.transactions.isEmpty) {
                             if (_showTutorial) {
                               WidgetsBinding.instance.addPostFrameCallback(
-                                (_) => managerTutorial(context, 0),
+                                (_) =>
+                                    managerTutorial(context, introductionHelp),
                               );
                               _showTutorial = false;
                             }

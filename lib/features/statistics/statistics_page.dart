@@ -117,7 +117,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
               ],
               onSelected: (value) {
                 if (value == 0) {
-                  managerTutorial(context, 14);
+                  managerTutorial(context, statisticsHelp);
                 }
               },
             )

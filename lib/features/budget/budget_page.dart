@@ -183,7 +183,7 @@ class _BudgetPageState extends State<BudgetPage>
             ],
             onSelected: (value) {
               if (value == 0) {
-                managerTutorial(context, 10);
+                managerTutorial(context, categoriesHelp);
               }
             },
           ),
