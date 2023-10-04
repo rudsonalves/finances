@@ -254,7 +254,7 @@
     "helpTransactionsAdd4": " ④ Wählt die Transaktionskategorie aus;",
     "helpTransactionsAdd5": " ⑤ Datum und Uhrzeit auswählen;",
     "helpTransactionsAdd6": " ⑥ Die Schaltfläche '+' erstellt eine neue Kategorie. Durch langes Drücken dieser Schaltfläche können Sie die ausgewählte Kategorie bearbeiten.",
-    "helpTransactionsAdd6": "**Hinweis:** Die Auswahl von Einnahmen/Ausgaben wird durch die in der ausgewählten Kategorie festgelegte Standardeinstellung überschrieben.",
+    "helpTransactionsAdd7": "**Hinweis:** Die Auswahl von Einnahmen/Ausgaben wird durch die in der ausgewählten Kategorie festgelegte Standardeinstellung überschrieben.",
     "helpAccountsTitle": "Konten",
     "helpAccounts0": "Auf dieser Seite können Sie Konten hinzufügen, bearbeiten und löschen.",
     "helpAccounts1": " ① Gesamtsaldo;",
