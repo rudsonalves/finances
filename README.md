@@ -281,7 +281,27 @@ Some bugs were noticed and need to be fixed:
 
 ## 2023/10/04 - Version 1.0.1+27:
 
+In this commit, a minor color correction was made in the app, and some bugs reported by the testers have been resolved. Here's a description of the changes:
 
+ * lib/common/constants/themes/app_colors.dart:
+   - Color adjustments.
+ * lib/features/help_manager/main_manager.dart:
+   - Created constants to indicate the help pages (introductionHelp, transactionsHelp, newTransactionsHelp, accountsHelp, ...).
+ * lib/features/account/account_page.dart:
+ * lib/features/budget/budget_page.dart:
+ * lib/features/home_page/home_page.dart:
+ * lib/features/home_page/home_page.dart:
+ * lib/features/home_page/widgets/home_popup_menu_buttons.dart:
+ * lib/features/statistics/statistics_page.dart:
+   - The constants declared in main_manager.dart are applied to all calls to the managerTutorial function.
+ * lib/features/transaction/transaction_page.dart:
+   - Implemented the editing of a selected category on the "Add Transaction" page using the onLongPress method when pressing the "+" button;
+   - Adding a new Category on this page now adds it directly to the edited transaction.
+   - Added a call to the help page to inform about this category editing feature.
+ * lib/l10n/app_??.arb:
+   - Text corrections.
+
+Future transaction entries are still not visible.
 
 ## 2023/10/02 - Version 1.0.1+20:
 
