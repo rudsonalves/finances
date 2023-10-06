@@ -104,6 +104,16 @@ class ExtendedDate extends DateTime {
     return add(const Duration(days: -1));
   }
 
+  /// Return the next week ExtendedDate
+  ExtendedDate nextWeek() {
+    return add(const Duration(days: 7));
+  }
+
+  /// Return the next year ExtendedDate
+  ExtendedDate nextYear() {
+    return ExtendedDate(year + 1, month, day, hour, minute, second);
+  }
+
   /// Return the next month ExtendedDate
   ExtendedDate nextMonth() {
     int addDays = 31;

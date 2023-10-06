@@ -13,7 +13,7 @@ class TransactionsCardHelp implements PageModel {
   static TransactionsCardHelp create(AppLocalizations locale, Color color) {
     String title = locale.helpTransactionsCardTitle;
     final List<Object> messages = [
-      title = locale.helpTransactionsCard0,
+      locale.helpTransactionsCard0,
       [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -28,11 +28,12 @@ class TransactionsCardHelp implements PageModel {
           ],
         ),
       ],
-      title = locale.helpTransactionsCard1,
-      title = locale.helpTransactionsCard2,
-      title = locale.helpTransactionsCard3,
-      title = locale.helpTransactionsCard4,
-      title = locale.helpTransactionsCard5,
+      locale.helpTransactionsCard1,
+      locale.helpTransactionsCard2,
+      locale.helpTransactionsCard3,
+      locale.helpTransactionsCard4,
+      locale.helpTransactionsCard5,
+      locale.helpTransactionsCard6,
     ];
 
     return TransactionsCardHelp(title, messages);

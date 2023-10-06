@@ -6,6 +6,7 @@ import '../../common/constants/themes/colors/custom_color.g.dart';
 import '../../common/models/account_db_model.dart';
 import '../../common/models/category_db_model.dart';
 import '../../common/widgets/account_dropdown_form_field.dart';
+import '../../common/widgets/spin_box_field.dart';
 import '../../locator.dart';
 import '../../repositories/account/account_repository.dart';
 import '../../services/database/managers/transfers_manager.dart';
@@ -53,12 +54,15 @@ class _TransactionPageState extends State<TransactionPage> {
   final _timeController = TextEditingController();
   final _categoryController = TextEditingController();
   final _accountController = TextEditingController();
+  final _installments = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey();
   final _focusNodeBasicTextFormField = FocusNode();
   bool _income = false;
+  bool _repeat = false;
 
   final _controller = locator.get<TransactionController>();
   final _categoryRepository = locator.get<CategoryRepository>();
+  final _homePageController = locator.get<HomePageController>();
   int? _categoryId;
 
   @override
@@ -97,28 +101,30 @@ class _TransactionPageState extends State<TransactionPage> {
     _focusNodeBasicTextFormField.dispose();
   }
 
-  void cancelAction() {
+  void cancelTransactionsAction() {
     Navigator.pop(context);
   }
 
-  void addAction() async {
+  void addTransactionsAction() async {
     final valit =
         _formKey.currentState != null && _formKey.currentState!.validate();
     if (valit) {
       double value = _amountController.numberValue;
       value = _income ? value : -value;
 
-      AccountDbModel? account1;
+      // get destination account
+      AccountDbModel? destinationAccount;
+      final accountRepository = locator.get<AccountRepository>();
       if (_accountController.text.isNotEmpty) {
-        int? accountId = locator
-            .get<AccountRepository>()
-            .accountIdByName(_accountController.text);
+        int? accountId =
+            accountRepository.accountIdByName(_accountController.text);
         if (accountId == null) {
           throw Exception('transactionPage: AccountId return null');
         }
-        account1 = locator.get<AccountRepository>().accountsMap[accountId];
+        destinationAccount = accountRepository.accountsMap[accountId];
       }
 
+      // Create transaction
       final TransactionDbModel transaction = TransactionDbModel(
         transId: widget.transaction?.transId,
         transDescription: _descController.text,
@@ -131,32 +137,64 @@ class _TransactionPageState extends State<TransactionPage> {
         transDate: ExtendedDate.parse(_dateController.text),
       );
 
-      if (account1 != null) {
-        if (transaction.transId == null) {
-          await TransfersManager.addTransfer(
-            transaction0: transaction,
-            account1: account1,
-          );
+      int? numberOfRepetitions;
+      if (_repeat) {
+        numberOfRepetitions = int.parse(
+          _installments.text.replaceAll('x ', ''),
+        );
+      }
 
-          if (!mounted) return;
-          Navigator.pop(context);
+      final navigator = Navigator.of(context);
+      // Check for Transfer
+      if (destinationAccount != null) {
+        if (transaction.transId == null) {
+          if (_repeat) {
+            ExtendedDate date = transaction.transDate;
+            for (int count = 1; count <= numberOfRepetitions!; count++) {
+              String label = '($count/$numberOfRepetitions)';
+              final newTrans = transaction.copy();
+              if (count > 1) {
+                date = date.nextMonth();
+              }
+              newTrans.transDescription = '${newTrans.transDescription} $label';
+              newTrans.transDate = date;
+              await TransfersManager.addTransfer(
+                transaction0: newTrans,
+                account1: destinationAccount,
+              );
+            }
+          } else {
+            await TransfersManager.addTransfer(
+              transaction0: transaction,
+              account1: destinationAccount,
+            );
+          }
+          navigator.pop();
         } else {
           await TransfersManager.updateTransfer(transaction0: transaction);
-
-          if (!mounted) return;
-          Navigator.pop(context);
+          navigator.pop();
         }
       } else {
         if (transaction.transId == null) {
-          await _controller.addTransactions(transaction);
-
-          if (!mounted) return;
-          Navigator.pop(context);
+          if (_repeat) {
+            ExtendedDate date = transaction.transDate;
+            for (int count = 1; count <= numberOfRepetitions!; count++) {
+              String label = '($count/$numberOfRepetitions)';
+              final newTrans = transaction.copy();
+              if (count > 1) {
+                date = date.nextMonth();
+              }
+              newTrans.transDescription = '${newTrans.transDescription} $label';
+              newTrans.transDate = date;
+              await _controller.addTransactions(newTrans);
+            }
+          } else {
+            await _controller.addTransactions(transaction);
+          }
+          navigator.pop();
         } else {
           await _controller.updateTransactions(transaction);
-
-          if (!mounted) return;
-          Navigator.pop(context);
+          navigator.pop();
         }
       }
     }
@@ -202,11 +240,40 @@ class _TransactionPageState extends State<TransactionPage> {
     });
   }
 
+  void toogleRepeat() {
+    setState(() {
+      _repeat = !_repeat;
+    });
+  }
+
+  void selectCategory(categoryName) {
+    if (categoryName != null) {
+      final category = _categoryRepository.categoriesMap[categoryName];
+      if (category != null) {
+        setState(() {
+          _categoryId = category.categoryId!;
+          _income = category.categoryIsIncome;
+        });
+      }
+    }
+  }
+
+  void onEditDescription(description) {
+    int? categoryId = _homePageController.cacheDescriptions[description];
+    if (categoryId != null) {
+      final category = _categoryRepository.getCategoryId(categoryId);
+      _categoryController.text = category.categoryName;
+      setState(() {
+        _categoryId = categoryId;
+        _categoryController.text = category.categoryName;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
     final transValidator = TransactionValidator(locale);
-    final homePageController = locator.get<HomePageController>();
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final primary = Theme.of(context).colorScheme.primary;
     final currentAccount = locator.get<CurrentAccount>();
@@ -317,24 +384,10 @@ class _TransactionPageState extends State<TransactionPage> {
                                 labelText: locale.transPageDescription,
                                 validator: transValidator.descriptionValidator,
                                 controller: _descController,
-                                suggestions: homePageController
+                                suggestions: _homePageController
                                     .cacheDescriptions.keys
                                     .toList(),
-                                onEditingComplete: (description) {
-                                  int? categoryId = homePageController
-                                      .cacheDescriptions[description];
-                                  if (categoryId != null) {
-                                    final category = _categoryRepository
-                                        .getCategoryId(categoryId);
-                                    _categoryController.text =
-                                        category.categoryName;
-                                    setState(() {
-                                      _categoryId = categoryId;
-                                      _categoryController.text =
-                                          category.categoryName;
-                                    });
-                                  }
-                                },
+                                onEditingComplete: onEditDescription,
                               ),
                               // Category
                               CategoryDropdownFormField(
@@ -353,18 +406,7 @@ class _TransactionPageState extends State<TransactionPage> {
                                     child: const Icon(Icons.add),
                                   ),
                                 ),
-                                onChanged: (categoryName) {
-                                  if (categoryName != null) {
-                                    final category = _categoryRepository
-                                        .categoriesMap[categoryName];
-                                    if (category != null) {
-                                      setState(() {
-                                        _categoryId = category.categoryId!;
-                                        _income = category.categoryIsIncome;
-                                      });
-                                    }
-                                  }
-                                },
+                                onChanged: selectCategory,
                               ),
                               if (_categoryId == 1)
                                 AccountDropdownFormField(
@@ -380,13 +422,37 @@ class _TransactionPageState extends State<TransactionPage> {
                                   labelText: locale.transPageDate,
                                 ),
                               ),
+                              // Installments - Repeat Monthly
+                              TextButton.icon(
+                                onPressed:
+                                    widget.addTransaction ? toogleRepeat : null,
+                                icon: _repeat
+                                    ? const Icon(Icons.task_alt)
+                                    : const Icon(Icons.radio_button_unchecked),
+                                label: Text(
+                                  locale.transactionRepeatMonthly,
+                                  style: AppTextStyles.textStyleSemiBold16,
+                                ),
+                              ),
+                              // Installments - Repeat times
+                              if (_repeat)
+                                SpinBoxField(
+                                  labelText: locale.transactionRepeatTimes,
+                                  style: AppTextStyles.textStyleBold16.copyWith(
+                                    color: primary,
+                                  ),
+                                  controller: _installments,
+                                  minValue: 2,
+                                  initialValue: 2,
+                                  maxValue: 12,
+                                ),
                               const SizedBox(height: 20),
                               AddCancelButtons(
                                 addLabel: widget.addTransaction
                                     ? locale.transPageButtonAdd
                                     : locale.transPageButtonUpdate,
-                                addCallback: addAction,
-                                cancelCallback: cancelAction,
+                                addCallback: addTransactionsAction,
+                                cancelCallback: cancelTransactionsAction,
                               ),
                             ],
                           ),
