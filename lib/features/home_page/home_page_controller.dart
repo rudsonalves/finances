@@ -30,7 +30,7 @@ class HomePageController extends ChangeNotifier {
 
   List<TransactionDbModel> get transactions => _transactions;
 
-  int maxTransactions = 30;
+  int maxTransactions = 50;
 
   void _changeState(HomePageState newState) {
     _state = newState;
@@ -42,12 +42,32 @@ class HomePageController extends ChangeNotifier {
     getTransactions();
   }
 
+  ExtendedDate getInitialDate() {
+    final date = ExtendedDate.now();
+    final futureTransactions =
+        locator.get<BalanceCardController>().futureTransactions;
+    switch (futureTransactions) {
+      case FutureTrans.hide:
+        return date;
+      case FutureTrans.week:
+        return date.nextWeek();
+      case FutureTrans.month:
+        return date.nextMonth();
+      case FutureTrans.year:
+        return date.nextYear();
+    }
+  }
+
   Future<void> getTransactions() async {
     _changeState(HomePageStateLoading());
     try {
       await locator.get<CategoryRepository>().init();
+
+      final date = getInitialDate();
+
       _transactions = await TransactionsManager.getNTransFromDate(
         maxItens: maxTransactions,
+        date: date,
       );
       if (_transactions.isNotEmpty) {
         await _updateLastDate();

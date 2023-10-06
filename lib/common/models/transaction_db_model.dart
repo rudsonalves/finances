@@ -66,6 +66,17 @@ class TransactionDbModel {
     );
   }
 
+  TransactionDbModel copy() {
+    return TransactionDbModel(
+      transDescription: transDescription,
+      transCategoryId: transCategoryId,
+      transValue: -transValue,
+      transStatus: transStatus,
+      transTransferId: transTransferId,
+      transDate: transDate,
+    );
+  }
+
   @override
   String toString() {
     return 'Transaction('

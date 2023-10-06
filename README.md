@@ -276,8 +276,44 @@ Some bugs were noticed and need to be fixed:
 - *20231002.1* adjust: Fiz a besteira de implementar pelo nome da categoria alguns códigos (como CategoryController, StatisticsController, alguns como RepositorCategory). Isto gera um problema, pois al alterar o nome de uma categoria tenho de refazer todos estes registros para que não gerem problemas. Trocar estas indexações para os ids das categorias. Al fazer isto não será mais necessário solicitar um reCalculate ao StatisticsPage por alteração em nomes de categorias.
 - *20231002.2* implementation: implemnetar um sistema de logger para o app.
 - *20231004.1* bug: Lançamentos futuros (Gastos programados não aparecem no histórico);
+- *20231004.2* bug: os cálculos de estatíticas está trabalhando apenas com o módulos das movimentações. Isto é um problema para categorias com valores positivos e negativos;
 
 # Commits:
+
+## 2023/10/05 - version: 1.0.2+28
+
+* **assets/images**:
+   - Added new images for help screens.
+* **lib/common/constants/themes/colors/app_colors.dart**:
+   - Added a distinct color for the future transaction card.
+* **lib/common/models/extends_date.dart**:
+   - Added the methods ExtendedDate nextWeek() and nextYear() to generate the date for the next week and next year.
+* **lib/common/models/transaction_db_model.dart**:
+   - Added the method TransactionDbModel copy().
+* **lib/features/help_manager/main_manager.dart**:
+   - Added two more help pages (TransactionsLockHelp and TransactionsFutureHelp).
+* **lib/features/help_manager/pages/transactions_add_help.dart**:
+   - Added two more sentences to the help window.
+* **lib/features/help_manager/pages/transactions_card_help.dart**:
+   - Fixed a bug in the presentation of this help page.
+* **lib/features/home_page/balance_card/balance_card.dart**:
+   - Added the method futureTransIcon() to return the IconData for the selected widget.controller.futureTransactions;
+   - Added menus to control transactionStatus and futureTransactions.
+* **lib/features/home_page/balance_card/balance_card_controller.dart**:
+   - Created the enum FutureTrans to control the states of _futureTransactions;
+   - Added the _futureTransactions attribute and its getter;
+   - Added the changeFutureTransactions method to change the status of _futureTransactions;
+   - Added the bool isFutureTrans(FutureTrans futureTrans) method.
+* **lib/features/home_page/home_page_controller.dart**:
+   - Changed maxTransactions to 50 transactions;
+   - Added the ExtendedDate getInitialDate() method. This method returns the initial date based on the locator.get<BalanceCardController>().futureTransactions selected. This date is used as the initial date for displaying transactions on the main page.
+* **lib/features/home_page/widgets/transaction_dismissible_tile.dart**:
+   - Added support for displaying future transactions.
+* **lib/features/transaction/transaction_page.dart**:
+   - Adjusted the addAction function, now renamed to addTransactionsAction, to handle future transactions.
+* **lib/l10n/app_??.arb**:
+   - Added new translations and corrections.
+
 
 ## 2023/10/04 - Version 1.0.1+27:
 

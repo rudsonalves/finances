@@ -1,7 +1,9 @@
+import 'package:finances/common/constants/themes/colors/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../common/constants/themes/colors/custom_color.g.dart';
+import '../../../common/models/extends_date.dart';
 import '../../../locator.dart';
 import '../../../services/database/managers/transfers_manager.dart';
 import '../../statistics/statistic_controller.dart';
@@ -108,22 +110,54 @@ class _TransactionDismissibleTileState
     );
   }
 
+  void onTabCheck() async {
+    if (balanceCardController.transStatusCheck) {
+      await widget.transaction.toggleTransStatus();
+      setState(() {});
+    }
+  }
+
+  void onTabFuture() async {
+    final AppLocalizations locale = AppLocalizations.of(context)!;
+
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          locale.transactionCheckDlgTitle,
+          textAlign: TextAlign.center,
+        ),
+        content: Text(locale.transactionCheckDlgMsg),
+        actions: [
+          ElevatedButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(locale.genericClose),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final money = locator.get<MoneyMaskedText>();
     final balanceCardController = locator.get<BalanceCardController>();
+    final transaction = widget.transaction;
 
-    double value = widget.transaction.transValue;
+    double value = transaction.transValue;
     bool minus = value.isNegative;
     value = value.abs();
 
     final CategoryDbModel category =
         locator.get<CategoryRepository>().getCategoryId(
-              widget.transaction.transCategoryId,
+              transaction.transCategoryId,
             );
     final AppLocalizations locale = AppLocalizations.of(context)!;
+
+    bool isFutureTransaction =
+        transaction.transDate.onlyDate > ExtendedDate.now();
 
     return Padding(
       padding: const EdgeInsets.only(
@@ -140,8 +174,7 @@ class _TransactionDismissibleTileState
           color: customColors.lightgreenContainer!,
           icon: Icons.edit,
           label: locale.transactionListTileEdit,
-          enable:
-              widget.transaction.transStatus != TransStatus.transactionChecked,
+          enable: transaction.transStatus != TransStatus.transactionChecked,
         ),
         secondaryBackground: baseDismissibleContainer(
           context,
@@ -149,46 +182,61 @@ class _TransactionDismissibleTileState
           color: colorScheme.errorContainer,
           icon: Icons.delete,
           label: locale.transactionListTileDelete,
-          enable:
-              widget.transaction.transStatus != TransStatus.transactionChecked,
+          enable: transaction.transStatus != TransStatus.transactionChecked,
         ),
         child: Card(
-          elevation: widget.transaction.ischecked ? 0 : 1,
+          elevation: transaction.ischecked ? 0 : 1,
+          color: isFutureTransaction ? AppColors.futureTransactionsCard : null,
           margin: EdgeInsets.zero,
           child: ListTile(
-            leading: category.categoryIcon.iconWidget(size: 28),
+            leading: category.categoryIcon.iconWidget(
+              size: 28,
+              color: isFutureTransaction
+                  ? colorScheme.outline.withAlpha(123)
+                  : null,
+            ),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   maxLines: 2,
-                  widget.transaction.transDescription,
-                  style: AppTextStyles.textStyle16,
+                  transaction.transDescription,
+                  style: isFutureTransaction
+                      ? AppTextStyles.textStyle16.copyWith(
+                          color: isFutureTransaction
+                              ? colorScheme.outline.withAlpha(123)
+                              : colorScheme.outline,
+                        )
+                      : AppTextStyles.textStyle16,
                 ),
                 Text(
-                  widget.transaction.transDate.toString(),
-                  style: AppTextStyles.textStyle11,
+                  transaction.transDate.toString(),
+                  style: AppTextStyles.textStyle11.copyWith(
+                    color: isFutureTransaction
+                        ? colorScheme.outline.withAlpha(123)
+                        : colorScheme.outline,
+                  ),
                 ),
               ],
             ),
             trailing: Text(
-              money.text(widget.transaction.transValue),
+              money.text(transaction.transValue),
               style: AppTextStyles.textStyleSemiBold18.copyWith(
-                  color: minus ? customColors.minusred : customColors.lowgreen,
+                  color: minus
+                      ? isFutureTransaction
+                          ? customColors.minusred!.withAlpha(123)
+                          : customColors.minusred
+                      : isFutureTransaction
+                          ? customColors.lowgreen!.withAlpha(123)
+                          : customColors.lowgreen,
                   fontWeight: FontWeight.w700),
             ),
-            onTap: () async {
-              if (balanceCardController.transStatusCheck) {
-                await widget.transaction.toggleTransStatus();
-                setState(() {});
-              }
-            },
+            onTap: isFutureTransaction ? onTabFuture : onTabCheck,
           ),
         ),
         confirmDismiss: (direction) async {
           // return if transaction.transStatus is transactionChecked
-          if (widget.transaction.transStatus ==
-              TransStatus.transactionChecked) {
+          if (transaction.transStatus == TransStatus.transactionChecked) {
             return false;
           }
           if (direction == DismissDirection.startToEnd) {
@@ -198,7 +246,7 @@ class _TransactionDismissibleTileState
               AppRoute.transaction.name,
               arguments: {
                 'addTransaction': false,
-                'transaction': widget.transaction,
+                'transaction': transaction,
               },
             );
             locator.get<StatisticsController>().requestRecalculate();
@@ -208,16 +256,14 @@ class _TransactionDismissibleTileState
           }
           if (direction == DismissDirection.endToStart) {
             // Delete
-            bool? action =
-                await deleteTransactionDialog(context, widget.transaction);
+            bool? action = await deleteTransactionDialog(context, transaction);
 
             if (action ?? false) {
               try {
-                if (widget.transaction.transTransferId == null) {
-                  await TransactionsManager.removeTransaction(
-                      widget.transaction);
+                if (transaction.transTransferId == null) {
+                  await TransactionsManager.removeTransaction(transaction);
                 } else {
-                  await TransfersManager.removeTransfer(widget.transaction);
+                  await TransfersManager.removeTransfer(transaction);
                 }
                 locator.get<StatisticsController>().requestRecalculate();
                 homePageController.getTransactions();

@@ -1,3 +1,4 @@
+import 'package:finances/features/home_page/home_page_controller.dart';
 import 'package:flutter/material.dart';
 
 import '../../../common/current_models/current_balance.dart';
@@ -9,6 +10,13 @@ import './balance_cart_state.dart';
 import '../../../common/models/card_balance_model.dart';
 import '../../../repositories/transaction/transaction_repository.dart';
 
+enum FutureTrans {
+  hide,
+  week,
+  month,
+  year,
+}
+
 class BalanceCardController extends ChangeNotifier {
   final transactionRepository = locator.get<TransactionRepository>();
   final accountRepository = locator.get<AccountRepository>();
@@ -16,6 +24,10 @@ class BalanceCardController extends ChangeNotifier {
   bool _transStatusCheck = false;
 
   bool get transStatusCheck => _transStatusCheck;
+
+  FutureTrans _futureTransactions = FutureTrans.week;
+
+  FutureTrans get futureTransactions => _futureTransactions;
 
   BalanceCardController();
 
@@ -79,5 +91,17 @@ class BalanceCardController extends ChangeNotifier {
     _transStatusCheck = !_transStatusCheck;
     Future.delayed(const Duration(milliseconds: 50));
     changeState(BalanceCardStateSuccess());
+  }
+
+  Future<void> changeFutureTransactions(FutureTrans newFutureTrans) async {
+    changeState(BalanceCardStateLoading());
+    _futureTransactions = newFutureTrans;
+    Future.delayed(const Duration(milliseconds: 50));
+    changeState(BalanceCardStateSuccess());
+    locator.get<HomePageController>().getTransactions();
+  }
+
+  bool isFutureTrans(FutureTrans futureTrans) {
+    return _futureTransactions == futureTrans;
   }
 }
