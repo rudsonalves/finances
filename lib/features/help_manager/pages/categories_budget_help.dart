@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'page_model.dart';
+import '../model/page_model.dart';
 
 class CategoriesBudgetHelp implements PageModel {
   final String _title;

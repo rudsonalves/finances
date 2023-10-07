@@ -27,6 +27,16 @@ class _ListTileStatisticState extends State<ListTileStatistic> {
   final categoryRepository = locator.get<CategoryRepository>();
   final controller = locator.get<StatisticCardController>();
 
+  void setGraphic(String categoryName) {
+    setState(() {
+      if (currentUser.userCategoryList.contains(categoryName)) {
+        controller.removeFromCategoryList(categoryName);
+      } else {
+        controller.addToCategoryList(categoryName);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final categoryName = widget.category.categoryName;
@@ -54,15 +64,7 @@ class _ListTileStatisticState extends State<ListTileStatistic> {
             VariationColumn(widget.category.variation),
           ],
         ),
-        onTap: () {
-          setState(() {
-            if (currentUser.userCategoryList.contains(categoryName)) {
-              controller.removeInCategoryList(categoryName);
-            } else {
-              controller.addInCategoryList(categoryName);
-            }
-          });
-        },
+        onTap: () => setGraphic(categoryName),
       ),
     );
   }

@@ -47,7 +47,8 @@ class CurrentAccount extends AccountDbModel {
     }
 
     setFromAccountDbModel(
-        accountRepository.accountsMap[currentUser.userMainAccountId]!);
+      accountRepository.accountsMap[currentUser.userMainAccountId]!,
+    );
   }
 
   void changeCurrenteAccount(AccountDbModel account) {
@@ -60,7 +61,7 @@ class CurrentAccount extends AccountDbModel {
     accountUserId = account.accountUserId;
     accountIcon = account.accountIcon;
     accountLastBalance = account.accountLastBalance;
-    accountDescription = accountDescription;
+    accountDescription = account.accountDescription;
   }
 
   factory CurrentAccount.fromAccountDbModel(AccountDbModel account) {

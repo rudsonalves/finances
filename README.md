@@ -275,8 +275,7 @@ Some bugs were noticed and need to be fixed:
 
 - *20231002.1* adjust: Fiz a besteira de implementar pelo nome da categoria alguns códigos (como CategoryController, StatisticsController, alguns como RepositorCategory). Isto gera um problema, pois al alterar o nome de uma categoria tenho de refazer todos estes registros para que não gerem problemas. Trocar estas indexações para os ids das categorias. Al fazer isto não será mais necessário solicitar um reCalculate ao StatisticsPage por alteração em nomes de categorias.
 - *20231002.2* implementation: implemnetar um sistema de logger para o app.
-- *20231004.1* bug: Lançamentos futuros (Gastos programados não aparecem no histórico);
-- *20231004.2* bug: os cálculos de estatíticas está trabalhando apenas com o módulos das movimentações. Isto é um problema para categorias com valores positivos e negativos;
+- *20231007.1* bug: existe um problema na StatisticsPage. No mes de agosto selecione Lazer e depois Marcenaria (ou vice-versa) que o bug se apresentará. Um problema que notei é que toda a lógica matemática desta página está em StatisticsController enquanto que StatisticsCardController é quem de fato usa os dados. Uma ideia é mover a lógica para a classe StatisticsCardController, visto que esta é que de fato usa os dados.
 
 # Commits:
 
