@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:finances/repositories/category/category_repository.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../../common/current_models/current_user.dart';
@@ -38,7 +39,6 @@ class StatisticCardController extends ChangeNotifier {
       } else {
         _getCategoriesData();
       }
-      await Future.delayed(const Duration(milliseconds: 50));
       _changeState(StatisticCardStateSuccess());
     } catch (err) {
       _changeState(StatisticCardStateError());
@@ -46,14 +46,14 @@ class StatisticCardController extends ChangeNotifier {
     }
   }
 
-  Future<void> addInCategoryList(String categoryName) async {
+  Future<void> addToCategoryList(String categoryName) async {
     if (currentUser.userCategoryList.contains(categoryName)) return;
 
     currentUser.userCategoryList.add(categoryName);
     await getGraphicDataPoints();
   }
 
-  Future<void> removeInCategoryList(String categoryName) async {
+  Future<void> removeFromCategoryList(String categoryName) async {
     if (!currentUser.userCategoryList.contains(categoryName)) return;
 
     currentUser.userCategoryList.remove(categoryName);
@@ -77,7 +77,7 @@ class StatisticCardController extends ChangeNotifier {
 
     _graphicData.add(
       PlotData(
-        data: expanses.map((e) => e.abs()).toList(),
+        data: expanses.map((element) => element.abs()).toList(),
         name: 'Expenses',
       ),
     );
@@ -85,6 +85,7 @@ class StatisticCardController extends ChangeNotifier {
 
   void _getCategoriesData() {
     _graphicData.clear();
+    final categoriesMap = locator.get<CategoryRepository>().categoriesMap;
 
     for (final categoryName in currentUser.userCategoryList) {
       final statisticsMap = statisticController.statisticsMap;
@@ -98,10 +99,12 @@ class StatisticCardController extends ChangeNotifier {
         data.add(result.monthSum);
       }
 
+      final signal = categoriesMap[categoryName]!.categoryIsIncome ? 1 : -1;
+
       _graphicData.add(
         PlotData(
           name: categoryName,
-          data: data.reversed.map((e) => e.abs()).toList(),
+          data: data.reversed.map((element) => signal * element).toList(),
         ),
       );
     }

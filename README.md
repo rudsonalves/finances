@@ -273,12 +273,22 @@ Com esses gatilhos em vigor, qualquer tentativa de inserir um valor inválido em
 
 Some bugs were noticed and need to be fixed:
 
-- *20231002.1* adjust: Fiz a besteira de implementar pelo nome da categoria alguns códigos (como CategoryController, StatisticsController, alguns como RepositorCategory). Isto gera um problema, pois al alterar o nome de uma categoria tenho de refazer todos estes registros para que não gerem problemas. Trocar estas indexações para os ids das categorias. Al fazer isto não será mais necessário solicitar um reCalculate ao StatisticsPage por alteração em nomes de categorias.
 - *20231002.2* implementation: implemnetar um sistema de logger para o app.
-- *20231004.1* bug: Lançamentos futuros (Gastos programados não aparecem no histórico);
-- *20231004.2* bug: os cálculos de estatíticas está trabalhando apenas com o módulos das movimentações. Isto é um problema para categorias com valores positivos e negativos;
+- *20231009.1* bug: ao mudar o mês na StasticsPage este está fazendo o gráfico redesenhar, o que não é necessário.
+- *20231009.1* implementation: implementar um filtro na página incial.
 
 # Commits:
+
+## 2023/10/05 - version: 1.0.2+29
+
+In this commit, bugs related to the scale of the chart on the statistics page have been resolved. Here's a description of the changes:
+ * lib/features/statistics/graphics/line_graphic.dart:
+   - Correction in the scale calculation in the calculateYScale method.
+ * lib/features/statistics/statistic_controller.dart:
+   - References to the Completer object were removed in the setStatisticsReference method. They are not needed.
+ * lib/features/statistics/widgets/list_tile_statistic.dart:
+   - The setGraphic method has become asynchronous, and some code optimizations have been implemented.
+
 
 ## 2023/10/05 - version: 1.0.2+28
 

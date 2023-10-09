@@ -85,11 +85,6 @@ class LineGraphic extends StatelessWidget {
 
     for (final GraphicLineData graphicData in data) {
       for (final FlSpot point in graphicData.data) {
-        if (maxY == 0) {
-          minY = point.y;
-          maxY = point.y;
-          continue;
-        }
         if (maxY < point.y) {
           maxY = point.y;
           continue;
@@ -100,22 +95,40 @@ class LineGraphic extends StatelessWidget {
       }
     }
 
+    maxY = (maxY > 0 ? maxY.ceil() : -(-maxY).round()).toDouble();
+    minY = (minY > 0 ? minY.toInt() : -(-minY).ceil()).toDouble();
+
     double minScale = 0.0;
     double maxScale = 0.0;
 
-    int orderMax = (log(maxY) / ln10).floor();
-    double orderValueMax = pow(10, orderMax).toDouble();
-    int scaleMax = (maxY / orderValueMax).round();
+    if (maxY != 0) {
+      int orderMax = (log(maxY.abs()) / ln10).floor();
+      double orderValueMax = pow(10, orderMax).toDouble();
+      int scaleMax = (maxY / orderValueMax).round();
 
-    maxScale = (scaleMax * orderValueMax).toDouble();
+      maxScale = (scaleMax * orderValueMax).toDouble();
+    }
 
-    if (minY > 0) {
-      int orderMin = (log(minY) / ln10).floor();
+    if (minY != 0) {
+      int orderMin = (log(minY.abs()) / ln10).floor();
       double orderValueMin = pow(10, orderMin).toDouble();
       int scaleMin = (minY / orderValueMin).round();
 
       minScale = (scaleMin * orderValueMin).toDouble();
     }
+
+    if (maxScale > 0) {
+      final interval = maxScale / 10;
+      while (maxScale < maxY) {
+        maxScale += interval;
+      }
+    }
+
+    // print("orderMaxY: $orderValueMax");
+    // print("orderMinY: $orderValueMin");
+
+    // print('minY: $minY maxY: $maxY ');
+    // print('Scales: min: $minScale, max: $maxScale');
 
     return (minScale, maxScale);
   }

@@ -15,7 +15,7 @@ import 'pages/categories_edit_help.dart';
 import 'pages/categories_help.dart';
 import 'pages/icons_color_help.dart';
 import 'pages/icons_selection_help.dart';
-import 'pages/page_model.dart';
+import 'model/page_model.dart';
 import 'pages/presentation_help.dart';
 import 'pages/statistics_card.dart';
 import 'pages/statistics_help.dart';
