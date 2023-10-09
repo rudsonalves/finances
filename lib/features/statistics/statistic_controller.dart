@@ -248,9 +248,9 @@ class StatisticsController extends ChangeNotifier {
       await _currentOperation;
     }
 
-    final completer = Completer<void>();
-    _successCompleter = completer;
-    _currentOperation = completer.future;
+    // final completer = Completer<void>();
+    // _successCompleter = completer;
+    // _currentOperation = completer.future;
 
     try {
       _changeState(StatisticsStateLoading());
@@ -259,18 +259,18 @@ class StatisticsController extends ChangeNotifier {
       await currentUser.updateUserBudgetRef();
       _buildStatistics();
       _changeState(StatisticsStateSuccess());
-      completer.complete();
+      // completer.complete();
     } catch (err) {
       log('Error: $err');
       _changeState(StatisticsStateError());
-      completer.completeError(err);
+      // completer.completeError(err);
     } finally {
       _currentOperation = null;
     }
   }
 
-  Future<void> waitUntilSuccess() {
+  Future<void> waitUntilSuccess() async {
     _successCompleter ??= Completer<void>();
-    return _successCompleter!.future;
+    return await _successCompleter!.future;
   }
 }

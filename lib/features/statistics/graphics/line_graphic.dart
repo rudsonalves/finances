@@ -85,11 +85,6 @@ class LineGraphic extends StatelessWidget {
 
     for (final GraphicLineData graphicData in data) {
       for (final FlSpot point in graphicData.data) {
-        if (maxY == 0) {
-          minY = point.y;
-          maxY = point.y;
-          continue;
-        }
         if (maxY < point.y) {
           maxY = point.y;
           continue;
@@ -132,8 +127,8 @@ class LineGraphic extends StatelessWidget {
     // print("orderMaxY: $orderValueMax");
     // print("orderMinY: $orderValueMin");
 
-    print('minY: $minY maxY: $maxY ');
-    print('Scales: min: $minScale, max: $maxScale');
+    // print('minY: $minY maxY: $maxY ');
+    // print('Scales: min: $minScale, max: $maxScale');
 
     return (minScale, maxScale);
   }
