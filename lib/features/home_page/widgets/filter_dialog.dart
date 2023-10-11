@@ -1,12 +1,12 @@
-import 'package:finances/features/home_page/home_page_controller.dart';
-import 'package:finances/repositories/category/category_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../common/constants/themes/app_button_styles.dart';
 import '../../../common/constants/themes/app_text_styles.dart';
 import '../../../common/widgets/autocomplete_text_form_field.dart';
 import '../../../locator.dart';
+import '../../../repositories/category/category_repository.dart';
+import '../home_page_controller.dart';
 
 class FilterDialog extends StatefulWidget {
   const FilterDialog({super.key});
@@ -41,7 +41,9 @@ class _FilterDialogState extends State<FilterDialog> {
   @override
   Widget build(BuildContext context) {
     final primary = Theme.of(context).colorScheme.primary;
-    final locale = AppLocalizations.of(context)!;
+    // final locale = AppLocalizations.of(context)!;
+    double maxHeight = MediaQuery.of(context).size.height;
+    print('>>>> $maxHeight');
 
     return Dialog(
       child: Padding(
@@ -126,7 +128,7 @@ class _FilterDialogState extends State<FilterDialog> {
                 valueListenable: _filterByDescription,
                 builder: (context, _, __) {
                   return AutocompleteTextFormField(
-                    maxHeight: 160,
+                    maxHeight: 160 * maxHeight / 813.1,
                     labelText: 'Filter Text',
                     suggestions: getSugestionsList(),
                     controller: _controller,
@@ -139,7 +141,7 @@ class _FilterDialogState extends State<FilterDialog> {
                 _filterByDescription.value,
               )),
               style: AppButtonStyles.primaryButtonColor(context),
-              child: Text(locale.genericClose),
+              child: Text('Filter'),
             ),
           ],
         ),
