@@ -339,6 +339,7 @@
     "helpStatisticsMenu1": "Selecione o menu {StatisticsPageStatisticalRef},",
     "helpStatisticsMenu2": "e depois escolha uma das opções de referência estatística.",
     "helpStatisticsMenu3": "Essas referências serão usadas como base para determinar os desvios nos gastos das categorias.",
+    "helpIndexTitle": "Índice",
     "transactionRepeatMonthly": "Repetir Mensalmente",
     "transactionRepeatTimes": "Repetir",
     "cardBalanceMenuShow": "Mostrar Transações Futuras",

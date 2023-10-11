@@ -1,7 +1,7 @@
-import 'package:finances/common/constants/themes/colors/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../common/constants/themes/colors/app_colors.dart';
 import '../../../common/constants/themes/colors/custom_color.g.dart';
 import '../../../common/models/extends_date.dart';
 import '../../../locator.dart';

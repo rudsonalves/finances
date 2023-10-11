@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="finances"
+        android:label="Control your Finances"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

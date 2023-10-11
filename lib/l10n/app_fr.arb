@@ -339,6 +339,7 @@
     "helpTransactionsFuture1": "Les Transactions Futures apparaissent en tons pastel ① pour se distinguer des transactions non vérifiées ② et vérifiées ③.",
     "helpTransactionsFuture2": "Par défaut, l'application affiche les transactions futures jusqu'à 7 jours à l'avance par rapport à la date actuelle.",
     "helpTransactionsFuture3": "Pour modifier la fenêtre de visibilité des transactions futures, sélectionnez les icônes dans le coin supérieur droit de l'écran Résumé ⓐ -> 'Afficher les Transactions Futures' ⓑ -> et sélectionnez l'option souhaitée ⓒ.",
+    "helpIndexTitle": "Index",
     "transactionRepeatMonthly": "Répéter Mensuellement",
     "transactionRepeatTimes": "Répéter",
     "cardBalanceMenuShow": "Afficher les Transactions Futures",

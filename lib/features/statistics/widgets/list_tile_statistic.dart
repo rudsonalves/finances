@@ -57,9 +57,9 @@ class _ListTileStatisticState extends State<ListTileStatistic> {
             const Spacer(),
             Text(
               money.text(widget.category.monthSum),
-              style: AppTextStyles.textStyleSemiBold18.copyWith(
+              style: AppTextStyles.textStyleSemiBold16.copyWith(
                   color: minus ? customColors.minusred : customColors.lowgreen,
-                  fontWeight: FontWeight.w700),
+                  fontWeight: FontWeight.w600),
             ),
             const SizedBox(width: 4),
             VariationColumn(widget.category.variation),

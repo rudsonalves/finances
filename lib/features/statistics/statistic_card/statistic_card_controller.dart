@@ -1,10 +1,10 @@
 import 'dart:developer';
 
-import 'package:finances/repositories/category/category_repository.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../../common/current_models/current_user.dart';
 import '../../../locator.dart';
+import '../../../repositories/category/category_repository.dart';
 import '../models/statistic_result.dart';
 import '../statistic_controller.dart';
 import 'statistic_cart.state.dart';

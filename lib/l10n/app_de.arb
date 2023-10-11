@@ -339,6 +339,7 @@
     "helpTransactionsFuture1": "Zukünftige Transaktionen erscheinen in Pastelltönen ①, um sie von nicht überprüften ② und überprüften ③ Transaktionen zu unterscheiden.",
     "helpTransactionsFuture2": "Standardmäßig zeigt die App zukünftige Transaktionen bis zu 7 Tage im Voraus zum aktuellen Datum an.",
     "helpTransactionsFuture3": "Um das Sichtbarkeitsfenster zukünftiger Transaktionen zu ändern, wählen Sie die Symbole oben rechts auf der Zusammenfassungsseite aus ⓐ -> 'Zukünftige Transaktionen anzeigen' ⓑ -> und wählen Sie die gewünschte Option ⓒ.",
+    "helpIndexTitle": "Index",
     "transactionRepeatMonthly": "Monatlich wiederholen",
     "transactionRepeatTimes": "Wiederholen",
     "cardBalanceMenuShow": "Zukünftige Transaktionen anzeigen",

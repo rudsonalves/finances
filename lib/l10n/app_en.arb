@@ -339,6 +339,7 @@
     "helpTransactionsFuture1": "Future Transactions appear in pastel tones ① to distinguish them from unverified ② and verified ③ transactions.",
     "helpTransactionsFuture2": "By default, the app displays future transactions within up to 7 days ahead of the current date.",
     "helpTransactionsFuture3": "To change the visibility window of future transactions, select the icons in the top right corner on the Summary screen ⓐ -> 'Show Future Transactions' ⓑ -> and select the desired option ⓒ.",
+    "helpIndexTitle": "Index",
     "transactionRepeatMonthly": "Repeat Monthly",
     "transactionRepeatTimes": "Repeat",
     "cardBalanceMenuShow": "Show Future Transactions",

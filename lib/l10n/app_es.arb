@@ -339,6 +339,7 @@
     "helpTransactionsFuture1": "Las Transacciones Futuras aparecen en tonos pastel ① para destacarse de las transacciones no verificadas ② y verificadas ③.",
     "helpTransactionsFuture2": "Por defecto, la aplicación muestra las transacciones futuras dentro de un máximo de 7 días a partir de la fecha actual.",
     "helpTransactionsFuture3": "Para cambiar la ventana de visibilidad de las transacciones futuras, seleccione los iconos en la esquina superior derecha en la pantalla de Resumen ⓐ -> 'Mostrar Transacciones Futuras' ⓑ -> y seleccione la opción deseada ⓒ.",
+    "helpIndexTitle": "Índice",
     "transactionRepeatMonthly": "Repetir Mensualmente",
     "transactionRepeatTimes": "Repetir",
     "cardBalanceMenuShow": "Mostrar Transacciones Futuras",

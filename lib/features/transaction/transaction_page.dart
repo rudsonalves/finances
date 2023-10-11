@@ -1,8 +1,8 @@
-import 'package:finances/common/current_models/current_account.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../common/constants/themes/colors/custom_color.g.dart';
+import '../../common/current_models/current_account.dart';
 import '../../common/models/account_db_model.dart';
 import '../../common/models/category_db_model.dart';
 import '../../common/widgets/account_dropdown_form_field.dart';
@@ -299,7 +299,7 @@ class _TransactionPageState extends State<TransactionPage> {
           IconButton(
             onPressed: () => managerTutorial(
               context,
-              newTransactionsHelp,
+              transactionsAddHelp,
             ),
             icon: const Icon(Icons.help_outline),
           ),

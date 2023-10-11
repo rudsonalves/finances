@@ -339,6 +339,7 @@
     "helpStatisticsMenu1": "Seleziona il menu {StatisticsPageStatisticalRef},",
     "helpStatisticsMenu2": "e poi scegli una delle opzioni di riferimento statistico.",
     "helpStatisticsMenu3": "Questi riferimenti verranno utilizzati come base per determinare le differenze nelle spese delle categorie.",
+    "helpIndexTitle": "Indice",
     "transactionRepeatMonthly": "Ripeti Mensilmente",
     "transactionRepeatTimes": "Ripeti",
     "cardBalanceMenuShow": "Mostra Transazioni Future",
