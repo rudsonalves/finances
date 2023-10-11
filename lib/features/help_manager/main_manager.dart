@@ -252,6 +252,7 @@ class MainHelpManager extends StatelessWidget {
   Widget build(BuildContext context) {
     final primary = Theme.of(context).colorScheme.primary;
     final fontSize = _calculateFontSize(page.title);
+    final locale = AppLocalizations.of(context)!;
 
     return SimpleDialog(
       title: Row(
@@ -301,7 +302,7 @@ class MainHelpManager extends StatelessWidget {
                   ? () => Navigator.of(context).pop(HelpCommand.close)
                   : null,
               style: AppButtonStyles.primaryButtonColor(context),
-              child: const Text('Close'),
+              child: Text(locale.genericClose),
             ),
             IconButton(
               onPressed: buttons.next

@@ -13,6 +13,7 @@ class AutocompleteTextFormField extends StatefulWidget {
   final void Function(String)? onEditingComplete;
   final Widget? suffixIcon;
   final List<String> suggestions;
+  final double maxHeight;
 
   const AutocompleteTextFormField({
     super.key,
@@ -28,6 +29,7 @@ class AutocompleteTextFormField extends StatefulWidget {
     this.onEditingComplete,
     this.suffixIcon,
     required this.suggestions,
+    this.maxHeight = double.infinity,
   });
 
   @override
@@ -108,6 +110,9 @@ class _AutocompleteTextFormFieldState extends State<AutocompleteTextFormField> {
             Padding(
               padding: const EdgeInsets.all(4),
               child: Container(
+                constraints: BoxConstraints(
+                  maxHeight: widget.maxHeight,
+                ),
                 decoration: BoxDecoration(
                     color: colorScheme.inversePrimary,
                     borderRadius: BorderRadius.circular(16)),

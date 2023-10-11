@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../common/models/transaction_db_model.dart';
 import '../../common/models/user_name_notifier.dart';
 import '../../locator.dart';
+import '../../repositories/category/category_repository.dart';
 import '../help_manager/main_manager.dart';
 import './home_page_state.dart';
 import './home_page_controller.dart';
 import './balance_card/balance_card.dart';
+import 'widgets/filter_dialog.dart';
 import 'widgets/transaction_dismissible_tile.dart';
 import '../../common/extensions/app_scale.dart';
 import '../../common/models/extends_date.dart';
@@ -33,6 +36,9 @@ class _HomePageState extends State<HomePage>
   final _balanceController = locator.get<BalanceCardController>();
   final ScrollController _listViewController = ScrollController();
   final _userNameNotifier = locator.get<UserNameNotifier>();
+  String _filterText = '';
+  bool _fliterIsDescription = true;
+  int _filterCategoryId = 0;
 
   ExtendedDate lastDate = ExtendedDate(1980, 1, 1);
 
@@ -69,6 +75,8 @@ class _HomePageState extends State<HomePage>
     super.build(context);
 
     final colorScheme = Theme.of(context).colorScheme;
+    final primary = colorScheme.primary;
+    final onPrimary = colorScheme.onPrimary;
     final currentUser = locator.get<CurrentUser>();
     final textScaleFactor = locator.get<AppScale>().textScaleFactor;
     final locale = AppLocalizations.of(context)!;
@@ -81,7 +89,7 @@ class _HomePageState extends State<HomePage>
             Text(
               greetingText(),
               style: AppTextStyles.textStyle14.copyWith(
-                color: colorScheme.onPrimary,
+                color: onPrimary,
               ),
             ),
             AnimatedBuilder(
@@ -90,7 +98,7 @@ class _HomePageState extends State<HomePage>
                   return Text(
                     currentUser.userName!,
                     style: AppTextStyles.textStyleSemiBold20.copyWith(
-                      color: colorScheme.onPrimary,
+                      color: onPrimary,
                     ),
                   );
                 }),
@@ -127,7 +135,39 @@ class _HomePageState extends State<HomePage>
                         Text(
                           locale.homePageTransHistory,
                           style: AppTextStyles.textStyleSemiBold18.copyWith(
-                            color: colorScheme.primary,
+                            color: primary,
+                          ),
+                        ),
+                        const Spacer(),
+                        IconButton(
+                          onPressed: () async {
+                            String? text;
+                            bool? isDescription;
+                            try {
+                              (text, isDescription) = await showDialog(
+                                context: context,
+                                builder: (context) => const FilterDialog(),
+                              );
+                              _filterText = text ?? '';
+                              _fliterIsDescription = isDescription ?? true;
+
+                              if (!_fliterIsDescription) {
+                                _filterCategoryId = locator
+                                    .get<CategoryRepository>()
+                                    .getIdByName(_filterText);
+                              }
+                            } catch (err) {
+                              _filterText = '';
+                              _fliterIsDescription = true;
+                            }
+
+                            setState(() {});
+                          },
+                          icon: Icon(
+                            _filterText.isEmpty
+                                ? Icons.filter_alt_outlined
+                                : Icons.filter_alt,
+                            color: primary,
                           ),
                         ),
                       ],
@@ -140,7 +180,7 @@ class _HomePageState extends State<HomePage>
                         // State Loading...
                         if (_controller.state is HomePageStateLoading) {
                           return CustomCircularProgressIndicator(
-                            color: Theme.of(context).colorScheme.primary,
+                            color: primary,
                           );
                         }
 
@@ -166,14 +206,33 @@ class _HomePageState extends State<HomePage>
                               ),
                             );
                           }
+
+                          List<TransactionDbModel> transactions = [];
+
+                          if (_filterText.isNotEmpty) {
+                            for (final trans in _controller.transactions) {
+                              if (_fliterIsDescription) {
+                                if (trans.transDescription
+                                    .contains(_filterText)) {
+                                  transactions.add(trans);
+                                }
+                              } else {
+                                if (trans.transCategoryId ==
+                                    _filterCategoryId) {
+                                  transactions.add(trans);
+                                }
+                              }
+                            }
+                          } else {
+                            transactions = _controller.transactions;
+                          }
                           // building...
                           return ListView.builder(
                             controller: _listViewController,
-                            itemCount: _controller.transactions.length + 1,
+                            itemCount: transactions.length + 1,
                             itemBuilder: (context, index) {
-                              if (index != _controller.transactions.length) {
-                                final transaction =
-                                    _controller.transactions[index];
+                              if (index != transactions.length) {
+                                final transaction = transactions[index];
 
                                 if (lastDate < transaction.transDate) {
                                   lastDate =
@@ -183,7 +242,7 @@ class _HomePageState extends State<HomePage>
 
                                 return TransactionDismissibleTile(
                                   textScale: textScaleFactor,
-                                  transaction: _controller.transactions[index],
+                                  transaction: transactions[index],
                                 );
                               } else {
                                 return Padding(
