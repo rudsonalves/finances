@@ -96,7 +96,7 @@ class _HomePageState extends State<HomePage>
                 animation: _userNameNotifier,
                 builder: (context, _) {
                   return Text(
-                    currentUser.userName!,
+                    currentUser.userName ?? '',
                     style: AppTextStyles.textStyleSemiBold20.copyWith(
                       color: onPrimary,
                     ),

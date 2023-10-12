@@ -250,7 +250,9 @@ class MainHelpManager extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final primary = Theme.of(context).colorScheme.primary;
+    final colorScheme = Theme.of(context).colorScheme;
+    final primary = colorScheme.primary;
+    final outlineVariant = colorScheme.outlineVariant;
     final fontSize = _calculateFontSize(page.title);
     final locale = AppLocalizations.of(context)!;
 
@@ -294,7 +296,7 @@ class MainHelpManager extends StatelessWidget {
                   : null,
               icon: Icon(
                 Icons.arrow_back_ios,
-                color: primary,
+                color: buttons._previus ? primary : outlineVariant,
               ),
             ),
             ElevatedButton(
@@ -310,7 +312,7 @@ class MainHelpManager extends StatelessWidget {
                   : null,
               icon: Icon(
                 Icons.arrow_forward_ios,
-                color: primary,
+                color: buttons.next ? primary : outlineVariant,
               ),
             ),
           ],
