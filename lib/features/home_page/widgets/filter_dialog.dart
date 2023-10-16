@@ -43,7 +43,6 @@ class _FilterDialogState extends State<FilterDialog> {
     final primary = Theme.of(context).colorScheme.primary;
     final locale = AppLocalizations.of(context)!;
     double maxHeight = MediaQuery.of(context).size.height;
-    print('>>>> $maxHeight');
 
     return Dialog(
       child: Padding(
