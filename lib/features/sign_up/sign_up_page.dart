@@ -112,7 +112,10 @@ class _SignUpPageState extends State<SignUpPage> {
       body: ListView(
         children: [
           LargeBoldText(locale.signUpPageMsg0),
-          Image.asset('assets/images/signup.png'),
+          Image.asset(
+            'assets/images/signup.png',
+            height: 180,
+          ),
           Form(
             key: _formKey,
             child: Padding(

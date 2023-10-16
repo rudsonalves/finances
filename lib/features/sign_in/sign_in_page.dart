@@ -173,7 +173,10 @@ class _SignInPageState extends State<SignInPage> {
       body: ListView(
         children: [
           LargeBoldText(locale.signInPageMsg0),
-          Image.asset('assets/images/signin.png'),
+          Image.asset(
+            'assets/images/signin.png',
+            height: 200,
+          ),
           Form(
             key: _formKey,
             child: Padding(
