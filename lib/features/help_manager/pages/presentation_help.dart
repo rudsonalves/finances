@@ -31,7 +31,10 @@ class PresentationHelp implements PageModel {
         locale.helpPresentation4,
       ],
       locale.helpPresentation5,
-      // locale.helpPresentation6,
+      [
+        Icon(Icons.list, color: color),
+        locale.helpPresentation6,
+      ],
     ];
     return PresentationHelp(title, messages);
   }

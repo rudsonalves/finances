@@ -221,6 +221,7 @@ class _BalanceCardState extends State<BalanceCard> {
                                     color: colorScheme.primary,
                                   ),
                                   title: Text(locale.cardBalanceMenuShow),
+                                  trailing: const Icon(Icons.arrow_forward_ios),
                                 ),
                                 onSelected: (value) {
                                   Navigator.of(context).pop();

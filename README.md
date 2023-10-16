@@ -274,8 +274,7 @@ Com esses gatilhos em vigor, qualquer tentativa de inserir um valor inválido em
 Some bugs were noticed and need to be fixed:
 
 - *20231002.2* implementation: implemnetar um sistema de logger para o app.
-- *20231009.1* bug: ao mudar o mês na StasticsPage este está fazendo o gráfico redesenhar, o que não é necessário.
-- *20231009.1* implementation: implementar um filtro na página incial.
+- *20231013.1* bug: o app não está filtrando o conteúdo por usuário. 
 
 # Commits:
 

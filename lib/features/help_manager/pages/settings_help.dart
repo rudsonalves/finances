@@ -3,17 +3,16 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../model/page_model.dart';
 
-class StatisticsMenuHelp implements PageModel {
+class SettingsHelp implements PageModel {
   final String _title;
-
   final List<Object> _messages;
 
-  StatisticsMenuHelp(this._title, this._messages);
+  SettingsHelp(this._title, this._messages);
 
-  static StatisticsMenuHelp create(AppLocalizations locale, Color color) {
-    String title = locale.helpStatisticsMenuTitle;
+  static SettingsHelp create(AppLocalizations locale, Color color) {
+    String title = locale.helpSettingsTitle;
     final List<Object> messages = [
-      locale.helpStatisticsMenu0,
+      locale.helpSettings0,
       [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -21,19 +20,18 @@ class StatisticsMenuHelp implements PageModel {
             SizedBox(
               width: 150,
               child: Image.asset(
-                'assets/images/statistics_menu_help.png',
+                'assets/images/settings_help.png',
                 fit: BoxFit.contain,
               ),
             ),
           ],
         ),
       ],
-      locale.helpStatisticsMenu1(locale.statisticsPageStatisticalRef),
-      locale.helpStatisticsMenu2,
-      locale.helpStatisticsMenu3,
+      locale.helpSettings1,
+      locale.helpSettings2,
+      locale.helpSettings3,
     ];
-
-    return StatisticsMenuHelp(title, messages);
+    return SettingsHelp(title, messages);
   }
 
   @override

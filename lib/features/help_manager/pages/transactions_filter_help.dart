@@ -3,17 +3,21 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../model/page_model.dart';
 
-class StatisticsMenuHelp implements PageModel {
+class TransactionsFilterHelp implements PageModel {
   final String _title;
-
   final List<Object> _messages;
 
-  StatisticsMenuHelp(this._title, this._messages);
+  TransactionsFilterHelp(this._title, this._messages);
 
-  static StatisticsMenuHelp create(AppLocalizations locale, Color color) {
-    String title = locale.helpStatisticsMenuTitle;
+  static TransactionsFilterHelp create(AppLocalizations locale, Color color) {
+    String title = locale.helpTransactionsFilterTitle;
     final List<Object> messages = [
-      locale.helpStatisticsMenu0,
+      locale.helpTransactionsFilter0,
+      [
+        Icon(Icons.filter_alt_outlined, color: color),
+        locale.helpTransactionsFilter1,
+      ],
+      locale.helpTransactionsFilter2,
       [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -21,19 +25,17 @@ class StatisticsMenuHelp implements PageModel {
             SizedBox(
               width: 150,
               child: Image.asset(
-                'assets/images/statistics_menu_help.png',
+                'assets/images/transaction_filter_help.png',
                 fit: BoxFit.contain,
               ),
             ),
           ],
         ),
       ],
-      locale.helpStatisticsMenu1(locale.statisticsPageStatisticalRef),
-      locale.helpStatisticsMenu2,
-      locale.helpStatisticsMenu3,
+      locale.helpTransactionsFilter3,
+      locale.helpTransactionsFilter4,
     ];
-
-    return StatisticsMenuHelp(title, messages);
+    return TransactionsFilterHelp(title, messages);
   }
 
   @override

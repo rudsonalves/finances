@@ -1580,6 +1580,22 @@ class SqfliteHelper implements DatabaseHelper {
     }
   }
 
+  /// Returns the number of categories in database.
+  @override
+  Future<int> countCategories() async {
+    if (!_db.isOpen) await _openDatabase();
+    try {
+      int count = Sqflite.firstIntValue(await _db.rawQuery(
+            'SELECT COUNT(*) FROM $categoriesTable',
+          )) ??
+          0;
+      return count;
+    } catch (err) {
+      log('Error: $err');
+      return -1;
+    }
+  }
+
   /// Returns the number of accounts on the passed id user.
   @override
   Future<int> countAccountsForUserId(String id) async {

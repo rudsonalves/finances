@@ -139,8 +139,14 @@ class _HomePageState extends State<HomePage>
                           ),
                         ),
                         const Spacer(),
-                        IconButton(
-                          onPressed: () async {
+                        InkWell(
+                          customBorder: const CircleBorder(),
+                          onLongPress: () {
+                            _filterText = '';
+                            _fliterIsDescription = true;
+                            setState(() {});
+                          },
+                          onTap: () async {
                             String? text;
                             bool? isDescription;
                             try {
@@ -163,11 +169,18 @@ class _HomePageState extends State<HomePage>
 
                             setState(() {});
                           },
-                          icon: Icon(
-                            _filterText.isEmpty
-                                ? Icons.filter_alt_outlined
-                                : Icons.filter_alt,
-                            color: primary,
+                          child: Ink(
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                            ),
+                            width: 32,
+                            height: 32,
+                            child: Icon(
+                              _filterText.isEmpty
+                                  ? Icons.filter_alt_outlined
+                                  : Icons.filter_alt,
+                              color: primary,
+                            ),
                           ),
                         ),
                       ],
@@ -213,7 +226,8 @@ class _HomePageState extends State<HomePage>
                             for (final trans in _controller.transactions) {
                               if (_fliterIsDescription) {
                                 if (trans.transDescription
-                                    .contains(_filterText)) {
+                                    .toLowerCase()
+                                    .contains(_filterText.toLowerCase())) {
                                   transactions.add(trans);
                                 }
                               } else {

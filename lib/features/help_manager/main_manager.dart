@@ -7,6 +7,7 @@ import 'index_help.dart';
 import 'pages/accounts_delete_help.dart';
 import 'pages/accounts_edit_help.dart';
 import 'pages/accounts_help.dart';
+import 'pages/backup_restore_help.dart';
 import 'pages/budget_set_help.dart';
 import 'pages/categories_budget_help.dart';
 import 'pages/categories_edit_help.dart';
@@ -16,6 +17,7 @@ import 'pages/icons_selection_help.dart';
 import 'model/page_model.dart';
 import 'pages/introduction_help.dart';
 import 'pages/presentation_help.dart';
+import 'pages/settings_help.dart';
 import 'pages/statistics_card.dart';
 import 'pages/statistics_help.dart';
 import 'pages/statistics_menu.dart';
@@ -23,6 +25,7 @@ import 'pages/statistics_move_help.dart';
 import 'pages/transactions_add_help.dart';
 import 'pages/transactions_card_help.dart';
 import 'pages/transactions_edit_help.dart';
+import 'pages/transactions_filter_help.dart';
 import 'pages/transactions_future.dart';
 import 'pages/transactions_help.dart';
 import 'pages/transactions_lock.dart';
@@ -55,20 +58,23 @@ const transactionsEditHelp = 4;
 const transactionsAddHelp = 5;
 const transactionsLockHelp = 6;
 const transactionsFutureHelp = 7;
-const accountsHelp = 8;
-const accountsEditHelp = 9;
-const accountsDeleteHelp = 10;
-const iconsSelectionsHelp = 11;
-const iconsColorHelp = 12;
-const categoriesHelp = 13;
-const categoriesEditHelp = 14;
-const categoriesBudgetHelp = 15;
-const budgetSetHelp = 16;
-const statisticsHelp = 17;
-const statisticsMoveHelp = 18;
-const statisticsCardHelp = 19;
-const statisticsMenuHelp = 20;
-const lastPage = statisticsMenuHelp;
+const transactionsFilterHelp = 8;
+const backupRestoreHelp = 9;
+const accountsHelp = 10;
+const accountsEditHelp = 11;
+const accountsDeleteHelp = 12;
+const iconsSelectionsHelp = 13;
+const iconsColorHelp = 14;
+const categoriesHelp = 15;
+const categoriesEditHelp = 16;
+const categoriesBudgetHelp = 17;
+const budgetSetHelp = 18;
+const statisticsHelp = 19;
+const statisticsMoveHelp = 20;
+const statisticsCardHelp = 21;
+const statisticsMenuHelp = 22;
+const settingsHelp = 23;
+const lastPage = settingsHelp;
 
 PageModel createPage(int index, AppLocalizations locale, Color color) {
   switch (index) {
@@ -88,6 +94,10 @@ PageModel createPage(int index, AppLocalizations locale, Color color) {
       return TransactionsLockHelp.create(locale, color);
     case transactionsFutureHelp:
       return TransactionsFutureHelp.create(locale, color);
+    case transactionsFilterHelp:
+      return TransactionsFilterHelp.create(locale, color);
+    case backupRestoreHelp:
+      return BackupRestoreHelp.create(locale, color);
     case accountsHelp:
       return AccountsHelp.create(locale, color);
     case accountsEditHelp:
@@ -112,9 +122,12 @@ PageModel createPage(int index, AppLocalizations locale, Color color) {
       return StatisticsMoveHelp.create(locale, color);
     case statisticsCardHelp:
       return StatisticsCardHelp.create(locale, color);
-    // case statisticsMenuHelp:
-    default:
+    case statisticsMenuHelp:
       return StatisticsMenuHelp.create(locale, color);
+    case settingsHelp:
+      return SettingsHelp.create(locale, color);
+    default:
+      return SettingsHelp.create(locale, color);
   }
 }
 
@@ -279,7 +292,8 @@ class MainHelpManager extends StatelessWidget {
               ))
         ],
       ),
-      contentPadding: const EdgeInsets.all(16),
+      contentPadding:
+          const EdgeInsets.only(top: 0, left: 16, right: 16, bottom: 8),
       children: [
         ...generateText(
           messages: page.messages,

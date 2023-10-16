@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../common/constants/themes/app_button_styles.dart';
 import '../../../common/constants/themes/app_text_styles.dart';
@@ -41,7 +41,7 @@ class _FilterDialogState extends State<FilterDialog> {
   @override
   Widget build(BuildContext context) {
     final primary = Theme.of(context).colorScheme.primary;
-    // final locale = AppLocalizations.of(context)!;
+    final locale = AppLocalizations.of(context)!;
     double maxHeight = MediaQuery.of(context).size.height;
     print('>>>> $maxHeight');
 
@@ -52,7 +52,7 @@ class _FilterDialogState extends State<FilterDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Transactions Filter',
+              locale.filterDialogTitle,
               textAlign: TextAlign.center,
               style: AppTextStyles.textStyleSemiBold20.copyWith(
                 color: primary,
@@ -77,7 +77,7 @@ class _FilterDialogState extends State<FilterDialog> {
                             }),
                         const SizedBox(width: 12),
                         Text(
-                          'Descrição',
+                          locale.filterDialogDescription,
                           style: AppTextStyles.textStyleSemiBold16.copyWith(
                             color: primary,
                           ),
@@ -108,7 +108,7 @@ class _FilterDialogState extends State<FilterDialog> {
                             }),
                         const SizedBox(width: 12),
                         Text(
-                          'Categoria',
+                          locale.filterDialogCategory,
                           style: AppTextStyles.textStyleSemiBold16.copyWith(
                             color: primary,
                           ),
@@ -129,7 +129,7 @@ class _FilterDialogState extends State<FilterDialog> {
                 builder: (context, _, __) {
                   return AutocompleteTextFormField(
                     maxHeight: 160 * maxHeight / 813.1,
-                    labelText: 'Filter Text',
+                    labelText: locale.filterDialogLabel,
                     suggestions: getSugestionsList(),
                     controller: _controller,
                   );
@@ -141,7 +141,7 @@ class _FilterDialogState extends State<FilterDialog> {
                 _filterByDescription.value,
               )),
               style: AppButtonStyles.primaryButtonColor(context),
-              child: Text('Filter'),
+              child: Text(locale.filterDialogButton),
             ),
           ],
         ),

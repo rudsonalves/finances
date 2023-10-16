@@ -22,6 +22,8 @@ class IndexHelp extends StatelessWidget {
       locale.helpTransactionsAddTitle,
       locale.helpTransactionsLockTitle,
       locale.helpTransactionsFutureTitle,
+      locale.helpTransactionsFilterTitle,
+      locale.helpBackupRestoreTitle,
       locale.helpAccountsTitle,
       locale.helpAccountsEditTitle,
       locale.helpAccountsDeleteTitle,
@@ -35,6 +37,7 @@ class IndexHelp extends StatelessWidget {
       locale.helpStatisticsMoveTitle,
       locale.helpStatisticsCardTitle,
       locale.helpStatisticsMenuTitle,
+      locale.helpSettingsTitle,
     ];
 
     final List<Widget> widgets = [];

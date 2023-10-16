@@ -82,6 +82,7 @@ abstract class DatabaseHelper {
 
   Future<int> countUsers();
   Future<int> countIcons();
+  Future<int> countCategories();
   Future<int> countAccountsForUserId(String id);
   Future<int> countTransactionForCategoryId(int id);
   Future<int> countBalancesForAccountId(int id);
