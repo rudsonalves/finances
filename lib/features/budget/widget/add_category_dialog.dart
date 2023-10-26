@@ -132,6 +132,7 @@ class _AddCategoryDialogState extends State<AddCategoryDialog> {
       children: [
         Form(
           key: formKey,
+          // CategoryName
           child: CategoryTextFormField(
             controller: _categoryController,
             validator: (value) {
@@ -142,6 +143,7 @@ class _AddCategoryDialogState extends State<AddCategoryDialog> {
             },
           ),
         ),
+        // Primary use
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
           child: Text(
@@ -156,6 +158,7 @@ class _AddCategoryDialogState extends State<AddCategoryDialog> {
           income: _categoryIsIncome,
           changeState: changeState,
         ),
+        // Icon x color selection
         SelectIconRow(
           iconModel: _iconModel,
           iconCallback: (IconModel newIcon) {

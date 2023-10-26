@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:finances/features/budget/widget/add_category_page.dart';
 import 'package:flutter/material.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -11,6 +12,7 @@ import './features/transaction/transaction_page.dart';
 import './common/current_models/current_language.dart';
 import './common/constants/themes/colors/custom_color.g.dart';
 import './common/constants/themes/colors/color_schemes.g.dart';
+import 'common/models/category_db_model.dart';
 
 class AppFinances extends StatelessWidget {
   const AppFinances({super.key});
@@ -76,7 +78,7 @@ class AppFinances extends StatelessWidget {
                       as Map<String, dynamic>?;
 
                   if (args == null) {
-                    return const TransactionPage();
+                    return AppRoute.transaction.page;
                   } else {
                     final addTransaction = args['addTransaction'] ?? true;
                     final transaction = args['transaction'];
@@ -92,6 +94,21 @@ class AppFinances extends StatelessWidget {
                 AppRoute.accountPage.name: (context) =>
                     AppRoute.accountPage.page,
                 AppRoute.budgetPage.name: (context) => AppRoute.budgetPage.page,
+                AppRoute.addCategoryPage.name: (context) {
+                  final args = ModalRoute.of(context)!.settings.arguments
+                      as Map<String, dynamic>?;
+                  if (args == null) {
+                    return AppRoute.addCategoryPage.page;
+                  } else {
+                    final editCategory =
+                        args['editCategory'] as CategoryDbModel?;
+                    final callBack = args['callBack'] as Function?;
+                    return AddCategoryPage(
+                      editCategory: editCategory,
+                      callBack: callBack,
+                    );
+                  }
+                }
               },
             );
           },

@@ -486,7 +486,7 @@ class SqfliteHelper implements DatabaseHelper {
 
       final dbBackupFile = File(dbBackupPath);
       if (await dbBackupFile.exists()) {
-        dbBackupFile.delete();
+        await dbBackupFile.delete();
       }
 
       final File dbFile = File(dbPath);
@@ -530,6 +530,7 @@ class SqfliteHelper implements DatabaseHelper {
       log('Error backupDatabase: ${err.toString()}');
       final File backupFile = File(backupPath);
       if (await backupFile.exists()) {
+        if (_db.isOpen) _db.close();
         await backupFile.copy(originalPath);
         await _openDatabase();
         await backupFile.delete();
