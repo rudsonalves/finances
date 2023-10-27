@@ -278,6 +278,36 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
+## 2023/10/27 - version: 1.0.4+36
+
+This commit brings a series of improvements and optimizations to various parts of the Finances app. Changes have been made to reduce the app's load, enhance the user experience, and standardize the dialogues for editing and updating accounts and categories. Additionally, there have been layout adjustments and translation corrections. As part of this update, the project has also been migrated to the stable Flutter channel. Check the detailed changes below:
+
+* lib/common/constants/themes/icons/material_icons_codes.dart:
+  - removal of various icons to reduce app load.
+* lib/common/widgets/row_of_two_buttons.dart:
+  - now removes focus from the active widget.
+* lib/features/account/account_page.dart:
+  - replacement of the stateful AddAccountDialog with the AddAccountPage.
+* lib/features/account/widgets/add_account_page.dart:
+  - a new dialogue for editing/updating an account. It performs the same function as the previous dialogue but follows a cleaner pattern.
+* lib/features/budget/budget_page.dart:
+  - some layout adjustments.
+* lib/features/budget/widget/add_category_page.dart:
+  - a new dialogue for editing/updating a category. It performs the same function as the previous dialogue but follows a cleaner pattern.
+* lib/features/budget/widget/dismissible_category.dart:
+  - replacement of the AddCategoryDialog with the AddCategoryPage.
+* lib/features/budget/widget/new_icon_selection.dart:
+  - a new dialogue for selecting icons and colors.
+* lib/features/home_page_view/home_page_view.dart:
+  - application of the new AddCategoryPage and AddAccountPage dialogues.
+* lib/features/transaction/transaction_page.dart:
+  - application of the new AddCategoryPage dialogue.
+* lib/l10n/app_?.arb:
+  - corrections and enhancements of some translations.
+* pubspec.yaml:
+  - adjustments to package versions in the project. This was necessary for migrating the project to the Flutter Channel stable.
+
+
 ## 2023/10/05 - version: 1.0.2+29
 
 In this commit, bugs related to the scale of the chart on the statistics page have been resolved. Here's a description of the changes:
