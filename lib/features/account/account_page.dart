@@ -11,10 +11,10 @@ import '../home_page/balance_card/balance_card_controller.dart';
 import 'account_state.dart';
 import '../../common/widgets/custom_circular_progress_indicator.dart';
 import 'account_controller.dart';
-import 'widgets/statefull_add_account_dialog.dart';
 import '../../common/widgets/app_top_border.dart';
 import '../../common/widgets/custom_app_bar.dart';
 import '../../common/models/account_db_model.dart';
+import 'widgets/add_account_page.dart';
 import 'widgets/dismissible_account_card.dart';
 import '../../common/extensions/money_masked_text.dart';
 import '../../common/constants/themes/app_text_styles.dart';
@@ -38,9 +38,11 @@ class _AccountPageState extends State<AccountPage> {
   }
 
   Future<void> addAccount([AccountDbModel? account]) async {
-    await statefullAddAccountDialog(
-      context,
-      editAccount: account,
+    await showDialog(
+      context: context,
+      builder: (context) => AddAccountPage(
+        editAccount: account,
+      ),
     );
     _controller.getAllBalances();
     locator.get<BalanceCardController>().requestRedraw();

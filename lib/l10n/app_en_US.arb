@@ -381,5 +381,7 @@
     "filterDialogCategory": "Category",
     "filterDialogDescription": "Description",
     "filterDialogLabel": "Text to filter",
-    "filterDialogButton": "Filter"
+    "filterDialogButton": "Filter",
+    "genericSelect": "Select",
+    "iconSelectionDialogColors": "Colors"
 }

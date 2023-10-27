@@ -76,7 +76,7 @@ class AppFinances extends StatelessWidget {
                       as Map<String, dynamic>?;
 
                   if (args == null) {
-                    return const TransactionPage();
+                    return AppRoute.transaction.page;
                   } else {
                     final addTransaction = args['addTransaction'] ?? true;
                     final transaction = args['transaction'];

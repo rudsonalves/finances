@@ -66,7 +66,7 @@ class SqflileCategoryRepository implements CategoryRepository {
         categoryName: locale.categoryNameInputs,
         categoryIsIncome: true,
         categoryIcon: IconModel(
-          iconName: 'monetization on',
+          iconName: 'attach money',
           iconFontFamily: IconsFontFamily.MaterialIcons,
           iconColor: 4280786688,
         ),

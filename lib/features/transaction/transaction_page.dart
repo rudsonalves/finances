@@ -11,7 +11,7 @@ import '../../locator.dart';
 import '../../repositories/account/account_repository.dart';
 import '../../services/database/managers/transfers_manager.dart';
 import '../budget/budget_controller.dart';
-import '../budget/widget/add_category_dialog.dart';
+import '../budget/widget/add_category_page.dart';
 import '../help_manager/main_manager.dart';
 import './transaction_controller.dart';
 import '../../common/models/extends_date.dart';
@@ -203,7 +203,7 @@ class _TransactionPageState extends State<TransactionPage> {
   void addCategoryAction() async {
     final CategoryDbModel? newCategory = await showDialog(
       context: context,
-      builder: (context) => AddCategoryDialog(
+      builder: (context) => AddCategoryPage(
         callBack: addCategoryCallBak,
       ),
     );
@@ -221,8 +221,7 @@ class _TransactionPageState extends State<TransactionPage> {
       final category = _categoryRepository.getCategoryId(_categoryId!);
       await showDialog(
         context: context,
-        builder: (context) => AddCategoryDialog(
-          addCategory: false,
+        builder: (context) => AddCategoryPage(
           editCategory: category,
           callBack: addCategoryCallBak,
         ),

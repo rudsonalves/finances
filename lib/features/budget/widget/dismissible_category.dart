@@ -12,7 +12,7 @@ import '../../../locator.dart';
 import '../../../services/database/database_helper.dart';
 import '../budget_controller.dart';
 import '../../../common/functions/base_dismissible_container.dart';
-import 'add_category_dialog.dart';
+import 'add_category_page.dart';
 
 class DismissibleCategory extends StatefulWidget {
   final BudgetController controller;
@@ -132,8 +132,7 @@ class _DismissibleCategoryState extends State<DismissibleCategory> {
             // Edit direction
             await showDialog(
               context: context,
-              builder: (context) => AddCategoryDialog(
-                addCategory: false,
+              builder: (context) => AddCategoryPage(
                 editCategory: category,
                 callBack: widget.callBack,
               ),

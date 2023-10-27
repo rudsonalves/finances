@@ -377,9 +377,11 @@
     "appFullName": "Controlla le tue Finanze\nVersione Completa",
     "categoryLimit": "Limite Categoria",
     "categoryMensage": "Hai raggiunto il limite di categorie. Per categorie illimitate, considera di utilizzare la versione completa di Finanza.",
-    "filterDialogTitle": "",
-    "filterDialogCategory": "",
-    "filterDialogDescription": "",
-    "filterDialogLabel": "",
-    "filterDialogButton": ""
+    "filterDialogTitle": "Filtra Trasferimenti",
+    "filterDialogCategory": "Categoria",
+    "filterDialogDescription": "Descrizione",
+    "filterDialogLabel": "Testo da filtrare",
+    "filterDialogButton": "Filtra",
+    "genericSelect": "Seleziona",
+    "iconSelectionDialogColors": "Colori"
 }

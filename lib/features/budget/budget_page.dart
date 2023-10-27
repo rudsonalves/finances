@@ -205,97 +205,94 @@ class _BudgetPageState extends State<BudgetPage>
                   topRight: Radius.circular(20),
                 ),
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: AnimatedBuilder(
-                  animation: _controller,
-                  builder: (context, child) {
-                    // Budget State Loading
-                    if (_controller.state is BudgetStateLoading) {
-                      return CustomCircularProgressIndicator(
-                        color: Theme.of(context).colorScheme.primary,
-                      );
-                    }
+              padding: const EdgeInsets.all(16),
+              child: AnimatedBuilder(
+                animation: _controller,
+                builder: (context, child) {
+                  // Budget State Loading
+                  if (_controller.state is BudgetStateLoading) {
+                    return CustomCircularProgressIndicator(
+                      color: Theme.of(context).colorScheme.primary,
+                    );
+                  }
 
-                    // Budget State Success
-                    if (_controller.state is BudgetStateSuccess) {
-                      final categories = _controller.categories;
+                  // Budget State Success
+                  if (_controller.state is BudgetStateSuccess) {
+                    final categories = _controller.categories;
 
-                      return Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 22),
-                            child: Row(
-                              children: [
-                                Text(
-                                  '${locale.budgetPageTotal}: ',
-                                  style: AppTextStyles.textStyleBold18.copyWith(
-                                    color: primary,
-                                  ),
+                    return Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 22),
+                          child: Row(
+                            children: [
+                              Text(
+                                '${locale.budgetPageTotal}: ',
+                                style: AppTextStyles.textStyleBold18.copyWith(
+                                  color: primary,
                                 ),
-                                Text(
-                                  money.text(_controller.totalBudget),
-                                  style: AppTextStyles.textStyleBold18.copyWith(
-                                    color: _controller.totalBudget < 0
-                                        ? customColors.minusred
-                                        : colorScheme.primary,
-                                  ),
+                              ),
+                              Text(
+                                money.text(_controller.totalBudget),
+                                style: AppTextStyles.textStyleBold18.copyWith(
+                                  color: _controller.totalBudget < 0
+                                      ? customColors.minusred
+                                      : colorScheme.primary,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                          const Divider(),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 22),
-                            child: Row(
-                              children: [
-                                Text(
-                                  locale.budgetPageCategory,
-                                  style: AppTextStyles.textStyleBold16.copyWith(
-                                    color: primary,
-                                  ),
+                        ),
+                        const Divider(),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 22),
+                          child: Row(
+                            children: [
+                              Text(
+                                locale.budgetPageCategory,
+                                style: AppTextStyles.textStyleBold16.copyWith(
+                                  color: primary,
                                 ),
-                                const Spacer(),
-                                Text(
-                                  locale.budgetPageBudget,
-                                  style: AppTextStyles.textStyleBold16.copyWith(
-                                    color: primary,
-                                  ),
+                              ),
+                              const Spacer(),
+                              Text(
+                                locale.budgetPageBudget,
+                                style: AppTextStyles.textStyleBold16.copyWith(
+                                  color: primary,
                                 ),
-                                const SizedBox(width: 12),
-                              ],
-                            ),
+                              ),
+                              const SizedBox(width: 12),
+                            ],
                           ),
-                          const SizedBox(height: 4),
-                          Expanded(
-                            child: SingleChildScrollView(
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: categories.length,
-                                itemBuilder: (context, index) =>
-                                    DismissibleCategory(
-                                  controller: _controller,
-                                  index: index,
-                                  callBack: callBack,
-                                  budgetEdit: (edit) =>
-                                      budgetEdit(context, edit),
-                                ),
+                        ),
+                        const SizedBox(height: 4),
+                        Expanded(
+                          child: SingleChildScrollView(
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: categories.length,
+                              itemBuilder: (context, index) =>
+                                  DismissibleCategory(
+                                controller: _controller,
+                                index: index,
+                                callBack: callBack,
+                                budgetEdit: (edit) => budgetEdit(context, edit),
                               ),
                             ),
                           ),
-                        ],
-                      );
-                    }
-
-                    // Budget State Error
-                    return Center(
-                      child: Text(
-                        locale.categoryPageTryLate,
-                      ),
+                        ),
+                      ],
                     );
-                  },
-                ),
+                  }
+
+                  // Budget State Error
+                  return Center(
+                    child: Text(
+                      locale.categoryPageTryLate,
+                    ),
+                  );
+                },
               ),
             ),
           ),
