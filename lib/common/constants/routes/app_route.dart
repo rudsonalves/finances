@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../features/account/account_page.dart';
 import '../../../features/budget/budget_page.dart';
-import '../../../features/budget/widget/add_category_page.dart';
 import '../../../features/home_page/home_page.dart';
 import '../../../features/home_page_view/home_page_view.dart';
 import '../../../features/onboarding/onboarding_page.dart';
@@ -69,9 +68,5 @@ class AppRoute {
   static const Route budgetPage = Route(
     name: '/budget_page',
     page: BudgetPage(),
-  );
-  static const Route addCategoryPage = Route(
-    name: '/add_category_page',
-    page: AddCategoryPage(),
   );
 }
