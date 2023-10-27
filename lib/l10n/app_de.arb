@@ -377,9 +377,11 @@
     "appFullName": "Behalten Sie Ihre Finanzen im Griff\nVollversion",
     "categoryLimit": "Kategorielimit",
     "categoryMensage": "Sie haben das Kategorielimit erreicht. Für unbegrenzte Kategorien sollten Sie die Vollversion von Finanzen in Betracht ziehen.",
-    "filterDialogTitle": "",
-    "filterDialogCategory": "",
-    "filterDialogDescription": "",
-    "filterDialogLabel": "",
-    "filterDialogButton": ""
+    "filterDialogTitle": "Überweisungen filtern",
+    "filterDialogCategory": "Kategorie",
+    "filterDialogDescription": "Beschreibung",
+    "filterDialogLabel": "Text filtern",
+    "filterDialogButton": "Filtern",
+    "genericSelect": "Auswählen",
+    "iconSelectionDialogColors": "Farben"
 }

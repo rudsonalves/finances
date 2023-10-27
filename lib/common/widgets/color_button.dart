@@ -1,7 +1,8 @@
-import 'package:finances/common/constants/themes/app_button_styles.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+
+import '../constants/themes/app_button_styles.dart';
 
 class ColorButton extends StatefulWidget {
   final Color currentColor;

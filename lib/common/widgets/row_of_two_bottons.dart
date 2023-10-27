@@ -37,6 +37,7 @@ class _RowOfTwoBottonsState extends State<RowOfTwoBottons> {
               ),
             ),
             onPressed: () {
+              FocusScope.of(context).unfocus();
               widget.changeState(true);
             },
             label: Text(locale.rowOfTwoBottonsIncome),
@@ -56,6 +57,7 @@ class _RowOfTwoBottonsState extends State<RowOfTwoBottons> {
               ),
             ),
             onPressed: () {
+              FocusScope.of(context).unfocus();
               widget.changeState(false);
             },
             label: Text(locale.rowOfTwoBottonsExpense),

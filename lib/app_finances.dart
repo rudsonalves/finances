@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:finances/features/budget/widget/add_category_page.dart';
 import 'package:flutter/material.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -13,6 +12,7 @@ import './common/current_models/current_language.dart';
 import './common/constants/themes/colors/custom_color.g.dart';
 import './common/constants/themes/colors/color_schemes.g.dart';
 import 'common/models/category_db_model.dart';
+import 'features/budget/widget/add_category_page.dart';
 
 class AppFinances extends StatelessWidget {
   const AppFinances({super.key});
