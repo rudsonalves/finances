@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../locator.dart';
 import '../account/account_controller.dart';
-import '../account/widgets/statefull_add_account_dialog.dart';
+import '../account/widgets/add_account_page.dart';
 import '../budget/budget_controller.dart';
 import '../budget/budget_page.dart';
-// import '../budget/widget/add_category_dialog.dart';
 import '../budget/widget/add_category_page.dart';
 import '../home_page/home_page.dart';
 import '../account/account_page.dart';
@@ -86,7 +85,10 @@ class _HomePageViewState extends State<HomePageView> {
   }
 
   Future<void> addAccount() async {
-    await statefullAddAccountDialog(context);
+    await showDialog(
+      context: context,
+      builder: (context) => const AddAccountPage(),
+    );
     locator.get<AccountController>().getAllBalances();
   }
 

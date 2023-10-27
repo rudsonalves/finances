@@ -33,8 +33,6 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
   bool _addNewCategory = true;
   int? _categoryId;
 
-  IconsFontFamily fontFamily = IconsFontFamily.TrademarkIcons;
-
   final ValueNotifier<IconModel> _categoryIcon = ValueNotifier(
     IconModel(
       iconName: 'attach money',
@@ -108,9 +106,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
     }
   }
 
-  void _cancelCallback() {
-    Navigator.pop(context);
-  }
+  void _cancelCallback() => Navigator.pop(context);
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +115,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
     final primary = colorScheme.primary;
 
     return Dialog(
-      elevation: 5,
+      elevation: 2,
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(8, 12, 8, 16),
