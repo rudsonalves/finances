@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import '../../locator.dart';
 import '../account/account_controller.dart';
 import '../account/widgets/add_account_page.dart';
-import '../budget/budget_controller.dart';
-import '../budget/budget_page.dart';
-import '../budget/widget/add_category_page.dart';
+import '../categories/categories_controller.dart';
+import '../categories/categories_page.dart';
+import '../categories/widget/add_category_page.dart';
 import '../home_page/home_page.dart';
 import '../account/account_page.dart';
 import '../statistics/statistic_controller.dart';
@@ -103,7 +103,7 @@ class _HomePageViewState extends State<HomePageView> {
   }
 
   Future<void> addCategoryCallBak() async {
-    await locator.get<BudgetController>().getAllCategories();
+    await locator.get<CategoriesController>().getAllCategories();
   }
 
   @override
@@ -130,7 +130,7 @@ class _HomePageViewState extends State<HomePageView> {
           children: const [
             HomePage(),
             AccountPage(),
-            BudgetPage(),
+            CategoriesPage(),
             StatisticsPage(),
           ],
         ),

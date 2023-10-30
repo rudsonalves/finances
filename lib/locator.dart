@@ -19,7 +19,7 @@ import './common/current_models/current_balance.dart';
 import 'common/models/app_locale.dart';
 import 'common/models/user_name_notifier.dart';
 import 'features/account/account_controller.dart';
-import 'features/budget/budget_controller.dart';
+import 'features/categories/categories_controller.dart';
 import 'features/statistics/statistic_card/statistic_card_controller.dart';
 import 'features/statistics/statistic_controller.dart';
 import 'repositories/account/account_repository.dart';
@@ -167,8 +167,8 @@ void setupDependencies() {
       () => StatisticCardController(),
     );
 
-    locator.registerLazySingleton<BudgetController>(
-      () => BudgetController(),
+    locator.registerLazySingleton<CategoriesController>(
+      () => CategoriesController(),
     );
 
     locator.registerLazySingleton<UserNameNotifier>(

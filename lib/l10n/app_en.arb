@@ -178,7 +178,7 @@
     "statisticCardIncomes": "Incomes",
     "statisticCardExpenses": "Expenses",
     "cardBalanceMenuTip": "Show accounts list",
-    "budgetPageTitle": "Budget/Categories",
+    "budgetPageTitle": "Categories/Budget",
     "budgetPageCategory": "Category",
     "budgetPageBudget": "Budget",
     "budgetPageDeleteAlert": "Category {categoryName} has {categoryCount} transactions. It is not possible to delete a category that is in use.",

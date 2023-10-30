@@ -70,6 +70,29 @@ class _HomePageState extends State<HomePage>
     _listViewController.jumpTo(listViewPosition);
   }
 
+  Widget noTransactions(AppLocalizations locale, Color primary) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(
+            'assets/images/no_trasactions.png',
+            width: 100,
+            height: 100,
+            fit: BoxFit.fitHeight,
+          ),
+          const SizedBox(height: 12),
+          Text(
+            locale.homePageNoTransactions,
+            style: AppTextStyles.textStyleMedium14.copyWith(
+              color: primary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -208,16 +231,7 @@ class _HomePageState extends State<HomePage>
                               );
                               _showTutorial = false;
                             }
-                            return Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    locale.homePageNoTransactions,
-                                  ),
-                                ],
-                              ),
-                            );
+                            return noTransactions(locale, primary);
                           }
 
                           List<TransactionDbModel> transactions = [];
@@ -282,11 +296,7 @@ class _HomePageState extends State<HomePage>
                         }
 
                         // State Error...
-                        return Center(
-                          child: Text(
-                            locale.homePageError,
-                          ),
-                        );
+                        return noTransactions(locale, primary);
                       },
                     ),
                   ),

@@ -17,6 +17,30 @@ import '../statistic_controller.dart';
 import 'statistic_card_controller.dart';
 import 'statistic_cart.state.dart';
 
+Widget noStatistics(AppLocalizations locale, Color primary,
+    [double size = 100]) {
+  return Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset(
+          'assets/images/no_statistics.png',
+          width: size,
+          height: size,
+          fit: BoxFit.fitHeight,
+        ),
+        const SizedBox(height: 12),
+        Text(
+          locale.statisticsPageNoStatistics,
+          style: AppTextStyles.textStyleMedium14.copyWith(
+            color: primary,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
 class StatisticCard extends StatefulWidget {
   final StatisticsController pageController;
 
@@ -370,14 +394,7 @@ class _StatisticCardState extends State<StatisticCard> {
                               width: 2,
                             ),
                           ),
-                          child: Center(
-                            child: Text(
-                              locale.statisticsPageNoStatistics,
-                              style: AppTextStyles.textStyleBold14.copyWith(
-                                color: primary,
-                              ),
-                            ),
-                          ),
+                          child: noStatistics(locale, primary, 55),
                         )
                     ],
                   ),
@@ -385,11 +402,7 @@ class _StatisticCardState extends State<StatisticCard> {
               }
 
               // Statistic Card State Error
-              return Expanded(
-                child: Center(
-                  child: Text(locale.statisticsPageNoStatistics),
-                ),
-              );
+              return noStatistics(locale, primary, 75);
             },
           ),
         ),

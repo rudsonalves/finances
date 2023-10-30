@@ -195,6 +195,14 @@ class TransactionsManager {
     var balance = await balanceRepository.getBalanceInDate(date: date.onlyDate);
     if (balance != null) return balance;
 
+    if (currentAccount.accountLastBalance == null) {
+      var balance = await balanceRepository.getBalanceInDate(
+        date: ExtendedDate.nowDate(),
+      );
+      currentAccount.accountLastBalance = balance!.balanceId;
+      await currentAccount.updateAccount();
+    }
+
     var previousBalance = await balanceRepository.getBalanceId(
       currentAccount.accountLastBalance!,
     );

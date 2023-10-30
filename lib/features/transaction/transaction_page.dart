@@ -10,8 +10,8 @@ import '../../common/widgets/spin_box_field.dart';
 import '../../locator.dart';
 import '../../repositories/account/account_repository.dart';
 import '../../services/database/managers/transfers_manager.dart';
-import '../budget/budget_controller.dart';
-import '../budget/widget/add_category_page.dart';
+import '../categories/categories_controller.dart';
+import '../categories/widget/add_category_page.dart';
 import '../help_manager/main_manager.dart';
 import './transaction_controller.dart';
 import '../../common/models/extends_date.dart';
@@ -110,7 +110,7 @@ class _TransactionPageState extends State<TransactionPage> {
         _formKey.currentState != null && _formKey.currentState!.validate();
     if (valit) {
       double value = _amountController.numberValue;
-      value = _income ? value : -value;
+      value = _income ? value.abs() : -value.abs();
 
       // get destination account
       AccountDbModel? destinationAccount;
@@ -230,7 +230,7 @@ class _TransactionPageState extends State<TransactionPage> {
   }
 
   Future<void> addCategoryCallBak() async {
-    await locator.get<BudgetController>().getAllCategories();
+    await locator.get<CategoriesController>().getAllCategories();
   }
 
   void changeState(bool state) {
