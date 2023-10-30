@@ -12,7 +12,7 @@ import '../../../common/widgets/add_cancel_buttons.dart';
 import '../../../common/widgets/basic_text_form_field.dart';
 import '../../../locator.dart';
 import '../../../repositories/account/account_repository.dart';
-import '../../budget/widget/new_icon_selection.dart';
+import '../../../common/widgets/new_icon_selection.dart';
 
 class AddAccountPage extends StatefulWidget {
   final AccountDbModel? editAccount;
@@ -83,13 +83,13 @@ class _AddAccountPageState extends State<AddAccountPage> {
       final currentAccount = locator.get<CurrentAccount>();
       if (_accountId == currentAccount.accountId) {
         currentAccount.setFromAccountDbModel(newAccount);
-      } else {
-        // New Account
-        await locator.get<AccountRepository>().addAccount(newAccount);
       }
-      if (!context.mounted) return;
-      Navigator.pop(context);
+    } else {
+      // New Account
+      await locator.get<AccountRepository>().addAccount(newAccount);
     }
+    if (!context.mounted) return;
+    Navigator.pop(context);
   }
 
   void _cancelCallback() => Navigator.pop(context);

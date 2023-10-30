@@ -178,7 +178,7 @@
     "statisticCardIncomes": "Revenus",
     "statisticCardExpenses": "Dépenses",
     "cardBalanceMenuTip": "Afficher la liste des comptes",
-    "budgetPageTitle": "Budget/Catégories",
+    "budgetPageTitle": "Catégories/Budget",
     "budgetPageCategory": "Catégorie",
     "budgetPageBudget": "Budget",
     "budgetPageDeleteAlert": "La catégorie {categoryName} a {categoryCount} transactions. Il est impossible de supprimer une catégorie en cours d'utilisation.",

@@ -3,10 +3,10 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_swiper_view/flutter_swiper_view.dart';
 
-import '../../../common/constants/themes/app_button_styles.dart';
-import '../../../common/constants/themes/app_icons.dart';
-import '../../../common/constants/themes/app_text_styles.dart';
-import '../../../common/models/icons_model.dart';
+import '../constants/themes/app_button_styles.dart';
+import '../constants/themes/app_icons.dart';
+import '../constants/themes/app_text_styles.dart';
+import '../models/icons_model.dart';
 
 const List<Color> paintColors = [
   Colors.red,
@@ -66,7 +66,7 @@ class _NewIconSelectionState extends State<NewIconSelection> {
       iconFontFamily: _iconFontFamily.value,
       iconColor: _iconColor.value,
     );
-    return iconModel.iconWidget(size: 38);
+    return iconModel.iconWidget(size: 32);
   }
 
   void _changeColorButton() async {
@@ -199,13 +199,21 @@ class _NewIconSelectionState extends State<NewIconSelection> {
                 ListenableBuilder(
                     listenable: Listenable.merge([_iconName, _iconColor]),
                     builder: (context, _) {
-                      return Card(
-                        elevation: 4,
-                        child: SizedBox(
-                          height: 52,
-                          width: 52,
-                          child: mountIcon,
-                        ),
+                      return Column(
+                        children: [
+                          Card(
+                            elevation: 4,
+                            child: SizedBox(
+                              height: 52,
+                              width: 52,
+                              child: mountIcon,
+                            ),
+                          ),
+                          Text(
+                            _iconName.value,
+                            style: AppTextStyles.textStyle9,
+                          ),
+                        ],
                       );
                     }),
               ],

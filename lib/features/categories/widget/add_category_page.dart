@@ -8,9 +8,9 @@ import '../../../common/models/category_db_model.dart';
 import '../../../common/models/icons_model.dart';
 import '../../../common/widgets/add_cancel_buttons.dart';
 import '../../../locator.dart';
-import '../budget_controller.dart';
+import '../categories_controller.dart';
 import 'category_text_form_field.dart';
-import 'new_icon_selection.dart';
+import '../../../common/widgets/new_icon_selection.dart';
 
 class AddCategoryPage extends StatefulWidget {
   final CategoryDbModel? editCategory;
@@ -74,7 +74,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
       categoryIsIncome: _isIncome.value,
     );
     final locale = AppLocalizations.of(context)!;
-    final controller = locator.get<BudgetController>();
+    final controller = locator.get<CategoriesController>();
 
     if (_categoryId != null) {
       await controller.updateCategory(newCategory);

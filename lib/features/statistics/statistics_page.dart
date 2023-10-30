@@ -178,14 +178,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
                           if (statistics.isEmpty) {
                             return Expanded(
-                              child: Center(
-                                child: Text(
-                                  locale.statisticsPageNoStatistics,
-                                  style: AppTextStyles.textStyleBold16.copyWith(
-                                    color: colorScheme.primary,
-                                  ),
-                                ),
-                              ),
+                              child: noStatistics(locale, primary),
                             );
                           }
 
@@ -200,9 +193,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
                         // Statistics State Error
                         return Expanded(
-                          child: Center(
-                            child: Text(locale.statisticsPageNoStatistics),
-                          ),
+                          child: noStatistics(locale, primary),
                         );
                       },
                     ),

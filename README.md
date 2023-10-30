@@ -278,6 +278,32 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
+## 2023/20/30 - Version: 1.0.6+39:
+In this commit, a series of improvements and fixes have been implemented in various parts of the Finances app. These changes aim to optimize the user experience, address functionality issues, and enhance the overall look of the application. Check out the details of the changes below:"
+
+* lib/common/constants/themes/app_text_styles.dart:
+  - added one more textStyle9 style.
+* lib/common/models/transaction_db_model.dart:
+  - fixed a bug in the value for multiple transaction entries.
+* lib/features/budget/widget/new_icon_selection.dart:
+  - reduced icon size and added icon names for easier reference.
+* lib/features/account/widgets/add_account_page.dart:
+  - fixed a bug that was blocking the creation of new accounts.
+* lib/features/categories/categories_controller.dart:
+* lib/features/categories/categories_page.dart:
+* lib/features/categories/categories_state.dart:
+  - class name changes.
+* lib/features/home_page/home_page.dart:
+  - replaced text with graphics for apps with no transactions.
+* lib/features/statistics/statistic_card/statistic_card.dart:
+* lib/features/statistics/statistics_page.dart:
+  - replaced text with graphics for apps with no statistics.
+* lib/l10n/app_fr.arb:
+  - more translation adjustments.
+* lib/services/database/managers/transactions_manager.dart:
+  - fixed a bug in updating currentAccount.accountLastBalance.
+
+
 ## 2023/10/27 - version: 1.0.4+36
 
 This commit brings a series of improvements and optimizations to various parts of the Finances app. Changes have been made to reduce the app's load, enhance the user experience, and standardize the dialogues for editing and updating accounts and categories. Additionally, there have been layout adjustments and translation corrections. As part of this update, the project has also been migrated to the stable Flutter channel. Check the detailed changes below:

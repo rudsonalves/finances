@@ -13,21 +13,21 @@ import '../../common/widgets/custom_circular_progress_indicator.dart';
 import '../../locator.dart';
 import '../help_manager/main_manager.dart';
 import '../statistics/statistic_controller.dart';
-import 'budget_controller.dart';
-import 'budget_state.dart';
+import 'categories_controller.dart';
+import 'categories_state.dart';
 import 'widget/change_budget_dialog.dart';
 import 'widget/dismissible_category.dart';
 
-class BudgetPage extends StatefulWidget {
-  const BudgetPage({super.key});
+class CategoriesPage extends StatefulWidget {
+  const CategoriesPage({super.key});
 
   @override
-  State<BudgetPage> createState() => _BudgetPageState();
+  State<CategoriesPage> createState() => _CategoriesPageState();
 }
 
-class _BudgetPageState extends State<BudgetPage>
+class _CategoriesPageState extends State<CategoriesPage>
     with AutomaticKeepAliveClientMixin {
-  final _controller = locator.get<BudgetController>();
+  final _controller = locator.get<CategoriesController>();
   final _statController = locator.get<StatisticsController>();
 
   @override
@@ -210,14 +210,14 @@ class _BudgetPageState extends State<BudgetPage>
                 animation: _controller,
                 builder: (context, child) {
                   // Budget State Loading
-                  if (_controller.state is BudgetStateLoading) {
+                  if (_controller.state is CategoriesStateLoading) {
                     return CustomCircularProgressIndicator(
                       color: Theme.of(context).colorScheme.primary,
                     );
                   }
 
                   // Budget State Success
-                  if (_controller.state is BudgetStateSuccess) {
+                  if (_controller.state is CategoriesStateSuccess) {
                     final categories = _controller.categories;
 
                     return Column(

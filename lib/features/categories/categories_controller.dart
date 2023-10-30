@@ -8,16 +8,16 @@ import '../../common/models/icons_model.dart';
 import '../../locator.dart';
 import '../../repositories/category/category_repository.dart';
 import '../statistics/statistic_controller.dart';
-import 'budget_state.dart';
+import 'categories_state.dart';
 
-class BudgetController extends ChangeNotifier {
+class CategoriesController extends ChangeNotifier {
   final _categoryRepository = locator.get<CategoryRepository>();
   final _statController = locator.get<StatisticsController>();
   double _totalBudget = 0.0;
 
-  BudgetState _state = BudgetStateInitial();
+  CategoriesState _state = CategoriesStateInitial();
 
-  BudgetState get state => _state;
+  CategoriesState get state => _state;
 
   double get totalBudget => _totalBudget;
 
@@ -27,7 +27,7 @@ class BudgetController extends ChangeNotifier {
     return _categoryRepository.categoriesMap.keys.toList();
   }
 
-  void _changeState(BudgetState newState) {
+  void _changeState(CategoriesState newState) {
     _state = newState;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       notifyListeners();
@@ -51,11 +51,11 @@ class BudgetController extends ChangeNotifier {
   Future<void> init() async {
     await _categoryRepository.init();
     await getAllCategories();
-    _state = BudgetStateSuccess();
+    _state = CategoriesStateSuccess();
   }
 
   Future<void> getAllCategories() async {
-    _changeState(BudgetStateLoading());
+    _changeState(CategoriesStateLoading());
 
     try {
       if (!_statController.noData) {
@@ -63,9 +63,9 @@ class BudgetController extends ChangeNotifier {
         _statController.requestRecalculate();
       }
       _sumTotalBudget();
-      _changeState(BudgetStateSuccess());
+      _changeState(CategoriesStateSuccess());
     } catch (err) {
-      _changeState(BudgetStateError());
+      _changeState(CategoriesStateError());
     }
   }
 
@@ -86,7 +86,7 @@ class BudgetController extends ChangeNotifier {
   }
 
   Future<void> setAllBudgets(StatisticMedium statReference) async {
-    _changeState(BudgetStateLoading());
+    _changeState(CategoriesStateLoading());
 
     try {
       final references = _statController.getReferences(statReference);
@@ -100,10 +100,10 @@ class BudgetController extends ChangeNotifier {
         await _categoryRepository.updateCategoryBudget(category);
       }
       _sumTotalBudget();
-      _changeState(BudgetStateSuccess());
+      _changeState(CategoriesStateSuccess());
     } catch (err) {
       log('Error: $err');
-      _changeState(BudgetStateError());
+      _changeState(CategoriesStateError());
     }
   }
 
@@ -116,14 +116,14 @@ class BudgetController extends ChangeNotifier {
   }
 
   Future<void> updateCategoryBudget(CategoryDbModel category) async {
-    _changeState(BudgetStateLoading());
+    _changeState(CategoriesStateLoading());
     try {
       await _categoryRepository.updateCategoryBudget(category);
       _sumTotalBudget();
-      _changeState(BudgetStateSuccess());
+      _changeState(CategoriesStateSuccess());
     } catch (err) {
       log('Error: $err');
-      _changeState(BudgetStateError());
+      _changeState(CategoriesStateError());
     }
   }
 }

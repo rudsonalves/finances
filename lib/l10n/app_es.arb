@@ -178,7 +178,7 @@
     "statisticCardIncomes": "Ingresos",
     "statisticCardExpenses": "Gastos",
     "cardBalanceMenuTip": "Mostrar lista de cuentas",
-    "budgetPageTitle": "Presupuesto/Categorías",
+    "budgetPageTitle": "Categorías/Presupuesto",
     "budgetPageCategory": "Categoría",
     "budgetPageBudget": "Presupuesto",
     "budgetPageDeleteAlert": "La categoría {categoryName} tiene {categoryCount} transacciones. No es posible eliminar una categoría que está en uso.",

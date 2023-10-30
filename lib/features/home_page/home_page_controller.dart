@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 
 import '../../common/current_models/current_account.dart';
 import '../../common/models/account_db_model.dart';
@@ -13,6 +14,7 @@ import 'balance_card/balance_card_controller.dart';
 
 class HomePageController extends ChangeNotifier {
   HomePageController();
+  final logger = Logger();
 
   HomePageState _state = HomePageStateInitial();
 
@@ -77,6 +79,7 @@ class HomePageController extends ChangeNotifier {
 
       _changeState(HomePageStateSuccess());
     } catch (err) {
+      logger.e(err);
       _changeState(HomePageStateError());
     }
   }

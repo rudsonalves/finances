@@ -70,7 +70,7 @@ class TransactionDbModel {
     return TransactionDbModel(
       transDescription: transDescription,
       transCategoryId: transCategoryId,
-      transValue: -transValue,
+      transValue: transValue,
       transStatus: transStatus,
       transTransferId: transTransferId,
       transDate: transDate,
