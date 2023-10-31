@@ -34,6 +34,21 @@ class HomePageController extends ChangeNotifier {
 
   int maxTransactions = 50;
 
+  bool _redraw = false;
+
+  bool get redraw => _redraw;
+
+  void setRedraw() {
+    _redraw = true;
+  }
+
+  void makeRedraw() {
+    if (_redraw) {
+      _redraw = false;
+      getTransactions();
+    }
+  }
+
   void _changeState(HomePageState newState) {
     _state = newState;
     notifyListeners();

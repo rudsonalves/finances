@@ -21,6 +21,12 @@ class _FilterDialogState extends State<FilterDialog> {
   final _controller = TextEditingController();
   final _filterByDescription = ValueNotifier<bool>(true);
 
+  @override
+  void initState() {
+    super.initState();
+    _categoriesController.init();
+  }
+
   List<String> getSugestionsList() {
     List<String> suggestions = [];
     if (_filterByDescription.value) {

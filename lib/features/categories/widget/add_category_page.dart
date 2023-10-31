@@ -8,6 +8,7 @@ import '../../../common/models/category_db_model.dart';
 import '../../../common/models/icons_model.dart';
 import '../../../common/widgets/add_cancel_buttons.dart';
 import '../../../locator.dart';
+import '../../home_page/home_page_controller.dart';
 import '../categories_controller.dart';
 import 'category_text_form_field.dart';
 import '../../../common/widgets/new_icon_selection.dart';
@@ -29,6 +30,7 @@ class AddCategoryPage extends StatefulWidget {
 class _AddCategoryPageState extends State<AddCategoryPage> {
   final _formKey = GlobalKey<FormState>();
   final _categoryController = TextEditingController();
+  final _homePageController = locator.get<HomePageController>();
 
   bool _addNewCategory = true;
   int? _categoryId;
@@ -78,6 +80,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
 
     if (_categoryId != null) {
       await controller.updateCategory(newCategory);
+      _homePageController.setRedraw();
       if (!context.mounted) return;
       Navigator.pop(context);
     } else {
@@ -85,6 +88,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
 
       if (!categoriesNames.contains(newCategory.categoryName)) {
         await controller.addCategory(newCategory);
+        _homePageController.setRedraw();
         if (!context.mounted) return;
         Navigator.pop(context, newCategory);
       } else {

@@ -274,9 +274,31 @@ Com esses gatilhos em vigor, qualquer tentativa de inserir um valor inválido em
 Some bugs were noticed and need to be fixed:
 
 - *20231002.2* implementation: implemnetar um sistema de logger para o app.
-- *20231013.1* bug: o app não está filtrando o conteúdo por usuário. 
+- *20231013.1* bug: o app não está filtrando o conteúdo por usuário.???
 
 # Commits:
+
+## 2023/20/31 - Version: 1.0.7+40:
+
+In this commit, some final adjustments to the app's interface were made to facilitate its usage and to fix the category update bug on the transactions page. This was the last known bug.
+
+* lib/features/account/account_page.dart:
+* lib/features/transaction/transaction_page.dart:
+	- Replacement of the icon in the help menu.
+* lib/features/account/widgets/add_account_page.dart:
+* lib/features/categories/widget/add_category_page.dart:
+* lib/features/home_page/home_page_controller.dart:
+* lib/features/home_page_view/home_page_view.dart:
+	- Bug fix for the transaction list update.
+* lib/features/categories/categories_page.dart:
+* lib/features/home_page/home_page.dart:
+* lib/features/home_page/widgets/home_popup_menu_buttons.dart:
+* lib/features/statistics/statistics_page.dart:
+	- Simplification and adjustments to the menu and icon spacing in the app bar.
+* lib/features/home_page/balance_card/balance_card.dart:
+	- Layout adjustments for the main page card.
+* lib/features/home_page/widgets/filter_dialog.dart:
+	- Added a call to `_categoriesController.init()` during filter initialization. Although not necessary at the moment, it does not impact performance loss.
 
 ## 2023/20/30 - Version: 1.0.6+39:
 In this commit, a series of improvements and fixes have been implemented in various parts of the Finances app. These changes aim to optimize the user experience, address functionality issues, and enhance the overall look of the application. Check out the details of the changes below:"

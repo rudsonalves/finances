@@ -127,8 +127,23 @@ class _HomePageState extends State<HomePage>
                 }),
           ],
         ),
-        actions: const [
-          HomePagePopupMenuButtons(),
+        actions: [
+          SizedBox(
+            width: 32,
+            height: 32,
+            child: InkWell(
+              customBorder: const CircleBorder(),
+              onTap: () => managerTutorial(
+                context,
+                transactionsHelp,
+              ),
+              child: const Icon(
+                Icons.question_mark,
+                size: 20,
+              ),
+            ),
+          ),
+          const HomePagePopupMenuButtons(),
         ],
       ),
       body: Stack(
