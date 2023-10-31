@@ -13,6 +13,7 @@ import '../../../common/widgets/basic_text_form_field.dart';
 import '../../../locator.dart';
 import '../../../repositories/account/account_repository.dart';
 import '../../../common/widgets/new_icon_selection.dart';
+import '../../home_page/home_page_controller.dart';
 
 class AddAccountPage extends StatefulWidget {
   final AccountDbModel? editAccount;
@@ -32,6 +33,7 @@ class _AddAccountPageState extends State<AddAccountPage> {
   final _formKey = GlobalKey<FormState>();
   final _accountNameController = TextEditingController();
   final _accountDescriptionController = TextEditingController();
+  final _homePageController = locator.get<HomePageController>();
 
   bool _addNewAccount = true;
   int? _accountId;
@@ -75,11 +77,11 @@ class _AddAccountPageState extends State<AddAccountPage> {
       accountDescription: _accountDescriptionController.text,
       accountUserId: locator.get<CurrentUser>().userId!,
     );
-    // final locale = AppLocalizations.of(context)!;
 
     if (_accountId != null) {
       // Update Account
       await newAccount.updateAccount();
+      _homePageController.setRedraw();
       final currentAccount = locator.get<CurrentAccount>();
       if (_accountId == currentAccount.accountId) {
         currentAccount.setFromAccountDbModel(newAccount);
@@ -87,6 +89,7 @@ class _AddAccountPageState extends State<AddAccountPage> {
     } else {
       // New Account
       await locator.get<AccountRepository>().addAccount(newAccount);
+      _homePageController.setRedraw();
     }
     if (!context.mounted) return;
     Navigator.pop(context);

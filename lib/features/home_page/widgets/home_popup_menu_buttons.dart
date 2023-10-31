@@ -7,10 +7,34 @@ import '../../../common/constants/routes/app_route.dart';
 import '../../../services/authentication/auth_service.dart';
 import '../../../services/database/database_helper.dart';
 import '../../database_recover/database_recover.dart';
-import '../../help_manager/main_manager.dart';
 
 class HomePagePopupMenuButtons extends StatelessWidget {
   const HomePagePopupMenuButtons({super.key});
+
+  void _onSelected(BuildContext context, String? value) async {
+    if (value == 'settings') {
+      await Navigator.pushNamed(context, AppRoute.settings.name);
+    } else if (value == 'logout') {
+      await locator.get<AuthService>().signOut();
+      var user = locator.get<CurrentUser>();
+      user.userLogged = false;
+      await locator.get<DatabaseHelper>().updateUser(user.toMap());
+      if (context.mounted) {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppRoute.onboard.name,
+          (route) => false,
+        );
+      }
+    } else if (value == 'backup') {
+      showDialog(
+        context: context,
+        builder: (context) => const DatabaseRecover(
+          dialogState: DialogStates.createRestore,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,99 +42,56 @@ class HomePagePopupMenuButtons extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final primary = colorScheme.primary;
 
-    return Row(
-      children: [
-        PopupMenuButton(
-          onSelected: (value) async {
-            if (value == 'settings') {
-              await Navigator.pushNamed(context, AppRoute.settings.name);
-            } else if (value == 'helpHomePage') {
-              managerTutorial(context, transactionsHelp);
-            } else if (value == 'logout') {
-              await locator.get<AuthService>().signOut();
-              var user = locator.get<CurrentUser>();
-              user.userLogged = false;
-              await locator.get<DatabaseHelper>().updateUser(user.toMap());
-              if (context.mounted) {
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  AppRoute.onboard.name,
-                  (route) => false,
-                );
-              }
-            } else if (value == 'backup') {
-              showDialog(
-                context: context,
-                builder: (context) => const DatabaseRecover(
-                  dialogState: DialogStates.createRestore,
-                ),
-              );
-            }
-          },
-          child: Icon(
-            Icons.more_horiz,
-            color: colorScheme.onPrimary,
+    return PopupMenuButton<String>(
+      onSelected: (value) => _onSelected(context, value),
+      icon: Icon(
+        Icons.more_vert,
+        color: colorScheme.onPrimary,
+      ),
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          value: 'settings',
+          child: Row(
+            children: [
+              Icon(
+                Icons.settings,
+                color: primary,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                locale.cardPopupMenuSettings,
+              )
+            ],
           ),
-          itemBuilder: (context) => [
-            PopupMenuItem(
-              value: 'settings',
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.settings,
-                    color: primary,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    locale.cardPopupMenuSettings,
-                  )
-                ],
-              ),
-            ),
-            PopupMenuItem(
-              value: 'backup',
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.upload_file,
-                    color: primary,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    locale.cardPopupMenuBackup,
-                  )
-                ],
-              ),
-            ),
-            PopupMenuItem(
-              value: 'helpHomePage',
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.help_outline,
-                    color: primary,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(locale.cardPopupMenuTransactionsHelp),
-                ],
-              ),
-            ),
-            PopupMenuItem(
-              value: 'logout',
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.logout,
-                    color: primary,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(locale.cardPopupMenuLogout),
-                ],
-              ),
-            ),
-          ],
         ),
-        const SizedBox(width: 16),
+        PopupMenuItem(
+          value: 'backup',
+          child: Row(
+            children: [
+              Icon(
+                Icons.upload_file,
+                color: primary,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                locale.cardPopupMenuBackup,
+              )
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: 'logout',
+          child: Row(
+            children: [
+              Icon(
+                Icons.logout,
+                color: primary,
+              ),
+              const SizedBox(width: 8),
+              Text(locale.cardPopupMenuLogout),
+            ],
+          ),
+        ),
       ],
     );
   }

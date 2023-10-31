@@ -4,7 +4,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../common/constants/app_constants.dart';
 import '../../common/constants/themes/app_text_styles.dart';
 import '../../common/constants/themes/colors/custom_color.g.dart';
-import '../../common/constants/themes/icons/fontello_icons.dart';
 import '../../common/extensions/money_masked_text.dart';
 import '../../common/models/category_db_model.dart';
 import '../../common/widgets/app_top_border.dart';
@@ -125,66 +124,56 @@ class _CategoriesPageState extends State<CategoriesPage>
           style: AppTextStyles.textStyleSemiBold18,
         ),
         actions: [
-          PopupMenuButton<int>(
-            padding: EdgeInsets.zero,
+          SizedBox(
+            width: 32,
+            height: 32,
+            child: InkWell(
+              customBorder: const CircleBorder(),
+              onTap: () => managerTutorial(
+                context,
+                categoriesHelp,
+              ),
+              child: const Icon(
+                Icons.question_mark,
+                size: 20,
+              ),
+            ),
+          ),
+          PopupMenuButton<StatisticMedium>(
             icon: const Icon(
-              Icons.more_horiz,
+              Icons.more_vert,
             ),
             itemBuilder: (context) => [
-              PopupMenuItem<int>(
-                value: 0,
-                child: ListTile(
-                  leading: Icon(
-                    Icons.help_outline,
-                    color: primary,
-                  ),
-                  title: Text(locale.transactionListTileHelp),
-                ),
-              ),
-              PopupMenuItem<int>(
-                value: 1,
-                child: PopupMenuButton<StatisticMedium>(
-                  padding: EdgeInsets.zero,
-                  elevation: 10,
-                  child: SizedBox(
-                    width: 200,
-                    child: ListTile(
-                      leading: Icon(
-                        FontelloIcons.budgetPig,
-                        color: primary,
-                      ),
-                      title: Text(locale.budgetPageBudget),
-                      trailing: Icon(
-                        Icons.arrow_forward_ios,
-                        color: primary,
-                      ),
-                    ),
-                  ),
-                  itemBuilder: (context) => [
-                    PopupMenuItem<StatisticMedium>(
-                      value: StatisticMedium.none,
-                      child: Text(locale.budgetPageResetValues),
-                    ),
-                    PopupMenuItem<StatisticMedium>(
-                      value: StatisticMedium.mediumMonth,
-                      child: Text(locale.budgetPageLastMonths),
-                    ),
-                    PopupMenuItem<StatisticMedium>(
-                      value: StatisticMedium.medium12,
-                      child: Text(locale.budgetPage12Month),
+              PopupMenuItem<StatisticMedium>(
+                value: StatisticMedium.none,
+                child: Column(
+                  children: [
+                    const Text('Budget'),
+                    const Divider(),
+                    ListTile(
+                      leading: const Icon(Icons.refresh_sharp),
+                      title: Text(locale.budgetPageResetValues),
                     ),
                   ],
-                  onSelected: (value) {
-                    _controller.setAllBudgets(value);
-                    Navigator.of(context).pop();
-                  },
+                ),
+              ),
+              PopupMenuItem<StatisticMedium>(
+                value: StatisticMedium.mediumMonth,
+                child: ListTile(
+                  leading: const Icon(Icons.calendar_month),
+                  title: Text(locale.budgetPageLastMonths),
+                ),
+              ),
+              PopupMenuItem<StatisticMedium>(
+                value: StatisticMedium.medium12,
+                child: ListTile(
+                  leading: const Icon(Icons.calendar_today),
+                  title: Text(locale.budgetPage12Month),
                 ),
               ),
             ],
             onSelected: (value) {
-              if (value == 0) {
-                managerTutorial(context, categoriesHelp);
-              }
+              _controller.setAllBudgets(value);
             },
           ),
         ],

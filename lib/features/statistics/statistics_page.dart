@@ -31,7 +31,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
     super.initState();
     _controller.init();
     statReference = _controller.statReference;
-    // log('StatisticsPageState: initState...');
   }
 
   @override
@@ -39,8 +38,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
     final locale = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
     final primary = colorScheme.primary;
-
-    // log('StatisticsPageState: build...');
 
     return Center(
       child: Scaffold(
@@ -52,75 +49,50 @@ class _StatisticsPageState extends State<StatisticsPage> {
             style: AppTextStyles.textStyleSemiBold18,
           ),
           actions: [
-            PopupMenuButton<int>(
-              icon: const Icon(
-                Icons.more_horiz,
-              ),
-              itemBuilder: (context) => [
-                PopupMenuItem<int>(
-                  value: 0,
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.help_outline,
-                      color: primary,
-                    ),
-                    title: Text(locale.transactionListTileHelp),
-                  ),
+            SizedBox(
+              width: 32,
+              height: 32,
+              child: InkWell(
+                customBorder: const CircleBorder(),
+                onTap: () => managerTutorial(
+                  context,
+                  statisticsHelp,
                 ),
-                PopupMenuItem<int>(
-                  value: 1,
-                  child: PopupMenuButton<StatisticMedium>(
-                    tooltip: locale.statisticsPageStatisticalRef,
-                    padding: EdgeInsets.zero,
-                    elevation: 10,
-                    child: ListTile(
-                      leading: Icon(
-                        Icons.gradient,
-                        color: primary,
-                      ),
-                      title: Text(locale.statisticsPageStatisticalRef),
-                      trailing: Icon(
-                        Icons.arrow_forward_ios,
-                        color: primary,
-                      ),
-                    ),
-                    itemBuilder: (context) => [
-                      CheckedPopupMenuItem<StatisticMedium>(
-                        checked: statReference == StatisticMedium.mediumMonth
-                            ? true
-                            : false,
-                        value: StatisticMedium.mediumMonth,
-                        child: Text(locale.statisticsPageLastMonths),
-                      ),
-                      CheckedPopupMenuItem<StatisticMedium>(
-                        checked: statReference == StatisticMedium.medium12
-                            ? true
-                            : false,
-                        value: StatisticMedium.medium12,
-                        child: Text(locale.statisticsPage12Month),
-                      ),
-                      CheckedPopupMenuItem<StatisticMedium>(
-                        checked: statReference == StatisticMedium.categoryBudget
-                            ? true
-                            : false,
-                        value: StatisticMedium.categoryBudget,
-                        child: Text(locale.statisticsPageCategoryBudget),
-                      ),
-                    ],
-                    onSelected: (value) {
-                      _controller.setStatisticsReference(value);
-                      statReference = value;
-                      Navigator.of(context).pop();
-                    },
-                  ),
+                child: const Icon(
+                  Icons.question_mark,
+                  size: 20,
+                ),
+              ),
+            ),
+            PopupMenuButton<StatisticMedium>(
+              icon: const Icon(Icons.more_vert),
+              itemBuilder: (context) => [
+                CheckedPopupMenuItem<StatisticMedium>(
+                  checked: statReference == StatisticMedium.mediumMonth
+                      ? true
+                      : false,
+                  value: StatisticMedium.mediumMonth,
+                  child: Text(locale.statisticsPageLastMonths),
+                ),
+                CheckedPopupMenuItem<StatisticMedium>(
+                  checked:
+                      statReference == StatisticMedium.medium12 ? true : false,
+                  value: StatisticMedium.medium12,
+                  child: Text(locale.statisticsPage12Month),
+                ),
+                CheckedPopupMenuItem<StatisticMedium>(
+                  checked: statReference == StatisticMedium.categoryBudget
+                      ? true
+                      : false,
+                  value: StatisticMedium.categoryBudget,
+                  child: Text(locale.statisticsPageCategoryBudget),
                 ),
               ],
               onSelected: (value) {
-                if (value == 0) {
-                  managerTutorial(context, statisticsHelp);
-                }
+                _controller.setStatisticsReference(value);
+                statReference = value;
               },
-            )
+            ),
           ],
         ),
         body: Stack(

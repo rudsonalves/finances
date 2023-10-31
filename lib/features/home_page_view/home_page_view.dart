@@ -24,7 +24,9 @@ class HomePageView extends StatefulWidget {
 }
 
 class _HomePageViewState extends State<HomePageView> {
-  final PageController _pageController = PageController();
+  final _pageController = PageController();
+  final _homePageController = locator.get<HomePageController>();
+
   bool _floatAppButton = true;
   int _pageIndex = 0;
   // bool _canPop = true;
@@ -44,9 +46,7 @@ class _HomePageViewState extends State<HomePageView> {
     setState(() {
       _pageIndex = page;
       _floatAppButton = (page != 3) ? true : false;
-      // _canPop = false;
       if (page == 0) {
-        // _canPop = true;
         _addFunction = addTransaction;
       } else if (page == 1) {
         _addFunction = addAccount;
@@ -54,6 +54,9 @@ class _HomePageViewState extends State<HomePageView> {
         _addFunction = addCategory;
       }
       _pageController.jumpToPage(page);
+      if (page == 0 && _homePageController.redraw) {
+        _homePageController.makeRedraw();
+      }
     });
   }
 
@@ -61,7 +64,6 @@ class _HomePageViewState extends State<HomePageView> {
   void initState() {
     super.initState();
     _pageIndex = 0;
-    // _canPop = true;
     _addFunction = addTransaction;
     _floatAppButton = true;
   }
@@ -69,7 +71,6 @@ class _HomePageViewState extends State<HomePageView> {
   void changeToMainPage() {
     setState(() {
       _pageIndex = 0;
-      // _canPop = true;
       _addFunction = addTransaction;
       _floatAppButton = true;
       _pageController.jumpToPage(0);
@@ -108,13 +109,6 @@ class _HomePageViewState extends State<HomePageView> {
 
   @override
   Widget build(BuildContext context) {
-    // return PopScope(
-    //   canPop: _canPop,
-    //   onPopInvoked: (didPop) async {
-    //     if (_pageIndex != 0) {
-    //       changeToMainPage();
-    //     }
-    //   },
     return WillPopScope(
       onWillPop: () async {
         if (_pageIndex != 0) {

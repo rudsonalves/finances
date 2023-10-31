@@ -88,7 +88,7 @@ class _BalanceCardState extends State<BalanceCard> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Expanded(
-                          flex: 2,
+                          flex: 3,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
@@ -104,10 +104,14 @@ class _BalanceCardState extends State<BalanceCard> {
                                     Text(
                                       currentAccount.accountName,
                                       maxLines: 1,
-                                      style: AppTextStyles.textStyleSemiBold14
+                                      style: AppTextStyles.textStyleSemiBold16
                                           .copyWith(
                                         color: customColors.sourceLightyellow,
                                       ),
+                                    ),
+                                    Icon(
+                                      Icons.arrow_drop_down,
+                                      color: customColors.sourceLightyellow,
                                     ),
                                   ],
                                 ),
@@ -139,7 +143,7 @@ class _BalanceCardState extends State<BalanceCard> {
                                     money.text(currentBalance.balanceClose),
                                     textAlign: TextAlign.left,
                                     style:
-                                        AppTextStyles.textStyleBold22.copyWith(
+                                        AppTextStyles.textStyleBold20.copyWith(
                                       color:
                                           currentBalance.balanceClose < -0.005
                                               ? customColors.sourceMinusred
