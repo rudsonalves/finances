@@ -74,8 +74,16 @@ class _SplashPageState extends State<SplashPage> {
             Text(
               locale.appName,
               textAlign: TextAlign.center,
-              style: AppTextStyles.textStyleBold50.copyWith(
+              style: AppTextStyles.textStyleBold38.copyWith(
                 color: Theme.of(context).colorScheme.onPrimary,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Image.asset(
+                'assets/icons/finances_icon2.png',
+                width: 100,
+                height: 100,
               ),
             ),
             const CustomCircularProgressIndicator(),
