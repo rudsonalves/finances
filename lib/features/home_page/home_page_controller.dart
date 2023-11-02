@@ -32,7 +32,7 @@ class HomePageController extends ChangeNotifier {
 
   List<TransactionDbModel> get transactions => _transactions;
 
-  int maxTransactions = 50;
+  int maxTransactions = 35;
 
   bool _redraw = false;
 

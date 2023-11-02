@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../common/admob/admob_google.dart';
 import '../../locator.dart';
 import '../account/account_controller.dart';
 import '../account/widgets/add_account_page.dart';
@@ -29,8 +30,9 @@ class _HomePageViewState extends State<HomePageView> {
 
   bool _floatAppButton = true;
   int _pageIndex = 0;
-  // bool _canPop = true;
   void Function()? _addFunction;
+
+  final AdmobIntersticial _admobIntersticial = AdmobIntersticial.instance;
 
   @override
   void dispose() {
@@ -38,16 +40,27 @@ class _HomePageViewState extends State<HomePageView> {
     _pageController.dispose();
   }
 
+  @override
+  void initState() {
+    super.initState();
+    _pageIndex = 0;
+    _addFunction = addTransaction;
+    _floatAppButton = true;
+  }
+
   void changePage(int page) {
     // 0 HomePage(),
     // 1 AccountPage(),
     // 2 BudgetPage(),
     // 3 StatisticsPage(),
+    _addFunction = addTransaction;
+    if (adMobEnable) {
+      _admobIntersticial.show();
+    }
     setState(() {
       _pageIndex = page;
       _floatAppButton = (page != 3) ? true : false;
       if (page == 0) {
-        _addFunction = addTransaction;
       } else if (page == 1) {
         _addFunction = addAccount;
       } else if (page == 2) {
@@ -58,14 +71,6 @@ class _HomePageViewState extends State<HomePageView> {
         _homePageController.makeRedraw();
       }
     });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _pageIndex = 0;
-    _addFunction = addTransaction;
-    _floatAppButton = true;
   }
 
   void changeToMainPage() {
@@ -118,6 +123,15 @@ class _HomePageViewState extends State<HomePageView> {
         return true;
       },
       child: Scaffold(
+        floatingActionButton: _floatAppButton
+            ? CustomFloatingActionButton(onPressed: _addFunction)
+            : null,
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: CustomBottomNavigatorBar(
+          page: _pageIndex,
+          floatAppButton: _floatAppButton,
+          changePage: changePage,
+        ),
         body: PageView(
           physics: const NeverScrollableScrollPhysics(),
           controller: _pageController,
@@ -127,15 +141,6 @@ class _HomePageViewState extends State<HomePageView> {
             CategoriesPage(),
             StatisticsPage(),
           ],
-        ),
-        floatingActionButton: _floatAppButton
-            ? CustomFloatingActionButton(onPressed: _addFunction)
-            : null,
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: CustomBottomNavigatorBar(
-          page: _pageIndex,
-          floatAppButton: _floatAppButton,
-          changePage: changePage,
         ),
       ),
     );

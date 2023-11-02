@@ -29,6 +29,11 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+        <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-8497496188098593~4536561711"/>
     </application>
     <!-- Need to accesses to firebbase authentication -->
     <uses-permission android:name="android.permission.INTERNET"/>

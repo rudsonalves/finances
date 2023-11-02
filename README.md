@@ -275,6 +275,10 @@ Some bugs were noticed and need to be fixed:
 
 - *20231002.2* implementation: implemnetar um sistema de logger para o app.
 - *20231013.1* bug: o app não está filtrando o conteúdo por usuário.???
+- *20231102.1* implementation: adicinar uma caoxa de diálogo antes de fazer a instalação da versão sem anúncios comunicando para fazer um backup dos dados antes de prosseguir;
+- *20231102.2* implementation: atualizar as páginas de ajuda figuras atualizadas e rever o texto;
+- *20231102.3* implementation: revisar os dispose das janelas;
+- *20231102.4* implementation: adicinar a página de configurações um controle sobre a quantidade de maxTransactions (HomePageController) que podem ser apresentadas na página inicial.
 
 # Commits:
 
