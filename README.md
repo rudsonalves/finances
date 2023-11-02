@@ -282,7 +282,45 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
-## 2023/20/31 - Version: 1.0.7+40:
+## 2023/11/02 - Version: 1.0.9+42
+This commit focuses on integrating Google ads, optimizations, and improvements in user experience. Here is a summary of the key changes:
+
+* android/app/build.gradle:
+   - Updated compileSdkVersion and targetSdkVersion to version 33.
+   - Added the dependency implementation 'com.google.android.gms:play-services-ads:22.5.0' to enable Google ads.
+* android/app/src/main/AndroidManifest.xml:
+   - Added metadata for Google ads.
+* lib/common/admob/admob_google.dart:
+   - Introduced classes to manage Google Banner and Interstitial ads.
+   - The constant adMobEnable enables and disables ads. Setting this constant to false renders ads completely inert.
+* lib/common/admob/app_lifecycle_reactor.dart:
+* lib/common/admob/app_open_ad_manager.dart:
+   - These two modules are for managing app open ads.
+* lib/common/widgets/custom_bottom_navigator_bar.dart:
+   - This widget changed to a StatefulWidget to facilitate the deployment of the Google banner.
+   - Added the Google ads banner below the app's BottomNavigatorBar. This is displayed only if ads are enabled.
+* lib/features/home_page/home_page.dart:
+   - Added the App Open ad to trigger when the app is put in the background.
+   - These ads are displayed only if ads are enabled.
+* lib/features/home_page/home_page_controller.dart:
+   - Adjusted maxTransactions to 35 transactions.
+* lib/features/home_page/widgets/home_popup_menu_buttons.dart:
+   - Added a button to link to the ad-free app on the Google Play Store.
+   - This link is shown only if ads are enabled.
+* lib/features/home_page_view/home_page_view.dart:
+   - Added the Interstitial ad to trigger when changing pages in the app through the BottomNavigatorBar.
+   - These ads are displayed only if ads are enabled.
+* /lib/l10n/app_?.arb:
+   - Added button messages to call the ad-free app link.
+* /lib/main.dart:
+   - Initialized MobileAds.
+* pubspec.yaml:
+   - Added packages:
+     - google_mobile_ads ^3.1.0 - for adding Google ads.
+     - url_launcher ^6.2.1 - for adding links to the Google store.
+
+
+## 2023/10/31 - Version: 1.0.7+40:
 
 In this commit, some final adjustments to the app's interface were made to facilitate its usage and to fix the category update bug on the transactions page. This was the last known bug.
 
