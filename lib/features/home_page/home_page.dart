@@ -1,7 +1,7 @@
-import 'package:finances/common/admob/admob_google.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../common/admob/admob_google.dart';
 import '../../common/admob/app_lifecycle_reactor.dart';
 import '../../common/admob/app_open_ad_manager.dart';
 import '../../common/models/transaction_db_model.dart';
