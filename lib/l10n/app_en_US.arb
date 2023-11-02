@@ -383,5 +383,7 @@
     "filterDialogLabel": "Text to filter",
     "filterDialogButton": "Filter",
     "genericSelect": "Select",
-    "iconSelectionDialogColors": "Colors"
+    "iconSelectionDialogColors": "Colors",
+    "admob_msg_banner": "If you like our app, support us by\npurchasing the ad-free version.",
+    "admob_msg_menu": "Ad-Free Finances"
 }

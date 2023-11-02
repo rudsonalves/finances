@@ -173,7 +173,7 @@
     "cardPopupMenuTransactionsHelp": "Aide aux transactions",
     "cardPopupMenuLogout": "Déconnexion",
     "cardPopupMenuSettings": "Paramètres",
-    "cardPopupMenuBackup": "Créer/Restaurer une Sauvegarde",
+    "cardPopupMenuBackup": "Gérer les Sauvegardes",
     "statisticCardBalance": "Solde : ",
     "statisticCardIncomes": "Revenus",
     "statisticCardExpenses": "Dépenses",
@@ -383,5 +383,7 @@
     "filterDialogLabel": "Texte à filtrer",
     "filterDialogButton": "Filtrer",
     "genericSelect": "Sélectionner",
-    "iconSelectionDialogColors": "Couleurs"
+    "iconSelectionDialogColors": "Couleurs",
+    "admob_msg_banner": "Si vous aimez notre application, soutenez-nous\nen achetant la version sans publicité.",
+    "admob_msg_menu": "Finances sans publicité"
 }

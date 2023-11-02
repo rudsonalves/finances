@@ -1,6 +1,9 @@
+import 'package:finances/common/admob/admob_google.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../common/admob/app_lifecycle_reactor.dart';
+import '../../common/admob/app_open_ad_manager.dart';
 import '../../common/models/transaction_db_model.dart';
 import '../../common/models/user_name_notifier.dart';
 import '../../locator.dart';
@@ -45,7 +48,18 @@ class _HomePageState extends State<HomePage>
   bool _showTutorial = true;
 
   @override
+  void dispose() {
+    _controller.dispose();
+    _balanceController.dispose();
+    _listViewController.dispose();
+    _userNameNotifier.dispose();
+    super.dispose();
+  }
+
+  @override
   bool get wantKeepAlive => true;
+
+  late AppLifecycleReactor _appLifecycleReactor;
 
   @override
   void initState() {
@@ -53,6 +67,13 @@ class _HomePageState extends State<HomePage>
     _controller.init();
     _balanceController.getBalance();
     _userNameNotifier.init();
+
+    if (adMobEnable) {
+      AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
+      _appLifecycleReactor =
+          AppLifecycleReactor(appOpenAdManager: appOpenAdManager);
+      _appLifecycleReactor.listenToAppStateChanges();
+    }
   }
 
   String greetingText() {

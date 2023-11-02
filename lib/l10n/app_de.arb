@@ -173,7 +173,7 @@
     "cardPopupMenuTransactionsHelp": "Hilfe zu Transaktionen",
     "cardPopupMenuLogout": "Abmelden",
     "cardPopupMenuSettings": "Einstellungen",
-    "cardPopupMenuBackup": "Erstellen/Wiederherstellen Backup",
+    "cardPopupMenuBackup": "Backup Verwalten",
     "statisticCardBalance": "Guthaben : ",
     "statisticCardIncomes": "Einnahmen",
     "statisticCardExpenses": "Ausgaben",
@@ -383,5 +383,7 @@
     "filterDialogLabel": "Text filtern",
     "filterDialogButton": "Filtern",
     "genericSelect": "Auswählen",
-    "iconSelectionDialogColors": "Farben"
+    "iconSelectionDialogColors": "Farben",
+    "admob_msg_banner": "Wenn Ihnen unsere App gefällt, unterstützen\nSie uns, indem Sie die werbefreie Version\nkaufen.",
+    "admob_msg_menu": "Werbefreie Finanzen"
 }
