@@ -282,6 +282,32 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
+## 2023/11/03 - Version: 1.0.10+43
+
+In this commit, several changes were made to enhance the codebase and improve the overall performance of the application.
+
+* **docs/movie_script.md**:
+  - Further additions to the app's video script.
+* **lib/common/widgets/custom_botton_navigator_bar.dart**:
+* **lib/features/home_page/widgets/filter_dialog.dart**:
+* **lib/features/home_page/widgets/transaction_dismissible_tile.dart**:
+* **lib/features/settings/settings_page.dart**:
+* **lib/features/transaction/transaction_page.dart**:
+  - Corrections to the dispose method.
+* **lib/common/widgets/new_icon_selection.dart**:
+* **lib/features/database_recover/database_recover.dart**:
+  - Adjustments to variable declarations.
+* **lib/features/account/account_page.dart**:
+* **lib/features/categories/categories_page.dart**:
+* **lib/features/statistics/statistics_page.dart**:
+  - Addition of a dispose method.
+* **lib/locator.dart**:
+  - Addition of the function void disposeDependencies() to perform the disposal of all registered Singletons or Factories in the locator.
+* **lib/services/database/database_helper.dart**:
+* **lib/services/database/sqflite_helper.dart**:
+  - Addition of the Future<void> dispose() method to close the database.
+
+
 ## 2023/11/02 - Version: 1.0.9+42
 This commit focuses on integrating Google ads, optimizations, and improvements in user experience. Here is a summary of the key changes:
 
