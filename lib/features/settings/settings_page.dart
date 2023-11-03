@@ -28,24 +28,24 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  final currentUser = locator.get<CurrentUser>();
-  final currentTheme = locator.get<CurrentTheme>();
-  final currentLanguage = locator.get<CurrentLanguage>();
-  final currentUserName = locator.get<UserNameNotifier>();
-  final controller = SettingsPageController();
-  final userNameController = TextEditingController();
+  final _currentUser = locator.get<CurrentUser>();
+  final _currentTheme = locator.get<CurrentTheme>();
+  final _currentLanguage = locator.get<CurrentLanguage>();
+  final _currentUserName = locator.get<UserNameNotifier>();
+  final _controller = SettingsPageController();
+  final _userNameController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    controller.init();
+    _controller.init();
   }
 
   @override
   void dispose() {
     super.dispose();
-    userNameController.dispose();
-    controller.dispose();
+    _userNameController.dispose();
+    _controller.dispose();
   }
 
   Widget languageDropdown() {
@@ -55,11 +55,11 @@ class _SettingsPageState extends State<SettingsPage> {
     return DropdownButton<String>(
       elevation: 5,
       dropdownColor: colorScheme.onInverseSurface,
-      value: currentLanguage.localeCode,
+      value: _currentLanguage.localeCode,
       onChanged: (codeLang) {
         if (codeLang != null) {
-          currentLanguage.setFromLocaleCode(codeLang);
-          currentUser.setUserLanguage(codeLang);
+          _currentLanguage.setFromLocaleCode(codeLang);
+          _currentUser.setUserLanguage(codeLang);
         }
         showDialog(
           context: context,
@@ -106,11 +106,11 @@ class _SettingsPageState extends State<SettingsPage> {
     return DropdownButton<ThemeMode>(
       elevation: 5,
       dropdownColor: colorScheme.onInverseSurface,
-      value: currentTheme.themeMode$.value,
+      value: _currentTheme.themeMode$.value,
       onChanged: (themeMode) {
         if (themeMode != null) {
-          currentTheme.setThemeMode(themeMode);
-          currentUser.setUserTheme(themeMode.name);
+          _currentTheme.setThemeMode(themeMode);
+          _currentUser.setUserTheme(themeMode.name);
         }
       },
       items: const [
@@ -155,7 +155,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return AlertDialog(
       title: Text(locale.settingsPageDialogTitle),
       content: BasicTextFormField(
-        controller: userNameController,
+        controller: _userNameController,
         labelText: locale.signUpPageYourName,
       ),
       actions: [
@@ -164,9 +164,9 @@ class _SettingsPageState extends State<SettingsPage> {
           onPressed: () async {
             final navigator = Navigator.of(context);
 
-            if (userNameController.text.isNotEmpty &&
-                currentUserName.userName != userNameController.text) {
-              await currentUserName.changeName(userNameController.text);
+            if (_userNameController.text.isNotEmpty &&
+                _currentUserName.userName != _userNameController.text) {
+              await _currentUserName.changeName(_userNameController.text);
             }
             navigator.pop();
           },
@@ -187,7 +187,7 @@ class _SettingsPageState extends State<SettingsPage> {
     final primary = colorScheme.primary;
     final locale = AppLocalizations.of(context)!;
 
-    userNameController.text = currentUserName.userName;
+    _userNameController.text = _currentUserName.userName;
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -234,16 +234,16 @@ class _SettingsPageState extends State<SettingsPage> {
                           );
                         },
                         child: AnimatedBuilder(
-                            animation: currentUserName,
+                            animation: _currentUserName,
                             builder: (context, _) {
                               return Text(
-                                userNameController.text,
+                                _userNameController.text,
                                 style: AppTextStyles.textStyleSemiBold18,
                               );
                             }),
                       ),
                       Text(
-                        currentUser.userEmail!,
+                        _currentUser.userEmail!,
                         style: AppTextStyles.textStyle18.apply(color: primary),
                       ),
                     ],
@@ -252,16 +252,16 @@ class _SettingsPageState extends State<SettingsPage> {
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: AnimatedBuilder(
-                    animation: controller,
+                    animation: _controller,
                     builder: (context, _) {
                       // SettingsPage State Loading
-                      if (controller.state is SettingsPageStateLoading) {
+                      if (_controller.state is SettingsPageStateLoading) {
                         return const CustomCircularProgressIndicator();
                       }
 
                       // SettingsPage State Success
-                      if (controller.state is SettingsPageStateSuccess) {
-                        String version = controller.packageInfo.version;
+                      if (_controller.state is SettingsPageStateSuccess) {
+                        String version = _controller.packageInfo.version;
 
                         return SingleChildScrollView(
                           child: Column(
@@ -276,7 +276,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               ),
                               const SizedBox(height: 8),
                               ValueListenableBuilder(
-                                valueListenable: currentTheme.themeMode$,
+                                valueListenable: _currentTheme.themeMode$,
                                 builder: (context, themeMode, _) {
                                   return Row(
                                     mainAxisSize: MainAxisSize.min,
@@ -295,7 +295,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 },
                               ),
                               ValueListenableBuilder(
-                                valueListenable: currentLanguage.locale$,
+                                valueListenable: _currentLanguage.locale$,
                                 builder: (context, value, _) {
                                   return Row(
                                     mainAxisSize: MainAxisSize.min,

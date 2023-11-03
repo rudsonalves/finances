@@ -96,8 +96,11 @@ class _TransactionPageState extends State<TransactionPage> {
     _amountController.dispose();
     _titleController.dispose();
     _descController.dispose();
+    _categoryController.dispose();
     _dateController.dispose();
     _timeController.dispose();
+    _installments.dispose();
+    _accountController.dispose();
     _focusNodeBasicTextFormField.dispose();
   }
 

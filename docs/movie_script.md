@@ -32,7 +32,14 @@ Dining (refeições em restaurantes)
 Primeira transação
 1. Criar a primeira transação
 Opening balance
+Electric bill
 
-2. Criar uma transferência entre contas
+2. Mudar de Conta
+Starbucks
 
-3. Criar uma transação com repetições
+3. Criar uma transferência entre contas
+College savings
+
+4. Criar uma transação com repetições
+Amazon Prime
+

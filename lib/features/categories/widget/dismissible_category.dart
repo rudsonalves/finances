@@ -33,11 +33,6 @@ class DismissibleCategory extends StatefulWidget {
 }
 
 class _DismissibleCategoryState extends State<DismissibleCategory> {
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   Future<bool?> removeCategoryDialog(
     BuildContext context,
     String categoryName,

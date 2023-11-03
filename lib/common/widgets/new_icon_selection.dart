@@ -32,12 +32,12 @@ class NewIconSelection extends StatefulWidget {
 
 class _NewIconSelectionState extends State<NewIconSelection> {
   int? iconId;
-  final ValueNotifier<String> _iconName = ValueNotifier('attach money');
-  final ValueNotifier<IconsFontFamily> _iconFontFamily = ValueNotifier(
+  final _iconName = ValueNotifier<String>('attach money');
+  final _iconFontFamily = ValueNotifier<IconsFontFamily>(
     IconsFontFamily.MaterialIcons,
   );
-  final ValueNotifier<int> _iconColor = ValueNotifier(0xFF14A01B);
-  final ValueNotifier<String> _iconSearch = ValueNotifier('');
+  final _iconColor = ValueNotifier<int>(0xFF14A01B);
+  final _iconSearch = ValueNotifier<String>('');
 
   @override
   void initState() {

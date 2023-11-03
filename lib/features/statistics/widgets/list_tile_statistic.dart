@@ -35,7 +35,6 @@ class _ListTileStatisticState extends State<ListTileStatistic> {
     }
 
     setState(() {});
-    // locator.get<StatisticCardController>().getGraphicDataPoints();
   }
 
   @override

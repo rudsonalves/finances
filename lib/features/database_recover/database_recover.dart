@@ -30,7 +30,7 @@ class DatabaseRecover extends StatefulWidget {
 }
 
 class _DatabaseRecoverState extends State<DatabaseRecover> {
-  final BackupRepository backupRepository = SqfliteBackupRepository();
+  final BackupRepository _backupRepository = SqfliteBackupRepository();
   String _message = '';
 
   Future<void> _restoreFunction(AppLocalizations locale) async {
@@ -42,7 +42,7 @@ class _DatabaseRecoverState extends State<DatabaseRecover> {
         PlatformFile selectedFile = result.files.first;
         selectedFileName = selectedFile.name;
 
-        await backupRepository.restoreBackup(selectedFile.path!);
+        await _backupRepository.restoreBackup(selectedFile.path!);
 
         setState(() {
           _message = locale.databaseRecoverRetrievedSuccessfully;
@@ -65,7 +65,7 @@ class _DatabaseRecoverState extends State<DatabaseRecover> {
 
       if (destinyPath != null) {
         final String? backupPath =
-            await backupRepository.createBackup(destinyPath);
+            await _backupRepository.createBackup(destinyPath);
         _message = locale.databaseRecoverBasename(path.basename(backupPath!));
       }
     } catch (err) {

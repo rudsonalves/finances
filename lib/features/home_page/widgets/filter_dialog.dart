@@ -40,8 +40,9 @@ class _FilterDialogState extends State<FilterDialog> {
 
   @override
   void dispose() {
-    super.dispose();
     _controller.dispose();
+    _filterByDescription.dispose();
+    super.dispose();
   }
 
   @override
