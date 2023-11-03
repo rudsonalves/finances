@@ -106,7 +106,7 @@ class _SignInPageState extends State<SignInPage> {
     super.dispose();
     _emailController.dispose();
     _pwdController.dispose();
-    _controller.dispose();
+    // _controller.dispose();
   }
 
   Future<void> recoverPassword() async {

@@ -15,14 +15,6 @@ class SqflileIconsRepository extends IconRepository {
     return result;
   }
 
-  // @override
-  // Future<void> deleteIcon(IconModel iconModel) async {
-  //   if (iconModel.iconId == null) {
-  //     throw Exception('Icon ${iconModel.iconName} don\'t have id');
-  //   }
-  //   await helper.deleteIconId(iconModel.iconId!);
-  // }
-
   @override
   Future<IconModel> getIconId(int id) async {
     final iconMap = await helper.queryIconId(id);

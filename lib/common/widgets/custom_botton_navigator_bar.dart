@@ -24,21 +24,21 @@ class CustomBottomNavigatorBar extends StatefulWidget {
 }
 
 class _CustomBottomNavigatorBarState extends State<CustomBottomNavigatorBar> {
-  AdmobBanner? _admobBanner;
+  AdmobBanner? _adMobBanner;
 
   @override
   void initState() {
     super.initState();
     if (adMobEnable) {
-      _admobBanner = AdmobBanner.instance;
-      _admobBanner!.refreshFunction = refresh;
+      _adMobBanner = AdmobBanner.instance;
+      _adMobBanner!.refreshFunction = refresh;
     }
   }
 
   @override
   void dispose() {
     if (adMobEnable) {
-      _admobBanner!.disposeAd();
+      _adMobBanner!.disposeAd();
     }
     super.dispose();
   }
@@ -55,7 +55,7 @@ class _CustomBottomNavigatorBarState extends State<CustomBottomNavigatorBar> {
     final locale = AppLocalizations.of(context)!;
 
     return BottomAppBar(
-      height: (_admobBanner != null) ? _admobBanner!.height : null,
+      height: (_adMobBanner != null) ? _adMobBanner!.height : null,
       shape: (widget.floatAppButton) ? const CircularNotchedRectangle() : null,
       child: Column(
         children: [
@@ -104,8 +104,8 @@ class _CustomBottomNavigatorBarState extends State<CustomBottomNavigatorBar> {
               ],
             ),
           ),
-          if (_admobBanner != null && adMobEnable)
-            ..._admobBanner!.build(context),
+          if (_adMobBanner != null && adMobEnable)
+            ..._adMobBanner!.build(context),
         ],
       ),
     );

@@ -1701,4 +1701,10 @@ class SqfliteHelper implements DatabaseHelper {
       return null;
     }
   }
+
+  // dispose
+  @override
+  Future<void> dispose() async {
+    await _db.close();
+  }
 }

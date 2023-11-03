@@ -49,10 +49,11 @@ class _HomePageState extends State<HomePage>
 
   @override
   void dispose() {
-    _controller.dispose();
+    // _controller.dispose();
     _balanceController.dispose();
     _listViewController.dispose();
     _userNameNotifier.dispose();
+    disposeDependencies();
     super.dispose();
   }
 

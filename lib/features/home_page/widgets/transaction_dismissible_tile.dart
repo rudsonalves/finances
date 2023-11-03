@@ -38,9 +38,8 @@ class TransactionDismissibleTile extends StatefulWidget {
 
 class _TransactionDismissibleTileState
     extends State<TransactionDismissibleTile> {
-  final homePageController = locator.get<HomePageController>();
-
-  final balanceCardController = locator.get<BalanceCardController>();
+  final _homePageController = locator.get<HomePageController>();
+  final _balanceCardController = locator.get<BalanceCardController>();
 
   Widget rowTransaction(String title, String content) {
     return Row(
@@ -111,7 +110,7 @@ class _TransactionDismissibleTileState
   }
 
   void onTabCheck() async {
-    if (balanceCardController.transStatusCheck) {
+    if (_balanceCardController.transStatusCheck) {
       await widget.transaction.toggleTransStatus();
       setState(() {});
     }
@@ -250,7 +249,7 @@ class _TransactionDismissibleTileState
               },
             );
             locator.get<StatisticsController>().requestRecalculate();
-            homePageController.getTransactions();
+            _homePageController.getTransactions();
             balanceCardController.getBalance();
             return false;
           }
@@ -266,7 +265,7 @@ class _TransactionDismissibleTileState
                   await TransfersManager.removeTransfer(transaction);
                 }
                 locator.get<StatisticsController>().requestRecalculate();
-                homePageController.getTransactions();
+                _homePageController.getTransactions();
                 balanceCardController.getBalance();
                 return true;
               } catch (err) {

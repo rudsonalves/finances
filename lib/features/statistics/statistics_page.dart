@@ -34,6 +34,12 @@ class _StatisticsPageState extends State<StatisticsPage> {
   }
 
   @override
+  void dispose() {
+    // _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;

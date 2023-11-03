@@ -96,4 +96,6 @@ abstract class DatabaseHelper {
   String get dbSchemeVersion;
   Future<String?> backupDatabase([String? destinyDir]);
   Future<bool> restoreDatabase(String newDbPath);
+
+  Future<void> dispose();
 }

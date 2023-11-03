@@ -12,8 +12,6 @@ import '../../services/authentication/auth_service.dart';
 import '../../common/models/user_db_model.dart';
 
 class SplashController extends ChangeNotifier {
-  // final SecureStorage _servive;
-
   SplashController();
 
   SplashState _state = SplashStateInitial();

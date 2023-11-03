@@ -39,6 +39,12 @@ class _CategoriesPageState extends State<CategoriesPage>
     _controller.init();
   }
 
+  @override
+  void dispose() {
+    // _controller.dispose();
+    super.dispose();
+  }
+
   void callBack() {
     _controller.getAllCategories();
   }

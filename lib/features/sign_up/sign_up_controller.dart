@@ -17,11 +17,9 @@ import '../../services/authentication/auth_service.dart';
 class SignUpController extends ChangeNotifier {
   SignUpState _state = SignUpStateInitial();
   final AuthService _service;
-  // final SecureStorage _secureStorage;
 
   SignUpController(
     this._service,
-    // this._secureStorage,
   );
 
   SignUpState get state => _state;
@@ -66,12 +64,9 @@ class SignUpController extends ChangeNotifier {
       } else {
         throw Exception();
       }
-
-      // return true;
     } catch (err) {
       log('Error: $err');
       _changeState(SignUpStateError(err.toString()));
-      // return false;
     }
   }
 }
