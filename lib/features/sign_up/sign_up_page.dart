@@ -78,7 +78,7 @@ class _SignUpPageState extends State<SignUpPage> {
     _emailController.dispose();
     _pwdController.dispose();
     _confirmPwdController.dispose();
-    _controller.dispose();
+    // _controller.dispose();
     super.dispose();
   }
 

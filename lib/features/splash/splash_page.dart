@@ -41,7 +41,7 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void dispose() {
     super.dispose();
-    _splashController.dispose();
+    // _splashController.dispose();
   }
 
   @override

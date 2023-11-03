@@ -41,7 +41,7 @@ class _CategoriesPageState extends State<CategoriesPage>
 
   @override
   void dispose() {
-    _controller.dispose();
+    // _controller.dispose();
     super.dispose();
   }
 

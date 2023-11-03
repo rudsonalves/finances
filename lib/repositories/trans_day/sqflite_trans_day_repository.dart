@@ -29,11 +29,4 @@ class SqfliteTransDayRepository implements TransDayRepository {
     }
     return TransDayDbModel.fromMap(map);
   }
-
-  // @override
-  // Future<void> deleteTransDay(TransDayDbModel transDay) async {
-  //   await helper.deleteTransDay(
-  //     transDay.transDayTransId!,
-  //   );
-  // }
 }
