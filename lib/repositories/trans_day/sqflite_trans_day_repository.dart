@@ -4,7 +4,7 @@ import '../../services/database/database_helper.dart';
 import '../../common/models/trans_day_db_model.dart';
 
 class SqfliteTransDayRepository implements TransDayRepository {
-  final DatabaseHelper helper = locator.get<DatabaseHelper>();
+  final DatabaseHelper helper = locator<DatabaseHelper>();
 
   @override
   Future<void> addTransDay(TransDayDbModel transDay) async {

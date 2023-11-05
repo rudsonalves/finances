@@ -20,7 +20,7 @@ class UserNameNotifier extends ChangeNotifier {
   }
 
   void init() {
-    currentUser = locator.get<CurrentUser>();
+    currentUser = locator<CurrentUser>();
     _userName = currentUser.userName ?? '';
   }
 }

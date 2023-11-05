@@ -9,9 +9,9 @@ import '../icons/icons_repository.dart';
 import './account_repository.dart';
 
 class SqfliteAccountRepository implements AccountRepository {
-  final helper = locator.get<DatabaseHelper>();
-  final currentUser = locator.get<CurrentUser>();
-  final iconRepository = locator.get<IconRepository>();
+  final helper = locator<DatabaseHelper>();
+  final currentUser = locator<CurrentUser>();
+  final iconRepository = locator<IconRepository>();
 
   SqfliteAccountRepository();
 
@@ -63,7 +63,7 @@ class SqfliteAccountRepository implements AccountRepository {
   @override
   Future<int> addAccount(AccountDbModel account) async {
     int id = await _addOnly(account);
-    await locator.get<BalanceRepository>().createTodayBalance(account);
+    await locator<BalanceRepository>().createTodayBalance(account);
 
     await _getUserAccounts();
     return id;
@@ -97,7 +97,7 @@ class SqfliteAccountRepository implements AccountRepository {
 
   @override
   Future<void> updateAccount(AccountDbModel account) async {
-    await locator.get<IconRepository>().updateIcon(account.accountIcon);
+    await locator<IconRepository>().updateIcon(account.accountIcon);
     await helper.updateAccount(account.toMap());
     await _getUserAccounts();
   }

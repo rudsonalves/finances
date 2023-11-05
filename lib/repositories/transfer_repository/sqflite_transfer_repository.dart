@@ -4,7 +4,7 @@ import '../../services/database/database_helper.dart';
 import 'transfer_repository.dart';
 
 class SqfliteTransferRepository implements TransferRepository {
-  final helper = locator.get<DatabaseHelper>();
+  final helper = locator<DatabaseHelper>();
 
   @override
   Future<void> addTranfer(TransferDbModel transfer) async {

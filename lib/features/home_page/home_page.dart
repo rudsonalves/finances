@@ -35,10 +35,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin {
-  final _controller = locator.get<HomePageController>();
-  final _balanceController = locator.get<BalanceCardController>();
+  final _controller = locator<HomePageController>();
+  final _balanceController = locator<BalanceCardController>();
   final ScrollController _listViewController = ScrollController();
-  final _userNameNotifier = locator.get<UserNameNotifier>();
+  final _userNameNotifier = locator<UserNameNotifier>();
   String _filterText = '';
   bool _fliterIsDescription = true;
   int _filterCategoryId = 0;
@@ -122,8 +122,8 @@ class _HomePageState extends State<HomePage>
     final colorScheme = Theme.of(context).colorScheme;
     final primary = colorScheme.primary;
     final onPrimary = colorScheme.onPrimary;
-    final currentUser = locator.get<CurrentUser>();
-    final textScaleFactor = locator.get<AppScale>().textScaleFactor;
+    final currentUser = locator<CurrentUser>();
+    final textScaleFactor = locator<AppScale>().textScaleFactor;
     final locale = AppLocalizations.of(context)!;
 
     return Scaffold(

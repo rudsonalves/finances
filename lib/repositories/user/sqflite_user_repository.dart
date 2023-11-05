@@ -4,7 +4,7 @@ import '../../services/database/database_helper.dart';
 import '../../common/models/user_db_model.dart';
 
 class SqfliteUserRepository implements UserRepository {
-  final DatabaseHelper helper = locator.get<DatabaseHelper>();
+  final DatabaseHelper helper = locator<DatabaseHelper>();
   final Map<String, UserDbModel> _users = {};
   bool isStarting = true;
 

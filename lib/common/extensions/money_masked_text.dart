@@ -22,7 +22,7 @@ class MoneyMaskedText {
   });
 
   void setLanguage() {
-    final language = locator.get<CurrentUser>().userLanguage;
+    final language = locator<CurrentUser>().userLanguage;
 
     final LanguageConstants currence =
         (languageAttributes.containsKey(language))
@@ -36,7 +36,7 @@ class MoneyMaskedText {
   }
 
   static MoneyMaskedText getMoneyMaskedText() {
-    final language = locator.get<CurrentUser>().userLanguage;
+    final language = locator<CurrentUser>().userLanguage;
 
     final LanguageConstants currence =
         (languageAttributes.containsKey(language))

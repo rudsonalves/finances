@@ -23,9 +23,9 @@ class ListTileStatistic extends StatefulWidget {
 }
 
 class _ListTileStatisticState extends State<ListTileStatistic> {
-  final currentUser = locator.get<CurrentUser>();
-  final categoryRepository = locator.get<CategoryRepository>();
-  final controller = locator.get<StatisticCardController>();
+  final currentUser = locator<CurrentUser>();
+  final categoryRepository = locator<CategoryRepository>();
+  final controller = locator<StatisticCardController>();
 
   void setGraphic(String categoryName) async {
     if (currentUser.userCategoryList.contains(categoryName)) {
@@ -42,7 +42,7 @@ class _ListTileStatisticState extends State<ListTileStatistic> {
     final categoryName = widget.category.categoryName;
     final icon = categoryRepository.categoriesMap[categoryName]!.categoryIcon
         .iconWidget();
-    final money = locator.get<MoneyMaskedText>();
+    final money = locator<MoneyMaskedText>();
     final minus = widget.category.monthSum < 0;
     final customColors = Theme.of(context).extension<CustomColors>()!;
 

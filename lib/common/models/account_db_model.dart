@@ -45,7 +45,7 @@ class AccountDbModel {
 
   static Future<AccountDbModel> fromMap(Map<String, dynamic> map) async {
     int iconId = map['accountIcon'] as int;
-    var accountIcon = await locator.get<IconRepository>().getIconId(iconId);
+    var accountIcon = await locator<IconRepository>().getIconId(iconId);
 
     return AccountDbModel(
       accountId: map['accountId'] != null ? map['accountId'] as int : null,
@@ -69,6 +69,6 @@ class AccountDbModel {
   }
 
   Future<void> updateAccount() async {
-    await locator.get<AccountRepository>().updateAccount(this);
+    await locator<AccountRepository>().updateAccount(this);
   }
 }

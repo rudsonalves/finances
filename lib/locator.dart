@@ -129,13 +129,13 @@ void setupDependencies() {
 
     locator.registerFactory<SignInController>(
       () => SignInController(
-        locator.get<AuthService>(),
+        locator<AuthService>(),
       ),
     );
 
     locator.registerFactory<SignUpController>(
       () => SignUpController(
-        locator.get<AuthService>(),
+        locator<AuthService>(),
       ),
     );
 

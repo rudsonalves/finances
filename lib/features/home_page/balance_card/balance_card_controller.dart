@@ -18,8 +18,8 @@ enum FutureTrans {
 }
 
 class BalanceCardController extends ChangeNotifier {
-  final transactionRepository = locator.get<TransactionRepository>();
-  final accountRepository = locator.get<AccountRepository>();
+  final transactionRepository = locator<TransactionRepository>();
+  final accountRepository = locator<AccountRepository>();
   ExtendedDate _balanceDate = ExtendedDate.nowDate();
   bool _transStatusCheck = false;
 
@@ -74,7 +74,7 @@ class BalanceCardController extends ChangeNotifier {
         cardBalance: _cardBalance,
         date: _balanceDate,
       );
-      await locator.get<CurrentBalance>().start();
+      await locator<CurrentBalance>().start();
       changeState(BalanceCardStateSuccess());
     } catch (err) {
       changeState(BalanceCardStateError());
@@ -98,7 +98,7 @@ class BalanceCardController extends ChangeNotifier {
     _futureTransactions = newFutureTrans;
     Future.delayed(const Duration(milliseconds: 50));
     changeState(BalanceCardStateSuccess());
-    locator.get<HomePageController>().getTransactions();
+    locator<HomePageController>().getTransactions();
   }
 
   bool isFutureTrans(FutureTrans futureTrans) {

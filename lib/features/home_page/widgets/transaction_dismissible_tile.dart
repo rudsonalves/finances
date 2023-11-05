@@ -38,8 +38,8 @@ class TransactionDismissibleTile extends StatefulWidget {
 
 class _TransactionDismissibleTileState
     extends State<TransactionDismissibleTile> {
-  final _homePageController = locator.get<HomePageController>();
-  final _balanceCardController = locator.get<BalanceCardController>();
+  final _homePageController = locator<HomePageController>();
+  final _balanceCardController = locator<BalanceCardController>();
 
   Widget rowTransaction(String title, String content) {
     return Row(
@@ -61,7 +61,7 @@ class _TransactionDismissibleTileState
     TransactionDbModel transaction,
   ) {
     final AppLocalizations locale = AppLocalizations.of(context)!;
-    final money = locator.get<MoneyMaskedText>();
+    final money = locator<MoneyMaskedText>();
 
     return showDialog<bool>(
       context: context,
@@ -141,8 +141,8 @@ class _TransactionDismissibleTileState
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final customColors = Theme.of(context).extension<CustomColors>()!;
-    final money = locator.get<MoneyMaskedText>();
-    final balanceCardController = locator.get<BalanceCardController>();
+    final money = locator<MoneyMaskedText>();
+    final balanceCardController = locator<BalanceCardController>();
     final transaction = widget.transaction;
 
     double value = transaction.transValue;
@@ -150,9 +150,9 @@ class _TransactionDismissibleTileState
     value = value.abs();
 
     final CategoryDbModel category =
-        locator.get<CategoryRepository>().getCategoryId(
-              transaction.transCategoryId,
-            );
+        locator<CategoryRepository>().getCategoryId(
+      transaction.transCategoryId,
+    );
     final AppLocalizations locale = AppLocalizations.of(context)!;
 
     bool isFutureTransaction =
@@ -248,7 +248,7 @@ class _TransactionDismissibleTileState
                 'transaction': transaction,
               },
             );
-            locator.get<StatisticsController>().requestRecalculate();
+            locator<StatisticsController>().requestRecalculate();
             _homePageController.getTransactions();
             balanceCardController.getBalance();
             return false;
@@ -264,7 +264,7 @@ class _TransactionDismissibleTileState
                 } else {
                   await TransfersManager.removeTransfer(transaction);
                 }
-                locator.get<StatisticsController>().requestRecalculate();
+                locator<StatisticsController>().requestRecalculate();
                 _homePageController.getTransactions();
                 balanceCardController.getBalance();
                 return true;

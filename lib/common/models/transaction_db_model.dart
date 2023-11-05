@@ -123,6 +123,6 @@ class TransactionDbModel {
       TransactionDbModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   Future<void> updateTransaction() async {
-    await locator.get<TransactionRepository>().updateTrans(this);
+    await locator<TransactionRepository>().updateTrans(this);
   }
 }

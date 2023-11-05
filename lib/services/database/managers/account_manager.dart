@@ -14,9 +14,9 @@ class AccountManager {
   static Future<BalanceDbModel> getAccountTodayBalance(
     AccountDbModel? account,
   ) async {
-    final balanceRepository = locator.get<BalanceRepository>();
+    final balanceRepository = locator<BalanceRepository>();
 
-    account ??= locator.get<CurrentAccount>();
+    account ??= locator<CurrentAccount>();
     final date = ExtendedDate.nowDate();
     BalanceDbModel? todayBalance = await balanceRepository.getBalanceInDate(
       date: date,

@@ -39,7 +39,7 @@ class TransfersManager {
     AccountDbModel? account0,
     required AccountDbModel account1,
   }) async {
-    account0 ??= locator.get<CurrentAccount>();
+    account0 ??= locator<CurrentAccount>();
     final transaction1 = transaction0.copyToTransfer();
 
     await TransactionsManager.addTransaction(
@@ -58,7 +58,7 @@ class TransfersManager {
       transferAccount1: account1.accountId!,
     );
 
-    await locator.get<TransferRepository>().addTranfer(transfer);
+    await locator<TransferRepository>().addTranfer(transfer);
 
     transaction0.transTransferId = transfer.transferId;
     transaction1.transTransferId = transfer.transferId;
@@ -84,8 +84,8 @@ class TransfersManager {
   /// await removeTransfer(transactionToRemove);
   /// ```
   static Future<void> removeTransfer(TransactionDbModel transaction0) async {
-    final transRepository = locator.get<TransactionRepository>();
-    final transferRepository = locator.get<TransferRepository>();
+    final transRepository = locator<TransactionRepository>();
+    final transferRepository = locator<TransferRepository>();
 
     final transfer = await transferRepository.getTransferId(
       transaction0.transTransferId!,
@@ -153,11 +153,11 @@ class TransfersManager {
     required TransactionDbModel transaction0,
     AccountDbModel? account1,
   }) async {
-    final transferRepository = locator.get<TransferRepository>();
-    final transactionRepository = locator.get<TransactionRepository>();
-    final accountRepository = locator.get<AccountRepository>();
+    final transferRepository = locator<TransferRepository>();
+    final transactionRepository = locator<TransactionRepository>();
+    final accountRepository = locator<AccountRepository>();
 
-    final account0 = locator.get<CurrentAccount>();
+    final account0 = locator<CurrentAccount>();
 
     // recover the original transaction
     final originalTransaction0 =

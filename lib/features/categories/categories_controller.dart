@@ -11,8 +11,8 @@ import '../statistics/statistic_controller.dart';
 import 'categories_state.dart';
 
 class CategoriesController extends ChangeNotifier {
-  final _categoryRepository = locator.get<CategoryRepository>();
-  final _statController = locator.get<StatisticsController>();
+  final _categoryRepository = locator<CategoryRepository>();
+  final _statController = locator<StatisticsController>();
   double _totalBudget = 0.0;
 
   CategoriesState _state = CategoriesStateInitial();

@@ -15,7 +15,7 @@ import 'models/statistic_total.dart';
 import 'statistic_state.dart';
 
 class StatisticsController extends ChangeNotifier {
-  final helper = locator.get<DatabaseHelper>();
+  final helper = locator<DatabaseHelper>();
   Future<void>? _currentOperation;
   Completer<void>? _successCompleter;
 
@@ -30,7 +30,7 @@ class StatisticsController extends ChangeNotifier {
   // Lists of categoryName x StatisticTotal
   final Map<String, StatisticTotal> _totalByCategory = {};
 
-  final currentUser = locator.get<CurrentUser>();
+  final currentUser = locator<CurrentUser>();
 
   late StatisticMedium _statReferenceType;
 
@@ -101,7 +101,7 @@ class StatisticsController extends ChangeNotifier {
         }
         break;
       case StatisticMedium.categoryBudget:
-        final categoriesMap = locator.get<CategoryRepository>().categoriesMap;
+        final categoriesMap = locator<CategoryRepository>().categoriesMap;
 
         for (String categoryName in categoriesMap.keys) {
           referencesByCategory[categoryName] =
@@ -109,7 +109,7 @@ class StatisticsController extends ChangeNotifier {
         }
         break;
       case StatisticMedium.none:
-        final categoriesMap = locator.get<CategoryRepository>().categoriesMap;
+        final categoriesMap = locator<CategoryRepository>().categoriesMap;
 
         for (String categoryName in categoriesMap.keys) {
           referencesByCategory[categoryName] = 0.0;

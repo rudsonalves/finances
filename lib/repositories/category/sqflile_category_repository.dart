@@ -9,7 +9,7 @@ import '../../services/database/database_helper.dart';
 import '../../common/models/category_db_model.dart';
 
 class SqflileCategoryRepository implements CategoryRepository {
-  final DatabaseHelper helper = locator.get<DatabaseHelper>();
+  final DatabaseHelper helper = locator<DatabaseHelper>();
   final Map<String, CategoryDbModel> _categories = {};
   bool isStarting = true;
 
@@ -88,8 +88,7 @@ class SqflileCategoryRepository implements CategoryRepository {
 
   @override
   Future<void> addCategory(CategoryDbModel category) async {
-    int result =
-        await locator.get<IconRepository>().addIcon(category.categoryIcon);
+    int result = await locator<IconRepository>().addIcon(category.categoryIcon);
     if (result < 0) {
       throw Exception('addCategory.categoryIcon return id $result');
     }
@@ -113,7 +112,7 @@ class SqflileCategoryRepository implements CategoryRepository {
 
   @override
   Future<void> updateCategory(CategoryDbModel category) async {
-    await locator.get<IconRepository>().updateIcon(category.categoryIcon);
+    await locator<IconRepository>().updateIcon(category.categoryIcon);
     await helper.updateCategory(category.toMap());
     await getCategories();
   }

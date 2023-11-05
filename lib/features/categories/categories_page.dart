@@ -26,8 +26,8 @@ class CategoriesPage extends StatefulWidget {
 
 class _CategoriesPageState extends State<CategoriesPage>
     with AutomaticKeepAliveClientMixin {
-  final _controller = locator.get<CategoriesController>();
-  final _statController = locator.get<StatisticsController>();
+  final _controller = locator<CategoriesController>();
+  final _statController = locator<StatisticsController>();
 
   @override
   bool get wantKeepAlive => true;
@@ -120,7 +120,7 @@ class _CategoriesPageState extends State<CategoriesPage>
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final primary = colorScheme.primary;
     final locale = AppLocalizations.of(context)!;
-    final money = locator.get<MoneyMaskedText>();
+    final money = locator<MoneyMaskedText>();
 
     return Scaffold(
       appBar: CustomAppBar(

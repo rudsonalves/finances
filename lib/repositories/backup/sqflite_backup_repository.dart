@@ -4,7 +4,7 @@ import '../user/user_repository.dart';
 import 'backup_repository.dart';
 
 class SqfliteBackupRepository extends BackupRepository {
-  final helper = locator.get<DatabaseHelper>();
+  final helper = locator<DatabaseHelper>();
 
   @override
   Future<String?> createBackup([String? destinyPath]) async {
@@ -15,7 +15,7 @@ class SqfliteBackupRepository extends BackupRepository {
   @override
   Future<bool> restoreBackup(String restorePath) async {
     bool result = await helper.restoreDatabase(restorePath);
-    await locator.get<UserRepository>().restart();
+    await locator<UserRepository>().restart();
     return result;
   }
 }

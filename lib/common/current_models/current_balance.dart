@@ -6,8 +6,8 @@ import '../../repositories/balance/balance_repository.dart';
 class CurrentBalance extends BalanceDbModel {
   CurrentBalance();
 
-  final balanceRepository = locator.get<BalanceRepository>();
-  final currentAccount = locator.get<CurrentAccount>();
+  final balanceRepository = locator<BalanceRepository>();
+  final currentAccount = locator<CurrentAccount>();
 
   Future<void> start() async {
     final balance = await balanceRepository.createTodayBalance(currentAccount);

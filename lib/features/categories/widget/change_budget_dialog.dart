@@ -32,7 +32,7 @@ class ChangeBudgetDialog extends StatefulWidget {
 }
 
 class _ChangeBudgetDialogState extends State<ChangeBudgetDialog> {
-  final money = locator.get<MoneyMaskedText>();
+  final money = locator<MoneyMaskedText>();
   final _budgetController = getMoneyMaskedTextController(0.0);
   late bool _income;
 

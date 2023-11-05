@@ -28,10 +28,10 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  final _currentUser = locator.get<CurrentUser>();
-  final _currentTheme = locator.get<CurrentTheme>();
-  final _currentLanguage = locator.get<CurrentLanguage>();
-  final _currentUserName = locator.get<UserNameNotifier>();
+  final _currentUser = locator<CurrentUser>();
+  final _currentTheme = locator<CurrentTheme>();
+  final _currentLanguage = locator<CurrentLanguage>();
+  final _currentUserName = locator<UserNameNotifier>();
   final _controller = SettingsPageController();
   final _userNameController = TextEditingController();
 

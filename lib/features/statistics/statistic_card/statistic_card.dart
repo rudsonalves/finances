@@ -59,7 +59,7 @@ class _StatisticCardState extends State<StatisticCard> {
 
   ExtendedDate currentDate = ExtendedDate.now();
 
-  final _controller = locator.get<StatisticCardController>();
+  final _controller = locator<StatisticCardController>();
 
   @override
   void initState() {
@@ -70,7 +70,7 @@ class _StatisticCardState extends State<StatisticCard> {
   List<GraphicLineData> processesData() {
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final List<GraphicLineData> graphicData = [];
-    final categories = locator.get<CategoryRepository>().categoriesMap;
+    final categories = locator<CategoryRepository>().categoriesMap;
 
     for (final plotData in _controller.graphicData) {
       Color color = Colors.black;
@@ -118,9 +118,9 @@ class _StatisticCardState extends State<StatisticCard> {
     final colorScheme = Theme.of(context).colorScheme;
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final primary = colorScheme.primary;
-    final money = locator.get<MoneyMaskedText>();
+    final money = locator<MoneyMaskedText>();
     final locale = AppLocalizations.of(context)!;
-    final currentUser = locator.get<CurrentUser>();
+    final currentUser = locator<CurrentUser>();
 
     return Positioned(
       left: 4,
@@ -153,7 +153,7 @@ class _StatisticCardState extends State<StatisticCard> {
 
                 final List<String> graphicXLabes = xLabels();
 
-                bool noData = locator.get<StatisticsController>().noData;
+                bool noData = locator<StatisticsController>().noData;
 
                 return SingleChildScrollView(
                   child: Column(

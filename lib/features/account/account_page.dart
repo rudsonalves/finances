@@ -29,7 +29,7 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
-  final _controller = locator.get<AccountController>();
+  final _controller = locator<AccountController>();
 
   @override
   void initState() {
@@ -51,7 +51,7 @@ class _AccountPageState extends State<AccountPage> {
       ),
     );
     _controller.getAllBalances();
-    locator.get<BalanceCardController>().requestRedraw();
+    locator<BalanceCardController>().requestRedraw();
   }
 
   Future<bool> deleteAccount(AccountDbModel account) async {
@@ -59,9 +59,9 @@ class _AccountPageState extends State<AccountPage> {
     final colorScheme = Theme.of(context).colorScheme;
 
     int numberOfTrans =
-        await locator.get<DatabaseHelper>().countTransactionsForAccountId(
-              account.accountId!,
-            );
+        await locator<DatabaseHelper>().countTransactionsForAccountId(
+      account.accountId!,
+    );
 
     if (numberOfTrans > 0) {
       if (!context.mounted) return false;
@@ -112,8 +112,8 @@ class _AccountPageState extends State<AccountPage> {
         false;
 
     if (delete) {
-      await locator.get<AccountRepository>().deleteAccount(account);
-      locator.get<BalanceCardController>().requestRedraw();
+      await locator<AccountRepository>().deleteAccount(account);
+      locator<BalanceCardController>().requestRedraw();
     }
     _controller.getAllBalances();
     return delete;
@@ -122,7 +122,7 @@ class _AccountPageState extends State<AccountPage> {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
-    final money = locator.get<MoneyMaskedText>();
+    final money = locator<MoneyMaskedText>();
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(

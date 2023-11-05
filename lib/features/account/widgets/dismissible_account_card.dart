@@ -28,7 +28,7 @@ class DismissibleAccountCard extends StatelessWidget {
     final locale = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
     final customColors = Theme.of(context).extension<CustomColors>()!;
-    final money = locator.get<MoneyMaskedText>();
+    final money = locator<MoneyMaskedText>();
 
     return Padding(
       padding: const EdgeInsets.only(

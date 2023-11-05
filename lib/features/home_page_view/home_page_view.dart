@@ -26,7 +26,7 @@ class HomePageView extends StatefulWidget {
 
 class _HomePageViewState extends State<HomePageView> {
   final _pageController = PageController();
-  final _homePageController = locator.get<HomePageController>();
+  final _homePageController = locator<HomePageController>();
 
   bool _floatAppButton = true;
   int _pageIndex = 0;
@@ -84,10 +84,10 @@ class _HomePageViewState extends State<HomePageView> {
 
   Future<void> addTransaction() async {
     await Navigator.pushNamed(context, AppRoute.transaction.name);
-    await locator.get<HomePageController>().getTransactions().then(
-          (value) => locator.get<BalanceCardController>().getBalance(),
+    await locator<HomePageController>().getTransactions().then(
+          (value) => locator<BalanceCardController>().getBalance(),
         );
-    locator.get<StatisticsController>().requestRecalculate();
+    locator<StatisticsController>().requestRecalculate();
   }
 
   Future<void> addAccount() async {
@@ -95,7 +95,7 @@ class _HomePageViewState extends State<HomePageView> {
       context: context,
       builder: (context) => const AddAccountPage(),
     );
-    locator.get<AccountController>().getAllBalances();
+    locator<AccountController>().getAllBalances();
   }
 
   Future<void> addCategory() async {
@@ -105,11 +105,11 @@ class _HomePageViewState extends State<HomePageView> {
         callBack: addCategoryCallBak,
       ),
     );
-    locator.get<StatisticsController>().requestRecalculate();
+    locator<StatisticsController>().requestRecalculate();
   }
 
   Future<void> addCategoryCallBak() async {
-    await locator.get<CategoriesController>().getAllCategories();
+    await locator<CategoriesController>().getAllCategories();
   }
 
   @override

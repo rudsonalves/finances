@@ -8,8 +8,8 @@ import '../../common/current_models/current_account.dart';
 import '../../common/models/balance_db_model.dart';
 
 class SqfliteBalanceRepository implements BalanceRepository {
-  final DatabaseHelper helper = locator.get<DatabaseHelper>();
-  final currentAccount = locator.get<CurrentAccount>();
+  final DatabaseHelper helper = locator<DatabaseHelper>();
+  final currentAccount = locator<CurrentAccount>();
 
   @override
   Future<void> addBalance(BalanceDbModel balance) async {

@@ -60,9 +60,9 @@ class _TransactionPageState extends State<TransactionPage> {
   bool _income = false;
   bool _repeat = false;
 
-  final _controller = locator.get<TransactionController>();
-  final _categoryRepository = locator.get<CategoryRepository>();
-  final _homePageController = locator.get<HomePageController>();
+  final _controller = locator<TransactionController>();
+  final _categoryRepository = locator<CategoryRepository>();
+  final _homePageController = locator<HomePageController>();
   int? _categoryId;
 
   @override
@@ -117,7 +117,7 @@ class _TransactionPageState extends State<TransactionPage> {
 
       // get destination account
       AccountDbModel? destinationAccount;
-      final accountRepository = locator.get<AccountRepository>();
+      final accountRepository = locator<AccountRepository>();
       if (_accountController.text.isNotEmpty) {
         int? accountId =
             accountRepository.accountIdByName(_accountController.text);
@@ -233,7 +233,7 @@ class _TransactionPageState extends State<TransactionPage> {
   }
 
   Future<void> addCategoryCallBak() async {
-    await locator.get<CategoriesController>().getAllCategories();
+    await locator<CategoriesController>().getAllCategories();
   }
 
   void changeState(bool state) {
@@ -278,7 +278,7 @@ class _TransactionPageState extends State<TransactionPage> {
     final transValidator = TransactionValidator(locale);
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final primary = Theme.of(context).colorScheme.primary;
-    final currentAccount = locator.get<CurrentAccount>();
+    final currentAccount = locator<CurrentAccount>();
 
     if (widget.transaction != null) {
       _categoryId = widget.transaction!.transCategoryId;

@@ -44,22 +44,22 @@ class SignUpController extends ChangeNotifier {
         // Create user in local database.
         //
         // Create user informations
-        final currentLanguage = locator.get<CurrentLanguage>();
+        final currentLanguage = locator<CurrentLanguage>();
         final String langCode = currentLanguage.locale.toString();
         final language =
             languageAttributes.containsKey(langCode) ? langCode : 'en_US';
 
-        final currentUser = locator.get<CurrentUser>();
+        final currentUser = locator<CurrentUser>();
         currentUser.setFromUserModel(user);
         currentUser.userLogged = true;
         currentUser.userLanguage = language;
         currentUser.addUser();
         // Create a first account and set as currentAccount
-        await locator.get<CurrentAccount>().init();
+        await locator<CurrentAccount>().init();
         // Create a initial balance
-        await locator.get<CurrentBalance>().start();
+        await locator<CurrentBalance>().start();
         // Create the category from transfer between accounts
-        await locator.get<CategoryRepository>().firstCategory(locale);
+        await locator<CategoryRepository>().firstCategory(locale);
         _changeState(SignUpStateSuccess());
       } else {
         throw Exception();

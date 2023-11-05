@@ -25,8 +25,8 @@ class AccountDropdownFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentAccount = locator.get<CurrentAccount>();
-    final accountRepository = locator.get<AccountRepository>();
+    final currentAccount = locator<CurrentAccount>();
+    final accountRepository = locator<AccountRepository>();
     final items = accountRepository.accountsMap.keys.toList();
     final locale = AppLocalizations.of(context)!;
     items.remove(currentAccount.accountId);

@@ -23,7 +23,7 @@ class StatisticsPage extends StatefulWidget {
 }
 
 class _StatisticsPageState extends State<StatisticsPage> {
-  final _controller = locator.get<StatisticsController>();
+  final _controller = locator<StatisticsController>();
   late StatisticMedium statReference;
 
   @override

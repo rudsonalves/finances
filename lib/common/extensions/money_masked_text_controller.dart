@@ -10,7 +10,7 @@ import '../constants/laguage_constants.dart';
 import '../current_models/current_user.dart';
 
 MoneyMaskedTextController getMoneyMaskedTextController(initialValue) {
-  final language = locator.get<CurrentUser>().userLanguage;
+  final language = locator<CurrentUser>().userLanguage;
 
   final LanguageConstants languageConstants;
 

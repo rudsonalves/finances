@@ -19,7 +19,7 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  final _splashController = locator.get<SplashController>();
+  final _splashController = locator<SplashController>();
 
   @override
   void initState() {
@@ -28,7 +28,7 @@ class _SplashPageState extends State<SplashPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) => Sizes.init(context));
     _splashController.isUserLogged();
     _splashController.addListener(() {
-      locator.get<AppScale>().init(context);
+      locator<AppScale>().init(context);
       if (_splashController.state is SplashStateSuccess) {
         Navigator.of(context)
             .pushNamedAndRemoveUntil(AppRoute.home.name, (route) => false);
@@ -47,12 +47,12 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    locator.get<AppLocale>().initializeLocale(context);
+    locator<AppLocale>().initializeLocale(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    final appLocale = locator.get<AppLocale>();
+    final appLocale = locator<AppLocale>();
     if (!appLocale.started) {
       appLocale.initializeLocale(context);
     }

@@ -42,22 +42,22 @@ class SignInController extends ChangeNotifier {
 
       if (user.id != null) {
         // read currentUser informations in local database
-        final userRepository = locator.get<UserRepository>();
+        final userRepository = locator<UserRepository>();
         await userRepository.init();
         final users = userRepository.users;
         if (!users.containsKey(user.id!)) {
           throw Exception('Local data don\'t have this user.');
         }
         // get currentUser informations
-        final currentUser = locator.get<CurrentUser>();
+        final currentUser = locator<CurrentUser>();
         currentUser.copyFromUser(users[user.id!]!);
         currentUser.userLogged = true;
         await currentUser.updateUser();
         currentUser.applyCurrentUserSettings();
         // start current account in main account;
-        await locator.get<CurrentAccount>().init();
+        await locator<CurrentAccount>().init();
         // start curretn balance
-        await locator.get<CurrentBalance>().start();
+        await locator<CurrentBalance>().start();
 
         _changeState(SignInStateSuccess());
       } else {
@@ -73,7 +73,7 @@ class SignInController extends ChangeNotifier {
     AppLocalizations locale,
   ) async {
     _changeState(SignInStateLoading());
-    final currentLanguage = locator.get<CurrentLanguage>();
+    final currentLanguage = locator<CurrentLanguage>();
     final String langCode = currentLanguage.locale.toString();
     final language =
         languageAttributes.containsKey(langCode) ? langCode : 'en_US';
@@ -85,14 +85,14 @@ class SignInController extends ChangeNotifier {
       );
 
       if (user.id != null) {
-        final currentUser = locator.get<CurrentUser>();
+        final currentUser = locator<CurrentUser>();
         currentUser.setFromUserModel(user);
         currentUser.userLogged = true;
         currentUser.userLanguage = language;
         currentUser.addUser();
-        await locator.get<CurrentAccount>().init();
-        await locator.get<CurrentBalance>().start();
-        await locator.get<CategoryRepository>().firstCategory(locale);
+        await locator<CurrentAccount>().init();
+        await locator<CurrentBalance>().start();
+        await locator<CategoryRepository>().firstCategory(locale);
         _changeState(SignInStateSuccess());
       } else {
         throw Exception('Sorry! An unexpected error occurred.');

@@ -26,7 +26,7 @@ class SplashController extends ChangeNotifier {
   Future<void> isUserLogged() async {
     _changeState(SplashStateLoading());
     await Future.delayed(const Duration(seconds: 2));
-    var userRepository = locator.get<UserRepository>();
+    var userRepository = locator<UserRepository>();
     await userRepository.init();
 
     UserDbModel? loggedUser;
@@ -37,7 +37,7 @@ class SplashController extends ChangeNotifier {
     }
 
     if (loggedUser != null) {
-      var user = locator.get<AuthService>().currentUser;
+      var user = locator<AuthService>().currentUser;
       String email = user?.email ?? '';
       if (email.isEmpty) {
         _changeState(SplashStateError());
@@ -46,13 +46,13 @@ class SplashController extends ChangeNotifier {
 
       try {
         if (loggedUser.userEmail == email) {
-          final currentUser = locator.get<CurrentUser>();
+          final currentUser = locator<CurrentUser>();
           currentUser.copyFromUser(loggedUser);
           currentUser.applyCurrentUserSettings();
           // start current account
-          await locator.get<CurrentAccount>().init();
+          await locator<CurrentAccount>().init();
           // start current balance
-          await locator.get<CurrentBalance>().start();
+          await locator<CurrentBalance>().start();
         }
         _changeState(SplashStateSuccess());
         return;

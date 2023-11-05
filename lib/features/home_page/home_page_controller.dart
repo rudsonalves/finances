@@ -62,7 +62,7 @@ class HomePageController extends ChangeNotifier {
   ExtendedDate getInitialDate() {
     final date = ExtendedDate.now();
     final futureTransactions =
-        locator.get<BalanceCardController>().futureTransactions;
+        locator<BalanceCardController>().futureTransactions;
     switch (futureTransactions) {
       case FutureTrans.hide:
         return date;
@@ -78,7 +78,7 @@ class HomePageController extends ChangeNotifier {
   Future<void> getTransactions() async {
     _changeState(HomePageStateLoading());
     try {
-      await locator.get<CategoryRepository>().init();
+      await locator<CategoryRepository>().init();
 
       final date = getInitialDate();
 
@@ -100,8 +100,8 @@ class HomePageController extends ChangeNotifier {
   }
 
   Future<void> changeCurrentAccount(AccountDbModel account) async {
-    locator.get<CurrentAccount>().changeCurrenteAccount(account);
-    locator.get<BalanceCardController>().getBalance();
+    locator<CurrentAccount>().changeCurrenteAccount(account);
+    locator<BalanceCardController>().getBalance();
     getTransactions();
   }
 

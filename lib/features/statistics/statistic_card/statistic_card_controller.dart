@@ -10,8 +10,8 @@ import '../statistic_controller.dart';
 import 'statistic_cart.state.dart';
 
 class StatisticCardController extends ChangeNotifier {
-  final currentUser = locator.get<CurrentUser>();
-  final statisticController = locator.get<StatisticsController>();
+  final currentUser = locator<CurrentUser>();
+  final statisticController = locator<StatisticsController>();
   final List<PlotData> _graphicData = [];
 
   List<PlotData> get graphicData => _graphicData;
@@ -85,7 +85,7 @@ class StatisticCardController extends ChangeNotifier {
 
   void _getCategoriesData() {
     _graphicData.clear();
-    final categoriesMap = locator.get<CategoryRepository>().categoriesMap;
+    final categoriesMap = locator<CategoryRepository>().categoriesMap;
 
     for (final categoryName in currentUser.userCategoryList) {
       final statisticsMap = statisticController.statisticsMap;

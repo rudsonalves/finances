@@ -17,8 +17,8 @@ class AppFinances extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentLanguage = locator.get<CurrentLanguage>();
-    final currentTheme = locator.get<CurrentTheme>();
+    final currentLanguage = locator<CurrentLanguage>();
+    final currentTheme = locator<CurrentTheme>();
 
     return DynamicColorBuilder(
       builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {

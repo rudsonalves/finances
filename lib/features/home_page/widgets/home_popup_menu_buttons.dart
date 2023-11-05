@@ -16,10 +16,10 @@ class HomePagePopupMenuButtons extends StatelessWidget {
     if (value == 'settings') {
       await Navigator.pushNamed(context, AppRoute.settings.name);
     } else if (value == 'logout') {
-      await locator.get<AuthService>().signOut();
-      var user = locator.get<CurrentUser>();
+      await locator<AuthService>().signOut();
+      var user = locator<CurrentUser>();
       user.userLogged = false;
-      await locator.get<DatabaseHelper>().updateUser(user.toMap());
+      await locator<DatabaseHelper>().updateUser(user.toMap());
       if (context.mounted) {
         Navigator.pushNamedAndRemoveUntil(
           context,

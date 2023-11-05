@@ -33,7 +33,7 @@ class _AddAccountPageState extends State<AddAccountPage> {
   final _formKey = GlobalKey<FormState>();
   final _accountNameController = TextEditingController();
   final _accountDescriptionController = TextEditingController();
-  final _homePageController = locator.get<HomePageController>();
+  final _homePageController = locator<HomePageController>();
 
   bool _addNewAccount = true;
   int? _accountId;
@@ -75,20 +75,20 @@ class _AddAccountPageState extends State<AddAccountPage> {
       accountIcon: _accountIcon.value,
       accountName: _accountNameController.text,
       accountDescription: _accountDescriptionController.text,
-      accountUserId: locator.get<CurrentUser>().userId!,
+      accountUserId: locator<CurrentUser>().userId!,
     );
 
     if (_accountId != null) {
       // Update Account
       await newAccount.updateAccount();
       _homePageController.setRedraw();
-      final currentAccount = locator.get<CurrentAccount>();
+      final currentAccount = locator<CurrentAccount>();
       if (_accountId == currentAccount.accountId) {
         currentAccount.setFromAccountDbModel(newAccount);
       }
     } else {
       // New Account
-      await locator.get<AccountRepository>().addAccount(newAccount);
+      await locator<AccountRepository>().addAccount(newAccount);
       _homePageController.setRedraw();
     }
     if (!context.mounted) return;

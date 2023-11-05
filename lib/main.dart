@@ -20,7 +20,7 @@ void main() async {
 
   setupDependencies();
 
-  var helper = locator.get<DatabaseHelper>();
+  var helper = locator<DatabaseHelper>();
   await helper.init();
 
   runApp(const AppFinances());

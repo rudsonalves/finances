@@ -23,7 +23,7 @@ class CurrentUser extends UserDbModel {
   }
 
   void applyCurrentUserSettings() {
-    locator.get<CurrentTheme>().setThemeFromThemeName(userTheme);
-    locator.get<CurrentLanguage>().setFromLocaleCode(userLanguage);
+    locator<CurrentTheme>().setThemeFromThemeName(userTheme);
+    locator<CurrentLanguage>().setFromLocaleCode(userLanguage);
   }
 }

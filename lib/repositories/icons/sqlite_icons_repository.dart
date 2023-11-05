@@ -4,7 +4,7 @@ import './icons_repository.dart';
 import '../../common/models/icons_model.dart';
 
 class SqflileIconsRepository extends IconRepository {
-  final helper = locator.get<DatabaseHelper>();
+  final helper = locator<DatabaseHelper>();
 
   @override
   Future<int> addIcon(IconModel iconModel) async {

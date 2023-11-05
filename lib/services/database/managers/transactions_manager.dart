@@ -33,11 +33,11 @@ class TransactionsManager {
     required TransactionDbModel transaction,
     AccountDbModel? account,
   }) async {
-    account ??= locator.get<CurrentAccount>();
+    account ??= locator<CurrentAccount>();
 
-    final transRepository = locator.get<TransactionRepository>();
-    final balanceRepository = locator.get<BalanceRepository>();
-    final transDayRepository = locator.get<TransDayRepository>();
+    final transRepository = locator<TransactionRepository>();
+    final balanceRepository = locator<BalanceRepository>();
+    final transDayRepository = locator<TransDayRepository>();
 
     await transRepository.addTrans(transaction);
 
@@ -98,8 +98,8 @@ class TransactionsManager {
     required TransactionDbModel transaction,
     AccountDbModel? account,
   }) async {
-    account ??= locator.get<CurrentAccount>();
-    final transRepository = locator.get<TransactionRepository>();
+    account ??= locator<CurrentAccount>();
+    final transRepository = locator<TransactionRepository>();
 
     final oldTrans = await transRepository.getTransactionId(
       transaction.transId!,
@@ -135,9 +135,9 @@ class TransactionsManager {
   /// await removeTransaction(transactionToRemove);
   /// ```
   static Future<void> removeTransaction(TransactionDbModel transaction) async {
-    final transRepository = locator.get<TransactionRepository>();
-    final balanceRepository = locator.get<BalanceRepository>();
-    final transDayRepository = locator.get<TransDayRepository>();
+    final transRepository = locator<TransactionRepository>();
+    final balanceRepository = locator<BalanceRepository>();
+    final transDayRepository = locator<TransDayRepository>();
 
     TransDayDbModel transDay =
         await transDayRepository.getTransDayId(transaction.transId!);
@@ -160,8 +160,8 @@ class TransactionsManager {
     int maxItens = 20,
     ExtendedDate? date,
   }) async {
-    final transRepository = locator.get<TransactionRepository>();
-    final balanceRepository = locator.get<BalanceRepository>();
+    final transRepository = locator<TransactionRepository>();
+    final balanceRepository = locator<BalanceRepository>();
 
     date ??= ExtendedDate.now();
     int count = 0;
@@ -189,8 +189,8 @@ class TransactionsManager {
   /// Return the previous balance (for currentAccount) to the nearest
   /// current date.
   static Future<BalanceDbModel> findBalanceCloseDate(ExtendedDate date) async {
-    final balanceRepository = locator.get<BalanceRepository>();
-    final currentAccount = locator.get<CurrentAccount>();
+    final balanceRepository = locator<BalanceRepository>();
+    final currentAccount = locator<CurrentAccount>();
 
     var balance = await balanceRepository.getBalanceInDate(date: date.onlyDate);
     if (balance != null) return balance;

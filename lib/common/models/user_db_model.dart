@@ -39,7 +39,7 @@ class UserDbModel {
     List<String>? userCategoryList,
   }) : userCategoryList = userCategoryList ?? [];
 
-  final userRepository = locator.get<UserRepository>();
+  final userRepository = locator<UserRepository>();
 
   void setFromUserModel(UserModel user) {
     userId = user.id;

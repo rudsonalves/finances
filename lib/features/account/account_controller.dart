@@ -9,7 +9,7 @@ import '../../repositories/account/account_repository.dart';
 import '../../services/database/managers/account_manager.dart';
 
 class AccountController extends ChangeNotifier {
-  final accountRepository = locator.get<AccountRepository>();
+  final accountRepository = locator<AccountRepository>();
 
   final List<double> _balances = [];
 

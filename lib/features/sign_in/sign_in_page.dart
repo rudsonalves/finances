@@ -28,7 +28,7 @@ class _SignInPageState extends State<SignInPage> {
   final _emailController = TextEditingController();
   final _pwdController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  final _controller = locator.get<SignInController>();
+  final _controller = locator<SignInController>();
   bool showMessage = false;
 
   @override

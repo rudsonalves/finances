@@ -60,8 +60,8 @@ class BalanceManager {
     required BalanceDbModel injectedBalance,
     AccountDbModel? account,
   }) async {
-    final currentAccount = locator.get<CurrentAccount>();
-    final balanceRepository = locator.get<BalanceRepository>();
+    final currentAccount = locator<CurrentAccount>();
+    final balanceRepository = locator<BalanceRepository>();
 
     account ??= currentAccount;
     // insert a new balance in balance indexed list
@@ -126,7 +126,7 @@ class BalanceManager {
     required BalanceDbModel balance,
     required double value,
   }) async {
-    final balanceRepository = locator.get<BalanceRepository>();
+    final balanceRepository = locator<BalanceRepository>();
 
     balance.balanceClose += value;
     balance.balanceTransCount += 1;
@@ -155,7 +155,7 @@ class BalanceManager {
     required BalanceDbModel balance,
     required double value,
   }) async {
-    final balanceRepository = locator.get<BalanceRepository>();
+    final balanceRepository = locator<BalanceRepository>();
 
     balance.balanceClose -= value;
     balance.balanceTransCount -= 1;
@@ -181,10 +181,10 @@ class BalanceManager {
   }
 
   static Future<void> _reloadCurrentBalance() async {
-    final balanceRepository = locator.get<BalanceRepository>();
+    final balanceRepository = locator<BalanceRepository>();
     final balance = await balanceRepository.getBalanceInDate(
       date: ExtendedDate.nowDate(),
     );
-    locator.get<CurrentBalance>().setFromBalanceDbModel(balance!);
+    locator<CurrentBalance>().setFromBalanceDbModel(balance!);
   }
 }

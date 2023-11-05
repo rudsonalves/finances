@@ -23,7 +23,7 @@ class CategoryDropdownFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final categoryRepository = locator.get<CategoryRepository>();
+    final categoryRepository = locator<CategoryRepository>();
     final items = categoryRepository.categoriesMap.keys.toList();
 
     return Padding(

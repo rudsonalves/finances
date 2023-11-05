@@ -32,15 +32,15 @@ class BalanceCard extends StatefulWidget {
 }
 
 class _BalanceCardState extends State<BalanceCard> {
-  MoneyMaskedText money = locator.get<MoneyMaskedText>();
+  MoneyMaskedText money = locator<MoneyMaskedText>();
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final locale = AppLocalizations.of(context)!;
-    final currentBalance = locator.get<CurrentBalance>();
-    final currentAccount = locator.get<CurrentAccount>();
+    final currentBalance = locator<CurrentBalance>();
+    final currentAccount = locator<CurrentAccount>();
     final formattedDate = DateFormat('MMMM y', locale.localeName);
 
     IconData futureTransIcon() {

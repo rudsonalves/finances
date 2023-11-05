@@ -30,7 +30,7 @@ class AddCategoryPage extends StatefulWidget {
 class _AddCategoryPageState extends State<AddCategoryPage> {
   final _formKey = GlobalKey<FormState>();
   final _categoryController = TextEditingController();
-  final _homePageController = locator.get<HomePageController>();
+  final _homePageController = locator<HomePageController>();
 
   bool _addNewCategory = true;
   int? _categoryId;
@@ -76,7 +76,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
       categoryIsIncome: _isIncome.value,
     );
     final locale = AppLocalizations.of(context)!;
-    final controller = locator.get<CategoriesController>();
+    final controller = locator<CategoriesController>();
 
     if (_categoryId != null) {
       await controller.updateCategory(newCategory);

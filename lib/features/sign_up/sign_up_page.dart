@@ -28,7 +28,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _pwdController = TextEditingController();
   final TextEditingController _confirmPwdController = TextEditingController();
-  final SignUpController _controller = locator.get<SignUpController>();
+  final SignUpController _controller = locator<SignUpController>();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 

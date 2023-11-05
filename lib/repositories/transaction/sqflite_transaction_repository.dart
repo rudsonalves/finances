@@ -7,7 +7,7 @@ import '../../common/models/card_balance_model.dart';
 import '../../common/models/transaction_db_model.dart';
 
 class SqfliteTransactionRepository implements TransactionRepository {
-  final DatabaseHelper helper = locator.get<DatabaseHelper>();
+  final DatabaseHelper helper = locator<DatabaseHelper>();
 
   @override
   Future<void> addTrans(TransactionDbModel transaction) async {
@@ -59,7 +59,7 @@ class SqfliteTransactionRepository implements TransactionRepository {
       date ?? ExtendedDate.now(),
     );
 
-    int accountId = locator.get<CurrentAccount>().accountId!;
+    int accountId = locator<CurrentAccount>().accountId!;
 
     double incomes = await helper.getIncomeBetweenDates(
       startDate: startDate,

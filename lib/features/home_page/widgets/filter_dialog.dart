@@ -16,8 +16,8 @@ class FilterDialog extends StatefulWidget {
 }
 
 class _FilterDialogState extends State<FilterDialog> {
-  final _homePageController = locator.get<HomePageController>();
-  final _categoriesController = locator.get<CategoryRepository>();
+  final _homePageController = locator<HomePageController>();
+  final _categoriesController = locator<CategoryRepository>();
   final _controller = TextEditingController();
   final _filterByDescription = ValueNotifier<bool>(true);
 

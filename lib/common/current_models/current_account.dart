@@ -7,7 +7,7 @@ import '../constants/themes/app_icons.dart';
 import '../../repositories/account/account_repository.dart';
 
 class CurrentAccount extends AccountDbModel {
-  final accountRepository = locator.get<AccountRepository>();
+  final accountRepository = locator<AccountRepository>();
 
   CurrentAccount({
     int? accountId,
@@ -28,13 +28,13 @@ class CurrentAccount extends AccountDbModel {
   Future<void> init() async {
     await accountRepository.init();
 
-    final currentUser = locator.get<CurrentUser>();
+    final currentUser = locator<CurrentUser>();
 
     if (currentUser.userMainAccountId == null) {
       // create first Account
       final account = AccountDbModel(
-        accountName: locator.get<AppLocale>().locale.mainAccounName,
-        accountUserId: locator.get<CurrentUser>().userId!,
+        accountName: locator<AppLocale>().locale.mainAccounName,
+        accountUserId: locator<CurrentUser>().userId!,
         accountIcon: IconModel(
           iconName: 'wallet',
           iconFontFamily: IconsFontFamily.MaterialIcons,

@@ -76,7 +76,7 @@ class _DismissibleCategoryState extends State<DismissibleCategory> {
     final colorScheme = Theme.of(context).colorScheme;
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final locale = AppLocalizations.of(context)!;
-    final money = locator.get<MoneyMaskedText>();
+    final money = locator<MoneyMaskedText>();
 
     final category = widget.controller.categories[widget.index];
 

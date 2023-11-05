@@ -11,7 +11,7 @@ import '../../repositories/category/category_repository.dart';
 import '../../services/database/managers/transactions_manager.dart';
 
 class TransactionController extends ChangeNotifier {
-  final _categoryRepository = locator.get<CategoryRepository>();
+  final _categoryRepository = locator<CategoryRepository>();
 
   TransactionState _state = TransactionStateInitial();
 
@@ -62,14 +62,14 @@ class TransactionController extends ChangeNotifier {
       if (transferId == null) return;
 
       final transfer =
-          await locator.get<TransferRepository>().getTransferId(transferId);
+          await locator<TransferRepository>().getTransferId(transferId);
 
-      int currentAccountId = locator.get<CurrentAccount>().accountId!;
+      int currentAccountId = locator<CurrentAccount>().accountId!;
       int accountId = transfer!.transferAccount0 == currentAccountId
           ? transfer.transferAccount1
           : transfer.transferAccount0;
       String accounName =
-          locator.get<AccountRepository>().accountsMap[accountId]!.accountName;
+          locator<AccountRepository>().accountsMap[accountId]!.accountName;
       accountController.text = accounName;
       _changeState(TransactionStateSuccess());
     } catch (err) {
