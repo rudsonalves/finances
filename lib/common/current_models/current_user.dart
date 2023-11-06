@@ -26,4 +26,9 @@ class CurrentUser extends UserDbModel {
     locator<CurrentTheme>().setThemeFromThemeName(userTheme);
     locator<CurrentLanguage>().setFromLocaleCode(userLanguage);
   }
+
+  Future<void> setMaxTransactions(int maxTransactions) async {
+    userMaxTransactions = maxTransactions;
+    await updateUserMaxTransactions();
+  }
 }

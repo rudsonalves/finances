@@ -14,4 +14,5 @@ abstract class UserRepository {
   Future<void> updateUserGrpAreaChart(UserDbModel user);
   Future<void> updateUserLanguage(UserDbModel user);
   Future<void> updateUserTheme(UserDbModel user);
+  Future<void> updateUserMaxTransactions(UserDbModel user);
 }

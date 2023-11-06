@@ -35,6 +35,7 @@ class SqfliteHelper implements DatabaseHelper {
   static const userGrpAreaChart = 'userGrpAreaChart';
   static const userBudgetRef = 'userBudgetRef';
   static const userCategoryList = 'userCategoryList';
+  static const userMaxTransactions = 'userMaxTransactions';
 
   static const iconsTable = 'iconsTable';
   static const iconsNameIndex = 'idxIconsName';
@@ -103,7 +104,7 @@ class SqfliteHelper implements DatabaseHelper {
    in database increment this value and add a new update script in
    _migrationScripts Map.
   */
-  static const _databaseSchemeVersion = 1005;
+  static const _databaseSchemeVersion = 1006;
 
   // This Map contains the database migration scripts. The last index of this
   // Map must be equal to the current version of the database.
@@ -126,6 +127,9 @@ class SqfliteHelper implements DatabaseHelper {
     ],
     1005: [
       'ALTER TABLE $categoriesTable ADD COLUMN $categoryIsIncome INTEGER DEFAULT 0',
+    ],
+    1006: [
+      'ALTER TABLE $usersTable ADD COLUMN $userMaxTransactions INTEGER DEFAULT 35',
     ],
   };
 
@@ -241,6 +245,7 @@ class SqfliteHelper implements DatabaseHelper {
       ' $userGrpAreaChart INTEGER DEFAULT 0,'
       ' $userBudgetRef INTEGER DEFAULT 2,'
       ' $userCategoryList TEXT DEFAULT "[]",'
+      ' $userMaxTransactions INTEGER DEFAULT 35,'
       ' FOREIGN KEY ($userMainAccountId)'
       '  REFERENCES $accountTable ($accountId)'
       '  ON DELETE CASCADE'
@@ -919,6 +924,22 @@ class SqfliteHelper implements DatabaseHelper {
       int result = await _db.update(
         usersTable,
         {userTheme: theme},
+        where: '$userId = ?',
+        whereArgs: [id],
+      );
+      return result;
+    } catch (err) {
+      log('Error: $err');
+      return -1;
+    }
+  }
+
+  @override
+  Future<int> updateUserMaxTransactions(String id, int maxTransactions) async {
+    try {
+      int result = await _db.update(
+        usersTable,
+        {userMaxTransactions: maxTransactions},
         where: '$userId = ?',
         whereArgs: [id],
       );
