@@ -385,5 +385,7 @@
     "genericSelect": "Select",
     "iconSelectionDialogColors": "Colors",
     "admob_msg_banner": "If you like our app, support us by\npurchasing the ad-free version.",
-    "admob_msg_menu": "Ad-Free Finances"
+    "admob_msg_menu": "Ad-Free Finances",
+    "maxTrasctionsText": "This value influences searches and autofill suggestions. Excessive values can impact the app's performance.\n\n**Typical values:** 30 to 60 transactions.\n\n**Ideal value:** the number of monthly transactions in the account.",
+    "maxTrasctionsTitle": "Transactions per Page"
 }

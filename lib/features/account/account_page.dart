@@ -37,12 +37,6 @@ class _AccountPageState extends State<AccountPage> {
     _controller.init();
   }
 
-  @override
-  dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
   Future<void> addAccount([AccountDbModel? account]) async {
     await showDialog(
       context: context,

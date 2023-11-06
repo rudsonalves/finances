@@ -1,3 +1,4 @@
+import 'package:finances/common/current_models/current_user.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 
@@ -56,6 +57,8 @@ class HomePageController extends ChangeNotifier {
 
   void init() {
     _state = HomePageStateSuccess();
+    maxTransactions = locator<CurrentUser>().userMaxTransactions;
+    if (maxTransactions < 25) maxTransactions = 25;
     getTransactions();
   }
 

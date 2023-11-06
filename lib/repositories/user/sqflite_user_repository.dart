@@ -125,4 +125,16 @@ class SqfliteUserRepository implements UserRepository {
   Map<String, dynamic> getUserMapById(String id) {
     return _users[id]!.toMap();
   }
+
+  @override
+  Future<void> updateUserMaxTransactions(UserDbModel user) async {
+    if (user.userId != null) {
+      await helper.updateUserMaxTransactions(
+        user.userId!,
+        user.userMaxTransactions,
+      );
+    } else {
+      throw Exception('Unregistered user');
+    }
+  }
 }

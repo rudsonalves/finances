@@ -22,6 +22,7 @@ class UserDbModel {
   bool userGrpAreaChart;
   StatisticMedium userBudgetRef;
   List<String> userCategoryList;
+  int userMaxTransactions;
 
   UserDbModel({
     this.userId,
@@ -37,6 +38,7 @@ class UserDbModel {
     this.userGrpAreaChart = false,
     this.userBudgetRef = StatisticMedium.mediumMonth,
     List<String>? userCategoryList,
+    this.userMaxTransactions = 35,
   }) : userCategoryList = userCategoryList ?? [];
 
   final userRepository = locator<UserRepository>();
@@ -70,6 +72,9 @@ class UserDbModel {
         userMap['userCategoryList'],
       ),
     );
+    userMaxTransactions = userMap['userMaxTransactions'] != null
+        ? userMap['userMaxTransactions'] as int
+        : 35;
   }
 
   void copyFromUser(UserDbModel user) {
@@ -86,6 +91,7 @@ class UserDbModel {
     userGrpAreaChart = user.userGrpAreaChart;
     userBudgetRef = user.userBudgetRef;
     userCategoryList = user.userCategoryList;
+    userMaxTransactions = user.userMaxTransactions;
   }
 
   @override
@@ -104,6 +110,7 @@ class UserDbModel {
         ' GrpAreaChart: $userGrpAreaChart\n'
         ' BudgetRef: $userBudgetRef\n'
         ' CategoryList: $userCategoryList\n'
+        ' MaxTransactions: $userMaxTransactions\n'
         ')';
   }
 
@@ -123,6 +130,7 @@ class UserDbModel {
         'userGrpAreaChart': userGrpAreaChart ? 1 : 0,
         'userBudgetRef': userBudgetRef.index,
         'userCategoryList': jsonEncode(userCategoryList),
+        'userMaxTransactions': userMaxTransactions,
       };
     } else {
       return <String, dynamic>{
@@ -138,6 +146,7 @@ class UserDbModel {
         'userGrpAreaChart': userGrpAreaChart ? 1 : 0,
         'userBudgetRef': userBudgetRef.index,
         'userCategoryList': jsonEncode(userCategoryList),
+        'userMaxTransactions': userMaxTransactions,
       };
     }
   }
@@ -165,6 +174,9 @@ class UserDbModel {
           map['userCategoryList'],
         ),
       ),
+      userMaxTransactions: map['userMaxTransactions'] != null
+          ? map['userMaxTransactions'] as int
+          : 35,
     );
   }
 
@@ -203,5 +215,9 @@ class UserDbModel {
 
   Future<void> updateUserTheme() async {
     await userRepository.updateUserTheme(this);
+  }
+
+  Future<void> updateUserMaxTransactions() async {
+    await userRepository.updateUserMaxTransactions(this);
   }
 }

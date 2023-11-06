@@ -1,3 +1,4 @@
+import 'package:finances/features/home_page/home_page_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:restart_app/restart_app.dart';
@@ -8,6 +9,9 @@ import '../../common/constants/themes/app_button_styles.dart';
 import '../../common/models/user_name_notifier.dart';
 import '../../common/widgets/basic_text_form_field.dart';
 import '../../common/widgets/custom_circular_progress_indicator.dart';
+import '../../common/widgets/markdown_rich_text.dart';
+import '../../common/widgets/simple_spin_box_field.dart';
+import '../../common/widgets/widget_alert_dialog.dart';
 import '../../locator.dart';
 import '../../common/widgets/app_top_border.dart';
 import '../../common/widgets/custom_app_bar.dart';
@@ -34,18 +38,25 @@ class _SettingsPageState extends State<SettingsPage> {
   final _currentUserName = locator<UserNameNotifier>();
   final _controller = SettingsPageController();
   final _userNameController = TextEditingController();
+  final _userMaxTransactions = ValueNotifier<int>(35);
+  final _maxTransValueController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _controller.init();
+
+    _userNameController.text = _currentUserName.userName;
+    _userMaxTransactions.value = _currentUser.userMaxTransactions;
   }
 
   @override
   void dispose() {
-    super.dispose();
     _userNameController.dispose();
+    _userMaxTransactions.dispose();
     _controller.dispose();
+    _maxTransValueController.dispose();
+    super.dispose();
   }
 
   Widget languageDropdown() {
@@ -181,13 +192,64 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  void editMaxTransactions() async {
+    final primary = Theme.of(context).colorScheme.primary;
+    final locale = AppLocalizations.of(context)!;
+
+    _maxTransValueController.text = _userMaxTransactions.value.toString();
+
+    int? value = await showDialog(
+      context: context,
+      builder: (context) => WidgetAlertDialog(
+        title: locale.maxTrasctionsTitle,
+        content: [
+          MarkdownRichText.richText(
+            locale.maxTrasctionsText,
+            color: primary,
+          ),
+          SimpleSpinBoxField(
+            value: _currentUser.userMaxTransactions,
+            labelText: 'labelText',
+            controller: _maxTransValueController,
+            minValue: 25,
+            maxValue: 100,
+          ),
+        ],
+        actions: [
+          ElevatedButton(
+            onPressed: () => Navigator.of(context).pop(
+              int.parse(_maxTransValueController.text),
+            ),
+            style: AppButtonStyles.primaryButtonColor(context),
+            child: Text(locale.genericSelect),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.of(context).pop(null),
+            style: AppButtonStyles.primaryButtonColor(context),
+            child: Text(locale.genericClose),
+          ),
+        ],
+      ),
+    );
+
+    if (value != null) {
+      _userMaxTransactions.value = value;
+    }
+  }
+
+  Future<void> updateMaxTransactions(int value) async {
+    if (_currentUser.userMaxTransactions != value) {
+      _currentUser.userMaxTransactions = value;
+      await _currentUser.updateUserMaxTransactions();
+      locator<HomePageController>().maxTransactions = value;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final primary = colorScheme.primary;
     final locale = AppLocalizations.of(context)!;
-
-    _userNameController.text = _currentUserName.userName;
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -209,64 +271,67 @@ class _SettingsPageState extends State<SettingsPage> {
             left: 0,
             right: 0,
             bottom: 0,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  alignment: Alignment.topCenter,
-                  child: Column(
-                    children: [
-                      CircleAvatar(
-                        radius: 50,
-                        child: Image.asset(
-                          'assets/images/finances_icon.png',
-                          width: 70,
-                          fit: BoxFit.fitWidth,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    alignment: Alignment.topCenter,
+                    child: Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 50,
+                          child: Image.asset(
+                            'assets/images/finances_icon.png',
+                            width: 70,
+                            fit: BoxFit.fitWidth,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      TextButton(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => editNameDialog(locale),
-                          );
-                        },
-                        child: AnimatedBuilder(
-                            animation: _currentUserName,
-                            builder: (context, _) {
-                              return Text(
-                                _userNameController.text,
-                                style: AppTextStyles.textStyleSemiBold18,
-                              );
-                            }),
-                      ),
-                      Text(
-                        _currentUser.userEmail!,
-                        style: AppTextStyles.textStyle18.apply(color: primary),
-                      ),
-                    ],
+                        const SizedBox(height: 8),
+                        TextButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => editNameDialog(locale),
+                            );
+                          },
+                          child: AnimatedBuilder(
+                              animation: _currentUserName,
+                              builder: (context, _) {
+                                return Text(
+                                  _userNameController.text,
+                                  style: AppTextStyles.textStyleSemiBold18,
+                                );
+                              }),
+                        ),
+                        Text(
+                          _currentUser.userEmail!,
+                          style:
+                              AppTextStyles.textStyle18.apply(color: primary),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: AnimatedBuilder(
-                    animation: _controller,
-                    builder: (context, _) {
-                      // SettingsPage State Loading
-                      if (_controller.state is SettingsPageStateLoading) {
-                        return const CustomCircularProgressIndicator();
-                      }
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: AnimatedBuilder(
+                      animation: _controller,
+                      builder: (context, _) {
+                        // SettingsPage State Loading
+                        if (_controller.state is SettingsPageStateLoading) {
+                          return const CustomCircularProgressIndicator();
+                        }
 
-                      // SettingsPage State Success
-                      if (_controller.state is SettingsPageStateSuccess) {
-                        String version = _controller.packageInfo.version;
+                        // SettingsPage State Success
+                        if (_controller.state is SettingsPageStateSuccess) {
+                          String version = _controller.packageInfo.version;
 
-                        return SingleChildScrollView(
-                          child: Column(
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              // Title
                               Text(
                                 locale.settingsPageAppSettings,
                                 style:
@@ -275,6 +340,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 ),
                               ),
                               const SizedBox(height: 8),
+                              // Theme
                               ValueListenableBuilder(
                                 valueListenable: _currentTheme.themeMode$,
                                 builder: (context, themeMode, _) {
@@ -294,6 +360,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   );
                                 },
                               ),
+                              // Language
                               ValueListenableBuilder(
                                 valueListenable: _currentLanguage.locale$,
                                 builder: (context, value, _) {
@@ -313,7 +380,39 @@ class _SettingsPageState extends State<SettingsPage> {
                                   );
                                 },
                               ),
+                              // Max Transactions per Page
+                              Row(
+                                children: [
+                                  Text(
+                                    'Transactions/page:',
+                                    style: AppTextStyles.textStyleMedium16
+                                        .copyWith(
+                                      color: colorScheme.primary,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 32),
+                                  ElevatedButton(
+                                    onPressed: editMaxTransactions,
+                                    child: SizedBox(
+                                      width: 60,
+                                      child: ListenableBuilder(
+                                        listenable: _userMaxTransactions,
+                                        builder: (context, _) {
+                                          updateMaxTransactions(
+                                              _userMaxTransactions.value);
+                                          return Text(
+                                            _userMaxTransactions.value
+                                                .toString(),
+                                            textAlign: TextAlign.center,
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                               const SizedBox(height: 32),
+                              // App Version
                               Text(
                                 '${locale.settingsPageAppVersion}: $version',
                                 style: AppTextStyles.textStyleMedium16.copyWith(
@@ -321,19 +420,19 @@ class _SettingsPageState extends State<SettingsPage> {
                                 ),
                               ),
                             ],
+                          );
+                        }
+                        // SettingsPage State Error
+                        return Expanded(
+                          child: Center(
+                            child: Text(locale.settingsPageSettingsError),
                           ),
                         );
-                      }
-                      // SettingsPage State Error
-                      return Expanded(
-                        child: Center(
-                          child: Text(locale.settingsPageSettingsError),
-                        ),
-                      );
-                    },
+                      },
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],

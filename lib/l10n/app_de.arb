@@ -385,5 +385,7 @@
     "genericSelect": "Auswählen",
     "iconSelectionDialogColors": "Farben",
     "admob_msg_banner": "Wenn Ihnen unsere App gefällt, unterstützen\nSie uns, indem Sie die werbefreie Version\nkaufen.",
-    "admob_msg_menu": "Werbefreie Finanzen"
+    "admob_msg_menu": "Werbefreie Finanzen",
+    "maxTrasctionsText": "Dieser Wert beeinflusst die Suche und die automatischen Vorschläge. Übermäßige Werte können sich auf die Leistung der App auswirken.\n\n**Typische Werte:** 30 bis 60 Transaktionen.\n\n**Idealwert:** die Anzahl der monatlichen Transaktionen im Konto.",
+    "maxTrasctionsTitle": "Transaktionen pro Seite"
 }
