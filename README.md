@@ -284,6 +284,33 @@ Some bugs were noticed and need to be fixed:
 
 ## 2023/11/05 - Version: 1.0.11+44
 
+In this commit, several enhancements and adjustments have been made across different parts of the application to improve performance and usability. A significant addition is the introduction of user-configurable maximum transaction limits. Explore the detailed changes below:
+* lib/common/current_models/current_user.dart:
+  - Added the method setMaxTransactions.
+* lib/common/models/user_db_model.dart:
+  - Added the userMaxTransactions attribute with a default value of 35. This attribute stores the maximum number of transactions loaded on the app's main page.
+  - Added the method Future<void> updateUserMaxTransactions.
+* lib/common/widgets/simple_spin_box_field.dart:
+  - Introduced a new class for SpinBoxField with longPress functioning properly. The old SpinBoxField will be replaced by this one at another time.
+* lib/common/widgets/widget_alert_dialog.dart:
+  - Modified this WidgetAlertDialog to add action buttons and change the title's color.
+* lib/features/account/account_page.dart:
+  - Removed the dispose method. The dispose of the _controller was causing an error.
+* lib/features/home_page/home_page_controller.dart:
+  - Now, maxTransactions is updated from locator<CurrentUser>.
+* lib/features/settings/settings_page.dart:
+  - Added support to control maxTransactions.
+* lib/l10n/app_?.arb:
+  - Added messages for the maxTransactions dialog.
+* lib/repositories/user/sqflite_user_repository.dart:
+* lib/repositories/user/user_repository.dart:
+  - Added the method Future<void> updateUserMaxTransactions(UserDbModel user).
+* lib/services/database/database_helper.dart:
+* lib/services/database/sqflite_helper.dart:
+  - Added support for userMaxTransactions in the database.
+  - Added the method Future<int> updateUserMaxTransactions(String id, int maxTransactions).
+
+
 
 ## 2023/11/03 - Version: 1.0.10+43
 
