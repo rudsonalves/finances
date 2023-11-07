@@ -385,7 +385,7 @@
     "genericSelect": "Selecionar",
     "iconSelectionDialogColors": "Cores",
     "admob_msg_banner": "Se gosta da nossa aplicação, apoie-nos \nao adquirir a versão sem anúncios.",
-    "admob_msg_menu": "Finanças sem anúncios",
+    "admob_msg_menu": "Finanças sem Anúncios",
     "maxTrasctionsText": "Este valor influencia as pesquisas e sugestões de preenchimento. Valores excessivos podem interferir o desempenho do aplicativo.\n\n**Valores típicos:** 30 a 60 transações.\n\n**Valor ideal:** número de transações mensais na conta.",
     "maxTrasctionsTitle": "Transações por Página"
 }

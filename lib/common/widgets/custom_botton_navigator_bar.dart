@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../admob/admob_google.dart';
 import '../constants/themes/colors/app_colors.dart';
 import '../constants/themes/icons/fontello_icons.dart';
 import 'custom_bottom_app_bar_item.dart';
@@ -24,22 +23,13 @@ class CustomBottomNavigatorBar extends StatefulWidget {
 }
 
 class _CustomBottomNavigatorBarState extends State<CustomBottomNavigatorBar> {
-  AdmobBanner? _adMobBanner;
-
   @override
   void initState() {
     super.initState();
-    if (adMobEnable) {
-      _adMobBanner = AdmobBanner.instance;
-      _adMobBanner!.refreshFunction = refresh;
-    }
   }
 
   @override
   void dispose() {
-    if (adMobEnable) {
-      _adMobBanner!.disposeAd();
-    }
     super.dispose();
   }
 
@@ -55,7 +45,6 @@ class _CustomBottomNavigatorBarState extends State<CustomBottomNavigatorBar> {
     final locale = AppLocalizations.of(context)!;
 
     return BottomAppBar(
-      height: (_adMobBanner != null) ? _adMobBanner!.height : null,
       shape: (widget.floatAppButton) ? const CircularNotchedRectangle() : null,
       child: Column(
         children: [
@@ -104,8 +93,6 @@ class _CustomBottomNavigatorBarState extends State<CustomBottomNavigatorBar> {
               ],
             ),
           ),
-          if (_adMobBanner != null && adMobEnable)
-            ..._adMobBanner!.build(context),
         ],
       ),
     );

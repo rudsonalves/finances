@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:path/path.dart' as path;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:restart_app/restart_app.dart';
@@ -55,7 +56,7 @@ class _DatabaseRecoverState extends State<DatabaseRecover> {
         _message = locale.databaseRecoverSorryRetrieving(selectedFileName);
       });
 
-      log('Error: $err');
+      Logger().e('Error: $err');
     }
   }
 
