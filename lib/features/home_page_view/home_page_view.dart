@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../common/admob/admob_google.dart';
 import '../../locator.dart';
 import '../account/account_controller.dart';
 import '../account/widgets/add_account_page.dart';
@@ -32,8 +31,6 @@ class _HomePageViewState extends State<HomePageView> {
   int _pageIndex = 0;
   void Function()? _addFunction;
 
-  final AdmobIntersticial _admobIntersticial = AdmobIntersticial.instance;
-
   @override
   void dispose() {
     super.dispose();
@@ -54,9 +51,7 @@ class _HomePageViewState extends State<HomePageView> {
     // 2 BudgetPage(),
     // 3 StatisticsPage(),
     _addFunction = addTransaction;
-    if (adMobEnable) {
-      _admobIntersticial.show();
-    }
+
     setState(() {
       _pageIndex = page;
       _floatAppButton = (page != 3) ? true : false;

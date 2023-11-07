@@ -275,9 +275,22 @@ Some bugs were noticed and need to be fixed:
 
 - *20231102.1* implementation: adicinar uma caixa de diálogo antes de fazer a instalação da versão sem anúncios comunicando para fazer um backup dos dados antes de prosseguir;
 - *20231102.2* implementation: atualizar as páginas de ajuda figuras atualizadas e rever o texto;
-- *20231107.1* alteration: remover o SpinBoxField, substituíndo-o pelo SimpleSpinBoxField.
+- *20231107.1* change: remover o SpinBoxField, substituíndo-o pelo SimpleSpinBoxField.
 
 # Commits:
+
+## 2023/11/07 - Version: 1.0.12+45
+
+* lib/common/admob/admob_google.dart:
+* lib/common/admob/app_lifecycle_reactor.dart:
+* lib/common/admob/app_open_ad_manager.dart:
+* lib/common/widgets/custom_botton_navigator_bar.dart:
+* lib/features/home_page/home_page.dart:
+* lib/features/home_page/widgets/home_popup_menu_buttons.dart:
+* lib/features/home_page_view/home_page_view.dart:
+* lib/main.dart:
+	- all Ads part has been removed for finances_com app.
+
 
 ## 2023/11/05 - Version: 1.0.11+44
 

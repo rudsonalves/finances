@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../common/admob/admob_google.dart';
 import '../../../common/current_models/current_user.dart';
 import '../../../locator.dart';
 import '../../../common/constants/routes/app_route.dart';
@@ -34,8 +33,6 @@ class HomePagePopupMenuButtons extends StatelessWidget {
           dialogState: DialogStates.createRestore,
         ),
       );
-    } else if (value == 'googlePlay') {
-      AdmobBanner.launchGooglePlay();
     }
   }
 
@@ -95,25 +92,6 @@ class HomePagePopupMenuButtons extends StatelessWidget {
             ],
           ),
         ),
-        if (adMobEnable)
-          PopupMenuItem(
-            value: 'googlePlay',
-            child: Column(
-              children: [
-                const Divider(),
-                Row(
-                  children: [
-                    Image.asset(
-                      'assets/images/google_play.png',
-                      width: 32,
-                    ),
-                    const SizedBox(width: 12),
-                    Text(locale.admob_msg_menu),
-                  ],
-                ),
-              ],
-            ),
-          ),
       ],
     );
   }
