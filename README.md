@@ -279,6 +279,17 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
+## 2023/11/08 - Version: 1.0.12+53
+
+In this version, I finished removing the inappropriate information from AdMob, and I took the opportunity to clean up the code by removing support for desktops on Linux, Windows, and iOS. Finally, I made some more additions to the app's video script.
+
+* android/app/build.gradle:
+* android/app/src/main/AndroidManifest.xml:
+* android/build.gradle:
+  - Final adjustments for removing app advertisements.
+* docs/movie_script.md:
+  - Script adjustments for the video.
+
 ## 2023/11/07 - Version: 1.0.12+45
 
 * lib/common/admob/admob_google.dart:
@@ -319,7 +330,6 @@ In this commit, several enhancements and adjustments have been made across diffe
 * lib/services/database/sqflite_helper.dart:
   - Added support for userMaxTransactions in the database.
   - Added the method Future<int> updateUserMaxTransactions(String id, int maxTransactions).
-
 
 
 ## 2023/11/03 - Version: 1.0.10+43

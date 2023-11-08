@@ -1,4 +1,4 @@
-package br.com.jrblog.finances.finances
+package br.com.jrblog.finances
 
 import io.flutter.embedding.android.FlutterActivity
 
