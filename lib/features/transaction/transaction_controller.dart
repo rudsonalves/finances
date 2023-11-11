@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../common/current_models/current_account.dart';
+import '../../common/models/account_db_model.dart';
 import '../../locator.dart';
-import '../../repositories/account/account_repository.dart';
 import '../../repositories/transfer_repository/transfer_repository.dart';
 import './transaction_state.dart';
 import '../../common/models/category_db_model.dart';
@@ -12,6 +12,13 @@ import '../../services/database/managers/transactions_manager.dart';
 
 class TransactionController extends ChangeNotifier {
   final _categoryRepository = locator<CategoryRepository>();
+  int _originAccountId = locator<CurrentAccount>().accountId!;
+  int? _destinationAccountId;
+
+  int? get destAccountId => _destinationAccountId;
+
+  void setDestAccountId(int? id) => _destinationAccountId = id;
+  void setOriginAccount(int id) => _originAccountId = id;
 
   TransactionState _state = TransactionStateInitial();
 
@@ -27,9 +34,12 @@ class TransactionController extends ChangeNotifier {
     notifyListeners();
   }
 
+  set accountId(int id) => _originAccountId = id;
+
   Future<void> init() async {
     _changeState(TransactionStateLoading());
     await _categoryRepository.init();
+    _destinationAccountId = null;
 
     _changeState(TransactionStateSuccess());
   }
@@ -44,33 +54,45 @@ class TransactionController extends ChangeNotifier {
     }
   }
 
-  Future<void> addTransactions(TransactionDbModel transaction) async {
-    await TransactionsManager.addTransaction(transaction: transaction);
+  Future<void> addTransactions({
+    required TransactionDbModel transaction,
+    AccountDbModel? account,
+  }) async {
+    await TransactionsManager.addTransaction(
+      transaction: transaction,
+      account: account,
+    );
   }
 
-  Future<void> updateTransactions(TransactionDbModel transaction) async {
-    await TransactionsManager.updateTransaction(transaction: transaction);
+  Future<void> updateTransactions({
+    required TransactionDbModel transaction,
+    AccountDbModel? account,
+  }) async {
+    await TransactionsManager.updateTransaction(
+      transaction: transaction,
+      account: account,
+    );
   }
 
   Future<void> getTransferAccountName({
     required TransactionDbModel transaction,
-    required TextEditingController accountController,
+    int? originAccountId,
   }) async {
     _changeState(TransactionStateLoading());
     try {
+      if (originAccountId != null) {
+        setOriginAccount(originAccountId);
+      }
       int? transferId = transaction.transTransferId;
       if (transferId == null) return;
 
       final transfer =
           await locator<TransferRepository>().getTransferId(transferId);
 
-      int currentAccountId = locator<CurrentAccount>().accountId!;
-      int accountId = transfer!.transferAccount0 == currentAccountId
+      _destinationAccountId = transfer!.transferAccount0 == _originAccountId
           ? transfer.transferAccount1
           : transfer.transferAccount0;
-      String accounName =
-          locator<AccountRepository>().accountsMap[accountId]!.accountName;
-      accountController.text = accounName;
+
       _changeState(TransactionStateSuccess());
     } catch (err) {
       _changeState(TransactionStateError());

@@ -6,7 +6,7 @@ import '../../common/current_models/current_account.dart';
 import '../../common/models/account_db_model.dart';
 import '../../common/models/category_db_model.dart';
 import '../../common/widgets/account_dropdown_form_field.dart';
-import '../../common/widgets/spin_box_field.dart';
+import '../../common/widgets/simple_spin_box_field.dart';
 import '../../locator.dart';
 import '../../repositories/account/account_repository.dart';
 import '../../services/database/managers/transfers_manager.dart';
@@ -49,14 +49,20 @@ class TransactionPage extends StatefulWidget {
 class _TransactionPageState extends State<TransactionPage> {
   final _amountController = getMoneyMaskedTextController(0.0);
   final _titleController = TextEditingController();
-  final _descController = TextEditingController();
+  final _descriptionController = TextEditingController();
   final _dateController = TextEditingController();
   final _timeController = TextEditingController();
   final _categoryController = TextEditingController();
-  final _accountController = TextEditingController();
   final _installments = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey();
   final _focusNodeBasicTextFormField = FocusNode();
+
+  final _originAccount = ValueNotifier<AccountDbModel>(
+    locator<CurrentAccount>(),
+  );
+  final _destinationAccountId = ValueNotifier<int?>(null);
+  final _accountsMap = locator<AccountRepository>().accountsMap;
+
   bool _income = false;
   bool _repeat = false;
 
@@ -64,6 +70,9 @@ class _TransactionPageState extends State<TransactionPage> {
   final _categoryRepository = locator<CategoryRepository>();
   final _homePageController = locator<HomePageController>();
   int? _categoryId;
+
+  final _originKey = GlobalKey<FormFieldState<int>>();
+  final _destinyKey = GlobalKey<FormFieldState<int>>();
 
   @override
   void initState() {
@@ -75,7 +84,7 @@ class _TransactionPageState extends State<TransactionPage> {
     if (widget.transaction != null) {
       _amountController.text =
           widget.transaction!.transValue.toStringAsFixed(2);
-      _descController.text = widget.transaction!.transDescription;
+      _descriptionController.text = widget.transaction!.transDescription;
       _dateController.text = widget.transaction!.transDate.toIso8601String();
       _categoryController.text = _categoryRepository
           .getCategoryId(
@@ -85,23 +94,24 @@ class _TransactionPageState extends State<TransactionPage> {
       _income = widget.transaction!.transValue >= 0;
       _controller.getTransferAccountName(
         transaction: widget.transaction!,
-        accountController: _accountController,
+        originAccountId: _originAccount.value.accountId,
       );
     }
   }
 
   @override
   void dispose() {
-    super.dispose();
     _amountController.dispose();
     _titleController.dispose();
-    _descController.dispose();
+    _descriptionController.dispose();
     _categoryController.dispose();
     _dateController.dispose();
     _timeController.dispose();
     _installments.dispose();
-    _accountController.dispose();
+    _originAccount.dispose();
+    _destinationAccountId.dispose();
     _focusNodeBasicTextFormField.dispose();
+    super.dispose();
   }
 
   void cancelTransactionsAction() {
@@ -109,28 +119,29 @@ class _TransactionPageState extends State<TransactionPage> {
   }
 
   void addTransactionsAction() async {
-    final valit =
-        _formKey.currentState != null && _formKey.currentState!.validate();
+    final valit = _formKey.currentState != null &&
+        _formKey.currentState!.validate() &&
+        _destinyKey.currentState != null &&
+        _destinyKey.currentState!.validate();
     if (valit) {
       double value = _amountController.numberValue;
       value = _income ? value.abs() : -value.abs();
 
       // get destination account
       AccountDbModel? destinationAccount;
-      final accountRepository = locator<AccountRepository>();
-      if (_accountController.text.isNotEmpty) {
-        int? accountId =
-            accountRepository.accountIdByName(_accountController.text);
+
+      if (_controller.destAccountId != null) {
+        int? accountId = _controller.destAccountId;
         if (accountId == null) {
           throw Exception('transactionPage: AccountId return null');
         }
-        destinationAccount = accountRepository.accountsMap[accountId];
+        destinationAccount = _accountsMap[accountId];
       }
 
       // Create transaction
       final TransactionDbModel transaction = TransactionDbModel(
         transId: widget.transaction?.transId,
-        transDescription: _descController.text,
+        transDescription: _descriptionController.text,
         transCategoryId: _categoryRepository.getIdByName(
           _categoryController.text,
         ),
@@ -163,18 +174,24 @@ class _TransactionPageState extends State<TransactionPage> {
               newTrans.transDate = date;
               await TransfersManager.addTransfer(
                 transaction0: newTrans,
+                account0: _originAccount.value,
                 account1: destinationAccount,
               );
             }
           } else {
             await TransfersManager.addTransfer(
               transaction0: transaction,
+              account0: _originAccount.value,
               account1: destinationAccount,
             );
           }
           navigator.pop();
         } else {
-          await TransfersManager.updateTransfer(transaction0: transaction);
+          await TransfersManager.updateTransfer(
+            transaction0: transaction,
+            account0: _originAccount.value,
+            account1: destinationAccount,
+          );
           navigator.pop();
         }
       } else {
@@ -189,14 +206,23 @@ class _TransactionPageState extends State<TransactionPage> {
               }
               newTrans.transDescription = '${newTrans.transDescription} $label';
               newTrans.transDate = date;
-              await _controller.addTransactions(newTrans);
+              await _controller.addTransactions(
+                transaction: newTrans,
+                account: _originAccount.value,
+              );
             }
           } else {
-            await _controller.addTransactions(transaction);
+            await _controller.addTransactions(
+              transaction: transaction,
+              account: _originAccount.value,
+            );
           }
           navigator.pop();
         } else {
-          await _controller.updateTransactions(transaction);
+          await _controller.updateTransactions(
+            transaction: transaction,
+            account: _originAccount.value,
+          );
           navigator.pop();
         }
       }
@@ -272,13 +298,74 @@ class _TransactionPageState extends State<TransactionPage> {
     }
   }
 
+  PopupMenuButton<int> accountPopupMenuButton(
+    AppLocalizations locale,
+    Color primary,
+  ) {
+    return PopupMenuButton<int>(
+      key: _originKey,
+      tooltip: locale.cardBalanceMenuTip,
+      onSelected: setOriginAccountId,
+      itemBuilder: (BuildContext context) {
+        return _accountsMap.values.map((account) {
+          return PopupMenuItem(
+            value: account.accountId,
+            child: Row(
+              children: [
+                account.accountIcon.iconWidget(size: 16),
+                const SizedBox(width: 8),
+                Text(account.accountName),
+              ],
+            ),
+          );
+        }).toList();
+      },
+      child: ListenableBuilder(
+          listenable: _originAccount,
+          builder: (context, _) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _originAccount.value.accountIcon.iconWidget(size: 24),
+                const SizedBox(width: 6),
+                Text(
+                  _originAccount.value.accountName,
+                  maxLines: 1,
+                  style: AppTextStyles.textStyleSemiBold20
+                      .copyWith(color: primary),
+                ),
+                Icon(
+                  Icons.arrow_drop_down,
+                  color: primary,
+                ),
+              ],
+            );
+          }),
+    );
+  }
+
+  void setOriginAccountId(int id) {
+    if (id == _destinationAccountId.value) {
+      _destinationAccountId.value = null;
+      _controller.setDestAccountId(null);
+      _destinyKey.currentState?.reset();
+    }
+
+    _controller.setOriginAccount(id);
+    _originAccount.value = _accountsMap[id]!;
+  }
+
+  void setDestinationAccountId(int id) {
+    _controller.setDestAccountId(id);
+    _destinationAccountId.value = id;
+  }
+
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
     final transValidator = TransactionValidator(locale);
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final primary = Theme.of(context).colorScheme.primary;
-    final currentAccount = locator<CurrentAccount>();
 
     if (widget.transaction != null) {
       _categoryId = widget.transaction!.transCategoryId;
@@ -340,19 +427,21 @@ class _TransactionPageState extends State<TransactionPage> {
 
                       // Transaction State Success
                       if (_controller.state is TransactionStateSuccess) {
+                        if (_controller.destAccountId != null) {
+                          _destinationAccountId.value =
+                              _controller.destAccountId!;
+                        }
+
                         return Form(
                           key: _formKey,
                           child: Column(
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(bottom: 8),
-                                child: Text(
-                                  currentAccount.accountName,
-                                  style: AppTextStyles.textStyleBold18.copyWith(
-                                    color: primary,
-                                  ),
-                                ),
+                                padding: const EdgeInsets.only(bottom: 12),
+                                // Account Selection
+                                child: accountPopupMenuButton(locale, primary),
                               ),
+                              // Income Buttons
                               RowOfTwoBottons(
                                 income: _income,
                                 changeState: changeState,
@@ -388,7 +477,7 @@ class _TransactionPageState extends State<TransactionPage> {
                                 capitalization: TextCapitalization.sentences,
                                 labelText: locale.transPageDescription,
                                 validator: transValidator.descriptionValidator,
-                                controller: _descController,
+                                controller: _descriptionController,
                                 suggestions: _homePageController
                                     .cacheDescriptions.keys
                                     .toList(),
@@ -404,7 +493,6 @@ class _TransactionPageState extends State<TransactionPage> {
                                   onTap: addCategoryAction,
                                   onLongPress: editCategoryAction,
                                   child: Ink(
-                                    //message: locale.transPageNewCategory,
                                     decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
                                     ),
@@ -413,11 +501,26 @@ class _TransactionPageState extends State<TransactionPage> {
                                 ),
                                 onChanged: selectCategory,
                               ),
+                              // Destiny Account
                               if (_categoryId == 1)
-                                AccountDropdownFormField(
-                                  hintText: locale.transPageSelectAccTransfer,
-                                  labelText: locale.transPageAccTransfer,
-                                  controller: _accountController,
+                                ListenableBuilder(
+                                  listenable: _originAccount,
+                                  builder: (context, _) {
+                                    return AccountDropdownFormField(
+                                      globalKey: _destinyKey,
+                                      originAccountId:
+                                          _originAccount.value.accountId!,
+                                      destinationAccountId:
+                                          _destinationAccountId.value,
+                                      validate: transValidator
+                                          .accountForTransferValidator,
+                                      hintText:
+                                          locale.transPageSelectAccTransfer,
+                                      labelText: locale.transPageAccTransfer,
+                                      accountIdSelected:
+                                          setDestinationAccountId,
+                                    );
+                                  },
                                 ),
                               // Date x Time
                               Semantics(
@@ -441,14 +544,14 @@ class _TransactionPageState extends State<TransactionPage> {
                               ),
                               // Installments - Repeat times
                               if (_repeat)
-                                SpinBoxField(
+                                SimpleSpinBoxField(
                                   labelText: locale.transactionRepeatTimes,
                                   style: AppTextStyles.textStyleBold16.copyWith(
                                     color: primary,
                                   ),
                                   controller: _installments,
                                   minValue: 2,
-                                  initialValue: 2,
+                                  value: 2,
                                   maxValue: 12,
                                 ),
                               const SizedBox(height: 20),

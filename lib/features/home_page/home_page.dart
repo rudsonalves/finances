@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage>
   final ScrollController _listViewController = ScrollController();
   final _userNameNotifier = locator<UserNameNotifier>();
   String _filterText = '';
-  bool _fliterIsDescription = true;
+  bool _filterIsDescription = true;
   int _filterCategoryId = 0;
 
   ExtendedDate lastDate = ExtendedDate(1980, 1, 1);
@@ -191,7 +191,7 @@ class _HomePageState extends State<HomePage>
                           customBorder: const CircleBorder(),
                           onLongPress: () {
                             _filterText = '';
-                            _fliterIsDescription = true;
+                            _filterIsDescription = true;
                             setState(() {});
                           },
                           onTap: () async {
@@ -203,16 +203,16 @@ class _HomePageState extends State<HomePage>
                                 builder: (context) => const FilterDialog(),
                               );
                               _filterText = text ?? '';
-                              _fliterIsDescription = isDescription ?? true;
+                              _filterIsDescription = isDescription ?? true;
 
-                              if (!_fliterIsDescription) {
+                              if (!_filterIsDescription) {
                                 _filterCategoryId = locator
                                     .get<CategoryRepository>()
                                     .getIdByName(_filterText);
                               }
                             } catch (err) {
                               _filterText = '';
-                              _fliterIsDescription = true;
+                              _filterIsDescription = true;
                             }
 
                             setState(() {});
@@ -254,16 +254,16 @@ class _HomePageState extends State<HomePage>
                                 (_) =>
                                     managerTutorial(context, introductionHelp),
                               );
-                              _showTutorial = false;
                             }
                             return noTransactions(locale, primary);
                           }
+                          _showTutorial = false;
 
                           List<TransactionDbModel> transactions = [];
 
                           if (_filterText.isNotEmpty) {
                             for (final trans in _controller.transactions) {
-                              if (_fliterIsDescription) {
+                              if (_filterIsDescription) {
                                 if (trans.transDescription
                                     .toLowerCase()
                                     .contains(_filterText.toLowerCase())) {

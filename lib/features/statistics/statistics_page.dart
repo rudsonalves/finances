@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../common/constants/app_constants.dart';
 import '../../common/constants/themes/app_text_styles.dart';
+import '../../common/constants/themes/icons/fontello_icons.dart';
 import '../../common/widgets/app_top_border.dart';
 import '../../common/widgets/custom_app_bar.dart';
 import '../../common/widgets/custom_circular_progress_indicator.dart';
@@ -71,7 +72,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
               ),
             ),
             PopupMenuButton<StatisticMedium>(
-              icon: const Icon(Icons.more_vert),
+              icon: const Icon(FontelloIcons.budget),
               itemBuilder: (context) => [
                 CheckedPopupMenuItem<StatisticMedium>(
                   checked: statReference == StatisticMedium.mediumMonth

@@ -76,8 +76,8 @@ class _CustomBottomNavigatorBarState extends State<CustomBottomNavigatorBar> {
                   tooltip: locale.budgetPageTitle,
                   changePage: widget.changePage,
                   icon: widget.page == 2
-                      ? FontelloIcons.budgetPage
-                      : FontelloIcons.budgetOutlined,
+                      ? FontelloIcons.budget_page
+                      : FontelloIcons.budget_outlined_ori,
                   color: widget.page == 2 ? selecteColor : unselecteColor,
                   index: 2,
                 ),
