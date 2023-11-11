@@ -56,4 +56,11 @@ class TransactionValidator {
 
     return null;
   }
+
+  String? accountForTransferValidator(int? value) {
+    if (value == null) {
+      return 'Select an account for the transfer';
+    }
+    return null;
+  }
 }

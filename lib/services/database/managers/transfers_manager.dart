@@ -151,13 +151,14 @@ class TransfersManager {
   /// );
   static Future<void> updateTransfer({
     required TransactionDbModel transaction0,
+    AccountDbModel? account0,
     AccountDbModel? account1,
   }) async {
     final transferRepository = locator<TransferRepository>();
     final transactionRepository = locator<TransactionRepository>();
     final accountRepository = locator<AccountRepository>();
 
-    final account0 = locator<CurrentAccount>();
+    account0 ??= locator<CurrentAccount>();
 
     // recover the original transaction
     final originalTransaction0 =
@@ -202,6 +203,10 @@ class TransfersManager {
     transaction0.transId = null;
     transaction0.transTransferId = null;
     // add a new transfer with transaction0 and account1
-    await addTransfer(transaction0: transaction0, account1: account1);
+    await addTransfer(
+      transaction0: transaction0,
+      account0: account0,
+      account1: account1,
+    );
   }
 }

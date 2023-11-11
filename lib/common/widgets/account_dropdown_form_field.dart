@@ -1,64 +1,102 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../common/current_models/current_account.dart';
 import '../../locator.dart';
 import '../../repositories/account/account_repository.dart';
 
-class AccountDropdownFormField extends StatelessWidget {
+class AccountDropdownFormField extends StatefulWidget {
+  final GlobalKey<FormFieldState<int>> globalKey;
+  final int originAccountId;
+  final int? destinationAccountId;
+  final String? Function(int?)? validate;
   final String hintText;
   final String labelText;
   final String? Function(String?)? validator;
-  final void Function(int?)? onChanged;
+  final void Function(int) accountIdSelected;
   final Widget? suffixIcon;
-  final TextEditingController? controller;
 
   const AccountDropdownFormField({
     super.key,
+    required this.globalKey,
+    required this.originAccountId,
+    required this.validate,
+    this.destinationAccountId,
     required this.hintText,
     required this.labelText,
     this.validator,
-    this.onChanged,
+    required this.accountIdSelected,
     this.suffixIcon,
-    this.controller,
   });
 
   @override
+  State<AccountDropdownFormField> createState() =>
+      _AccountDropdownFormFieldState();
+}
+
+class _AccountDropdownFormFieldState extends State<AccountDropdownFormField> {
+  final TextEditingController _controller = TextEditingController();
+  final accountsMap = locator<AccountRepository>().accountsMap;
+  int? _selectedAccountIndex;
+
+  @override
+  void initState() {
+    _selectedAccountIndex = widget.destinationAccountId;
+    _controller.text = _selectedAccountIndex != null
+        ? accountsMap[_selectedAccountIndex!]!.accountName
+        : '';
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final currentAccount = locator<CurrentAccount>();
-    final accountRepository = locator<AccountRepository>();
-    final items = accountRepository.accountsMap.keys.toList();
+    final accountIds = accountsMap.keys.toList();
     final locale = AppLocalizations.of(context)!;
-    items.remove(currentAccount.accountId);
+    log('inputs: $_selectedAccountIndex ${widget.originAccountId}');
+    accountIds.remove(widget.originAccountId);
+    if (widget.originAccountId == _selectedAccountIndex) {
+      _selectedAccountIndex = null;
+    }
+    _controller.text = _selectedAccountIndex != null
+        ? accountsMap[_selectedAccountIndex!]!.accountName
+        : '';
 
     return Padding(
       padding: const EdgeInsets.only(top: 5, bottom: 10),
       child: DropdownButtonFormField<int>(
-        value: controller!.text.isNotEmpty
-            ? accountRepository.accountIdByName(controller!.text)
-            : null,
+        key: widget.globalKey,
+        value: _selectedAccountIndex,
+        validator: widget.validate,
         decoration: InputDecoration(
-          suffixIcon: suffixIcon,
+          suffixIcon: widget.suffixIcon,
           floatingLabelBehavior: FloatingLabelBehavior.always,
-          hintText: items.isEmpty ? locale.accountDropdownFormHint : hintText,
-          labelText: labelText.toUpperCase(),
+          hintText: accountIds.isEmpty
+              ? locale.accountDropdownFormHint
+              : widget.hintText,
+          labelText: widget.labelText.toUpperCase(),
           border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(15),
             ),
           ),
         ),
-        items: items
+        items: accountIds
             .map(
               (index) => DropdownMenuItem(
                 value: index,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    accountRepository.accountsMap[index]!.accountIcon
-                        .iconWidget(size: 24),
+                    accountsMap[index]!.accountIcon.iconWidget(size: 24),
                     const SizedBox(width: 8),
-                    Text(accountRepository.accountsMap[index]!.accountName),
+                    Text(accountsMap[index]!.accountName),
                   ],
                 ),
               ),
@@ -66,11 +104,9 @@ class AccountDropdownFormField extends StatelessWidget {
             .toList(),
         onChanged: (index) {
           if (index != null) {
-            if (controller != null) {
-              controller!.text =
-                  accountRepository.accountsMap[index]!.accountName;
-            }
-            if (onChanged != null) onChanged!(index);
+            _selectedAccountIndex = index;
+            _controller.text = accountsMap[index]!.accountName;
+            widget.accountIdSelected(index);
           }
         },
       ),

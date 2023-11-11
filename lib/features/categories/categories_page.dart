@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../common/constants/app_constants.dart';
 import '../../common/constants/themes/app_text_styles.dart';
 import '../../common/constants/themes/colors/custom_color.g.dart';
+import '../../common/constants/themes/icons/fontello_icons.dart';
 import '../../common/extensions/money_masked_text.dart';
 import '../../common/models/category_db_model.dart';
 import '../../common/widgets/app_top_border.dart';
@@ -147,7 +148,7 @@ class _CategoriesPageState extends State<CategoriesPage>
           ),
           PopupMenuButton<StatisticMedium>(
             icon: const Icon(
-              Icons.more_vert,
+              FontelloIcons.budget,
             ),
             itemBuilder: (context) => [
               PopupMenuItem<StatisticMedium>(

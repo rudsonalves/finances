@@ -275,9 +275,43 @@ Some bugs were noticed and need to be fixed:
 
 - *20231102.1* implementation: adicinar uma caixa de diálogo antes de fazer a instalação da versão sem anúncios comunicando para fazer um backup dos dados antes de prosseguir;
 - *20231102.2* implementation: atualizar as páginas de ajuda figuras atualizadas e rever o texto;
-- *20231107.1* change: remover o SpinBoxField, substituíndo-o pelo SimpleSpinBoxField.
 
 # Commits:
+
+## 2023/22/11 - Version: 1.0.13+56
+
+In this commit, various updates, improvements, and fixes have been made in different parts of the application to enhance performance and usability. Additionally, there have been updates to fonts and the database diagram, improvements to the media script, and icon adjustments in various sections of the application.
+
+* assets/fonts/TrademarkIcons.ttf:
+* b/assets/fonts/Fontelloicons.ttf:
+* lib/common/constants/themes/icons/fontello_icons.dart:
+* lib/common/constants/themes/icons/fontello_icons_codes.dart:
+* lib/common/constants/themes/icons/trademark_icons.dart:
+* lib/common/constants/themes/icons/trademarks_icons_codes.dart:
+	- font updates. This resulted in several icon updates throughout the code.
+* docs/databaseDiagram.jpg:
+* docs/databaseDiagram.dia:
+	- database diagram update.
+* docs/movie_script.md:
+	- improvements to the media script.
+* lib/common/validate/transaction_validator.dart:
+	- added the validation method String? accountForTransferValidator(int? value).
+* lib/common/widgets/account_dropdown_form_field.dart:
+	- AccountDropdownFormField can now clear the content properly. This was done by adding a GlobalKey<FormFieldState<int>> globalKey.
+* lib/common/widgets/custom_botton_navigator_bar.dart:
+* lib/features/help_manager/pages/presentation_help.dart:
+	- icon updates.
+* lib/common/widgets/spin_box_field.dart:
+	- removed from the code and replaced with SimpleSpinBox, with full longPress control.
+* lib/features/categories/categories_page.dart:
+* lib/features/statistics/statistics_page.dart:
+	- menu icon replacement to differentiate the page's options menu from the app menu.
+* lib/features/home_page/home_page.dart:
+	- adjustments to the _showTutorial behavior;
+	- code text correction.
+* lib/features/transaction/transaction_controller.dart:
+	- code reorganization, changing some structures to make the code cleaner and
+
 
 ## 2023/11/08 - Version: 1.0.12+53
 

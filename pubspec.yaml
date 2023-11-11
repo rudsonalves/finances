@@ -3,7 +3,7 @@ description: "financial control app"
 
 publish_to: 'none' 
 
-version: 1.0.12+53
+version: 1.0.13+56
 
 environment:
   sdk: '>=3.1.5 <4.0.0' 
@@ -78,5 +78,5 @@ flutter:
         - asset: assets/fonts/TrademarkIcons.ttf
     - family: FontelloIcons
       fonts:
-        - asset: assets/fonts/fontelloicons.ttf
+        - asset: assets/fonts/FontelloIcons.ttf
 
