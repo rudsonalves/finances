@@ -118,11 +118,16 @@ class _TransactionPageState extends State<TransactionPage> {
     Navigator.pop(context);
   }
 
+  bool get isTransfer => _categoryId == 1;
+
   void addTransactionsAction() async {
-    final valit = _formKey.currentState != null &&
-        _formKey.currentState!.validate() &&
-        _destinyKey.currentState != null &&
-        _destinyKey.currentState!.validate();
+    bool valit =
+        _formKey.currentState != null && _formKey.currentState!.validate();
+    if (isTransfer) {
+      valit = valit &&
+          _destinyKey.currentState != null &&
+          _destinyKey.currentState!.validate();
+    }
     if (valit) {
       double value = _amountController.numberValue;
       value = _income ? value.abs() : -value.abs();
@@ -502,7 +507,7 @@ class _TransactionPageState extends State<TransactionPage> {
                                 onChanged: selectCategory,
                               ),
                               // Destiny Account
-                              if (_categoryId == 1)
+                              if (isTransfer)
                                 ListenableBuilder(
                                   listenable: _originAccount,
                                   builder: (context, _) {

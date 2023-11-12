@@ -2,6 +2,14 @@ Planejamento de vídeo para o app Finanças
 
 Ao abrir o app passar para a página de contas e criar as contas:
 
+Ato 1:Breve introdução
+
+**Controle suas Finanças**, ou simplesmente **Finanças**, é uma aplicação de gestão financeira desenvolvida com o objetivo é capacitar os usuários com um eficiente controle de orçamento, permitindo-lhes criar e gerenciar contas, rastrear transações financeiras organizadas em categorias personalizáveis e planejar e executar orçamentos.
+
+Aqui sua privacidade é levada a sério e tudo o que é coletado pelo aplicativo é uma conta de e-mail e um password. Todas as informações inseridas no aplicativo são mantidas exclusivamente em seu Smartphone, não sendo transitadas pelo app na rede de nenhuma forma.
+
+Ato 2: Apresentação
+
 1. Editar a conta principal:
 Bank of America
 My personal account
