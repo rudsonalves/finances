@@ -278,6 +278,16 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
+## 2023/22/11 - Version: 1.0.14+57
+
+In this version, some tests and recording of the app's presentation media were carried out. A bug in transaction validation was identified and fixed.
+
+* docs/movie_script.md:
+  - updates to the media script.
+* lib/features/transaction/transaction_page.dart:
+  - correction in the transaction form validation.
+
+
 ## 2023/22/11 - Version: 1.0.13+56
 
 In this commit, various updates, improvements, and fixes have been made in different parts of the application to enhance performance and usability. Additionally, there have been updates to fonts and the database diagram, improvements to the media script, and icon adjustments in various sections of the application.
