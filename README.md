@@ -279,7 +279,7 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
-## 2023/11/20 - Version: 1.0.11+44
+## 2023/11/20 - Version: 1.0.16+59
 
 In this commit, several enhancements and adjustments have been made across different parts of the application to improve performance and usability. A significant addition is the introduction of user-configurable maximum transaction limits. Explore the detailed changes below:
 * lib/common/current_models/current_user.dart:
