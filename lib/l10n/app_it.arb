@@ -387,5 +387,12 @@
     "admob_msg_banner": "Se ti piace la nostra app, sostienici\nacquistando la versione senza pubblicità",
     "admob_msg_menu": "Finanze senza Pubblicità",
     "maxTrasctionsText": "Questo valore influenza le ricerche e le suggerimenti di compilazione. Valori eccessivi possono influire sulle prestazioni dell'app.\n\n**Valori tipici:** 30-60 transazioni.\n\n**Valore ideale:** numero di transazioni mensili nell'account.",
-    "maxTrasctionsTitle": "Transazioni per Pagina"
+    "maxTrasctionsTitle": "Transazioni per Pagina",
+    "resetDialogTitle": "Cancella Account",
+    "resetDialogMsg0": "Questo dialogo consente di cancellare tutti i tuoi dati e rimuovere il tuo account in modo irreversibile. Scegli con attenzione.",
+    "resetDialogMsg1": "**Cancella Dati:** cancella tutte le tue transazioni, account, categorie e budget. In seguito, puoi rifare il login con l'account e ricominciare a compilare il tuo budget da zero.",
+    "resetDialogData": "Cancella Dati!",
+    "resetDialogAccountMsg": "**Cancella Account:** tutti i tuoi dati saranno cancellati, come sopra, così come il tuo account. In questo caso, sarà necessario creare un nuovo account per continuare a utilizzare l'applicazione.",
+    "resetDialogReset": "Cancella l'account!",
+    "genericCancel": "Annulla"
 }

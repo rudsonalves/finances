@@ -98,4 +98,9 @@ class FirebaseAuthService implements AuthService {
       rethrow;
     }
   }
+
+  @override
+  Future<void> removeAccount() async {
+    await _auth.currentUser!.delete();
+  }
 }

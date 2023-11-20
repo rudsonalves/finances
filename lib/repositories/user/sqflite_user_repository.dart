@@ -40,6 +40,7 @@ class SqfliteUserRepository implements UserRepository {
 
   @override
   Future<void> addUser(UserDbModel user) async {
+    user.userName ??= '';
     Map<String, dynamic> userMap = user.toMap();
     int result = await helper.insertUser(userMap);
     if (result < 0) {

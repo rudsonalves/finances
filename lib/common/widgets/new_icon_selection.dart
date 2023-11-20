@@ -197,25 +197,26 @@ class _NewIconSelectionState extends State<NewIconSelection> {
                 const SizedBox(width: 12),
                 // Icon View
                 ListenableBuilder(
-                    listenable: Listenable.merge([_iconName, _iconColor]),
-                    builder: (context, _) {
-                      return Column(
-                        children: [
-                          Card(
-                            elevation: 4,
-                            child: SizedBox(
-                              height: 52,
-                              width: 52,
-                              child: mountIcon,
-                            ),
+                  listenable: Listenable.merge([_iconName, _iconColor]),
+                  builder: (context, _) {
+                    return Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: _changeColorButton,
+                          child: SizedBox(
+                            height: 52,
+                            // width: 52,
+                            child: mountIcon,
                           ),
-                          Text(
-                            _iconName.value,
-                            style: AppTextStyles.textStyle9,
-                          ),
-                        ],
-                      );
-                    }),
+                        ),
+                        Text(
+                          _iconName.value,
+                          style: AppTextStyles.textStyle10,
+                        ),
+                      ],
+                    );
+                  },
+                ),
               ],
             ),
             // Icon Grid

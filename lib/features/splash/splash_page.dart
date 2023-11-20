@@ -39,12 +39,6 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    // _splashController.dispose();
-  }
-
-  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     locator<AppLocale>().initializeLocale(context);

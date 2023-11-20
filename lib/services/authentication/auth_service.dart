@@ -19,4 +19,6 @@ abstract class AuthService {
   Future<void> signOut();
 
   Future<bool> recoverPassword(String email);
+
+  Future<void> removeAccount();
 }

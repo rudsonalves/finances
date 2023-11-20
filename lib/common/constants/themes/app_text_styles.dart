@@ -147,7 +147,13 @@ class AppTextStyles {
     fontWeight: FontWeight.w400,
   );
 
-  static const TextStyle textStyle9 = TextStyle(
+  static const TextStyle textStyle10 = TextStyle(
+    fontFamily: 'Inter',
+    fontSize: 10,
+    fontWeight: FontWeight.w400,
+  );
+
+  static const TextStyle textStyle09 = TextStyle(
     fontFamily: 'Inter',
     fontSize: 9,
     fontWeight: FontWeight.w400,

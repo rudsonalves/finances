@@ -22,13 +22,11 @@ import '../../../services/database/managers/transactions_manager.dart';
 class TransactionDismissibleTile extends StatefulWidget {
   final double textScale;
   final TransactionDbModel transaction;
-  final void Function()? onTap;
 
   const TransactionDismissibleTile({
     super.key,
     required this.textScale,
     required this.transaction,
-    this.onTap,
   });
 
   @override
@@ -117,24 +115,26 @@ class _TransactionDismissibleTileState
   }
 
   void onTabFuture() async {
-    final AppLocalizations locale = AppLocalizations.of(context)!;
+    if (_balanceCardController.transStatusCheck) {
+      final AppLocalizations locale = AppLocalizations.of(context)!;
 
-    await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(
-          locale.transactionCheckDlgTitle,
-          textAlign: TextAlign.center,
-        ),
-        content: Text(locale.transactionCheckDlgMsg),
-        actions: [
-          ElevatedButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(locale.genericClose),
+      await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(
+            locale.transactionCheckDlgTitle,
+            textAlign: TextAlign.center,
           ),
-        ],
-      ),
-    );
+          content: Text(locale.transactionCheckDlgMsg),
+          actions: [
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(locale.genericClose),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   @override

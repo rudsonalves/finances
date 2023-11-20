@@ -5,6 +5,7 @@ abstract class DatabaseHelper {
   Future<void> init();
   Future<void> restartTables();
   Future<void> restartTestTables();
+  Future<void> deleteDatabase();
 
   Future<int> insertUser(Map<String, dynamic> userMap);
   Future<Map<String, Object?>?> queryUserId(String id);

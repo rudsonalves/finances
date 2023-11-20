@@ -387,5 +387,12 @@
     "admob_msg_banner": "If you like our app, support us by\npurchasing the ad-free version.",
     "admob_msg_menu": "Ad-Free Finances",
     "maxTrasctionsText": "This value influences searches and autofill suggestions. Excessive values can impact the app's performance.\n\n**Typical values:** 30 to 60 transactions.\n\n**Ideal value:** the number of monthly transactions in the account.",
-    "maxTrasctionsTitle": "Transactions per Page"
+    "maxTrasctionsTitle": "Transactions per Page",
+    "resetDialogTitle": "Delete Account",
+    "resetDialogMsg0": "This dialog allows you to delete all your data and remove your account irreversibly. Choose an option carefully.",
+    "resetDialogMsg1": "**Delete Data:** delete all your transactions, accounts, categories, and budget. Then you can log in again with the account and start filling in your budget from scratch.",
+    "resetDialogData": "Delete Data!",
+    "resetDialogAccountMsg": "**Delete Account:** all your data will be deleted, as mentioned above, as well as your account. In this case, it will be necessary to create a new account to continue using the application.",
+    "resetDialogReset": "Delete Account!",
+    "genericCancel": "Cancel"
 }

@@ -387,5 +387,12 @@
     "admob_msg_banner": "Si te gusta nuestra aplicación, apóyanos\ncomprando la versión sin anuncios.",
     "admob_msg_menu": "Finanzas sin Anuncios",
     "maxTrasctionsText": "Este valor influye en las búsquedas y sugerencias de llenado. Valores excesivos pueden afectar el rendimiento de la aplicación.\n\n**Valores típicos:** 30 a 60 transacciones.\n\n**Valor ideal:** número de transacciones mensuales en la cuenta.",
-    "maxTrasctionsTitle": "Transacciones por Página"
+    "maxTrasctionsTitle": "Transacciones por Página",
+    "resetDialogTitle": "Eliminar la Cuenta",
+    "resetDialogMsg0": "Este diálogo permite borrar todos tus datos y eliminar tu cuenta de forma irreversible. Elige una opción con cuidado.",
+    "resetDialogMsg1": "**Eliminar Datos:** elimina todas tus transacciones, cuentas, categorías y presupuesto. Luego puedes iniciar sesión nuevamente con la cuenta y comenzar a completar tu presupuesto desde cero.",
+    "resetDialogData": "Eliminar Datos!",
+    "resetDialogAccountMsg": "**Eliminar la Cuenta:** todos tus datos se eliminarán, como se mencionó anteriormente, así como tu cuenta. En este caso, será necesario crear una nueva cuenta para seguir utilizando la aplicación.",
+    "resetDialogReset": "Eliminar la Cuenta!",
+    "genericCancel": "Cancelar"
 }

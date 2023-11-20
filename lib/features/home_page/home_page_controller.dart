@@ -1,8 +1,8 @@
-import 'package:finances/common/current_models/current_user.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 
 import '../../common/current_models/current_account.dart';
+import '../../common/current_models/current_user.dart';
 import '../../common/models/account_db_model.dart';
 import '../../locator.dart';
 import './home_page_state.dart';
