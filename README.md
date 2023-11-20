@@ -275,6 +275,7 @@ Some bugs were noticed and need to be fixed:
 
 - *20231102.1* implementation: adicinar uma caixa de diálogo antes de fazer a instalação da versão sem anúncios comunicando para fazer um backup dos dados antes de prosseguir;
 - *20231102.2* implementation: atualizar as páginas de ajuda figuras atualizadas e rever o texto;
+- *20231117.1* remover as transferências do orçamento.
 
 # Commits:
 

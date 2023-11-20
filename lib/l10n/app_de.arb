@@ -387,5 +387,12 @@
     "admob_msg_banner": "Wenn Ihnen unsere App gefällt, unterstützen\nSie uns, indem Sie die werbefreie Version\nkaufen.",
     "admob_msg_menu": "Werbefreie Finanzen",
     "maxTrasctionsText": "Dieser Wert beeinflusst die Suche und die automatischen Vorschläge. Übermäßige Werte können sich auf die Leistung der App auswirken.\n\n**Typische Werte:** 30 bis 60 Transaktionen.\n\n**Idealwert:** die Anzahl der monatlichen Transaktionen im Konto.",
-    "maxTrasctionsTitle": "Transaktionen pro Seite"
+    "maxTrasctionsTitle": "Transaktionen pro Seite",
+    "resetDialogTitle": "Konto löschen",
+    "resetDialogMsg0": "Dieser Dialog ermöglicht es Ihnen, alle Ihre Daten zu löschen und Ihr Konto unwiderruflich zu entfernen. Wählen Sie eine Option sorgfältig aus.",
+    "resetDialogMsg1": "**Daten löschen:** Löschen Sie alle Ihre Transaktionen, Konten, Kategorien und Budgets. Dann können Sie sich erneut mit dem Konto anmelden und Ihr Budget von Grund auf neu erstellen.",
+    "resetDialogData": "Daten löschen!",
+    "resetDialogAccountMsg": "**Konto löschen:** Alle Ihre Daten werden gelöscht, wie oben erwähnt, sowie Ihr Konto. In diesem Fall ist es notwendig, ein neues Konto zu erstellen, um die Anwendung weiterhin zu verwenden.",
+    "resetDialogReset": "Konto löschen!",
+    "genericCancel": "Abbrechen"
 }

@@ -387,5 +387,12 @@
     "admob_msg_banner": "Se gosta da nossa aplicação, apoie-nos \nao adquirir a versão sem anúncios.",
     "admob_msg_menu": "Finanças sem Anúncios",
     "maxTrasctionsText": "Este valor influencia as pesquisas e sugestões de preenchimento. Valores excessivos podem interferir o desempenho do aplicativo.\n\n**Valores típicos:** 30 a 60 transações.\n\n**Valor ideal:** número de transações mensais na conta.",
-    "maxTrasctionsTitle": "Transações por Página"
+    "maxTrasctionsTitle": "Transações por Página",
+    "resetDialogTitle": "Apagar o Cadastro",
+    "resetDialogMsg0": "Este diálogo permite apagar todos os seus dados e remover sua conta de forma irreversível. Escolha uma opção com atenção.",
+    "resetDialogMsg1": "**Apagar Dados:** apagar todas as suas transações, contas, categorias e orçamento. Em seguida, você pode refazer o login com a conta e reiniciar o preenchimento do seu orçamento do zero.",
+    "resetDialogData": "Apagar Dados!",
+    "resetDialogAccountMsg": "**Apagar a Conta:** todos os seus dados serão apagados, como acima, bem como sua conta. Neste caso, será necessário criar uma nova conta para continuar usando o aplicativo.",
+    "resetDialogReset": "Apagar a conta!",
+    "genericCancel": "Cancelar"
 }

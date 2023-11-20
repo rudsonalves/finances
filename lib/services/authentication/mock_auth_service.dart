@@ -62,4 +62,9 @@ class MockAuthService implements AuthService {
   Future<bool> recoverPassword(String email) {
     throw UnimplementedError();
   }
+
+  @override
+  Future<void> removeAccount() {
+    throw UnimplementedError();
+  }
 }

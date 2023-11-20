@@ -217,6 +217,18 @@ class SqfliteHelper implements DatabaseHelper {
     await db.execute('PRAGMA foreign_keys = ON');
   }
 
+  @override
+  Future<void> deleteDatabase() async {
+    final Directory directory = await getApplicationDocumentsDirectory();
+    final String path = join(directory.path, _dbName);
+
+    if (_db.isOpen) {
+      await _db.close();
+    }
+
+    await databaseFactory.deleteDatabase(path);
+  }
+
   /* 
   * Create Tables
   */

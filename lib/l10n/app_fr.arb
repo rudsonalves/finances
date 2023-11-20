@@ -387,5 +387,12 @@
     "admob_msg_banner": "Si vous aimez notre application, soutenez-nous\nen achetant la version sans publicité.",
     "admob_msg_menu": "Finances sans Publicité",
     "maxTrasctionsText": "Cette valeur influence les recherches et les suggestions de remplissage. Des valeurs excessives peuvent affecter les performances de l'application.\n\n**Valeurs typiques :** 30 à 60 transactions.\n\n**Valeur idéale :** nombre de transactions mensuelles sur le compte.",
-    "maxTrasctionsTitle": "Transactions par Page"
+    "maxTrasctionsTitle": "Transactions par Page",
+    "resetDialogTitle": "Supprimer le Compte",
+    "resetDialogMsg0": "Cette boîte de dialogue permet de supprimer toutes vos données et de supprimer votre compte de manière irréversible. Choisissez une option avec précaution.",
+    "resetDialogMsg1": "**Supprimer les Données:** supprimez toutes vos transactions, comptes, catégories et budget. Ensuite, vous pouvez vous reconnecter avec le compte et recommencer à remplir votre budget à partir de zéro.",
+    "resetDialogData": "Supprimer les Données!",
+    "resetDialogAccountMsg": "**Supprimer le Compte:** toutes vos données seront supprimées, comme ci-dessus, ainsi que votre compte. Dans ce cas, il sera nécessaire de créer un nouveau compte pour continuer à utiliser l'application.",
+    "resetDialogReset": "Supprimer le Compte!",
+    "genericCancel": "Annuler"
 }

@@ -1,4 +1,3 @@
-import 'package:finances/features/home_page/home_page_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:restart_app/restart_app.dart';
@@ -19,6 +18,9 @@ import '../../common/current_models/current_user.dart';
 import '../../common/current_models/current_theme.dart';
 import '../../common/current_models/current_language.dart';
 import '../../common/constants/themes/app_text_styles.dart';
+import '../../services/authentication/auth_service.dart';
+import '../../services/database/database_helper.dart';
+import '../home_page/home_page_controller.dart';
 import 'settings_page_controller.dart';
 import 'settings_page_state.dart';
 
@@ -41,6 +43,8 @@ class _SettingsPageState extends State<SettingsPage> {
   final _userMaxTransactions = ValueNotifier<int>(35);
   final _maxTransValueController = TextEditingController();
 
+  int _count = 0;
+
   @override
   void initState() {
     super.initState();
@@ -48,6 +52,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
     _userNameController.text = _currentUserName.userName;
     _userMaxTransactions.value = _currentUser.userMaxTransactions;
+    _count = 0;
   }
 
   @override
@@ -62,6 +67,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget languageDropdown() {
     final locale = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
+    _count = 0;
 
     return DropdownButton<String>(
       elevation: 5,
@@ -113,6 +119,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Widget themeModeDropdown() {
     final colorScheme = Theme.of(context).colorScheme;
+    _count = 0;
 
     return DropdownButton<ThemeMode>(
       elevation: 5,
@@ -162,6 +169,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   AlertDialog editNameDialog(AppLocalizations locale) {
     final buttonStyle = AppButtonStyles.primaryButtonColor(context);
+    _count = 0;
 
     return AlertDialog(
       title: Text(locale.settingsPageDialogTitle),
@@ -195,6 +203,7 @@ class _SettingsPageState extends State<SettingsPage> {
   void editMaxTransactions() async {
     final primary = Theme.of(context).colorScheme.primary;
     final locale = AppLocalizations.of(context)!;
+    _count = 0;
 
     _maxTransValueController.text = _userMaxTransactions.value.toString();
 
@@ -238,11 +247,78 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> updateMaxTransactions(int value) async {
+    _count = 0;
     if (_currentUser.userMaxTransactions != value) {
       _currentUser.userMaxTransactions = value;
       await _currentUser.updateUserMaxTransactions();
       locator<HomePageController>().maxTransactions = value;
     }
+  }
+
+  void _resetDialog() async {
+    final locale = AppLocalizations.of(context)!;
+    final primary = Theme.of(context).colorScheme.primary;
+
+    await showDialog(
+      context: context,
+      builder: (context) => WidgetAlertDialog(
+        title: locale.resetDialogTitle,
+        content: [
+          Text(
+            style: TextStyle(color: primary),
+            locale.resetDialogMsg0,
+          ),
+          const SizedBox(height: 12),
+          MarkdownRichText.richText(
+            color: primary,
+            locale.resetDialogMsg1,
+          ),
+          const SizedBox(height: 4),
+          Center(
+            child: ElevatedButton(
+              style: AppButtonStyles.primaryButtonColor(context),
+              onPressed: _resetData,
+              child: Text(
+                locale.resetDialogData,
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          MarkdownRichText.richText(
+            color: primary,
+            locale.resetDialogAccountMsg,
+          ),
+          const SizedBox(height: 4),
+          Center(
+            child: ElevatedButton(
+              style: AppButtonStyles.primaryButtonColor(context),
+              onPressed: _resetAccount,
+              child: Text(
+                locale.resetDialogReset,
+              ),
+            ),
+          ),
+        ],
+        actions: [
+          ElevatedButton(
+            onPressed: () => Navigator.of(context).pop(),
+            style: AppButtonStyles.primaryButtonColor(context),
+            child: Text(locale.genericCancel),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _resetAccount() async {
+    await locator<DatabaseHelper>().deleteDatabase();
+    await locator<AuthService>().removeAccount();
+    await Restart.restartApp(webOrigin: AppRoute.onboard.name);
+  }
+
+  Future<void> _resetData() async {
+    await locator<DatabaseHelper>().deleteDatabase();
+    await Restart.restartApp(webOrigin: AppRoute.onboard.name);
   }
 
   @override
@@ -280,12 +356,21 @@ class _SettingsPageState extends State<SettingsPage> {
                     alignment: Alignment.topCenter,
                     child: Column(
                       children: [
-                        CircleAvatar(
-                          radius: 50,
-                          child: Image.asset(
-                            'assets/images/finances_icon.png',
-                            width: 70,
-                            fit: BoxFit.fitWidth,
+                        InkWell(
+                          onTap: () {
+                            _count++;
+                            if (_count == 20) {
+                              _count = 0;
+                              _resetDialog();
+                            }
+                          },
+                          child: CircleAvatar(
+                            radius: 50,
+                            child: Image.asset(
+                              'assets/images/finances_icon.png',
+                              width: 70,
+                              fit: BoxFit.fitWidth,
+                            ),
                           ),
                         ),
                         const SizedBox(height: 8),
