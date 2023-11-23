@@ -279,6 +279,16 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
+## 2023/11/21 - Version: 1.0.17+60
+
+In this version, adjustments have been made to the video scripts in the app's presentation section. Additionally, in response to the latest Flutter update, the deprecated WillPopScope has been replaced with PopScope in the home page view.
+
+* docs/presentation/:
+  - Adjustments to video scripts.
+* lib/features/home_page_view/home_page_view.dart:
+  - In the latest Flutter update, WillPopScope was removed and replaced with PopScope.
+
+
 ## 2023/11/20 - Version: 1.0.16+59
 
 In this commit, several enhancements and adjustments have been made across different parts of the application to improve performance and usability. A significant addition is the introduction of user-configurable maximum transaction limits. Explore the detailed changes below:

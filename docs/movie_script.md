@@ -11,29 +11,29 @@ Aqui sua privacidade é levada a sério e tudo o que é coletado pelo aplicativo
 Ato 2: Apresentação
 
 1. Editar a conta principal:
-Bank of America
-My personal account
-Red
+   Bank of America
+   My personal account
+   Red
 
 2. Criar uma nova conta
-Visa Card
-My Visa credit Card
-Blue
+   Visa Card
+   My Visa credit Card
+   Blue
 
 3. Criar uma terceira conta.
-Savings
-Investiment reservers
-Green
+   Savings
+   Investiment reservers
+   Green
 
 Em seguida passar para a aba de Categorias. Nela editar as categorias
 
 1. Editar
-Credits
-Internal Transfers
+   Credits
+   Internal Transfers
 
 2. Adicionar Categorias
-Grocery Shopping 
-(relativo a compras em supermercados) 
+   Grocery Shopping 
+   (relativo a compras em supermercados) 
 
 Utilities 
 (serviços gerais como internet, água, energia, gás, ...)
@@ -57,24 +57,26 @@ Transportation
 (taxi, uber, bus, metro)
 
 Primeira transação
+
 1. Criar a primeira transação
-Opening balance
+   Opening balance
 
 Electric bill
 
 AT&T bill -> lançamento futuro
 
 2. Mudar de Conta
-Starbucks -> Cartão Visa
-Brooklyn Ice Cream -> Snacks
+   Starbucks -> Cartão Visa
+   Brooklyn Ice Cream -> Snacks
 
 3. Criar uma transferência entre contas
-College savings
+   College savings
 
-4. Criar uma transação com repetições
-Amazon Prime
+4. Card bill paygment
 
-5. Backup
+5. Criar uma transação com repetições
+   Amazon Prime
 
-6. Setup
+6. Backup
 
+7. Setup

@@ -109,14 +109,9 @@ class _HomePageViewState extends State<HomePageView> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (_pageIndex != 0) {
-          changeToMainPage();
-          return false;
-        }
-        return true;
-      },
+    return PopScope(
+      canPop: _pageIndex != 0 ? false : true,
+      onPopInvoked: (_) => changeToMainPage(),
       child: Scaffold(
         floatingActionButton: _floatAppButton
             ? CustomFloatingActionButton(onPressed: _addFunction)
