@@ -26,6 +26,7 @@ class HomePageView extends StatefulWidget {
 class _HomePageViewState extends State<HomePageView> {
   final _pageController = PageController();
   final _homePageController = locator<HomePageController>();
+  final _statisticsController = locator<StatisticsController>();
 
   bool _floatAppButton = true;
   int _pageIndex = 0;
@@ -61,9 +62,14 @@ class _HomePageViewState extends State<HomePageView> {
       } else if (page == 2) {
         _addFunction = addCategory;
       }
+
+      // Jump to new page
       _pageController.jumpToPage(page);
+      // check for remake page
       if (page == 0 && _homePageController.redraw) {
         _homePageController.makeRedraw();
+      } else if (page == 3) {
+        _statisticsController.makeRecalculated();
       }
     });
   }
@@ -82,7 +88,7 @@ class _HomePageViewState extends State<HomePageView> {
     await locator<HomePageController>().getTransactions().then(
           (value) => locator<BalanceCardController>().getBalance(),
         );
-    locator<StatisticsController>().requestRecalculate();
+    _statisticsController.recalculate();
   }
 
   Future<void> addAccount() async {
@@ -100,7 +106,7 @@ class _HomePageViewState extends State<HomePageView> {
         callBack: addCategoryCallBak,
       ),
     );
-    locator<StatisticsController>().requestRecalculate();
+    _statisticsController.recalculate();
   }
 
   Future<void> addCategoryCallBak() async {

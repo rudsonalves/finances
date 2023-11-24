@@ -60,7 +60,7 @@ class CategoriesController extends ChangeNotifier {
     try {
       if (!_statController.noData) {
         await _statController.getStatistics(false);
-        _statController.requestRecalculate();
+        _statController.recalculate();
       }
       _sumTotalBudget();
       _changeState(CategoriesStateSuccess());
