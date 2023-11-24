@@ -110,6 +110,7 @@ class _CategoriesPageState extends State<CategoriesPage>
     if (category.categoryBudget != budgetValue) {
       category.categoryBudget = budgetValue;
       await _controller.updateCategoryBudget(category);
+      _statController.recalculate();
     }
   }
 
@@ -181,6 +182,7 @@ class _CategoriesPageState extends State<CategoriesPage>
             ],
             onSelected: (value) {
               _controller.setAllBudgets(value);
+              _statController.recalculate();
             },
           ),
         ],

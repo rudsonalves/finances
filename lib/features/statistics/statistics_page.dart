@@ -107,7 +107,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
             const AppTopBorder(),
             StatisticCard(_controller),
             Positioned(
-              top: 310,
+              top: 320,
               left: 0,
               right: 0,
               bottom: 0,

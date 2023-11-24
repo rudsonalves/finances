@@ -54,23 +54,33 @@ class StatisticsController extends ChangeNotifier {
 
   StatisticsState get state => _state;
 
+  bool _isStart = true;
+
   void _changeState(StatisticsState newState) {
     _state = newState;
     notifyListeners();
   }
 
-  bool _requestRecalculate = true;
+  bool _recalculate = true;
 
-  bool get recalculateRequested => _requestRecalculate;
+  bool get recalculateRequested => _recalculate;
 
-  void requestRecalculate() {
-    _requestRecalculate = true;
-    // log('Request redraw...');
+  void recalculate() {
+    _recalculate = true;
+  }
+
+  Future<void> makeRecalculated() async {
+    if (_recalculate != false && _isStart != true) {
+      await getStatistics();
+    }
   }
 
   Future<void> init() async {
-    _statReferenceType = currentUser.userBudgetRef;
-    await getStatistics();
+    if (_isStart) {
+      _statReferenceType = currentUser.userBudgetRef;
+      await getStatistics();
+      _isStart = false;
+    }
   }
 
   void _setReferenceByCategory() {
@@ -147,9 +157,9 @@ class StatisticsController extends ChangeNotifier {
     if (doState) _changeState(StatisticsStateLoading());
     try {
       if (recalculateRequested) {
-        _requestRecalculate = false;
+        _recalculate = false;
         // log('StatisticsController: Calculate...');
-        await calculateStatistics();
+        await _calculateStatistics();
       }
 
       if (doState) _changeState(StatisticsStateSuccess());
@@ -162,7 +172,7 @@ class StatisticsController extends ChangeNotifier {
     }
   }
 
-  Future<void> calculateStatistics() async {
+  Future<void> _calculateStatistics() async {
     final formatedDate = DateFormat.yMMMM();
     _statisticsList.clear();
     _incomes.clear();

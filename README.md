@@ -279,6 +279,24 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
+## 2023/11/22 - Version: 1.0.18+61
+
+In this version, a bug in the update of statistics when changes occur in budgets or a new transaction is recorded has been fixed. Additionally, some layout adjustments have been made to the app. The changes are as follows:
+
+* lib/features/categories/categories_page.dart:
+* lib/features/home_page/widgets/transaction_dismissible_tile.dart:
+  - added the recalculate() method to StatisticsController to recalculate statistics when the budget changes.
+* lib/features/home_page_view/home_page_view.dart:
+  - added a call to StatisticsController.makeRecalculated() when selecting the statistics page;
+  - added the recalculate() method to StatisticsController to recalculate statistics when the budget changes.
+* lib/features/statistics/statistic_controller.dart:
+  - enabled the use of the recalculate() method and the _recalculate attribute;
+  - added the makeRecalculated() method;
+  - added the _isStart attribute.
+* lib/features/statistics/statistics_page.dart:
+  - adjusted the position of the categories list.
+
+
 ## 2023/11/21 - Version: 1.0.17+60
 
 In this version, adjustments have been made to the video scripts in the app's presentation section. Additionally, in response to the latest Flutter update, the deprecated WillPopScope has been replaced with PopScope in the home page view.

@@ -248,7 +248,7 @@ class _TransactionDismissibleTileState
                 'transaction': transaction,
               },
             );
-            locator<StatisticsController>().requestRecalculate();
+            locator<StatisticsController>().recalculate();
             _homePageController.getTransactions();
             balanceCardController.getBalance();
             return false;
@@ -264,7 +264,7 @@ class _TransactionDismissibleTileState
                 } else {
                   await TransfersManager.removeTransfer(transaction);
                 }
-                locator<StatisticsController>().requestRecalculate();
+                locator<StatisticsController>().recalculate();
                 _homePageController.getTransactions();
                 balanceCardController.getBalance();
                 return true;
