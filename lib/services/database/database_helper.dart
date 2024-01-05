@@ -7,6 +7,9 @@ abstract class DatabaseHelper {
   Future<void> restartTestTables();
   Future<void> deleteDatabase();
 
+  Future<void> updateAppVersion(String appVersion);
+  Future<String> queryAppVersion();
+
   Future<int> insertUser(Map<String, dynamic> userMap);
   Future<Map<String, Object?>?> queryUserId(String id);
   Future<List<Map<String, dynamic>>> queryAllUsers();

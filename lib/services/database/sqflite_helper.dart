@@ -17,9 +17,10 @@ class SqfliteHelper implements DatabaseHelper {
   static const _dbName = 'app_dataBase.db';
   static const _dbVersion = 1;
 
-  static const versionControlTable = 'versionControl';
-  static const versionControlId = 'id';
-  static const versionControlVersion = 'version';
+  static const appControlTable = 'versionControl';
+  static const appControlId = 'id';
+  static const appControlVersion = 'version';
+  static const appControlApp = 'appVersion';
 
   static const usersTable = 'usersTable';
   static const userId = 'userId';
@@ -104,7 +105,7 @@ class SqfliteHelper implements DatabaseHelper {
    in database increment this value and add a new update script in
    _migrationScripts Map.
   */
-  static const _databaseSchemeVersion = 1006;
+  static const _databaseSchemeVersion = 1007;
 
   // This Map contains the database migration scripts. The last index of this
   // Map must be equal to the current version of the database.
@@ -130,6 +131,9 @@ class SqfliteHelper implements DatabaseHelper {
     ],
     1006: [
       'ALTER TABLE $usersTable ADD COLUMN $userMaxTransactions INTEGER DEFAULT 35',
+    ],
+    1007: [
+      'ALTER TABLE $appControlTable ADD COLUMN $appControlApp TEXT DEFAULT ""',
     ],
   };
 
@@ -196,7 +200,7 @@ class SqfliteHelper implements DatabaseHelper {
     try {
       Batch batch = db.batch();
       // Tables
-      _createVersionControlTable(batch);
+      _createAppControlTable(batch);
       _createUsersTable(batch);
       _createIconsTable(batch);
       _createAccountsTable(batch);
@@ -232,11 +236,12 @@ class SqfliteHelper implements DatabaseHelper {
   /* 
   * Create Tables
   */
-  void _createVersionControlTable(Batch batch) {
+  void _createAppControlTable(Batch batch) {
     batch.execute(
-      'CREATE TABLE IF NOT EXISTS $versionControlTable ('
-      ' $versionControlId INTEGER PRIMARY KEY,'
-      ' $versionControlVersion INTEGER NOT NULL'
+      'CREATE TABLE IF NOT EXISTS $appControlTable ('
+      ' $appControlId INTEGER PRIMARY KEY,'
+      ' $appControlVersion INTEGER NOT NULL,'
+      ' $appControlApp TEXT DEFAULT ""'
       ')',
     );
   }
@@ -465,26 +470,62 @@ class SqfliteHelper implements DatabaseHelper {
     }
   }
 
-  // Record an applied migration in the versionControl table
+  // Record an applied migration in the appControl table
   Future<void> _recordMigration(int targetVersion) async {
     _db.insert(
-      versionControlTable,
+      appControlTable,
       {
-        versionControlId: 1,
-        versionControlVersion: targetVersion,
+        appControlId: 1,
+        appControlVersion: targetVersion,
+        appControlApp: '',
       },
     );
   }
 
-  // Record an applied migration in the versionControl table
+  // Record an applied migration in the appControl table
   Future<void> _updateMigration(int targetVersion) async {
     _db.update(
-      versionControlTable,
+      appControlTable,
       {
-        versionControlId: 1,
-        versionControlVersion: targetVersion,
+        appControlVersion: targetVersion,
       },
+      where: '$appControlId = 1',
     );
+  }
+
+  // Record an app version in the appControl table
+  @override
+  Future<void> updateAppVersion(String appVersion) async {
+    if (!_db.isOpen) _openDatabase();
+
+    try {
+      _db.update(
+        appControlTable,
+        {
+          appControlApp: appVersion,
+        },
+        where: '$appControlId = 1',
+      );
+    } catch (err) {
+      log('updateAppVersion: $err');
+    }
+  }
+
+  // Record an app version in the appControl table
+  @override
+  Future<String> queryAppVersion() async {
+    if (!_db.isOpen) _openDatabase();
+
+    try {
+      final result = await _db.query(
+        appControlTable,
+        where: '$appControlId = 1',
+      );
+      return result.first[appControlApp] as String;
+    } catch (err) {
+      log('queryAppVersion: $err');
+      return '';
+    }
   }
 
   @override
@@ -558,8 +599,8 @@ class SqfliteHelper implements DatabaseHelper {
 
   Future<int> _getCurrentDatabaseSchemeVersion() async {
     final List<Map<String, dynamic>> results = await _db.query(
-      versionControlTable,
-      where: '$versionControlId = 1',
+      appControlTable,
+      where: '$appControlId = 1',
     );
 
     if (results.isEmpty) {
@@ -567,7 +608,7 @@ class SqfliteHelper implements DatabaseHelper {
       return _databaseSchemeVersion;
     }
 
-    return results.first[versionControlVersion] as int;
+    return results.first[appControlVersion] as int;
   }
 
   /*

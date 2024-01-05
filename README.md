@@ -279,6 +279,40 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
+## 2024/01/04 - version: 1.0.21+66:
+
+This comprehensive update to the Finances app enriches the user experience with new informational resources and improved accessibility to app details. Alongside technical improvements, we've released informative videos in both English and Portuguese to showcase the app's features and functionalities. Additionally, we've thoroughly rewritten the terms in our Privacy Policy to enhance clarity and user understanding. Key changes in this update include:
+
+* lib/app_finances.dart:
+* lib/common/constants/routes/app_route.dart:
+* lib/features/about/about_page.dart:
+  - Introduced an About page featuring comprehensive app details, links to informative videos and pages, access to the revised Privacy Policy, and contact options for direct communication.
+
+* lib/common/constants/app_info.dart:
+  - Automated bash scripts now generate this code to aggregate essential app information like the developer, name, description, and version, along with functionalities for URL handling through url_launcher.
+
+* lib/features/home_page/home_page.dart:
+  - Implemented a check for app version updates in init(), triggering the updateMessage dialog after the page is rendered (using WidgetsBinding.instance.addPostFrameCallback).
+
+* lib/features/home_page/widgets/home_popup_menu_buttons.dart:
+  - Enhanced the logout process to call SystemNavigator.pop(), ensuring stability with discarded controllers. Added a menu item for easy navigation to the AboutPage.
+
+* lib/features/home_page/widgets/update_message.dart:
+  - This module now actively checks for app version updates and displays a summarized message of recent changes.
+
+* lib/features/settings/settings_page.dart:
+* lib/features/settings/settings_page_controller.dart:
+* lib/features/settings/settings_page_state.dart:
+  - Adjustments to utilize AppInfo, streamlining the settings management process and obviating the need for separate status controls.
+
+* lib/services/database/database_helper.dart:
+* lib/services/database/sqflite_helper.dart:
+  - Introduced appControlApp attribute for app version tracking, updated database Scheme Version to 1.0.07, and added methods for managing the app version in the database.
+
+* lib/l10n/app_?.arb:
+  - update all arb files to support AboutPage and updateMessage function.
+
+
 ## 2023/11/22 - Version: 1.0.18+61
 
 In this version, a bug in the update of statistics when changes occur in budgets or a new transaction is recorded has been fixed. Additionally, some layout adjustments have been made to the app. The changes are as follows:

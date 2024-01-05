@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../common/current_models/current_user.dart';
@@ -19,13 +20,7 @@ class HomePagePopupMenuButtons extends StatelessWidget {
       var user = locator<CurrentUser>();
       user.userLogged = false;
       await locator<DatabaseHelper>().updateUser(user.toMap());
-      if (context.mounted) {
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          AppRoute.onboard.name,
-          (route) => false,
-        );
-      }
+      SystemNavigator.pop();
     } else if (value == 'backup') {
       showDialog(
         context: context,
@@ -33,6 +28,8 @@ class HomePagePopupMenuButtons extends StatelessWidget {
           dialogState: DialogStates.createRestore,
         ),
       );
+    } else if (value == 'about') {
+      Navigator.pushNamed(context, AppRoute.aboutPage.name);
     }
   }
 
@@ -76,6 +73,19 @@ class HomePagePopupMenuButtons extends StatelessWidget {
               Text(
                 locale.cardPopupMenuBackup,
               )
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: 'about',
+          child: Row(
+            children: [
+              Icon(
+                Icons.person,
+                color: primary,
+              ),
+              const SizedBox(width: 8),
+              const Text('About'),
             ],
           ),
         ),

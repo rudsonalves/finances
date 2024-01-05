@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:restart_app/restart_app.dart';
 
+import '../../common/constants/app_info.dart';
 import '../../common/constants/laguage_constants.dart';
 import '../../common/constants/routes/app_route.dart';
 import '../../common/constants/themes/app_button_styles.dart';
 import '../../common/models/user_name_notifier.dart';
 import '../../common/widgets/basic_text_form_field.dart';
-import '../../common/widgets/custom_circular_progress_indicator.dart';
 import '../../common/widgets/markdown_rich_text.dart';
 import '../../common/widgets/simple_spin_box_field.dart';
 import '../../common/widgets/widget_alert_dialog.dart';
@@ -21,8 +21,6 @@ import '../../common/constants/themes/app_text_styles.dart';
 import '../../services/authentication/auth_service.dart';
 import '../../services/database/database_helper.dart';
 import '../home_page/home_page_controller.dart';
-import 'settings_page_controller.dart';
-import 'settings_page_state.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({
@@ -38,7 +36,6 @@ class _SettingsPageState extends State<SettingsPage> {
   final _currentTheme = locator<CurrentTheme>();
   final _currentLanguage = locator<CurrentLanguage>();
   final _currentUserName = locator<UserNameNotifier>();
-  final _controller = SettingsPageController();
   final _userNameController = TextEditingController();
   final _userMaxTransactions = ValueNotifier<int>(35);
   final _maxTransValueController = TextEditingController();
@@ -48,7 +45,6 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   void initState() {
     super.initState();
-    _controller.init();
 
     _userNameController.text = _currentUserName.userName;
     _userMaxTransactions.value = _currentUser.userMaxTransactions;
@@ -59,7 +55,6 @@ class _SettingsPageState extends State<SettingsPage> {
   void dispose() {
     _userNameController.dispose();
     _userMaxTransactions.dispose();
-    _controller.dispose();
     _maxTransValueController.dispose();
     super.dispose();
   }
@@ -400,120 +395,96 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(16),
-                    child: AnimatedBuilder(
-                      animation: _controller,
-                      builder: (context, _) {
-                        // SettingsPage State Loading
-                        if (_controller.state is SettingsPageStateLoading) {
-                          return const CustomCircularProgressIndicator();
-                        }
-
-                        // SettingsPage State Success
-                        if (_controller.state is SettingsPageStateSuccess) {
-                          String version = _controller.packageInfo.version;
-
-                          return Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Title
-                              Text(
-                                locale.settingsPageAppSettings,
-                                style:
-                                    AppTextStyles.textStyleSemiBold18.copyWith(
-                                  color: colorScheme.primary,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              // Theme
-                              ValueListenableBuilder(
-                                valueListenable: _currentTheme.themeMode$,
-                                builder: (context, themeMode, _) {
-                                  return Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        locale.settingsPageAppTheme,
-                                        style: AppTextStyles.textStyleMedium16
-                                            .copyWith(
-                                          color: colorScheme.primary,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 16),
-                                      themeModeDropdown(),
-                                    ],
-                                  );
-                                },
-                              ),
-                              // Language
-                              ValueListenableBuilder(
-                                valueListenable: _currentLanguage.locale$,
-                                builder: (context, value, _) {
-                                  return Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        locale.settingsPageLanguage,
-                                        style: AppTextStyles.textStyleMedium16
-                                            .copyWith(
-                                          color: colorScheme.primary,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 16),
-                                      languageDropdown(),
-                                    ],
-                                  );
-                                },
-                              ),
-                              // Max Transactions per Page
-                              Row(
-                                children: [
-                                  Text(
-                                    'Transactions/page:',
-                                    style: AppTextStyles.textStyleMedium16
-                                        .copyWith(
-                                      color: colorScheme.primary,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 32),
-                                  ElevatedButton(
-                                    onPressed: editMaxTransactions,
-                                    child: SizedBox(
-                                      width: 60,
-                                      child: ListenableBuilder(
-                                        listenable: _userMaxTransactions,
-                                        builder: (context, _) {
-                                          updateMaxTransactions(
-                                              _userMaxTransactions.value);
-                                          return Text(
-                                            _userMaxTransactions.value
-                                                .toString(),
-                                            textAlign: TextAlign.center,
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 32),
-                              // App Version
-                              Text(
-                                '${locale.settingsPageAppVersion}: $version',
-                                style: AppTextStyles.textStyleMedium16.copyWith(
-                                  color: colorScheme.primary,
-                                ),
-                              ),
-                            ],
-                          );
-                        }
-                        // SettingsPage State Error
-                        return Expanded(
-                          child: Center(
-                            child: Text(locale.settingsPageSettingsError),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Title
+                        Text(
+                          locale.settingsPageAppSettings,
+                          style: AppTextStyles.textStyleSemiBold18.copyWith(
+                            color: colorScheme.primary,
                           ),
-                        );
-                      },
+                        ),
+                        const SizedBox(height: 8),
+                        // Theme
+                        ValueListenableBuilder(
+                          valueListenable: _currentTheme.themeMode$,
+                          builder: (context, themeMode, _) {
+                            return Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  locale.settingsPageAppTheme,
+                                  style:
+                                      AppTextStyles.textStyleMedium16.copyWith(
+                                    color: colorScheme.primary,
+                                  ),
+                                ),
+                                const SizedBox(width: 16),
+                                themeModeDropdown(),
+                              ],
+                            );
+                          },
+                        ),
+                        // Language
+                        ValueListenableBuilder(
+                          valueListenable: _currentLanguage.locale$,
+                          builder: (context, value, _) {
+                            return Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  locale.settingsPageLanguage,
+                                  style:
+                                      AppTextStyles.textStyleMedium16.copyWith(
+                                    color: colorScheme.primary,
+                                  ),
+                                ),
+                                const SizedBox(width: 16),
+                                languageDropdown(),
+                              ],
+                            );
+                          },
+                        ),
+                        // Max Transactions per Page
+                        Row(
+                          children: [
+                            Text(
+                              'Transactions/page:',
+                              style: AppTextStyles.textStyleMedium16.copyWith(
+                                color: colorScheme.primary,
+                              ),
+                            ),
+                            const SizedBox(width: 32),
+                            ElevatedButton(
+                              onPressed: editMaxTransactions,
+                              child: SizedBox(
+                                width: 60,
+                                child: ListenableBuilder(
+                                  listenable: _userMaxTransactions,
+                                  builder: (context, _) {
+                                    updateMaxTransactions(
+                                        _userMaxTransactions.value);
+                                    return Text(
+                                      _userMaxTransactions.value.toString(),
+                                      textAlign: TextAlign.center,
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 32),
+                        // App Version
+                        Text(
+                          '${locale.settingsPageAppVersion}: ${AppInfo.version}',
+                          style: AppTextStyles.textStyleMedium16.copyWith(
+                            color: colorScheme.primary,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
