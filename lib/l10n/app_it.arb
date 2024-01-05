@@ -394,5 +394,12 @@
     "resetDialogData": "Cancella Dati!",
     "resetDialogAccountMsg": "**Cancella Account:** tutti i tuoi dati saranno cancellati, come sopra, così come il tuo account. In questo caso, sarà necessario creare un nuovo account per continuare a utilizzare l'applicazione.",
     "resetDialogReset": "Cancella l'account!",
-    "genericCancel": "Annulla"
+    "genericCancel": "Annulla",
+    "updateMessage": "Novità nell'Ultima Versione di Finances:\n\n- Abbiamo implementato aggiustamenti tecnici per conformarci alle linee guida di Google Play.\n\n- Guarda i nostri nuovi video tutorial in Inglese e Portoghese nella pagina 'Informazioni'.\n\n- Abbiamo aggiornato la nostra Politica sulla Privacy. Per saperne di più, clicca sul bottone qui sotto o nella pagina 'Informazioni'.",
+    "aboutPageTitle": "Informazioni",
+    "aboutPageVersion": "Versione",
+    "aboutPageDev": "Applicazione sviluppata da",
+    "aboutPageVideos": "Video dell'Applicazione",
+    "aboutPageAppPage": "Pagina dell'Applicazione",
+    "aboutPagePolice": "Politica sulla Privacy"
 }

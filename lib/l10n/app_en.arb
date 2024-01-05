@@ -394,5 +394,12 @@
     "resetDialogData": "Delete Data!",
     "resetDialogAccountMsg": "**Delete Account:** all your data will be deleted, as mentioned above, as well as your account. In this case, it will be necessary to create a new account to continue using the application.",
     "resetDialogReset": "Delete Account!",
-    "genericCancel": "Cancel"
+    "genericCancel": "Cancel",
+    "updateMessage": "What's New in the Latest Version of Finances:\n\n- We have implemented technical adjustments to comply with Google Play guidelines.\n\n- Check out our new tutorial videos in English and Portuguese on the 'About' page.\n\n- We have updated our Privacy Policy. Learn more by clicking the button below or on the 'About' page.",
+    "aboutPageTitle": "About",
+    "aboutPageVersion": "Version",
+    "aboutPageDev": "Application developed by",
+    "aboutPageVideos": "Application Videos",
+    "aboutPageAppPage": "Application Page",
+    "aboutPagePolice": "Privacy Policy"
 }

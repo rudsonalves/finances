@@ -20,6 +20,7 @@ import '../../common/constants/themes/app_text_styles.dart';
 import '../../common/widgets/custom_circular_progress_indicator.dart';
 import '../../features/home_page/balance_card/balance_card_controller.dart';
 import 'widgets/home_popup_menu_buttons.dart';
+import 'widgets/update_message.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -63,6 +64,10 @@ class _HomePageState extends State<HomePage>
     _controller.init();
     _balanceController.getBalance();
     _userNameNotifier.init();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      updateMessage(context);
+    });
   }
 
   String greetingText() {

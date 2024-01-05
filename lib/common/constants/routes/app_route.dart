@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../features/about/about_page.dart';
 import '../../../features/account/account_page.dart';
 import '../../../features/categories/categories_page.dart';
 import '../../../features/home_page/home_page.dart';
@@ -68,5 +69,9 @@ class AppRoute {
   static const Route budgetPage = Route(
     name: '/budget_page',
     page: CategoriesPage(),
+  );
+  static const Route aboutPage = Route(
+    name: '/about',
+    page: AboutPage(),
   );
 }
