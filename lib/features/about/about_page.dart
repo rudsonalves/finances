@@ -75,38 +75,44 @@ class _AboutPageState extends State<AboutPage> {
               textAlign: TextAlign.center,
             ),
             GestureDetector(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    TrademarkIcons.youtube,
-                    color: Colors.red,
-                  ),
-                  const SizedBox(width: 12),
-                  Text(
-                    '[en] $youtubeVideoEn',
-                    style: AppTextStyles.textStyleSemiBold14
-                        .copyWith(color: primary),
-                  ),
-                ],
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      TrademarkIcons.youtube,
+                      color: Colors.red,
+                    ),
+                    const SizedBox(width: 12),
+                    Text(
+                      '[en] $youtubeVideoEn',
+                      style: AppTextStyles.textStyleSemiBold14
+                          .copyWith(color: primary),
+                    ),
+                  ],
+                ),
               ),
               onTap: () => AppInfo.launchUrl(youtubeVideoEn),
             ),
             GestureDetector(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    TrademarkIcons.youtube,
-                    color: Colors.red,
-                  ),
-                  const SizedBox(width: 12),
-                  Text(
-                    '[pt_BR] $youtubeVideoPt',
-                    style: AppTextStyles.textStyleSemiBold14
-                        .copyWith(color: primary),
-                  ),
-                ],
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      TrademarkIcons.youtube,
+                      color: Colors.red,
+                    ),
+                    const SizedBox(width: 12),
+                    Text(
+                      '[pt_BR] $youtubeVideoPt',
+                      style: AppTextStyles.textStyleSemiBold14
+                          .copyWith(color: primary),
+                    ),
+                  ],
+                ),
               ),
               onTap: () => AppInfo.launchUrl(youtubeVideoPt),
             ),

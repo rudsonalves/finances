@@ -21,7 +21,8 @@ Future<void> updateMessage(BuildContext context) async {
       builder: (context) => StatefulBuilder(
         builder: (context, StateSetter setState) {
           return AlertDialog(
-            title: const Text('News in ${AppInfo.version}'),
+            title: Text(
+                '${locale.aboutPageVersion} ${AppInfo.version.split('+')[0]}'),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -31,7 +32,7 @@ Future<void> updateMessage(BuildContext context) async {
                   value: checkBox,
                   controlAffinity: ListTileControlAffinity.leading,
                   // activeColor: AppColors.darkPrimary,
-                  subtitle: const Text('Don\'t show this message again'),
+                  subtitle: Text(locale.aboutPageCheckBox),
                   onChanged: (value) {
                     setState(() {
                       checkBox = value ?? checkBox;
@@ -45,12 +46,12 @@ Future<void> updateMessage(BuildContext context) async {
               ElevatedButton(
                 onPressed: () => AppInfo.launchUrl(AppInfo.privacyPolicyUrl),
                 style: AppButtonStyles.primaryButtonColor(context),
-                child: const Text('Privacy Policy (en)'),
+                child: const Text('Privacy Policy'),
               ),
               ElevatedButton(
                 onPressed: () => Navigator.pop(context),
                 style: AppButtonStyles.primaryButtonColor(context),
-                child: const Text('Close'),
+                child: Text(locale.genericClose),
               )
             ],
           );

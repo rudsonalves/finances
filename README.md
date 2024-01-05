@@ -279,7 +279,7 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
-## 2024/01/04 - version: 1.0.21+64:
+## 2024/01/04 - version: 1.0.21+66:
 
 This comprehensive update to the Finances app enriches the user experience with new informational resources and improved accessibility to app details. Alongside technical improvements, we've released informative videos in both English and Portuguese to showcase the app's features and functionalities. Additionally, we've thoroughly rewritten the terms in our Privacy Policy to enhance clarity and user understanding. Key changes in this update include:
 
