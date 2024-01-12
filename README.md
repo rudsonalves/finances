@@ -279,6 +279,25 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
+## 2024/01/12 - Version 1.0.22+8
+
+In this commit, several important improvements and corrections were made to Finances. Focusing on enhancing the user experience and optimizing app functionality, the changes range from adjustments in the user interface to enhancements in location features. Below, we detail the main modifications implemented in this version:
+
+* `lib/features/home_page/widgets/update_message.dart`:
+  - Added an `await` in `showDialog`;
+  - Implemented translation for `updatePoliceButton`;
+  - Used a `checkBox` to verify version update in the database.
+
+* `lib/features/settings/settings_page.dart`:
+  - Removed the `int _count` attribute;
+  - Removed the action to clear/delete by multiple clicks on the app logo;
+  - Added translations for `resetDialogTransactions` and `resetDialogResetButton`;
+  - Inserted a button for cleaning/deleting user data through the app.
+
+* `lib/l10n/app_?.arb`:
+  - Added new translations.
+
+
 ## 2024/01/04 - version: 1.0.21+66:
 
 This comprehensive update to the Finances app enriches the user experience with new informational resources and improved accessibility to app details. Alongside technical improvements, we've released informative videos in both English and Portuguese to showcase the app's features and functionalities. Additionally, we've thoroughly rewritten the terms in our Privacy Policy to enhance clarity and user understanding. Key changes in this update include:
