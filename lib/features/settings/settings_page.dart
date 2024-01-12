@@ -40,15 +40,12 @@ class _SettingsPageState extends State<SettingsPage> {
   final _userMaxTransactions = ValueNotifier<int>(35);
   final _maxTransValueController = TextEditingController();
 
-  int _count = 0;
-
   @override
   void initState() {
     super.initState();
 
     _userNameController.text = _currentUserName.userName;
     _userMaxTransactions.value = _currentUser.userMaxTransactions;
-    _count = 0;
   }
 
   @override
@@ -62,7 +59,6 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget languageDropdown() {
     final locale = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
-    _count = 0;
 
     return DropdownButton<String>(
       elevation: 5,
@@ -114,7 +110,6 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Widget themeModeDropdown() {
     final colorScheme = Theme.of(context).colorScheme;
-    _count = 0;
 
     return DropdownButton<ThemeMode>(
       elevation: 5,
@@ -164,7 +159,6 @@ class _SettingsPageState extends State<SettingsPage> {
 
   AlertDialog editNameDialog(AppLocalizations locale) {
     final buttonStyle = AppButtonStyles.primaryButtonColor(context);
-    _count = 0;
 
     return AlertDialog(
       title: Text(locale.settingsPageDialogTitle),
@@ -198,7 +192,6 @@ class _SettingsPageState extends State<SettingsPage> {
   void editMaxTransactions() async {
     final primary = Theme.of(context).colorScheme.primary;
     final locale = AppLocalizations.of(context)!;
-    _count = 0;
 
     _maxTransValueController.text = _userMaxTransactions.value.toString();
 
@@ -242,7 +235,6 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> updateMaxTransactions(int value) async {
-    _count = 0;
     if (_currentUser.userMaxTransactions != value) {
       _currentUser.userMaxTransactions = value;
       await _currentUser.updateUserMaxTransactions();
@@ -351,21 +343,12 @@ class _SettingsPageState extends State<SettingsPage> {
                     alignment: Alignment.topCenter,
                     child: Column(
                       children: [
-                        InkWell(
-                          onTap: () {
-                            _count++;
-                            if (_count == 20) {
-                              _count = 0;
-                              _resetDialog();
-                            }
-                          },
-                          child: CircleAvatar(
-                            radius: 50,
-                            child: Image.asset(
-                              'assets/images/finances_icon.png',
-                              width: 70,
-                              fit: BoxFit.fitWidth,
-                            ),
+                        CircleAvatar(
+                          radius: 50,
+                          child: Image.asset(
+                            'assets/images/finances_icon.png',
+                            width: 70,
+                            fit: BoxFit.fitWidth,
                           ),
                         ),
                         const SizedBox(height: 8),
@@ -451,7 +434,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         Row(
                           children: [
                             Text(
-                              'Transactions/page:',
+                              locale.resetDialogTransactions,
                               style: AppTextStyles.textStyleMedium16.copyWith(
                                 color: colorScheme.primary,
                               ),
@@ -472,6 +455,25 @@ class _SettingsPageState extends State<SettingsPage> {
                                     );
                                   },
                                 ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 32),
+                        Row(
+                          children: [
+                            Text(
+                              locale.resetDialogResetButton,
+                              style: AppTextStyles.textStyleMedium16.copyWith(
+                                color: colorScheme.primary,
+                              ),
+                            ),
+                            const SizedBox(width: 32),
+                            IconButton.filledTonal(
+                              onPressed: _resetDialog,
+                              icon: const Icon(
+                                Icons.restart_alt_rounded,
+                                color: Colors.red,
                               ),
                             ),
                           ],
