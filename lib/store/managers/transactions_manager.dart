@@ -1,13 +1,13 @@
-import '../../../locator.dart';
-import '../../../common/models/extends_date.dart';
-import '../../../common/models/balance_db_model.dart';
-import '../../../common/models/trans_day_db_model.dart';
-import '../../../common/current_models/current_account.dart';
-import '../../../common/models/transaction_db_model.dart';
-import '../../../repositories/balance/balance_repository.dart';
-import '../../../common/models/account_db_model.dart';
-import '../../../repositories/trans_day/trans_day_repository.dart';
-import '../../../repositories/transaction/transaction_repository.dart';
+import '../../locator.dart';
+import '../../common/models/extends_date.dart';
+import '../../common/models/balance_db_model.dart';
+import '../../common/models/trans_day_db_model.dart';
+import '../../common/current_models/current_account.dart';
+import '../../common/models/transaction_db_model.dart';
+import '../../repositories/balance/balance_repository.dart';
+import '../../common/models/account_db_model.dart';
+import '../../repositories/trans_day/trans_day_repository.dart';
+import '../../repositories/transaction/transaction_repository.dart';
 import 'balance_manager.dart';
 
 class TransactionsManager {

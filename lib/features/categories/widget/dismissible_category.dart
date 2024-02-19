@@ -9,7 +9,7 @@ import '../../../common/functions/function_alert_dialog.dart';
 import '../../../common/models/category_db_model.dart';
 import '../../../common/widgets/markdown_rich_text.dart';
 import '../../../locator.dart';
-import '../../../services/database/database_helper.dart';
+import '../../../store/database_helper.dart';
 import '../categories_controller.dart';
 import '../../../common/functions/base_dismissible_container.dart';
 import 'add_category_page.dart';

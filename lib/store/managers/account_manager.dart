@@ -1,10 +1,10 @@
-import '../../../locator.dart';
+import '../../locator.dart';
 import './balance_manager.dart';
-import '../../../common/models/extends_date.dart';
-import '../../../common/models/account_db_model.dart';
-import '../../../common/models/balance_db_model.dart';
-import '../../../common/current_models/current_account.dart';
-import '../../../repositories/balance/balance_repository.dart';
+import '../../common/models/extends_date.dart';
+import '../../common/models/account_db_model.dart';
+import '../../common/models/balance_db_model.dart';
+import '../../common/current_models/current_account.dart';
+import '../../repositories/balance/balance_repository.dart';
 
 class AccountManager {
   AccountManager._();

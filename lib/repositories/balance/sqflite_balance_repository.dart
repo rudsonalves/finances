@@ -1,8 +1,8 @@
 import '../../common/models/account_db_model.dart';
 import '../../locator.dart';
-import '../../services/database/managers/balance_manager.dart';
+import '../../store/managers/balance_manager.dart';
 import './balance_repository.dart';
-import '../../services/database/database_helper.dart';
+import '../../store/database_helper.dart';
 import '../../common/models/extends_date.dart';
 import '../../common/current_models/current_account.dart';
 import '../../common/models/balance_db_model.dart';

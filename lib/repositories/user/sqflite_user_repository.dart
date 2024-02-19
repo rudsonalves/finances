@@ -1,6 +1,6 @@
 import '../../locator.dart';
 import './user_repository.dart';
-import '../../services/database/database_helper.dart';
+import '../../store/database_helper.dart';
 import '../../common/models/user_db_model.dart';
 
 class SqfliteUserRepository implements UserRepository {

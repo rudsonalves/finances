@@ -8,7 +8,7 @@ import './transaction_state.dart';
 import '../../common/models/category_db_model.dart';
 import '../../common/models/transaction_db_model.dart';
 import '../../repositories/category/category_repository.dart';
-import '../../services/database/managers/transactions_manager.dart';
+import '../../store/managers/transactions_manager.dart';
 
 class TransactionController extends ChangeNotifier {
   final _categoryRepository = locator<CategoryRepository>();

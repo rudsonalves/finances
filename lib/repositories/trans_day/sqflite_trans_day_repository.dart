@@ -1,6 +1,6 @@
 import '../../locator.dart';
 import './trans_day_repository.dart';
-import '../../services/database/database_helper.dart';
+import '../../store/database_helper.dart';
 import '../../common/models/trans_day_db_model.dart';
 
 class SqfliteTransDayRepository implements TransDayRepository {

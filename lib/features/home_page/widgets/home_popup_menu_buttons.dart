@@ -6,7 +6,7 @@ import '../../../common/current_models/current_user.dart';
 import '../../../locator.dart';
 import '../../../common/constants/routes/app_route.dart';
 import '../../../services/authentication/auth_service.dart';
-import '../../../services/database/database_helper.dart';
+import '../../../store/database_helper.dart';
 import '../../database_recover/database_recover.dart';
 
 class HomePagePopupMenuButtons extends StatelessWidget {

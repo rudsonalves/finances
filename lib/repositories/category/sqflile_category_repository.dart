@@ -5,7 +5,7 @@ import '../../common/constants/themes/app_icons.dart';
 import '../../locator.dart';
 import '../icons/icons_repository.dart';
 import './category_repository.dart';
-import '../../services/database/database_helper.dart';
+import '../../store/database_helper.dart';
 import '../../common/models/category_db_model.dart';
 
 class SqflileCategoryRepository implements CategoryRepository {

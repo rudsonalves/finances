@@ -1,5 +1,5 @@
 import '../../locator.dart';
-import '../../services/database/database_helper.dart';
+import '../../store/database_helper.dart';
 import './icons_repository.dart';
 import '../../common/models/icons_model.dart';
 

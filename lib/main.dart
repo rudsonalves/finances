@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'app_finances.dart';
 import './locator.dart';
 import './firebase_options.dart';
-import './services/database/database_helper.dart';
+import 'store/database_helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

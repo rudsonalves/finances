@@ -1,6 +1,6 @@
 import '../../common/models/transfer_db_model.dart';
 import '../../locator.dart';
-import '../../services/database/database_helper.dart';
+import '../../store/database_helper.dart';
 import 'transfer_repository.dart';
 
 class SqfliteTransferRepository implements TransferRepository {

@@ -1,11 +1,11 @@
-import '../../../common/current_models/current_account.dart';
-import '../../../common/models/account_db_model.dart';
-import '../../../common/models/transaction_db_model.dart';
-import '../../../common/models/transfer_db_model.dart';
-import '../../../locator.dart';
-import '../../../repositories/account/account_repository.dart';
-import '../../../repositories/transaction/transaction_repository.dart';
-import '../../../repositories/transfer_repository/transfer_repository.dart';
+import '../../common/current_models/current_account.dart';
+import '../../common/models/account_db_model.dart';
+import '../../common/models/transaction_db_model.dart';
+import '../../common/models/transfer_db_model.dart';
+import '../../locator.dart';
+import '../../repositories/account/account_repository.dart';
+import '../../repositories/transaction/transaction_repository.dart';
+import '../../repositories/transfer_repository/transfer_repository.dart';
 import 'transactions_manager.dart';
 
 class TransfersManager {

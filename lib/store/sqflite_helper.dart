@@ -6,12 +6,12 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../../common/models/category_db_model.dart';
-import '../../common/models/transfer_db_model.dart';
+import '../common/models/category_db_model.dart';
+import '../common/models/transfer_db_model.dart';
 import './database_helper.dart';
-import '../../common/models/balance_db_model.dart';
-import '../../common/models/trans_day_db_model.dart';
-import '../../common/models/transaction_db_model.dart';
+import '../common/models/balance_db_model.dart';
+import '../common/models/trans_day_db_model.dart';
+import '../common/models/transaction_db_model.dart';
 
 class SqfliteHelper implements DatabaseHelper {
   static const _dbName = 'app_dataBase.db';

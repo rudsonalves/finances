@@ -10,7 +10,7 @@ import '../../common/models/extends_date.dart';
 import '../../common/models/transaction_db_model.dart';
 import '../../repositories/balance/balance_repository.dart';
 import '../../repositories/category/category_repository.dart';
-import '../../services/database/managers/transactions_manager.dart';
+import '../../store/managers/transactions_manager.dart';
 import 'balance_card/balance_card_controller.dart';
 
 class HomePageController extends ChangeNotifier {

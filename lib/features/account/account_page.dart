@@ -5,7 +5,7 @@ import '../../common/current_models/current_user.dart';
 import '../../common/widgets/markdown_rich_text.dart';
 import '../../locator.dart';
 import '../../repositories/account/account_repository.dart';
-import '../../services/database/database_helper.dart';
+import '../../store/database_helper.dart';
 import '../help_manager/main_manager.dart';
 import '../home_page/balance_card/balance_card_controller.dart';
 import 'account_state.dart';

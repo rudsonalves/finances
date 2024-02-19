@@ -19,7 +19,7 @@ import '../../common/current_models/current_theme.dart';
 import '../../common/current_models/current_language.dart';
 import '../../common/constants/themes/app_text_styles.dart';
 import '../../services/authentication/auth_service.dart';
-import '../../services/database/database_helper.dart';
+import '../../store/database_helper.dart';
 import '../home_page/home_page_controller.dart';
 
 class SettingsPage extends StatefulWidget {

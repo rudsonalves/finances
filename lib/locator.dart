@@ -4,10 +4,10 @@ import 'package:get_it/get_it.dart';
 
 import './common/extensions/app_scale.dart';
 import './common/models/categories_icons.dart';
-import './services/database/sqflite_helper.dart';
+import 'store/sqflite_helper.dart';
 import './repositories/user/user_repository.dart';
 import './features/splash/splash_controller.dart';
-import './services/database/database_helper.dart';
+import 'store/database_helper.dart';
 import './common/current_models/current_user.dart';
 import './common/extensions/money_masked_text.dart';
 import './features/sign_in/sign_in_controller.dart';

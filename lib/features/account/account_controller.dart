@@ -6,7 +6,7 @@ import '../../locator.dart';
 import 'account_state.dart';
 import '../../common/models/account_db_model.dart';
 import '../../repositories/account/account_repository.dart';
-import '../../services/database/managers/account_manager.dart';
+import '../../store/managers/account_manager.dart';
 
 class AccountController extends ChangeNotifier {
   final accountRepository = locator<AccountRepository>();

@@ -9,7 +9,7 @@ import '../../common/current_models/current_user.dart';
 import '../../common/models/extends_date.dart';
 import '../../locator.dart';
 import '../../repositories/category/category_repository.dart';
-import '../../services/database/database_helper.dart';
+import '../../store/database_helper.dart';
 import 'models/statistic_result.dart';
 import 'models/statistic_total.dart';
 import 'statistic_state.dart';

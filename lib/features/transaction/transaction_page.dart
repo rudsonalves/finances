@@ -9,7 +9,7 @@ import '../../common/widgets/account_dropdown_form_field.dart';
 import '../../common/widgets/simple_spin_box_field.dart';
 import '../../locator.dart';
 import '../../repositories/account/account_repository.dart';
-import '../../services/database/managers/transfers_manager.dart';
+import '../../store/managers/transfers_manager.dart';
 import '../categories/categories_controller.dart';
 import '../categories/widget/add_category_page.dart';
 import '../help_manager/main_manager.dart';
