@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import '../../locator.dart';
-import '../../repositories/user/user_repository.dart';
+import '../../repositories/user/abstract_user_repository.dart';
 import '../constants/app_constants.dart';
 import './user_model.dart';
 
@@ -41,7 +41,7 @@ class UserDbModel {
     this.userMaxTransactions = 35,
   }) : userCategoryList = userCategoryList ?? [];
 
-  final userRepository = locator<UserRepository>();
+  final userRepository = locator<AbstractUserRepository>();
 
   void setFromUserModel(UserModel user) {
     userId = user.id;

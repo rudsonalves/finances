@@ -4,11 +4,11 @@ import '../../../common/current_models/current_balance.dart';
 import '../../../common/models/extends_date.dart';
 import '../../../common/models/account_db_model.dart';
 import '../../../locator.dart';
-import '../../../repositories/account/account_repository.dart';
+import '../../../repositories/account/abstract_account_repository.dart';
 import '../home_page_controller.dart';
 import './balance_cart_state.dart';
 import '../../../common/models/card_balance_model.dart';
-import '../../../repositories/transaction/transaction_repository.dart';
+import '../../../repositories/transaction/abstract_transaction_repository.dart';
 
 enum FutureTrans {
   hide,
@@ -18,8 +18,8 @@ enum FutureTrans {
 }
 
 class BalanceCardController extends ChangeNotifier {
-  final transactionRepository = locator<TransactionRepository>();
-  final accountRepository = locator<AccountRepository>();
+  final transactionRepository = locator<AbstractTransactionRepository>();
+  final accountRepository = locator<AbstractAccountRepository>();
   ExtendedDate _balanceDate = ExtendedDate.nowDate();
   bool _transStatusCheck = false;
 

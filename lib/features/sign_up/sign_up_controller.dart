@@ -8,7 +8,7 @@ import '../../common/current_models/current_language.dart';
 import '../../locator.dart';
 import './sign_up_state.dart';
 import '../../common/current_models/current_user.dart';
-import '../../repositories/category/category_repository.dart';
+import '../../repositories/category/abstract_category_repository.dart';
 import '../../common/current_models/current_account.dart';
 import '../../common/current_models/current_balance.dart';
 import '../../common/models/user_model.dart';
@@ -59,7 +59,7 @@ class SignUpController extends ChangeNotifier {
         // Create a initial balance
         await locator<CurrentBalance>().start();
         // Create the category from transfer between accounts
-        await locator<CategoryRepository>().firstCategory(locale);
+        await locator<AbstractCategoryRepository>().firstCategory(locale);
         _changeState(SignUpStateSuccess());
       } else {
         throw Exception();

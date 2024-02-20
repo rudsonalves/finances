@@ -3,9 +3,9 @@ import '../../common/models/account_db_model.dart';
 import '../../common/models/transaction_db_model.dart';
 import '../../common/models/transfer_db_model.dart';
 import '../../locator.dart';
-import '../../repositories/account/account_repository.dart';
-import '../../repositories/transaction/transaction_repository.dart';
-import '../../repositories/transfer_repository/transfer_repository.dart';
+import '../../repositories/account/abstract_account_repository.dart';
+import '../../repositories/transaction/abstract_transaction_repository.dart';
+import '../../repositories/transfer_repository/abstract_transfer_repository.dart';
 import 'transactions_manager.dart';
 
 class TransfersManager {
@@ -58,7 +58,7 @@ class TransfersManager {
       transferAccount1: account1.accountId!,
     );
 
-    await locator<TransferRepository>().addTranfer(transfer);
+    await locator<AbstractTransferRepository>().addTranfer(transfer);
 
     transaction0.transTransferId = transfer.transferId;
     transaction1.transTransferId = transfer.transferId;
@@ -84,8 +84,8 @@ class TransfersManager {
   /// await removeTransfer(transactionToRemove);
   /// ```
   static Future<void> removeTransfer(TransactionDbModel transaction0) async {
-    final transRepository = locator<TransactionRepository>();
-    final transferRepository = locator<TransferRepository>();
+    final transRepository = locator<AbstractTransactionRepository>();
+    final transferRepository = locator<AbstractTransferRepository>();
 
     final transfer = await transferRepository.getTransferId(
       transaction0.transTransferId!,
@@ -154,9 +154,9 @@ class TransfersManager {
     AccountDbModel? account0,
     AccountDbModel? account1,
   }) async {
-    final transferRepository = locator<TransferRepository>();
-    final transactionRepository = locator<TransactionRepository>();
-    final accountRepository = locator<AccountRepository>();
+    final transferRepository = locator<AbstractTransferRepository>();
+    final transactionRepository = locator<AbstractTransactionRepository>();
+    final accountRepository = locator<AbstractAccountRepository>();
 
     account0 ??= locator<CurrentAccount>();
 

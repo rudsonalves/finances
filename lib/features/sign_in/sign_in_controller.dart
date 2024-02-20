@@ -4,10 +4,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../common/constants/laguage_constants.dart';
 import '../../common/current_models/current_language.dart';
 import '../../locator.dart';
-import '../../repositories/category/category_repository.dart';
+import '../../repositories/category/abstract_category_repository.dart';
 import './sign_in_state.dart';
 import '../../common/models/user_model.dart';
-import '../../repositories/user/user_repository.dart';
+import '../../repositories/user/abstract_user_repository.dart';
 import '../../common/current_models/current_user.dart';
 import '../../common/current_models/current_account.dart';
 import '../../services/authentication/auth_service.dart';
@@ -42,7 +42,7 @@ class SignInController extends ChangeNotifier {
 
       if (user.id != null) {
         // read currentUser informations in local database
-        final userRepository = locator<UserRepository>();
+        final userRepository = locator<AbstractUserRepository>();
         await userRepository.init();
         final users = userRepository.users;
         if (!users.containsKey(user.id!)) {
@@ -92,7 +92,7 @@ class SignInController extends ChangeNotifier {
         currentUser.addUser();
         await locator<CurrentAccount>().init();
         await locator<CurrentBalance>().start();
-        await locator<CategoryRepository>().firstCategory(locale);
+        await locator<AbstractCategoryRepository>().firstCategory(locale);
         _changeState(SignInStateSuccess());
       } else {
         throw Exception('Sorry! An unexpected error occurred.');

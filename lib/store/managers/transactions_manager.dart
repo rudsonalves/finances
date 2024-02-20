@@ -4,10 +4,10 @@ import '../../common/models/balance_db_model.dart';
 import '../../common/models/trans_day_db_model.dart';
 import '../../common/current_models/current_account.dart';
 import '../../common/models/transaction_db_model.dart';
-import '../../repositories/balance/balance_repository.dart';
+import '../../repositories/balance/abstract_balance_repository.dart';
 import '../../common/models/account_db_model.dart';
-import '../../repositories/trans_day/trans_day_repository.dart';
-import '../../repositories/transaction/transaction_repository.dart';
+import '../../repositories/trans_day/abstract_trans_day_repository.dart';
+import '../../repositories/transaction/abstract_transaction_repository.dart';
 import 'balance_manager.dart';
 
 class TransactionsManager {
@@ -35,9 +35,9 @@ class TransactionsManager {
   }) async {
     account ??= locator<CurrentAccount>();
 
-    final transRepository = locator<TransactionRepository>();
-    final balanceRepository = locator<BalanceRepository>();
-    final transDayRepository = locator<TransDayRepository>();
+    final transRepository = locator<AbstractTransactionRepository>();
+    final balanceRepository = locator<AbstractBalanceRepository>();
+    final transDayRepository = locator<AbstractTransDayRepository>();
 
     await transRepository.addTrans(transaction);
 
@@ -99,7 +99,7 @@ class TransactionsManager {
     AccountDbModel? account,
   }) async {
     account ??= locator<CurrentAccount>();
-    final transRepository = locator<TransactionRepository>();
+    final transRepository = locator<AbstractTransactionRepository>();
 
     final oldTrans = await transRepository.getTransactionId(
       transaction.transId!,
@@ -135,9 +135,9 @@ class TransactionsManager {
   /// await removeTransaction(transactionToRemove);
   /// ```
   static Future<void> removeTransaction(TransactionDbModel transaction) async {
-    final transRepository = locator<TransactionRepository>();
-    final balanceRepository = locator<BalanceRepository>();
-    final transDayRepository = locator<TransDayRepository>();
+    final transRepository = locator<AbstractTransactionRepository>();
+    final balanceRepository = locator<AbstractBalanceRepository>();
+    final transDayRepository = locator<AbstractTransDayRepository>();
 
     TransDayDbModel transDay =
         await transDayRepository.getTransDayId(transaction.transId!);
@@ -160,8 +160,8 @@ class TransactionsManager {
     int maxItens = 20,
     ExtendedDate? date,
   }) async {
-    final transRepository = locator<TransactionRepository>();
-    final balanceRepository = locator<BalanceRepository>();
+    final transRepository = locator<AbstractTransactionRepository>();
+    final balanceRepository = locator<AbstractBalanceRepository>();
 
     date ??= ExtendedDate.now();
     int count = 0;
@@ -189,7 +189,7 @@ class TransactionsManager {
   /// Return the previous balance (for currentAccount) to the nearest
   /// current date.
   static Future<BalanceDbModel> findBalanceCloseDate(ExtendedDate date) async {
-    final balanceRepository = locator<BalanceRepository>();
+    final balanceRepository = locator<AbstractBalanceRepository>();
     final currentAccount = locator<CurrentAccount>();
 
     var balance = await balanceRepository.getBalanceInDate(date: date.onlyDate);

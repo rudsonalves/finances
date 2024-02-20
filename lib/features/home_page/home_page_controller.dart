@@ -8,8 +8,8 @@ import '../../locator.dart';
 import './home_page_state.dart';
 import '../../common/models/extends_date.dart';
 import '../../common/models/transaction_db_model.dart';
-import '../../repositories/balance/balance_repository.dart';
-import '../../repositories/category/category_repository.dart';
+import '../../repositories/balance/abstract_balance_repository.dart';
+import '../../repositories/category/abstract_category_repository.dart';
 import '../../store/managers/transactions_manager.dart';
 import 'balance_card/balance_card_controller.dart';
 
@@ -81,7 +81,7 @@ class HomePageController extends ChangeNotifier {
   Future<void> getTransactions() async {
     _changeState(HomePageStateLoading());
     try {
-      await locator<CategoryRepository>().init();
+      await locator<AbstractCategoryRepository>().init();
 
       final date = getInitialDate();
 
@@ -115,7 +115,7 @@ class HomePageController extends ChangeNotifier {
       _lastDate = _transactions.last.transDate.onlyDate;
     }
     final balance = await locator
-        .get<BalanceRepository>()
+        .get<AbstractBalanceRepository>()
         .getBalanceInDate(date: _lastDate!);
     if (balance!.balancePreviousId == null) {
       _lastDate = null;

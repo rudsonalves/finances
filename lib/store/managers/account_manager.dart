@@ -4,7 +4,7 @@ import '../../common/models/extends_date.dart';
 import '../../common/models/account_db_model.dart';
 import '../../common/models/balance_db_model.dart';
 import '../../common/current_models/current_account.dart';
-import '../../repositories/balance/balance_repository.dart';
+import '../../repositories/balance/abstract_balance_repository.dart';
 
 class AccountManager {
   AccountManager._();
@@ -14,7 +14,7 @@ class AccountManager {
   static Future<BalanceDbModel> getAccountTodayBalance(
     AccountDbModel? account,
   ) async {
-    final balanceRepository = locator<BalanceRepository>();
+    final balanceRepository = locator<AbstractBalanceRepository>();
 
     account ??= locator<CurrentAccount>();
     final date = ExtendedDate.nowDate();

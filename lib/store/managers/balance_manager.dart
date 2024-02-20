@@ -4,7 +4,7 @@ import '../../locator.dart';
 import '../../common/models/extends_date.dart';
 import '../../common/models/balance_db_model.dart';
 import '../../common/current_models/current_account.dart';
-import '../../repositories/balance/balance_repository.dart';
+import '../../repositories/balance/abstract_balance_repository.dart';
 
 class BalanceManager {
   BalanceManager._();
@@ -61,7 +61,7 @@ class BalanceManager {
     AccountDbModel? account,
   }) async {
     final currentAccount = locator<CurrentAccount>();
-    final balanceRepository = locator<BalanceRepository>();
+    final balanceRepository = locator<AbstractBalanceRepository>();
 
     account ??= currentAccount;
     // insert a new balance in balance indexed list
@@ -126,7 +126,7 @@ class BalanceManager {
     required BalanceDbModel balance,
     required double value,
   }) async {
-    final balanceRepository = locator<BalanceRepository>();
+    final balanceRepository = locator<AbstractBalanceRepository>();
 
     balance.balanceClose += value;
     balance.balanceTransCount += 1;
@@ -155,7 +155,7 @@ class BalanceManager {
     required BalanceDbModel balance,
     required double value,
   }) async {
-    final balanceRepository = locator<BalanceRepository>();
+    final balanceRepository = locator<AbstractBalanceRepository>();
 
     balance.balanceClose -= value;
     balance.balanceTransCount -= 1;
@@ -181,7 +181,7 @@ class BalanceManager {
   }
 
   static Future<void> _reloadCurrentBalance() async {
-    final balanceRepository = locator<BalanceRepository>();
+    final balanceRepository = locator<AbstractBalanceRepository>();
     final balance = await balanceRepository.getBalanceInDate(
       date: ExtendedDate.nowDate(),
     );

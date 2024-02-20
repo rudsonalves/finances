@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../../common/current_models/current_user.dart';
 import '../../../locator.dart';
-import '../../../repositories/category/category_repository.dart';
+import '../../../repositories/category/abstract_category_repository.dart';
 import '../models/statistic_result.dart';
 import '../statistic_controller.dart';
 import 'statistic_cart.state.dart';
@@ -85,7 +85,7 @@ class StatisticCardController extends ChangeNotifier {
 
   void _getCategoriesData() {
     _graphicData.clear();
-    final categoriesMap = locator<CategoryRepository>().categoriesMap;
+    final categoriesMap = locator<AbstractCategoryRepository>().categoriesMap;
 
     for (final categoryName in currentUser.userCategoryList) {
       final statisticsMap = statisticController.statisticsMap;

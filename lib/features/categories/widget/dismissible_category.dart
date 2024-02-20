@@ -9,7 +9,7 @@ import '../../../common/functions/function_alert_dialog.dart';
 import '../../../common/models/category_db_model.dart';
 import '../../../common/widgets/markdown_rich_text.dart';
 import '../../../locator.dart';
-import '../../../store/database_helper.dart';
+import '../../../repositories/counter/counter_repository.dart';
 import '../categories_controller.dart';
 import '../../../common/functions/base_dismissible_container.dart';
 import 'add_category_page.dart';
@@ -160,9 +160,8 @@ class _DismissibleCategoryState extends State<DismissibleCategory> {
               return false;
             }
 
-            final int categoryCount = await locator
-                .get<DatabaseHelper>()
-                .countTransactionForCategoryId(category.categoryId!);
+            final int categoryCount = await CounterRepository()
+                .countTransactionForCategoryId(category);
 
             if (categoryCount > 0) {
               if (!mounted) return false;

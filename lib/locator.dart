@@ -4,10 +4,9 @@ import 'package:get_it/get_it.dart';
 
 import './common/extensions/app_scale.dart';
 import './common/models/categories_icons.dart';
-import 'store/sqflite_helper.dart';
-import './repositories/user/user_repository.dart';
+import 'store/database_provider.dart';
+import 'repositories/user/abstract_user_repository.dart';
 import './features/splash/splash_controller.dart';
-import 'store/database_helper.dart';
 import './common/current_models/current_user.dart';
 import './common/extensions/money_masked_text.dart';
 import './features/sign_in/sign_in_controller.dart';
@@ -22,28 +21,28 @@ import 'features/account/account_controller.dart';
 import 'features/categories/categories_controller.dart';
 import 'features/statistics/statistic_card/statistic_card_controller.dart';
 import 'features/statistics/statistic_controller.dart';
-import 'repositories/account/account_repository.dart';
+import 'repositories/account/abstract_account_repository.dart';
 import './common/current_models/current_language.dart';
 import './features/home_page/home_page_controller.dart';
-import './repositories/balance/balance_repository.dart';
-import './repositories/category/category_repository.dart';
-import './repositories/user/sqflite_user_repository.dart';
-import './repositories/trans_day/trans_day_repository.dart';
+import 'repositories/balance/abstract_balance_repository.dart';
+import 'repositories/category/abstract_category_repository.dart';
+import 'repositories/user/user_repository.dart';
+import 'repositories/trans_day/abstract_trans_day_repository.dart';
 import './features/transaction/transaction_controller.dart';
 import './services/authentication/firebase_auth_service.dart';
-import 'repositories/account/sqflite_account_repository.dart';
-import './repositories/balance/sqflite_balance_repository.dart';
-import './repositories/transaction/transaction_repository.dart';
-import './repositories/category/sqflile_category_repository.dart';
+import 'repositories/account/account_repository.dart';
+import 'repositories/balance/balance_repository.dart';
+import 'repositories/transaction/abstract_transaction_repository.dart';
+import 'repositories/category/category_repository.dart';
 import './repositories/trans_day/sqflite_trans_day_repository.dart';
 import './features/home_page/balance_card/balance_card_controller.dart';
-import './repositories/transaction/sqflite_transaction_repository.dart';
+import 'repositories/transaction/transaction_repository.dart';
 import 'common/constants/themes/app_icons.dart';
 import 'common/models/icons_model.dart';
+import 'repositories/icons/abstract_icons_repository.dart';
 import 'repositories/icons/icons_repository.dart';
-import 'repositories/icons/sqlite_icons_repository.dart';
-import 'repositories/transfer_repository/sqflite_transfer_repository.dart';
 import 'repositories/transfer_repository/transfer_repository.dart';
+import 'repositories/transfer_repository/abstract_transfer_repository.dart';
 
 final locator = GetIt.instance;
 
@@ -53,9 +52,18 @@ void setupDependencies() {
       FirebaseAuthService(),
     );
 
-    locator.registerSingleton<DatabaseHelper>(
-      SqfliteHelper(),
-    );
+    locator.registerSingleton<DatabaseProvider>(DatabaseProvider());
+    // locator.registerFactory<DatabaseBackuper>(() => DatabaseBackup());
+    // locator.registerFactory<UserStorer>(() => UserStore());
+    // locator.registerFactory<AccountStorer>(() => AccountStore());
+    // locator.registerFactory<CatgoryStorer>(() => CatgoryStore());
+    // locator.registerFactory<IconStorer>(() => IconStore());
+    // locator.registerFactory<BalanceStorer>(() => BalanceStore());
+    // locator.registerFactory<TransactionStore>(() => TransactionStore());
+    // locator.registerFactory<TransDayStorer>(() => TransDayStore());
+    // locator.registerFactory<TransferStorer>(() => TransferStore());
+    // locator.registerFactory<StatisticStorer>(() => StatisticStore());
+    // locator.registerFactory<CountStorer>(() => CountStore());
 
     locator.registerLazySingleton<CurrentUser>(
       () => CurrentUser(),
@@ -95,36 +103,36 @@ void setupDependencies() {
       () => AppScale(),
     );
 
-    locator.registerLazySingleton<UserRepository>(
-      () => SqfliteUserRepository(),
+    locator.registerLazySingleton<AbstractUserRepository>(
+      () => UserRepository(),
     );
 
-    locator.registerLazySingleton<IconRepository>(
-      () => SqflileIconsRepository(),
+    locator.registerLazySingleton<AbstractIconRepository>(
+      () => IconsRepository(),
     );
 
-    locator.registerLazySingleton<AccountRepository>(
-      () => SqfliteAccountRepository(),
+    locator.registerLazySingleton<AbstractAccountRepository>(
+      () => AccountRepository(),
     );
 
-    locator.registerLazySingleton<CategoryRepository>(
-      () => SqflileCategoryRepository(),
+    locator.registerLazySingleton<AbstractCategoryRepository>(
+      () => CategoryRepository(),
     );
 
-    locator.registerLazySingleton<TransactionRepository>(
-      () => SqfliteTransactionRepository(),
+    locator.registerLazySingleton<AbstractTransactionRepository>(
+      () => TransactionRepository(),
     );
 
-    locator.registerLazySingleton<TransferRepository>(
-      () => SqfliteTransferRepository(),
+    locator.registerLazySingleton<AbstractTransferRepository>(
+      () => TransferRepository(),
     );
 
-    locator.registerLazySingleton<BalanceRepository>(
-      () => SqfliteBalanceRepository(),
+    locator.registerLazySingleton<AbstractBalanceRepository>(
+      () => BalanceRepository(),
     );
 
-    locator.registerLazySingleton<TransDayRepository>(
-      () => SqfliteTransDayRepository(),
+    locator.registerLazySingleton<AbstractTransDayRepository>(
+      () => TransDayRepository(),
     );
 
     locator.registerFactory<SignInController>(
@@ -212,6 +220,7 @@ void disposeDependencies() {
   // locator<CurrentBalance>().dispose();
   // locator<CurrentAccount>().dispose();
   // locator<CurrentUser>().dispose();
-  locator<DatabaseHelper>().dispose();
+  // locator<DatabaseHelper>().dispose();
   // locator<AuthService>().dispose();
+  locator<DatabaseProvider>().dispose();
 }

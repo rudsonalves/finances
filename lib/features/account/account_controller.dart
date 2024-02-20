@@ -5,11 +5,11 @@ import 'package:flutter/foundation.dart';
 import '../../locator.dart';
 import 'account_state.dart';
 import '../../common/models/account_db_model.dart';
-import '../../repositories/account/account_repository.dart';
+import '../../repositories/account/abstract_account_repository.dart';
 import '../../store/managers/account_manager.dart';
 
 class AccountController extends ChangeNotifier {
-  final accountRepository = locator<AccountRepository>();
+  final accountRepository = locator<AbstractAccountRepository>();
 
   final List<double> _balances = [];
 

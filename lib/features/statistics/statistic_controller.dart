@@ -8,18 +8,16 @@ import '../../common/constants/app_constants.dart';
 import '../../common/current_models/current_user.dart';
 import '../../common/models/extends_date.dart';
 import '../../locator.dart';
-import '../../repositories/category/category_repository.dart';
-import '../../store/database_helper.dart';
+import '../../repositories/category/abstract_category_repository.dart';
+import '../../repositories/statistic/statistic_repository.dart';
 import 'models/statistic_result.dart';
 import 'models/statistic_total.dart';
 import 'statistic_state.dart';
 
 class StatisticsController extends ChangeNotifier {
-  final helper = locator<DatabaseHelper>();
+  final _statistic = StatisticRepository();
   Future<void>? _currentOperation;
   Completer<void>? _successCompleter;
-
-  // bool _starting = true;
 
   // List of date x StatisticResult
   final Map<String, List<StatisticResult>> _statisticsList = {};
@@ -111,7 +109,8 @@ class StatisticsController extends ChangeNotifier {
         }
         break;
       case StatisticMedium.categoryBudget:
-        final categoriesMap = locator<CategoryRepository>().categoriesMap;
+        final categoriesMap =
+            locator<AbstractCategoryRepository>().categoriesMap;
 
         for (String categoryName in categoriesMap.keys) {
           referencesByCategory[categoryName] =
@@ -119,7 +118,8 @@ class StatisticsController extends ChangeNotifier {
         }
         break;
       case StatisticMedium.none:
-        final categoriesMap = locator<CategoryRepository>().categoriesMap;
+        final categoriesMap =
+            locator<AbstractCategoryRepository>().categoriesMap;
 
         for (String categoryName in categoriesMap.keys) {
           referencesByCategory[categoryName] = 0.0;
@@ -189,7 +189,7 @@ class StatisticsController extends ChangeNotifier {
       (startDate, endDate) =
           ExtendedDate.getMillisecondsIntervalOfMonth(dateIndex);
 
-      final statisticsMap = await helper.getTransactionSumsByCategory(
+      final statisticsMap = await _statistic.getTransactionSumsByCategory(
         startDate: startDate,
         endDate: endDate,
       );

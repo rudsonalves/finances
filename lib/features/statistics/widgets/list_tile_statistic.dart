@@ -5,7 +5,7 @@ import '../../../common/constants/themes/colors/custom_color.g.dart';
 import '../../../common/current_models/current_user.dart';
 import '../../../common/extensions/money_masked_text.dart';
 import '../../../locator.dart';
-import '../../../repositories/category/category_repository.dart';
+import '../../../repositories/category/abstract_category_repository.dart';
 import '../models/statistic_result.dart';
 import '../statistic_card/statistic_card_controller.dart';
 import 'variation_column.dart';
@@ -24,7 +24,7 @@ class ListTileStatistic extends StatefulWidget {
 
 class _ListTileStatisticState extends State<ListTileStatistic> {
   final currentUser = locator<CurrentUser>();
-  final categoryRepository = locator<CategoryRepository>();
+  final categoryRepository = locator<AbstractCategoryRepository>();
   final controller = locator<StatisticCardController>();
 
   void setGraphic(String categoryName) async {

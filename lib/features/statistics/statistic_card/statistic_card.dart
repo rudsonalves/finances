@@ -10,7 +10,7 @@ import '../../../common/extensions/money_masked_text.dart';
 import '../../../common/models/extends_date.dart';
 import '../../../common/widgets/custom_circular_progress_indicator.dart';
 import '../../../locator.dart';
-import '../../../repositories/category/category_repository.dart';
+import '../../../repositories/category/abstract_category_repository.dart';
 import '../graphics/line_graphic.dart';
 import '../graphics/model/graphic_line_data.dart';
 import '../statistic_controller.dart';
@@ -70,7 +70,7 @@ class _StatisticCardState extends State<StatisticCard> {
   List<GraphicLineData> processesData() {
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final List<GraphicLineData> graphicData = [];
-    final categories = locator<CategoryRepository>().categoriesMap;
+    final categories = locator<AbstractCategoryRepository>().categoriesMap;
 
     for (final plotData in _controller.graphicData) {
       Color color = Colors.black;

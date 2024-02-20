@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import '../../locator.dart';
-import '../../repositories/icons/icons_repository.dart';
+import '../../repositories/icons/abstract_icons_repository.dart';
 import './icons_model.dart';
 
 class CategoryDbModel {
@@ -51,7 +51,8 @@ class CategoryDbModel {
 
   static Future<CategoryDbModel> fromMap(Map<String, dynamic> map) async {
     int iconId = map['categoryIcon'] as int;
-    var categoryIcon = await locator<IconRepository>().getIconId(iconId);
+    var categoryIcon =
+        await locator<AbstractIconRepository>().getIconId(iconId);
 
     return CategoryDbModel(
       categoryId: map['categoryId'] != null ? map['categoryId'] as int : null,

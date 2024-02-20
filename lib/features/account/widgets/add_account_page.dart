@@ -11,7 +11,7 @@ import '../../../common/validate/account_validator.dart';
 import '../../../common/widgets/add_cancel_buttons.dart';
 import '../../../common/widgets/basic_text_form_field.dart';
 import '../../../locator.dart';
-import '../../../repositories/account/account_repository.dart';
+import '../../../repositories/account/abstract_account_repository.dart';
 import '../../../common/widgets/new_icon_selection.dart';
 import '../../home_page/home_page_controller.dart';
 
@@ -88,7 +88,7 @@ class _AddAccountPageState extends State<AddAccountPage> {
       }
     } else {
       // New Account
-      await locator<AccountRepository>().addAccount(newAccount);
+      await locator<AbstractAccountRepository>().addAccount(newAccount);
       _homePageController.setRedraw();
     }
     if (!context.mounted) return;

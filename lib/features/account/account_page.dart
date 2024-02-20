@@ -4,8 +4,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../common/current_models/current_user.dart';
 import '../../common/widgets/markdown_rich_text.dart';
 import '../../locator.dart';
-import '../../repositories/account/account_repository.dart';
-import '../../store/database_helper.dart';
+import '../../repositories/account/abstract_account_repository.dart';
+import '../../store/count_store.dart';
 import '../help_manager/main_manager.dart';
 import '../home_page/balance_card/balance_card_controller.dart';
 import 'account_state.dart';
@@ -52,8 +52,7 @@ class _AccountPageState extends State<AccountPage> {
     final locale = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
 
-    int numberOfTrans =
-        await locator<DatabaseHelper>().countTransactionsForAccountId(
+    int numberOfTrans = await CountStore().countTransactionsForAccountId(
       account.accountId!,
     );
 
@@ -106,7 +105,7 @@ class _AccountPageState extends State<AccountPage> {
         false;
 
     if (delete) {
-      await locator<AccountRepository>().deleteAccount(account);
+      await locator<AbstractAccountRepository>().deleteAccount(account);
       locator<BalanceCardController>().requestRedraw();
     }
     _controller.getAllBalances();

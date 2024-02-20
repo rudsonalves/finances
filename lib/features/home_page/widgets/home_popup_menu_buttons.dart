@@ -5,8 +5,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../common/current_models/current_user.dart';
 import '../../../locator.dart';
 import '../../../common/constants/routes/app_route.dart';
+import '../../../repositories/user/abstract_user_repository.dart';
 import '../../../services/authentication/auth_service.dart';
-import '../../../store/database_helper.dart';
 import '../../database_recover/database_recover.dart';
 
 class HomePagePopupMenuButtons extends StatelessWidget {
@@ -19,7 +19,7 @@ class HomePagePopupMenuButtons extends StatelessWidget {
       await locator<AuthService>().signOut();
       var user = locator<CurrentUser>();
       user.userLogged = false;
-      await locator<DatabaseHelper>().updateUser(user.toMap());
+      await locator<AbstractUserRepository>().updateUser(user);
       SystemNavigator.pop();
     } else if (value == 'backup') {
       showDialog(

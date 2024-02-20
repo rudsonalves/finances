@@ -15,7 +15,7 @@ import '../../../common/models/transaction_db_model.dart';
 import '../../../common/extensions/money_masked_text.dart';
 import '../../../common/functions/function_alert_dialog.dart';
 import '../../../common/constants/themes/app_text_styles.dart';
-import '../../../repositories/category/category_repository.dart';
+import '../../../repositories/category/abstract_category_repository.dart';
 import '../../../common/functions/base_dismissible_container.dart';
 import '../../../store/managers/transactions_manager.dart';
 
@@ -79,7 +79,7 @@ class _TransactionDismissibleTileState
               rowTransaction(
                   locale.transactionListTileCategory,
                   locator
-                      .get<CategoryRepository>()
+                      .get<AbstractCategoryRepository>()
                       .getCategoryId(transaction.transCategoryId)
                       .categoryName),
               rowTransaction(
@@ -150,7 +150,7 @@ class _TransactionDismissibleTileState
     value = value.abs();
 
     final CategoryDbModel category =
-        locator<CategoryRepository>().getCategoryId(
+        locator<AbstractCategoryRepository>().getCategoryId(
       transaction.transCategoryId,
     );
     final AppLocalizations locale = AppLocalizations.of(context)!;

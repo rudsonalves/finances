@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../locator.dart';
-import '../../repositories/account/account_repository.dart';
+import '../../repositories/account/abstract_account_repository.dart';
 
 class AccountDropdownFormField extends StatefulWidget {
   final GlobalKey<FormFieldState<int>> globalKey;
@@ -37,7 +37,7 @@ class AccountDropdownFormField extends StatefulWidget {
 
 class _AccountDropdownFormFieldState extends State<AccountDropdownFormField> {
   final TextEditingController _controller = TextEditingController();
-  final accountsMap = locator<AccountRepository>().accountsMap;
+  final accountsMap = locator<AbstractAccountRepository>().accountsMap;
   int? _selectedAccountIndex;
 
   @override
