@@ -6,12 +6,12 @@ import '../../common/constants/app_constants.dart';
 import '../../common/models/category_db_model.dart';
 import '../../common/models/icons_model.dart';
 import '../../locator.dart';
-import '../../repositories/category/category_repository.dart';
+import '../../repositories/category/abstract_category_repository.dart';
 import '../statistics/statistic_controller.dart';
 import 'categories_state.dart';
 
 class CategoriesController extends ChangeNotifier {
-  final _categoryRepository = locator<CategoryRepository>();
+  final _categoryRepository = locator<AbstractCategoryRepository>();
   final _statController = locator<StatisticsController>();
   double _totalBudget = 0.0;
 

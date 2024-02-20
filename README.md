@@ -277,9 +277,36 @@ Some bugs were noticed and need to be fixed:
 - *20231102.2* implementation: atualizar as páginas de ajuda figuras atualizadas e rever o texto;
 - *20231117.1* remover as transferências do orçamento.
 
+
 # Commits:
 
-## 2024/01/12 - Version 1.0.22+8
+## 2024/02/20 - version 1.1.00+69
+
+This commit represents a significant overhaul of the `sqflite_helper.dart`, resulting in the creation of multiple files segmented by distinct responsibilities. The restructuring extends to the repository folder, where abstract model files are now prefixed with `abstract_` and their implementing classes follow a simplified naming convention. Additionally, this commit introduces new packages in the repository, such as `counter` and `statistic`, shifting direct store layer calls to these newly encapsulated invocations. Below is a detailed summary of the refactor and new introductions:
+
+- **Database Management and Migration**:
+  - **DatabaseManager**: Manages database initialization, closure, migrations, table creation, and enables foreign key constraints with `PRAGMA foreign_keys = ON`.
+  - **DatabaseMigrations**: Encapsulates static methods for database migration, including schema versioning and migration script execution.
+  - **DatabaseBackup**: Implements database backup and restoration methods.
+  - **DatabaseProvider**: Wraps database initialization, schema version control, migration, and backup functionalities.
+  - **Constants**: Consolidates all database-related constants, including table names, schema versions, and SQL statements.
+  - **TablesCreators**: Encloses static methods for creating database tables, indices, and triggers.
+
+- **Store Layer Enhancements**:
+  - **AccountStore**: Provides CRUD operations for account records.
+  - **BalanceStore**: Manages balance record CRUD operations.
+  - **CategoryStore**: Facilitates CRUD interactions with category records.
+  - **CountStore**: Executes transaction count queries based on criteria like category or account ID.
+  - **IconStore**: Performs counting queries related to transactions.
+  - **StatisticStore**: Conducts complex queries for statistical analysis, such as transaction sums by category.
+  - **TransactionStore**: Manages CRUD operations for transaction records.
+  - **TransDayStore**: Handles insertion, querying, and deletion of records associating transactions with dates.
+  - **TransferStore**: Facilitates CRUD operations for transfer records.
+  - **UserStore**: Manages insertion, querying, and updating of user records.
+
+This comprehensive refactoring enhances the app's architecture by segregating functionalities into more manageable and logically distinct components, laying the groundwork for a more maintainable and scalable application. Following these changes, the app has entered the testing phase to ensure the refactor's efficacy and stability.
+
+## 2024/01/12 - Version 1.0.22+68
 
 In this commit, several important improvements and corrections were made to Finances. Focusing on enhancing the user experience and optimizing app functionality, the changes range from adjustments in the user interface to enhancements in location features. Below, we detail the main modifications implemented in this version:
 

@@ -8,8 +8,8 @@ import '../../common/models/category_db_model.dart';
 import '../../common/widgets/account_dropdown_form_field.dart';
 import '../../common/widgets/simple_spin_box_field.dart';
 import '../../locator.dart';
-import '../../repositories/account/account_repository.dart';
-import '../../services/database/managers/transfers_manager.dart';
+import '../../repositories/account/abstract_account_repository.dart';
+import '../../store/managers/transfers_manager.dart';
 import '../categories/categories_controller.dart';
 import '../categories/widget/add_category_page.dart';
 import '../help_manager/main_manager.dart';
@@ -26,7 +26,7 @@ import '../../common/validate/transaction_validator.dart';
 import '../../features/transaction/transaction_state.dart';
 import '../../features/home_page/home_page_controller.dart';
 import '../../common/constants/themes/app_text_styles.dart';
-import '../../repositories/category/category_repository.dart';
+import '../../repositories/category/abstract_category_repository.dart';
 import '../../common/widgets/category_dropdown_form_field.dart';
 import '../../common/widgets/autocomplete_text_form_field.dart';
 import '../../common/extensions/money_masked_text_controller.dart';
@@ -61,13 +61,13 @@ class _TransactionPageState extends State<TransactionPage> {
     locator<CurrentAccount>(),
   );
   final _destinationAccountId = ValueNotifier<int?>(null);
-  final _accountsMap = locator<AccountRepository>().accountsMap;
+  final _accountsMap = locator<AbstractAccountRepository>().accountsMap;
 
   bool _income = false;
   bool _repeat = false;
 
   final _controller = locator<TransactionController>();
-  final _categoryRepository = locator<CategoryRepository>();
+  final _categoryRepository = locator<AbstractCategoryRepository>();
   final _homePageController = locator<HomePageController>();
   int? _categoryId;
 

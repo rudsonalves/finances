@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import '../../repositories/account/account_repository.dart';
+import '../../repositories/account/abstract_account_repository.dart';
 import './icons_model.dart';
 import '../../locator.dart';
-import '../../repositories/icons/icons_repository.dart';
+import '../../repositories/icons/abstract_icons_repository.dart';
 
 class AccountDbModel {
   int? accountId;
@@ -45,7 +45,7 @@ class AccountDbModel {
 
   static Future<AccountDbModel> fromMap(Map<String, dynamic> map) async {
     int iconId = map['accountIcon'] as int;
-    var accountIcon = await locator<IconRepository>().getIconId(iconId);
+    var accountIcon = await locator<AbstractIconRepository>().getIconId(iconId);
 
     return AccountDbModel(
       accountId: map['accountId'] != null ? map['accountId'] as int : null,
@@ -69,6 +69,6 @@ class AccountDbModel {
   }
 
   Future<void> updateAccount() async {
-    await locator<AccountRepository>().updateAccount(this);
+    await locator<AbstractAccountRepository>().updateAccount(this);
   }
 }

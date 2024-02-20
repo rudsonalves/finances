@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../locator.dart';
-import '../../repositories/category/category_repository.dart';
+import '../../repositories/category/abstract_category_repository.dart';
 
 class CategoryDropdownFormField extends StatelessWidget {
   final String hintText;
@@ -23,7 +23,7 @@ class CategoryDropdownFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final categoryRepository = locator<CategoryRepository>();
+    final categoryRepository = locator<AbstractCategoryRepository>();
     final items = categoryRepository.categoriesMap.keys.toList();
 
     return Padding(

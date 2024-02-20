@@ -7,7 +7,7 @@ import '../../common/current_models/current_balance.dart';
 import './splash_state.dart';
 import '../../locator.dart';
 import '../../common/current_models/current_user.dart';
-import '../../repositories/user/user_repository.dart';
+import '../../repositories/user/abstract_user_repository.dart';
 import '../../services/authentication/auth_service.dart';
 import '../../common/models/user_db_model.dart';
 
@@ -26,7 +26,7 @@ class SplashController extends ChangeNotifier {
   Future<void> isUserLogged() async {
     _changeState(SplashStateLoading());
     await Future.delayed(const Duration(seconds: 2));
-    var userRepository = locator<UserRepository>();
+    var userRepository = locator<AbstractUserRepository>();
     await userRepository.init();
 
     UserDbModel? loggedUser;

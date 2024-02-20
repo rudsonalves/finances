@@ -10,8 +10,8 @@ import 'package:restart_app/restart_app.dart';
 import '../../common/constants/routes/app_route.dart';
 import '../../common/constants/themes/app_button_styles.dart';
 import '../../common/constants/themes/app_text_styles.dart';
+import '../../repositories/backup/abstract_backup_repository.dart';
 import '../../repositories/backup/backup_repository.dart';
-import '../../repositories/backup/sqflite_backup_repository.dart';
 
 enum DialogStates {
   create,
@@ -31,7 +31,7 @@ class DatabaseRecover extends StatefulWidget {
 }
 
 class _DatabaseRecoverState extends State<DatabaseRecover> {
-  final BackupRepository _backupRepository = SqfliteBackupRepository();
+  final AbstractBackupRepository _backupRepository = BackupRepository();
   String _message = '';
 
   Future<void> _restoreFunction(AppLocalizations locale) async {

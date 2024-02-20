@@ -1,8 +1,7 @@
 import 'dart:convert';
 
 import '../../locator.dart';
-import '../../repositories/transaction/transaction_repository.dart';
-import '../../services/database/database_helper.dart';
+import '../../repositories/transaction/abstract_transaction_repository.dart';
 import './extends_date.dart';
 
 enum TransStatus {
@@ -40,8 +39,8 @@ class TransactionDbModel {
   Future<void> toggleTransStatus() async {
     _toggleStatus();
     await locator
-        .get<DatabaseHelper>()
-        .updateTransactionStatus(transId!, transStatus.index);
+        .get<AbstractTransactionRepository>()
+        .updateTransactionStatus(transId!, transStatus);
   }
 
   static List<TransactionDbModel> listOfTransactions(
@@ -123,6 +122,6 @@ class TransactionDbModel {
       TransactionDbModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   Future<void> updateTransaction() async {
-    await locator<TransactionRepository>().updateTrans(this);
+    await locator<AbstractTransactionRepository>().updateTrans(this);
   }
 }

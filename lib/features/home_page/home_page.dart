@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../common/models/transaction_db_model.dart';
 import '../../common/models/user_name_notifier.dart';
 import '../../locator.dart';
-import '../../repositories/category/category_repository.dart';
+import '../../repositories/category/abstract_category_repository.dart';
 import '../help_manager/main_manager.dart';
 import './home_page_state.dart';
 import './home_page_controller.dart';
@@ -212,7 +212,7 @@ class _HomePageState extends State<HomePage>
 
                               if (!_filterIsDescription) {
                                 _filterCategoryId = locator
-                                    .get<CategoryRepository>()
+                                    .get<AbstractCategoryRepository>()
                                     .getIdByName(_filterText);
                               }
                             } catch (err) {

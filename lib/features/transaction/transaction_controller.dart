@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import '../../common/current_models/current_account.dart';
 import '../../common/models/account_db_model.dart';
 import '../../locator.dart';
-import '../../repositories/transfer_repository/transfer_repository.dart';
+import '../../repositories/transfer_repository/abstract_transfer_repository.dart';
 import './transaction_state.dart';
 import '../../common/models/category_db_model.dart';
 import '../../common/models/transaction_db_model.dart';
-import '../../repositories/category/category_repository.dart';
-import '../../services/database/managers/transactions_manager.dart';
+import '../../repositories/category/abstract_category_repository.dart';
+import '../../store/managers/transactions_manager.dart';
 
 class TransactionController extends ChangeNotifier {
-  final _categoryRepository = locator<CategoryRepository>();
+  final _categoryRepository = locator<AbstractCategoryRepository>();
   int _originAccountId = locator<CurrentAccount>().accountId!;
   int? _destinationAccountId;
 
@@ -87,7 +87,7 @@ class TransactionController extends ChangeNotifier {
       if (transferId == null) return;
 
       final transfer =
-          await locator<TransferRepository>().getTransferId(transferId);
+          await locator<AbstractTransferRepository>().getTransferId(transferId);
 
       _destinationAccountId = transfer!.transferAccount0 == _originAccountId
           ? transfer.transferAccount1

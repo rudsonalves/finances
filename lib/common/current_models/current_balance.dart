@@ -1,12 +1,12 @@
 import '../../locator.dart';
 import 'current_account.dart';
 import '../models/balance_db_model.dart';
-import '../../repositories/balance/balance_repository.dart';
+import '../../repositories/balance/abstract_balance_repository.dart';
 
 class CurrentBalance extends BalanceDbModel {
   CurrentBalance();
 
-  final balanceRepository = locator<BalanceRepository>();
+  final balanceRepository = locator<AbstractBalanceRepository>();
   final currentAccount = locator<CurrentAccount>();
 
   Future<void> start() async {

@@ -4,10 +4,10 @@ import './current_user.dart';
 import '../models/icons_model.dart';
 import '../models/account_db_model.dart';
 import '../constants/themes/app_icons.dart';
-import '../../repositories/account/account_repository.dart';
+import '../../repositories/account/abstract_account_repository.dart';
 
 class CurrentAccount extends AccountDbModel {
-  final accountRepository = locator<AccountRepository>();
+  final accountRepository = locator<AbstractAccountRepository>();
 
   CurrentAccount({
     int? accountId,

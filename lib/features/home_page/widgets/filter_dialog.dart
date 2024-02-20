@@ -5,7 +5,7 @@ import '../../../common/constants/themes/app_button_styles.dart';
 import '../../../common/constants/themes/app_text_styles.dart';
 import '../../../common/widgets/autocomplete_text_form_field.dart';
 import '../../../locator.dart';
-import '../../../repositories/category/category_repository.dart';
+import '../../../repositories/category/abstract_category_repository.dart';
 import '../home_page_controller.dart';
 
 class FilterDialog extends StatefulWidget {
@@ -17,7 +17,7 @@ class FilterDialog extends StatefulWidget {
 
 class _FilterDialogState extends State<FilterDialog> {
   final _homePageController = locator<HomePageController>();
-  final _categoriesController = locator<CategoryRepository>();
+  final _categoriesController = locator<AbstractCategoryRepository>();
   final _controller = TextEditingController();
   final _filterByDescription = ValueNotifier<bool>(true);
 

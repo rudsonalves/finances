@@ -1,3 +1,4 @@
+import 'package:finances/store/database_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:restart_app/restart_app.dart';
@@ -19,7 +20,6 @@ import '../../common/current_models/current_theme.dart';
 import '../../common/current_models/current_language.dart';
 import '../../common/constants/themes/app_text_styles.dart';
 import '../../services/authentication/auth_service.dart';
-import '../../services/database/database_helper.dart';
 import '../home_page/home_page_controller.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -298,13 +298,15 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> _resetAccount() async {
-    await locator<DatabaseHelper>().deleteDatabase();
+    // FIXME: use a repository
+    await locator<DatabaseProvider>().deleteDatabase();
     await locator<AuthService>().removeAccount();
     await Restart.restartApp(webOrigin: AppRoute.onboard.name);
   }
 
   Future<void> _resetData() async {
-    await locator<DatabaseHelper>().deleteDatabase();
+    // FIXME: use a repository
+    await locator<DatabaseProvider>().deleteDatabase();
     await Restart.restartApp(webOrigin: AppRoute.onboard.name);
   }
 

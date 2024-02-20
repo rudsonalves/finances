@@ -5,7 +5,7 @@ import '../../../common/constants/themes/colors/app_colors.dart';
 import '../../../common/constants/themes/colors/custom_color.g.dart';
 import '../../../common/models/extends_date.dart';
 import '../../../locator.dart';
-import '../../../services/database/managers/transfers_manager.dart';
+import '../../../store/managers/transfers_manager.dart';
 import '../../statistics/statistic_controller.dart';
 import '../home_page_controller.dart';
 import '../balance_card/balance_card_controller.dart';
@@ -15,9 +15,9 @@ import '../../../common/models/transaction_db_model.dart';
 import '../../../common/extensions/money_masked_text.dart';
 import '../../../common/functions/function_alert_dialog.dart';
 import '../../../common/constants/themes/app_text_styles.dart';
-import '../../../repositories/category/category_repository.dart';
+import '../../../repositories/category/abstract_category_repository.dart';
 import '../../../common/functions/base_dismissible_container.dart';
-import '../../../services/database/managers/transactions_manager.dart';
+import '../../../store/managers/transactions_manager.dart';
 
 class TransactionDismissibleTile extends StatefulWidget {
   final double textScale;
@@ -79,7 +79,7 @@ class _TransactionDismissibleTileState
               rowTransaction(
                   locale.transactionListTileCategory,
                   locator
-                      .get<CategoryRepository>()
+                      .get<AbstractCategoryRepository>()
                       .getCategoryId(transaction.transCategoryId)
                       .categoryName),
               rowTransaction(
@@ -150,7 +150,7 @@ class _TransactionDismissibleTileState
     value = value.abs();
 
     final CategoryDbModel category =
-        locator<CategoryRepository>().getCategoryId(
+        locator<AbstractCategoryRepository>().getCategoryId(
       transaction.transCategoryId,
     );
     final AppLocalizations locale = AppLocalizations.of(context)!;
