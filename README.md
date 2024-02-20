@@ -261,7 +261,7 @@ Esta tabela foi criada para manter o controle de versões do banco de dados.
 
 Esta tabela mantém as definições de ícones (nome, fontFamily, cor), usadas em categoriesTable e accountsTable
 
-![Diagrama do Banco de Dados](docs/databaseDiagram.jpg)
+![Diagrama do Banco de Dados](docs/database_t.jpg)
 
 ### Gatilhos
 
