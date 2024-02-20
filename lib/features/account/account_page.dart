@@ -5,7 +5,7 @@ import '../../common/current_models/current_user.dart';
 import '../../common/widgets/markdown_rich_text.dart';
 import '../../locator.dart';
 import '../../repositories/account/abstract_account_repository.dart';
-import '../../store/count_store.dart';
+import '../../repositories/counter/counter_repository.dart';
 import '../help_manager/main_manager.dart';
 import '../home_page/balance_card/balance_card_controller.dart';
 import 'account_state.dart';
@@ -52,8 +52,8 @@ class _AccountPageState extends State<AccountPage> {
     final locale = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
 
-    int numberOfTrans = await CountStore().countTransactionsForAccountId(
-      account.accountId!,
+    int numberOfTrans = await CounterRepository().countTransactionsForAccountId(
+      account,
     );
 
     if (numberOfTrans > 0) {

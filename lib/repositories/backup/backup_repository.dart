@@ -1,11 +1,10 @@
-import 'package:finances/store/database_backup.dart';
-
 import '../../locator.dart';
+import '../../store/database_backup.dart';
 import '../user/abstract_user_repository.dart';
 import 'abstract_backup_repository.dart';
 
 class BackupRepository extends AbstractBackupRepository {
-  final _helper = locator<DatabaseBackuper>();
+  final _helper = DatabaseBackup();
 
   @override
   Future<String?> createBackup([String? destinyPath]) async {

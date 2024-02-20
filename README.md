@@ -91,7 +91,11 @@ A *transTransferId* column was added to store the ID of a transfer between accou
 
 ### 6. Table "transDayTable":
 
-This table is used to relate specific transactions to specific balances in the *balanceTable*. It is used as a junction table to create a relationship between transactions and balances in wallets.
+**This table is being removed from the project**
+
+The applicability of this table was suppressed throughout the development of the project and ended up becoming unnecessary to the project.
+
+~~This table is used to relate specific transactions to specific balances in the *balanceTable*. It is used as a junction table to create a relationship between transactions and balances in wallets.~~
 
 ### 7. Table "transfersTable":
 
@@ -247,7 +251,11 @@ Foi adicionada uma coluna *transTransferId* para armazenar a ID de uma transfer�
 
 ### 6. Tabela "transDayTable":
 
-Essa tabela é usada para relacionar transações específicas com saldos específicos na tabela *balanceTable*. Ela é usada como uma tabela de junção para criar uma relação entre transações e saldos nas carteiras.
+**Esta tabela está sendo removida do projeto.**
+
+A aplicabilidade desta tabela foi suprimida ao longo do desenvolvimento do projeto e acabou se tornando desnecessária ao projeto.
+
+~~Essa tabela é usada para relacionar transações específicas com saldos específicos na tabela *balanceTable*. Ela é usada como uma tabela de junção para criar uma relação entre transações e saldos nas carteiras.~~
 
 ### 7. Tabela "transfersTable":
 

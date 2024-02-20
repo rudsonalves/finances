@@ -5,7 +5,6 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../locator.dart';
 import 'constants.dart';
 import 'database_backup.dart';
 import 'database_manager.dart';
@@ -32,7 +31,7 @@ class DatabaseProvider {
 
     int currentVersion = await _getCurrentDatabaseSchemeVersion();
     if (DatabaseMigrations.databaseSchemeVersion > currentVersion) {
-      await locator<DatabaseBackuper>().backupDatabase();
+      await DatabaseBackup().backupDatabase();
       Batch batch = database.batch();
       DatabaseMigrations.applyMigrations(
         batch: batch,

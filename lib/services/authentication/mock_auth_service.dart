@@ -13,7 +13,7 @@ class MockAuthService implements AuthService {
     required String password,
   }) async {
     try {
-      await Future.delayed(const Duration(seconds: 2));
+      // await Future.delayed(const Duration(seconds: 2));
       if (password.startsWith('123')) {
         throw Exception();
       }
@@ -36,7 +36,7 @@ class MockAuthService implements AuthService {
     required String password,
   }) async {
     try {
-      await Future.delayed(const Duration(seconds: 2));
+      // await Future.delayed(const Duration(seconds: 2));
       if (password.startsWith('123')) {
         throw Exception();
       }
@@ -55,7 +55,7 @@ class MockAuthService implements AuthService {
 
   @override
   Future<void> signOut() async {
-    await Future.delayed(const Duration(seconds: 2));
+    // await Future.delayed(const Duration(seconds: 2));
   }
 
   @override

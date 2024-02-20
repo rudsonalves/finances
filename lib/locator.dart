@@ -53,17 +53,6 @@ void setupDependencies() {
     );
 
     locator.registerSingleton<DatabaseProvider>(DatabaseProvider());
-    // locator.registerFactory<DatabaseBackuper>(() => DatabaseBackup());
-    // locator.registerFactory<UserStorer>(() => UserStore());
-    // locator.registerFactory<AccountStorer>(() => AccountStore());
-    // locator.registerFactory<CatgoryStorer>(() => CatgoryStore());
-    // locator.registerFactory<IconStorer>(() => IconStore());
-    // locator.registerFactory<BalanceStorer>(() => BalanceStore());
-    // locator.registerFactory<TransactionStore>(() => TransactionStore());
-    // locator.registerFactory<TransDayStorer>(() => TransDayStore());
-    // locator.registerFactory<TransferStorer>(() => TransferStore());
-    // locator.registerFactory<StatisticStorer>(() => StatisticStore());
-    // locator.registerFactory<CountStorer>(() => CountStore());
 
     locator.registerLazySingleton<CurrentUser>(
       () => CurrentUser(),
