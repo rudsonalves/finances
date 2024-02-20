@@ -105,7 +105,7 @@ This table was created to maintain control over database versions.
 
 This table maintains icon definitions (name, fontFamily, color) used in categoriesTable and accountsTable.
 
-![Database Diagram](docs/databaseDiagram.jpg)
+![Database Diagram](docs/database_t.png)
 
 ### Triggers
 
