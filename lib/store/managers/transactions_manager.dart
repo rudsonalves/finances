@@ -39,7 +39,7 @@ class TransactionsManager {
     final balanceRepository = locator<AbstractBalanceRepository>();
     final transDayRepository = locator<AbstractTransDayRepository>();
 
-    await transRepository.addTrans(transaction);
+    await transRepository.addNewTransaction(transaction);
 
     final transDate = transaction.transDate.onlyDate;
 
@@ -101,7 +101,7 @@ class TransactionsManager {
     account ??= locator<CurrentAccount>();
     final transRepository = locator<AbstractTransactionRepository>();
 
-    final oldTrans = await transRepository.getTransactionId(
+    final oldTrans = await transRepository.getTransId(
       transaction.transId!,
     );
     if ((oldTrans!.transDate.onlyDate != transaction.transDate.onlyDate) ||
@@ -115,7 +115,7 @@ class TransactionsManager {
       );
     } else {
       // write updated transaction
-      await transRepository.updateTrans(transaction);
+      await transRepository.updateTransaction(transaction);
     }
   }
 
@@ -151,7 +151,7 @@ class TransactionsManager {
 
     await transDayRepository.deleteTransDayId(transaction.transId!);
     // CHECK THIS: verificar se é necessário apagar a transação.
-    await transRepository.deleteTrans(transaction);
+    await transRepository.deleteTransaction(transaction);
   }
 
   /// Return the first [maxItens] transactions carried out in the

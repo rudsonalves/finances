@@ -288,6 +288,32 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
+## 2024/02/22 - version 1.1.00+70
+
+This update encompasses a comprehensive refactor related to database table changes, leading to a significant number of modifications throughout the project.
+
+- **Database Structure and Model Adjustments**:
+  - Removed the `accountLastBalance` attribute from `current_account.dart` and `account_db_model.dart`.
+  - Eliminated `balanceNextId` and `balancePreviousId` attributes from `current_balance.dart` and `balance_db_model.dart`, streamlining the balance management process.
+  - Enhanced `extends_date.dart` with thorough documentation for improved code readability.
+  - Introduced `transBalanceId` and `transAccountId` attributes in `transaction_db_model.dart` to better link transactions with accounts and balances.
+  - In `transfer_db_model.dart`, removed `transferAccount0` and `transferAccount1` attributes and allowed `transferTransId0` and `transferTransId1` to be nullable, optimizing resource usage during transfer updates and creations.
+
+- **Codebase and Architecture Refinement**:
+  - Transitioned store package methods to repository packages in `home_page/widgets/update_message.dart` and `settings_page.dart`, consolidating data interaction through the repository layer for enhanced code organization and clarity.
+  - Contents related to the now-obsolete `transDayTable` are being phased out, including its removal from `constants.dart` and various related adjustments in store and repository layers, reflecting the addition of necessary columns in the `transactionsTable`.
+  - Significant documentation updates and additions are part of this refactor, alongside the removal of `sqflite_trans_day_repository.dart` and `abstract_transaction_repository.dart`, simplifying the code and clarifying layer responsibilities.
+  - Updated `constants.dart` with new constants relevant to the updated database schema and removed outdated ones, reflecting the structural changes in database tables and triggers.
+  - All files within the store folder have been updated to align with the new database schema guidelines.
+
+- **Database Migration and Schema Update**:
+  - Updated the database schema version to 1008 and implemented a series of database updates, including the addition of `transBalanceId` and `transAccountId` to the `transactionsTable`, restructuring of the `transactionsTable` to incorporate these columns along with foreign key constraints, and simplification of the project by disabling the linked list, thereby removing `balanceNextId` and `balancePreviousId` from the `balanceTable`.
+  - Introduced new triggers to maintain `balanceClose` and `balanceTransCount` accurately upon transaction modifications and fully restructured the `transfersTable` to eliminate undesired columns and their constraints.
+  - Ultimately, the `transDayTable` was removed, marking a significant simplification and optimization of the database structure.
+
+This commit marks a crucial phase, following extensive alterations to adapt the app to these changes, aiming for a more efficient, maintainable, and clearer codebase and database schema.
+
+
 ## 2024/02/20 - version 1.1.00+69
 
 This commit represents a significant overhaul of the `sqflite_helper.dart`, resulting in the creation of multiple files segmented by distinct responsibilities. The restructuring extends to the repository folder, where abstract model files are now prefixed with `abstract_` and their implementing classes follow a simplified naming convention. Additionally, this commit introduces new packages in the repository, such as `counter` and `statistic`, shifting direct store layer calls to these newly encapsulated invocations. Below is a detailed summary of the refactor and new introductions:

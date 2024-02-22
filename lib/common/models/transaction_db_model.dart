@@ -11,6 +11,8 @@ enum TransStatus {
 
 class TransactionDbModel {
   int? transId;
+  int? transBalanceId;
+  int transAccountId;
   String transDescription;
   int transCategoryId;
   double transValue;
@@ -20,6 +22,8 @@ class TransactionDbModel {
 
   TransactionDbModel({
     this.transId,
+    this.transBalanceId,
+    required this.transAccountId,
     required this.transDescription,
     required this.transCategoryId,
     required this.transValue,
@@ -40,7 +44,7 @@ class TransactionDbModel {
     _toggleStatus();
     await locator
         .get<AbstractTransactionRepository>()
-        .updateTransactionStatus(transId!, transStatus);
+        .updateTransStatus(transId!, transStatus);
   }
 
   static List<TransactionDbModel> listOfTransactions(
@@ -54,8 +58,10 @@ class TransactionDbModel {
     return listTransaction;
   }
 
-  TransactionDbModel copyToTransfer() {
+  TransactionDbModel copyToTransfer(int toAccountId) {
     return TransactionDbModel(
+      transBalanceId: transBalanceId,
+      transAccountId: toAccountId,
       transDescription: transDescription,
       transCategoryId: transCategoryId,
       transValue: -transValue,
@@ -67,6 +73,8 @@ class TransactionDbModel {
 
   TransactionDbModel copy() {
     return TransactionDbModel(
+      transBalanceId: transBalanceId,
+      transAccountId: transAccountId,
       transDescription: transDescription,
       transCategoryId: transCategoryId,
       transValue: transValue,
@@ -80,6 +88,8 @@ class TransactionDbModel {
   String toString() {
     return 'Transaction('
         ' Id: $transId;'
+        ' BalanceId: $transBalanceId;'
+        ' AccountId: $transAccountId;'
         ' Category: $transCategoryId;'
         ' Description: "$transDescription";'
         ' Value: $transValue;'
@@ -93,6 +103,8 @@ class TransactionDbModel {
     // if (transId != null) {
     return <String, dynamic>{
       'transId': transId,
+      'transBalanceId': transBalanceId,
+      'transAccountId': transAccountId,
       'transDescription': transDescription,
       'transCategoryId': transCategoryId,
       'transValue': transValue,
@@ -105,6 +117,9 @@ class TransactionDbModel {
   factory TransactionDbModel.fromMap(Map<String, dynamic> map) {
     return TransactionDbModel(
       transId: map['transId'] != null ? map['transId'] as int : null,
+      transBalanceId:
+          map['transBalanceId'] != null ? map['transBalanceId'] as int : null,
+      transAccountId: map['transAccountId'] as int,
       transDescription: map['transDescription'] as String,
       transCategoryId: map['transCategoryId'] as int,
       transValue: map['transValue'] as double,
@@ -122,6 +137,6 @@ class TransactionDbModel {
       TransactionDbModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   Future<void> updateTransaction() async {
-    await locator<AbstractTransactionRepository>().updateTrans(this);
+    await locator<AbstractTransactionRepository>().updateTransaction(this);
   }
 }

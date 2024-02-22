@@ -10,7 +10,6 @@ class AccountDbModel {
   String accountName;
   String accountUserId;
   IconModel accountIcon;
-  int? accountLastBalance;
   String? accountDescription;
 
   AccountDbModel({
@@ -18,7 +17,6 @@ class AccountDbModel {
     required this.accountName,
     required this.accountUserId,
     required this.accountIcon,
-    this.accountLastBalance,
     this.accountDescription,
   });
 
@@ -28,7 +26,6 @@ class AccountDbModel {
       ' Name: "$accountName";'
       ' UserId: $accountUserId;'
       ' Icon: ${accountIcon.iconName}(${accountIcon.iconFontFamily});'
-      ' LastBalance: $accountLastBalance;'
       ' Description: "$accountDescription"'
       ')';
 
@@ -38,7 +35,6 @@ class AccountDbModel {
       'accountName': accountName,
       'accountUserId': accountUserId,
       'accountIcon': accountIcon.iconId!,
-      'accountLastBalance': accountLastBalance,
       'accountDescription': accountDescription,
     };
   }
@@ -52,9 +48,6 @@ class AccountDbModel {
       accountName: map['accountName'] as String,
       accountUserId: map['accountUserId'] as String,
       accountIcon: accountIcon,
-      accountLastBalance: map['accountLastBalance'] != null
-          ? map['accountLastBalance'] as int
-          : null,
       accountDescription: map['accountDescription'] != null
           ? map['accountDescription'] as String
           : null,

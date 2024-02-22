@@ -97,8 +97,7 @@ class TransfersManager {
     int transferTransId1 = transfer.transferTransId0 == transaction0.transId!
         ? transfer.transferTransId1
         : transfer.transferTransId0;
-    final transaction1 =
-        await transRepository.getTransactionId(transferTransId1);
+    final transaction1 = await transRepository.getTransId(transferTransId1);
     if (transaction1 == null) {
       throw Exception(
           'transaction1 not fount in TransfersManager.removeTransfer');
@@ -162,7 +161,7 @@ class TransfersManager {
 
     // recover the original transaction
     final originalTransaction0 =
-        await transactionRepository.getTransactionId(transaction0.transId!);
+        await transactionRepository.getTransId(transaction0.transId!);
     if (originalTransaction0 == null) {
       throw Exception('updateTransfer: Original transaction not found');
     }

@@ -13,9 +13,9 @@ class DatabaseMigrations {
   /// This is the database scheme current version. To futures upgrades
   /// in database increment this value and add a new update script in
   /// _migrationScripts Map.
-  static const databaseSchemeVersion = 1007;
+  static const databaseSchemeVersion = 1008;
 
-  // Retrieves the database schema version in a readable format (e.g., "1.0.7").
+  // Retrieves the database schema version in a readable format (e.g., "1.0.07").
   static String get dbSchemeVersion {
     String version = databaseSchemeVersion.toString();
     int length = version.length;
@@ -52,7 +52,105 @@ class DatabaseMigrations {
     1007: [
       'ALTER TABLE $appControlTable ADD COLUMN $appControlApp TEXT DEFAULT ""',
     ],
+    1008: [
+      'ALTER TABLE $transactionsTable ADD COLUMN $transBalanceId INTEGER',
+      'ALTER TABLE $transactionsTable ADD COLUMN $transAccountId INTEGER',
+      'UPDATE $transactionsTable SET $transBalanceId = ('
+          'SELECT transDayBalanceId FROM transDayTable '
+          '  WHERE transDayTable.transDayTransId = $transactionsTable.$transId'
+          ')',
+      'UPDATE $transactionsTable SET $transAccountId = ('
+          'SELECT $balanceAccountId FROM $balanceTable'
+          '  WHERE $balanceTable.$balanceId = $transactionsTable.$transBalanceId'
+          ')',
+      'PRAGMA foreign_keys=off',
+      'BEGIN TRANSACTION',
+      'CREATE TABLE IF NOT EXISTS ${transactionsTable}_new ('
+          ' $transId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+          ' $transBalanceId INTEGER NOT NULL,'
+          ' $transAccountId INTEGER NOT NULL,'
+          ' $transDescription TEXT NOT NULL,'
+          ' $transCategoryId INTEGER NOT NULL,'
+          ' $transValue REAL NOT NULL,'
+          ' $transStatus INTEGER NOT NULL,'
+          ' $transTransferId INTEGER,'
+          ' $transDate INTEGER NOT NULL,'
+          ' FOREIGN KEY ($transCategoryId)'
+          '  REFERENCES $categoriesTable ($categoryId)'
+          '  ON DELETE RESTRICT,'
+          ' FOREIGN KEY ($transBalanceId)'
+          '  REFERENCES $balanceTable ($balanceId)'
+          '  ON DELETE RESTRICT,'
+          '  ON DELETE RESTRICT,'
+          ' FOREIGN KEY ($transAccountId)'
+          '  REFERENCES $accountTable ($accountId)'
+          '  ON DELETE RESTRICT'
+          ')',
+      'INSERT INTO ${transactionsTable}_new ($transId, $transBalanceId,'
+          '  $transAccountId, $transDescription, $transCategoryId, $transValue, '
+          '  $transStatus, $transTransferId, $transDate) '
+          'SELECT $transId, $transBalanceId, $transAccountId, $transDescription,'
+          '  $transCategoryId, $transValue, $transStatus, $transTransferId,'
+          '  $transDate FROM $transactionsTable',
+      'DROP TABLE $transactionsTable',
+      'ALTER TABLE ${transactionsTable}_new RENAME TO $transactionsTable',
+      'COMMIT',
+      'PRAGMA foreign_keys=on',
+      'ALTER TABLE $balanceTable DROP COLUMN IF EXISTS balanceNextId',
+      'ALTER TABLE $balanceTable DROP COLUMN IF EXISTS balancePreviousId',
+      'DROP TRIGGER IF EXISTS $checkBalanceNextId',
+      'DROP TRIGGER IF EXISTS $checkBalancePreviousId',
+      'CREATE TRIGGER IF NOT EXISTS $triggerAfterInsertTransaction'
+          'AFTER INSERT ON $transactionsTable'
+          'FOR EACH ROW'
+          'BEGIN'
+          '  UPDATE $balanceTable'
+          '  SET $balanceClose = $balanceClose + NEW.$transValue,'
+          '      $balanceTransCount = IFNULL($balanceTransCount, 0) + 1'
+          '  WHERE $balanceAccountId = NEW.$transAccountId'
+          '    AND $balanceDate = NEW.$transDate;'
+          'END',
+      'CREATE TRIGGER IF NOT EXISTS $triggerAfterDeleteTransaction'
+          'AFTER DELETE ON $transactionsTable'
+          'FOR EACH ROW'
+          'BEGIN'
+          '  UPDATE $balanceTable'
+          "  SET $balanceClose = $balanceClose - OLD.$transValue,"
+          '      $balanceTransCount = IFNULL($balanceTransCount, 0) - 1'
+          '  WHERE $balanceAccountId = OLD.$transAccountId'
+          '    AND $balanceDate = OLD.$transDate;'
+          'END',
+      'ALTER TABLE $accountTable DROP COLUMN IF EXISTS accountLastBalance',
+      'CREATE TABLE IF NOT EXISTS ${transfersTable}_new ('
+          '  $transferId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+          '  $transferTransId0 INTEGER,'
+          '  $transferTransId1 INTEGER,'
+          'FOREIGN KEY ($transferTransId0)'
+          '  REFERENCES $transactionsTable ($transId)'
+          '  ON DELETE RESTRICT,'
+          'FOREIGN KEY ($transferTransId1)'
+          '  REFERENCES $transactionsTable ($transId)'
+          '  ON DELETE RESTRICT'
+          ')',
+      'INSERT INTO ${transfersTable}_new'
+          '  ($transferId, $transferTransId0, $transferTransId1) '
+          'SELECT $transferId, $transferTransId0, $transferTransId1'
+          '  FROM $transfersTable',
+      'DROP TABLE $transfersTable',
+      'ALTER TABLE ${transfersTable}_new RENAME TO $transfersTable',
+      'DROP TABLE transDayTable',
+    ],
   };
+  // 'CREATE TRIGGER IF NOT EXISTS $triggerAfterUpdateTransaction'
+  //     'AFTER UPDATE ON $transactionsTable'
+  //     'FOR EACH ROW'
+  //     'WHEN OLD.$transValue != NEW.$transValue'
+  //     'BEGIN'
+  //     '  UPDATE $balanceTable'
+  //     '  SET $balanceClose = $balanceClose - OLD.$transValue + NEW.$transValue'
+  //     '  WHERE $balanceAccountId = OLD.$transAccountId'
+  //     '    AND $balanceDate = OLD.$transDate;'
+  //     'END',
 
   /// Applies migration scripts to the database batch.
   ///

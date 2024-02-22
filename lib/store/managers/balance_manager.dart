@@ -78,7 +78,7 @@ class BalanceManager {
         balance.balanceDate! > injectedBalance.balanceDate!) {
       // save injectedBalance
       injectedBalance.balanceNextId = balance.balanceId;
-      await balanceRepository.addBalance(injectedBalance);
+      await balanceRepository.addNewBalance(injectedBalance);
       // update balance
       balance.balancePreviousId = injectedBalance.balanceId;
       await balanceRepository.updateBalance(balance);
@@ -94,7 +94,7 @@ class BalanceManager {
       injectedBalance.balancePreviousId = balance.balanceId;
       injectedBalance.balanceOpen = balance.balanceClose;
       injectedBalance.balanceClose = balance.balanceClose;
-      await balanceRepository.addBalance(injectedBalance);
+      await balanceRepository.addNewBalance(injectedBalance);
       // update balance (now a previous balance)
       balance.balanceNextId = injectedBalance.balanceId;
       await balanceRepository.updateBalance(balance);
@@ -109,7 +109,7 @@ class BalanceManager {
     injectedBalance.balanceNextId = balance.balanceNextId;
     injectedBalance.balanceOpen = balance.balanceClose;
     injectedBalance.balanceClose = balance.balanceClose;
-    await balanceRepository.addBalance(injectedBalance);
+    await balanceRepository.addNewBalance(injectedBalance);
     // update previous balance
     balance.balanceNextId = injectedBalance.balanceId;
     await balanceRepository.updateBalance(balance);

@@ -10,6 +10,10 @@ abstract class BalanceStorer {
   Future<Map<String, dynamic>?> queryBalanceId(int id);
   Future<Map<String, dynamic>?> queryBalanceDate(
       {required int account, required int date});
+  Future<Map<String, dynamic>?> queryBalanceBeforeDate(
+      {required int account, required int date});
+  Future<List<Map<String, dynamic>>> queryAllBalanceAfterDate(
+      {required int account, required int date});
   Future<void> updateBalance(Map<String, dynamic> balanceMap);
   Future<void> deleteBalance(int id);
 }
@@ -32,7 +36,7 @@ class BalanceStore implements BalanceStorer {
     final database = await _databaseManager.database;
 
     try {
-      int result = await database.insert(
+      final result = await database.insert(
         balanceTable,
         balanceMap,
         conflictAlgorithm: ConflictAlgorithm.abort,
@@ -55,7 +59,7 @@ class BalanceStore implements BalanceStorer {
     final database = await _databaseManager.database;
 
     try {
-      var result = await database.query(
+      final result = await database.query(
         balanceTable,
         where: '$balanceId = ?',
         whereArgs: [id],
@@ -84,7 +88,7 @@ class BalanceStore implements BalanceStorer {
     final database = await _databaseManager.database;
 
     try {
-      var result = await database.query(
+      final result = await database.query(
         balanceTable,
         where: '$balanceAccountId = ? AND $balanceDate = ?',
         whereArgs: [account, date],
@@ -94,6 +98,82 @@ class BalanceStore implements BalanceStorer {
     } catch (err) {
       log('Error: $err');
       return null;
+    }
+  }
+
+  /// Queries the most recent balance record before a specified date for a
+  /// given account ID.
+  ///
+  /// Parameters:
+  ///   - account: The account ID associated with the balance.
+  ///   - date: The date before which the balance record is sought.
+  ///
+  /// Returns a map representing the balance's data for the specified account
+  /// immediately before the given date, or null if no record is found.
+  @override
+  Future<Map<String, dynamic>?> queryBalanceBeforeDate({
+    required int account,
+    required int date,
+  }) async {
+    final database = await _databaseManager.database;
+
+    try {
+      final result = await database.query(
+        balanceTable,
+        where: '$balanceAccountId = ? AND $balanceDate < ?',
+        whereArgs: [account, date],
+        orderBy: '$balanceDate DESC',
+      );
+      if (result.isEmpty) return null;
+      return result[0];
+    } catch (err) {
+      log('Error: $err');
+      return null;
+    }
+  }
+
+  /// Queries the most recent balance record before a specified date for a given account.
+  ///
+  /// This method searches for the latest balance record for the specified account that
+  /// is dated before the given date. It's useful for retrieving the last known balance
+  /// state before a certain point in time.
+  ///
+  /// Parameters:
+  ///   - account: The account ID for which the balance is being queried.
+  ///   - date: The date before which the balance record is sought, represented as
+  ///           an integer (e.g., milliseconds since epoch).
+  ///
+  /// Returns:
+  ///   A map representing the most recent balance's data before the specified date,
+  ///   or null if no such record exists. The map includes balance details such as
+  ///   balance ID, account ID, balance date, opening balance, closing balance, etc.
+  ///
+  /// Throws:
+  ///   An exception if there's an error during the database query, logging the error.
+  ///
+  /// Note:
+  ///   This method is particularly useful for financial calculations that require
+  ///   understanding the account balance before a specific transaction or event date.
+  @override
+  Future<List<Map<String, dynamic>>> queryAllBalanceAfterDate({
+    required int account,
+    required int date,
+  }) async {
+    final database = await _databaseManager.database;
+
+    try {
+      final result = await database.query(
+        balanceTable,
+        where: '$balanceAccountId = ? AND $balanceDate > ?',
+        whereArgs: [account, date],
+        orderBy: '$balanceDate ASC',
+        limit: 1,
+      );
+      if (result.isEmpty) return [];
+      return result;
+    } catch (err) {
+      log('Error: $err');
+      return [];
     }
   }
 
@@ -108,7 +188,7 @@ class BalanceStore implements BalanceStorer {
     final database = await _databaseManager.database;
 
     try {
-      int id = balanceMap[balanceId];
+      final id = balanceMap[balanceId];
       await database.update(
         balanceTable,
         balanceMap,

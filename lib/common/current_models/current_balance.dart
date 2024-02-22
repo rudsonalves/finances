@@ -19,8 +19,6 @@ class CurrentBalance extends BalanceDbModel {
     balanceId = balance.balanceId;
     balanceAccountId = balance.balanceAccountId;
     balanceDate = balance.balanceDate;
-    balanceNextId = balance.balanceNextId;
-    balancePreviousId = balance.balancePreviousId;
     balanceOpen = balance.balanceOpen;
     balanceClose = balance.balanceClose;
   }

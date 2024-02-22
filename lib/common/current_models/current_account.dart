@@ -21,7 +21,6 @@ class CurrentAccount extends AccountDbModel {
           accountName: accountName,
           accountUserId: accountUserId,
           accountIcon: accountIcon,
-          accountLastBalance: accountLastBalance,
           accountDescription: accountDescription,
         );
 
@@ -60,7 +59,6 @@ class CurrentAccount extends AccountDbModel {
     accountName = account.accountName;
     accountUserId = account.accountUserId;
     accountIcon = account.accountIcon;
-    accountLastBalance = account.accountLastBalance;
     accountDescription = account.accountDescription;
   }
 
@@ -70,7 +68,6 @@ class CurrentAccount extends AccountDbModel {
       accountName: account.accountName,
       accountUserId: account.accountUserId,
       accountIcon: account.accountIcon,
-      accountLastBalance: account.accountLastBalance,
       accountDescription: account.accountDescription,
     );
   }

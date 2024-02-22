@@ -36,7 +36,6 @@ const accountName = 'accountName';
 const accountDescription = 'accountDescription';
 const accountUserId = 'accountUserId';
 const accountIcon = 'accountIcon';
-const accountLastBalance = 'accountLastBalance';
 
 const balanceTable = 'balanceTable';
 const balanceDateIndex = 'idxBalanceDate';
@@ -46,15 +45,9 @@ const balanceAccountIndex = 'idxBalanceAccount';
 const balanceId = 'balanceId';
 const balanceAccountId = 'balanceAccountId';
 const balanceDate = 'balanceDate';
-const balanceNextId = 'balanceNextId';
-const balancePreviousId = 'balancePreviousId';
 const balanceTransCount = 'balanceTransCount';
 const balanceOpen = 'balanceOpen';
 const balanceClose = 'balanceClose';
-
-const transDayTable = 'transDayTable';
-const transDayBalanceId = 'transDayBalanceId';
-const transDayTransId = 'transDayTransId';
 
 const categoriesTable = 'categoriesTable';
 const categoriesNameIndex = 'idxCategoriesName';
@@ -68,6 +61,8 @@ const transactionsTable = 'transactonsTable';
 const transactionsDateIndex = 'idxTransactionsDate';
 const transactionsCategoryIndex = 'idxTransactionsCategory';
 const transId = 'transId';
+const transBalanceId = 'transBalanceId';
+const transAccountId = 'transAccountId';
 const transDescription = 'transDescription';
 const transCategoryId = 'transCategoryId';
 const transValue = 'transValue';
@@ -81,6 +76,9 @@ const transferTransId0 = 'transferTransId0';
 const transferTransId1 = 'transferTransId1';
 const transferAccount0 = 'transferAccount0';
 const transferAccount1 = 'transferAccount1';
+
+const triggerAfterInsertTransaction = 'tr_after_insert_transaction';
+const triggerAfterDeleteTransaction = 'tr_after_delete_transaction';
 
 const createAppControlSQL = 'CREATE TABLE IF NOT EXISTS $appControlTable ('
     ' $appControlId INTEGER PRIMARY KEY,'
@@ -120,7 +118,6 @@ const createAccountsSQL = 'CREATE TABLE IF NOT EXISTS $accountTable ('
     ' $accountDescription TEXT,'
     ' $accountUserId TEXT NOT NULL,'
     ' $accountIcon INTEGER,'
-    ' $accountLastBalance INTEGER,'
     ' FOREIGN KEY ($accountIcon)'
     '  REFERENCES $iconsTable ($iconId)'
     '  ON DELETE CASCADE,'
@@ -137,8 +134,6 @@ const createBalanceSQL = 'CREATE TABLE IF NOT EXISTS $balanceTable ('
     ' $balanceId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
     ' $balanceAccountId INTEGER NOT NULL,'
     ' $balanceDate INTEGER NOT NULL,'
-    ' $balanceNextId INTEGER,'
-    ' $balancePreviousId INTEGER,'
     ' $balanceTransCount INTEGER,'
     ' $balanceOpen REAL NOT NULL,'
     ' $balanceClose REAL NOT NULL,'
@@ -171,6 +166,8 @@ const createCategoriesNameIndexSQL =
 
 const createTransactionsSQL = 'CREATE TABLE IF NOT EXISTS $transactionsTable ('
     ' $transId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+    ' $transBalanceId INTEGER NOT NULL,'
+    ' $transAccountId INTEGER NOT NULL,'
     ' $transDescription TEXT NOT NULL,'
     ' $transCategoryId INTEGER NOT NULL,'
     ' $transValue REAL NOT NULL,'
@@ -179,6 +176,13 @@ const createTransactionsSQL = 'CREATE TABLE IF NOT EXISTS $transactionsTable ('
     ' $transDate INTEGER NOT NULL,'
     ' FOREIGN KEY ($transCategoryId)'
     '  REFERENCES $categoriesTable ($categoryId)'
+    '  ON DELETE RESTRICT,'
+    ' FOREIGN KEY ($transBalanceId)'
+    '  REFERENCES $balanceTable ($balanceId)'
+    '  ON DELETE RESTRICT,'
+    '  ON DELETE RESTRICT,'
+    ' FOREIGN KEY ($transAccountId)'
+    '  REFERENCES $accountTable ($accountId)'
     '  ON DELETE RESTRICT'
     ')';
 
@@ -190,64 +194,41 @@ const createTransactionsCategoryIndexSQL =
     'CREATE INDEX IF NOT EXISTS $transactionsCategoryIndex'
     ' ON $transactionsTable ($transCategoryId)';
 
-const createTransDaySQL = 'CREATE TABLE IF NOT EXISTS $transDayTable ('
-    ' $transDayTransId INTEGER PRIMARY KEY NOT NULL,'
-    ' $transDayBalanceId INTEGER NOT NULL,'
-    ' FOREIGN KEY ($transDayBalanceId)'
-    '  REFERENCES $balanceTable ($balanceId)'
-    '  ON DELETE RESTRICT,'
-    ' FOREIGN KEY ($transDayTransId)'
-    '  REFERENCES $transactionsTable ($transId)'
-    '  ON DELETE CASCADE'
-    ')';
-
 const createTransfersSQL = 'CREATE TABLE IF NOT EXISTS $transfersTable ('
     ' $transferId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
-    ' $transferTransId0 INTEGER NOT NULL,'
-    ' $transferTransId1 INTEGER NOT NULL,'
-    ' $transferAccount0 INTEGER NOT NULL,'
-    ' $transferAccount1 INTEGER NOT NULL,'
+    ' $transferTransId0 INTEGER,'
+    ' $transferTransId1 INTEGER,'
     ' FOREIGN KEY ($transferTransId0)'
     '  REFERENCES $transactionsTable ($transId)'
     '  ON DELETE RESTRICT,'
     ' FOREIGN KEY ($transferTransId1)'
     '  REFERENCES $transactionsTable ($transId)'
     '  ON DELETE RESTRICT,'
-    ' FOREIGN KEY ($transferAccount0)'
-    '  REFERENCES $accountTable ($accountId)'
-    '  ON DELETE RESTRICT,'
-    ' FOREIGN KEY ($transferAccount1)'
-    '  REFERENCES $accountTable ($accountId)'
-    '  ON DELETE RESTRICT'
     ')';
 
-const createTriggerCheckBalanceNextIdSQL =
-    'CREATE TRIGGER IF NOT EXISTS $checkBalanceNextId'
-    ' BEFORE INSERT ON $balanceTable'
-    ' FOR EACH ROW'
-    ' BEGIN'
-    '   SELECT CASE'
-    '     WHEN NEW.$balanceNextId IS NOT NULL THEN'
-    '       CASE WHEN EXISTS(SELECT 1 FROM $balanceTable'
-    '       WHERE $balanceId = NEW.$balanceNextId) THEN'
-    '       1 ELSE RAISE(ABORT, \'Invalid $balanceNextId\') END'
-    '     ELSE 1'
-    '   END;'
-    ' END;';
+const createTriggerAfterInsertTransaction =
+    'CREATE TRIGGER IF NOT EXISTS $triggerAfterInsertTransaction'
+    'AFTER INSERT ON $transactionsTable'
+    'FOR EACH ROW'
+    'BEGIN'
+    '  UPDATE $balanceTable'
+    '  SET $balanceClose = $balanceClose - NEW.$transValue,'
+    '      $balanceTransCount = IFNULL($balanceTransCount, 0) + 1'
+    '  WHERE $balanceAccountId = NEW.$transAccountId'
+    '    AND $balanceDate = NEW.$transDate;'
+    'END';
 
-const createTriggerCheckBalancePreviousIdSQL =
-    'CREATE TRIGGER IF NOT EXISTS $checkBalancePreviousId'
-    ' BEFORE INSERT ON $balanceTable'
-    ' FOR EACH ROW'
-    ' BEGIN'
-    '   SELECT CASE'
-    '     WHEN NEW.$balancePreviousId IS NOT NULL THEN'
-    '       CASE WHEN EXISTS(SELECT 1 FROM $balanceTable'
-    '       WHERE $balanceId = NEW.$balancePreviousId) THEN'
-    '       1 ELSE RAISE(ABORT, \'Invalid $balancePreviousId\') END'
-    '     ELSE 1'
-    '   END;'
-    ' END;';
+const createTriggerAfterDeleteTransaction =
+    'CREATE TRIGGER IF NOT EXISTS $triggerAfterDeleteTransaction'
+    'AFTER DELETE ON $transactionsTable'
+    'FOR EACH ROW'
+    'BEGIN'
+    '  UPDATE $balanceTable'
+    "  SET $balanceClose = $balanceClose + OLD.$transValue,"
+    '      $balanceTransCount = IFNULL($balanceTransCount, 0) - 1'
+    '  WHERE $balanceAccountId = OLD.$transAccountId'
+    '    AND $balanceDate = OLD.$transDate;'
+    'END';
 
 const rawQueryTransForBalanceIdSQL = 'SELECT t.*'
     ' FROM $balanceTable b'

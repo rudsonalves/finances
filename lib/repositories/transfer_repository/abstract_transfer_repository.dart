@@ -1,8 +1,13 @@
-import '../../common/models/transfer_db_model.dart';
+import '../../common/models/transaction_db_model.dart';
 
 abstract class AbstractTransferRepository {
-  Future<void> addTranfer(TransferDbModel transfer);
-  Future<int> deleteTransfer(TransferDbModel transfer);
-  Future<TransferDbModel?> getTransferId(int id);
-  Future<int> updateTransfer(TransferDbModel transfer);
+  Future<void> addTranfer({
+    required TransactionDbModel transOrigin,
+    required int accountDestinyId,
+  });
+  Future<int> deleteTransfer(TransactionDbModel transOrigin);
+  Future<void> updateTransfer({
+    required TransactionDbModel transOrigin,
+    required int accountDestinyId,
+  });
 }

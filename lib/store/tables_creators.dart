@@ -79,9 +79,9 @@ class TablesCreators {
   /// The TransDay table links transactions to specific days for better organization
   /// and retrieval.
   /// - Parameter batch: The database batch in which the SQL command is to be executed.
-  static void createTransDayTable(Batch batch) {
-    batch.execute(createTransDaySQL);
-  }
+  // static void createTransDayTable(Batch batch) {
+  //   batch.execute(createTransDaySQL);
+  // }
 
   /// Creates the Transfers table using predefined SQL commands.
   ///
@@ -91,18 +91,14 @@ class TablesCreators {
     batch.execute(createTransfersSQL);
   }
 
-  /// Creates database triggers to ensure referential integrity and data consistency
+  /// Creates database triggers to update ballanceTable balanceClose
   /// using predefined SQL commands.
   ///
-  /// This includes triggers for maintaining the integrity of balance links.
+  /// This includes triggers for update balanceClose in insert/delete/update transactions
   /// - Parameter batch: The database batch in which the SQL commands are to be executed.
   static void createTriggers(Batch batch) {
-    // Create a trigger to check referential integrity and
-    // limit balanceNextId to balanceId
-    batch.execute(createTriggerCheckBalanceNextIdSQL);
-
-    // Create a trigger to check referential integrity and
-    // limit balancePreviousId to balanceId
-    batch.execute(createTriggerCheckBalancePreviousIdSQL);
+    batch.execute(createTriggerAfterInsertTransaction);
+    batch.execute(createTriggerAfterDeleteTransaction);
+    // batch.execute(createTriggerAfterUpdateTransaction);
   }
 }

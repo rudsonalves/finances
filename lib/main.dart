@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'app_finances.dart';
 import './locator.dart';
 import './firebase_options.dart';
-import 'store/database_provider.dart';
+import 'repositories/database/abstract_database_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,8 +15,8 @@ void main() async {
 
   setupDependencies();
 
-  var dbProvider = locator<DatabaseProvider>();
-  await dbProvider.init();
+  var dbRepository = locator<AbstractDatabaseRepository>();
+  await dbRepository.init();
 
   runApp(const AppFinances());
 }

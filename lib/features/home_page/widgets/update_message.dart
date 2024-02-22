@@ -5,11 +5,11 @@ import '../../../../common/constants/app_info.dart';
 import '../../../common/constants/themes/app_button_styles.dart';
 import '../../../common/widgets/markdown_rich_text.dart';
 import '../../../locator.dart';
-import '../../../store/database_provider.dart';
+import '../../../repositories/database/abstract_database_repository.dart';
 
 Future<void> updateMessage(BuildContext context) async {
   final locale = AppLocalizations.of(context)!;
-  final helper = locator<DatabaseProvider>(); // FIXME: use a repository package
+  final helper = locator<AbstractDatabaseRepository>();
   final primary = Theme.of(context).colorScheme.primary;
   var version = await helper.queryAppVersion();
 

@@ -6,8 +6,6 @@ class BalanceDbModel {
   int? balanceId;
   int? balanceAccountId;
   ExtendedDate? balanceDate;
-  int? balanceNextId;
-  int? balancePreviousId;
   int balanceTransCount;
   double balanceOpen;
   double balanceClose;
@@ -16,8 +14,6 @@ class BalanceDbModel {
     this.balanceId,
     this.balanceAccountId,
     this.balanceDate,
-    this.balanceNextId,
-    this.balancePreviousId,
     this.balanceTransCount = 0,
     this.balanceOpen = 0.0,
     this.balanceClose = 0.0,
@@ -29,8 +25,6 @@ class BalanceDbModel {
         ' Id: $balanceId;'
         ' AccountId: $balanceAccountId;'
         ' Date: $balanceDate;'
-        ' NextId: $balanceNextId;'
-        ' PreviousId: $balancePreviousId;'
         ' Count: $balanceTransCount;'
         ' Open: $balanceOpen;'
         ' Close: $balanceClose'
@@ -42,8 +36,6 @@ class BalanceDbModel {
       'balanceId': balanceId,
       'balanceAccountId': balanceAccountId,
       'balanceDate': balanceDate!.millisecondsSinceEpoch,
-      'balanceNextId': balanceNextId,
-      'balancePreviousId': balancePreviousId,
       'balanceTransCount': balanceTransCount,
       'balanceOpen': balanceOpen,
       'balanceClose': balanceClose,
@@ -56,11 +48,6 @@ class BalanceDbModel {
       balanceAccountId: map['balanceAccountId'] as int,
       balanceDate:
           ExtendedDate.fromMillisecondsSinceEpoch(map['balanceDate'] as int),
-      balanceNextId:
-          map['balanceNextId'] != null ? map['balanceNextId'] as int : null,
-      balancePreviousId: map['balancePreviousId'] != null
-          ? map['balancePreviousId'] as int
-          : null,
       balanceTransCount: map['balanceTransCount'] as int,
       balanceOpen: map['balanceOpen'] as double,
       balanceClose: map['balanceClose'] as double,

@@ -4,7 +4,8 @@ import 'package:get_it/get_it.dart';
 
 import './common/extensions/app_scale.dart';
 import './common/models/categories_icons.dart';
-import 'store/database_provider.dart';
+import 'repositories/database/abstract_database_repository.dart';
+import 'repositories/database/database_repository.dart';
 import 'repositories/user/abstract_user_repository.dart';
 import './features/splash/splash_controller.dart';
 import './common/current_models/current_user.dart';
@@ -27,14 +28,14 @@ import './features/home_page/home_page_controller.dart';
 import 'repositories/balance/abstract_balance_repository.dart';
 import 'repositories/category/abstract_category_repository.dart';
 import 'repositories/user/user_repository.dart';
-import 'repositories/trans_day/abstract_trans_day_repository.dart';
+// import 'repositories/trans_day/abstract_trans_day_repository.dart';
 import './features/transaction/transaction_controller.dart';
 import './services/authentication/firebase_auth_service.dart';
 import 'repositories/account/account_repository.dart';
 import 'repositories/balance/balance_repository.dart';
 import 'repositories/transaction/abstract_transaction_repository.dart';
 import 'repositories/category/category_repository.dart';
-import './repositories/trans_day/sqflite_trans_day_repository.dart';
+// import './repositories/trans_day/sqflite_trans_day_repository.dart';
 import './features/home_page/balance_card/balance_card_controller.dart';
 import 'repositories/transaction/transaction_repository.dart';
 import 'common/constants/themes/app_icons.dart';
@@ -52,7 +53,9 @@ void setupDependencies() {
       FirebaseAuthService(),
     );
 
-    locator.registerSingleton<DatabaseProvider>(DatabaseProvider());
+    locator.registerSingleton<AbstractDatabaseRepository>(
+      DatabaseRepository(),
+    );
 
     locator.registerLazySingleton<CurrentUser>(
       () => CurrentUser(),
@@ -120,9 +123,9 @@ void setupDependencies() {
       () => BalanceRepository(),
     );
 
-    locator.registerLazySingleton<AbstractTransDayRepository>(
-      () => TransDayRepository(),
-    );
+    // locator.registerLazySingleton<AbstractTransDayRepository>(
+    //   () => TransDayRepository(),
+    // );
 
     locator.registerFactory<SignInController>(
       () => SignInController(
@@ -211,5 +214,5 @@ void disposeDependencies() {
   // locator<CurrentUser>().dispose();
   // locator<DatabaseHelper>().dispose();
   // locator<AuthService>().dispose();
-  locator<DatabaseProvider>().dispose();
+  locator<AbstractDatabaseRepository>().dispose();
 }
