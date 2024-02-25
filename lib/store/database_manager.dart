@@ -75,7 +75,6 @@ class DatabaseManager {
       TablesCreators.createBalanceTable(batch);
       TablesCreators.createCategoryTable(batch);
       TablesCreators.createTransactionsTable(batch);
-      // TablesCreators.createTransDayTable(batch);
       TablesCreators.createTransfersTable(batch);
       TablesCreators.createTriggers(batch);
       await batch.commit();

@@ -117,10 +117,8 @@ class AccountStore implements AccountStorer {
 
     try {
       await database.delete(
-        transDayTable,
-        where: '$transDayBalanceId IN ('
-            ' SELECT $balanceId FROM $balanceTable WHERE $balanceAccountId = ?'
-            ')',
+        transactionsTable,
+        where: '$transAccountId = ?',
         whereArgs: [id],
       );
     } catch (err) {

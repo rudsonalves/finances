@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:finances/common/models/extends_date.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'constants.dart';
@@ -11,11 +12,16 @@ abstract class TransactionStorer {
   Future<int> updateTransactionStatus(int id, int newStatus);
   Future<int> deleteTransactionId(int id);
   Future<Map<String, Object?>?> queryTransactionAtId(int id);
-  Future<List<Map<String, dynamic>>> rawQueryTransForBalanceId(int id);
+  Future<List<Map<String, dynamic>>> queryTransactionForBalanceId(int id);
   Future<double> getIncomeBetweenDates(
       {required int startDate, required int endDate, required int accountId});
   Future<double> getExpenseBetweenDates(
       {required int startDate, required int endDate, required int accountId});
+  Future<List<Map<String, dynamic>>> queryNTransactionsFromDate({
+    required final ExtendedDate startDate,
+    required final int accountId,
+    required final int maxTransactions,
+  });
 }
 
 /// Manages database operations for transaction-related data.
@@ -156,14 +162,75 @@ class TransactionStore implements TransactionStorer {
   ///
   /// Returns a list of maps, each representing a transaction's data.
   @override
-  Future<List<Map<String, dynamic>>> rawQueryTransForBalanceId(int id) async {
+  Future<List<Map<String, dynamic>>> queryTransactionForBalanceId(
+      int balanceId) async {
     final database = await _databaseManager.database;
 
     try {
-      List<Map<String, dynamic>> result = await database.rawQuery(
-        rawQueryTransForBalanceIdSQL,
-        [id],
+      List<Map<String, dynamic>> result = await database.query(
+        transactionsTable,
+        where: '$transBalanceId = ?',
+        whereArgs: [balanceId],
+        orderBy: '$transDate DESC',
       );
+
+      return result;
+    } catch (err) {
+      log('Error: $err');
+      return [];
+    }
+  }
+
+  /// Retrieves a list of transactions for a specific account up to a specified
+  /// start date, limited to a maximum number of transactions.
+  ///
+  /// This method queries the database for transactions associated with the
+  /// provided account ID that occurred on or before the provided start date.
+  /// The transactions are returned in descending order by date, allowing for
+  /// the retrieval of the most recent transactions first. The number of
+  /// transactions returned is capped at the specified maximum number to
+  /// prevent excessive data loading.
+  ///
+  /// Parameters:
+  ///   - startDate: An `ExtendedDate` instance representing the upper bound of
+  ///                the date range for the query. Only transactions on or before
+  ///                this date will be considered.
+  ///   - accountId: The unique identifier of the account for which transactions
+  ///                are to be retrieved.
+  ///   - maxTransactions: The maximum number of transactions to retrieve. This
+  ///                      limits the result set to the most recent transactions
+  ///                      up to the specified number for the given account.
+  ///
+  /// Returns:
+  ///   A list of maps, each representing a transaction's data for the specified
+  ///   account, limited to the number specified by `maxTransactions`. If an error
+  ///   occurs during the query, an empty list is returned.
+  ///
+  /// Throws:
+  ///   Logs an error message and returns an empty list if there is an issue
+  ///   executing the query.
+  ///
+  /// Note:
+  ///   This method is particularly useful for generating reports or summaries
+  ///   of recent transactions for a specific account up to a certain date,
+  ///   facilitating financial analysis and record-keeping for individual accounts.
+  @override
+  Future<List<Map<String, dynamic>>> queryNTransactionsFromDate({
+    required final ExtendedDate startDate,
+    required final int accountId,
+    required final int maxTransactions,
+  }) async {
+    final database = await _databaseManager.database;
+
+    try {
+      List<Map<String, dynamic>> result = await database.query(
+        transactionsTable,
+        where: '$transDate < ? AND $transAccountId = ?',
+        whereArgs: [startDate.millisecondsSinceEpoch, accountId],
+        orderBy: '$transDate DESC',
+        limit: maxTransactions,
+      );
+
       return result;
     } catch (err) {
       log('Error: $err');

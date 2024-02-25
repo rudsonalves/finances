@@ -4,11 +4,15 @@ class TransferDbModel {
   int? transferId;
   int? transferTransId0;
   int? transferTransId1;
+  int? transferAccountId0;
+  int? transferAccountId1;
 
   TransferDbModel({
     this.transferId,
     this.transferTransId0,
     this.transferTransId1,
+    this.transferAccountId0,
+    this.transferAccountId1,
   });
 
   Map<String, dynamic> toMap() {
@@ -16,6 +20,8 @@ class TransferDbModel {
       'transferId': transferId,
       'transferTransId0': transferTransId0,
       'transferTransId1': transferTransId1,
+      'transferAccountId0': transferAccountId0,
+      'transferAccountId1': transferAccountId1,
     };
   }
 
@@ -24,6 +30,8 @@ class TransferDbModel {
       transferId: map['transferId'] != null ? map['transferId'] as int : null,
       transferTransId0: map['transferTransId0'] as int,
       transferTransId1: map['transferTransId1'] as int,
+      transferAccountId0: map['transferAccountId0'] as int,
+      transferAccountId1: map['transferAccountId1'] as int,
     );
   }
 

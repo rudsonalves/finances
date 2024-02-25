@@ -9,7 +9,7 @@ import '../../common/widgets/account_dropdown_form_field.dart';
 import '../../common/widgets/simple_spin_box_field.dart';
 import '../../locator.dart';
 import '../../repositories/account/abstract_account_repository.dart';
-import '../../store/managers/transfers_manager.dart';
+import '../../repositories/transfer/abstract_transfer_repository.dart';
 import '../categories/categories_controller.dart';
 import '../categories/widget/add_category_page.dart';
 import '../help_manager/main_manager.dart';
@@ -68,6 +68,8 @@ class _TransactionPageState extends State<TransactionPage> {
 
   final _controller = locator<TransactionController>();
   final _categoryRepository = locator<AbstractCategoryRepository>();
+  // final _transactionRepository = locator<AbstractTransactionRepository>();
+  final _transferRepository = locator<AbstractTransferRepository>();
   final _homePageController = locator<HomePageController>();
   int? _categoryId;
 
@@ -92,10 +94,10 @@ class _TransactionPageState extends State<TransactionPage> {
           )
           .categoryName;
       _income = widget.transaction!.transValue >= 0;
-      _controller.getTransferAccountName(
-        transaction: widget.transaction!,
-        originAccountId: _originAccount.value.accountId,
-      );
+      // _controller.getTransferAccountName(
+      //   transaction: widget.transaction!,
+      //   originAccountId: _originAccount.value.accountId,
+      // );
     }
   }
 
@@ -133,19 +135,21 @@ class _TransactionPageState extends State<TransactionPage> {
       value = _income ? value.abs() : -value.abs();
 
       // get destination account
-      AccountDbModel? destinationAccount;
+      AccountDbModel? destinyAccount;
 
       if (_controller.destAccountId != null) {
         int? accountId = _controller.destAccountId;
         if (accountId == null) {
           throw Exception('transactionPage: AccountId return null');
         }
-        destinationAccount = _accountsMap[accountId];
+        destinyAccount = _accountsMap[accountId];
       }
 
       // Create transaction
       final TransactionDbModel transaction = TransactionDbModel(
         transId: widget.transaction?.transId,
+        // transBalanceId: xxx,
+        transAccountId: _originAccount.value.accountId!,
         transDescription: _descriptionController.text,
         transCategoryId: _categoryRepository.getIdByName(
           _categoryController.text,
@@ -165,7 +169,7 @@ class _TransactionPageState extends State<TransactionPage> {
 
       final navigator = Navigator.of(context);
       // Check for Transfer
-      if (destinationAccount != null) {
+      if (destinyAccount != null) {
         if (transaction.transId == null) {
           if (_repeat) {
             ExtendedDate date = transaction.transDate;
@@ -177,26 +181,38 @@ class _TransactionPageState extends State<TransactionPage> {
               }
               newTrans.transDescription = '${newTrans.transDescription} $label';
               newTrans.transDate = date;
-              await TransfersManager.addTransfer(
-                transaction0: newTrans,
-                account0: _originAccount.value,
-                account1: destinationAccount,
+              await _transferRepository.addTranfer(
+                transOrigin: newTrans,
+                accountDestinyId: destinyAccount.accountId!,
               );
+              // TransfersManager.addTransfer(
+              //   transaction0: newTrans,
+              //   account0: _originAccount.value,
+              //   account1: destinyAccount,
+              // );
             }
           } else {
-            await TransfersManager.addTransfer(
-              transaction0: transaction,
-              account0: _originAccount.value,
-              account1: destinationAccount,
+            await _transferRepository.addTranfer(
+              transOrigin: transaction,
+              accountDestinyId: destinyAccount.accountId!,
             );
+            // await TransfersManager.addTransfer(
+            //   transaction0: transaction,
+            //   account0: _originAccount.value,
+            //   account1: destinyAccount,
+            // );
           }
           navigator.pop();
         } else {
-          await TransfersManager.updateTransfer(
-            transaction0: transaction,
-            account0: _originAccount.value,
-            account1: destinationAccount,
+          await _transferRepository.updateTransfer(
+            transOrigin: transaction,
+            accountDestinyId: destinyAccount.accountId!,
           );
+          // TransfersManager.updateTransfer(
+          //   transaction0: transaction,
+          //   account0: _originAccount.value,
+          //   account1: destinyAccount,
+          // );
           navigator.pop();
         }
       } else {

@@ -3,22 +3,24 @@ import 'package:flutter/material.dart';
 import '../../common/current_models/current_account.dart';
 import '../../common/models/account_db_model.dart';
 import '../../locator.dart';
-import '../../repositories/transfer_repository/abstract_transfer_repository.dart';
+import '../../repositories/transaction/abstract_transaction_repository.dart';
+import '../../repositories/transfer/abstract_transfer_repository.dart';
 import './transaction_state.dart';
 import '../../common/models/category_db_model.dart';
 import '../../common/models/transaction_db_model.dart';
 import '../../repositories/category/abstract_category_repository.dart';
-import '../../store/managers/transactions_manager.dart';
 
 class TransactionController extends ChangeNotifier {
+  final _transactionRepository = locator<AbstractTransactionRepository>();
+  final _transferRepository = locator<AbstractTransferRepository>();
   final _categoryRepository = locator<AbstractCategoryRepository>();
-  int _originAccountId = locator<CurrentAccount>().accountId!;
-  int? _destinationAccountId;
+  int _currentAccountId = locator<CurrentAccount>().accountId!;
+  int? _destinyAccountId;
 
-  int? get destAccountId => _destinationAccountId;
+  int? get destAccountId => _destinyAccountId;
 
-  void setDestAccountId(int? id) => _destinationAccountId = id;
-  void setOriginAccount(int id) => _originAccountId = id;
+  void setDestAccountId(int? id) => _destinyAccountId = id;
+  void setOriginAccount(int id) => _currentAccountId = id;
 
   TransactionState _state = TransactionStateInitial();
 
@@ -34,12 +36,12 @@ class TransactionController extends ChangeNotifier {
     notifyListeners();
   }
 
-  set accountId(int id) => _originAccountId = id;
+  // set accountId(int id) => _originAccountId = id;
 
   Future<void> init() async {
     _changeState(TransactionStateLoading());
     await _categoryRepository.init();
-    _destinationAccountId = null;
+    _destinyAccountId = null;
 
     _changeState(TransactionStateSuccess());
   }
@@ -58,40 +60,29 @@ class TransactionController extends ChangeNotifier {
     required TransactionDbModel transaction,
     AccountDbModel? account,
   }) async {
-    await TransactionsManager.addTransaction(
-      transaction: transaction,
-      account: account,
-    );
+    await _transactionRepository.addNewTransaction(transaction);
   }
 
   Future<void> updateTransactions({
     required TransactionDbModel transaction,
     AccountDbModel? account,
   }) async {
-    await TransactionsManager.updateTransaction(
-      transaction: transaction,
-      account: account,
-    );
+    await _transactionRepository.updateTransaction(transaction);
   }
 
   Future<void> getTransferAccountName({
     required TransactionDbModel transaction,
-    int? originAccountId,
   }) async {
     _changeState(TransactionStateLoading());
     try {
-      if (originAccountId != null) {
-        setOriginAccount(originAccountId);
-      }
       int? transferId = transaction.transTransferId;
       if (transferId == null) return;
 
-      final transfer =
-          await locator<AbstractTransferRepository>().getTransferId(transferId);
+      final transfer = await _transferRepository.getTransferById(transferId);
 
-      _destinationAccountId = transfer!.transferAccount0 == _originAccountId
-          ? transfer.transferAccount1
-          : transfer.transferAccount0;
+      _destinyAccountId = transfer!.transferAccountId0 == _currentAccountId
+          ? transfer.transferAccountId1
+          : transfer.transferAccountId0;
 
       _changeState(TransactionStateSuccess());
     } catch (err) {

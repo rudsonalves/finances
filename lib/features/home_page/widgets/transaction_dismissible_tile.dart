@@ -5,7 +5,8 @@ import '../../../common/constants/themes/colors/app_colors.dart';
 import '../../../common/constants/themes/colors/custom_color.g.dart';
 import '../../../common/models/extends_date.dart';
 import '../../../locator.dart';
-import '../../../store/managers/transfers_manager.dart';
+import '../../../repositories/transaction/transaction_repository.dart';
+import '../../../repositories/transfer/transfer_repository.dart';
 import '../../statistics/statistic_controller.dart';
 import '../home_page_controller.dart';
 import '../balance_card/balance_card_controller.dart';
@@ -17,7 +18,6 @@ import '../../../common/functions/function_alert_dialog.dart';
 import '../../../common/constants/themes/app_text_styles.dart';
 import '../../../repositories/category/abstract_category_repository.dart';
 import '../../../common/functions/base_dismissible_container.dart';
-import '../../../store/managers/transactions_manager.dart';
 
 class TransactionDismissibleTile extends StatefulWidget {
   final double textScale;
@@ -260,9 +260,11 @@ class _TransactionDismissibleTileState
             if (action ?? false) {
               try {
                 if (transaction.transTransferId == null) {
-                  await TransactionsManager.removeTransaction(transaction);
+                  await locator<TransactionRepository>()
+                      .deleteTransaction(transaction);
                 } else {
-                  await TransfersManager.removeTransfer(transaction);
+                  await locator<TransferRepository>()
+                      .deleteTransfer(transaction);
                 }
                 locator<StatisticsController>().recalculate();
                 _homePageController.getTransactions();

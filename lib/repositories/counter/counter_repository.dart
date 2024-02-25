@@ -1,10 +1,10 @@
 import '../../common/models/account_db_model.dart';
 import '../../common/models/category_db_model.dart';
-import '../../store/count_store.dart';
+import '../../store/manage_counter.dart';
 import 'abstract_counter_repository.dart';
 
 class CounterRepository implements AbstractCounterRepository {
-  final store = CountStore();
+  final store = ManageCount();
 
   @override
   Future<int> countTransactionForCategoryId(CategoryDbModel category) async {

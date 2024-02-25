@@ -193,7 +193,7 @@ class TransactionRepository implements AbstractTransactionRepository {
   ///   by providing a complete view of transactions for a specific balance.
   @override
   Future<List<TransactionDbModel>> getTransForBalanceId(int balanceId) async {
-    var maps = await _store.rawQueryTransForBalanceId(balanceId);
+    var maps = await _store.queryTransactionForBalanceId(balanceId);
     return maps
         .map((transMap) => TransactionDbModel.fromMap(transMap))
         .toList();
@@ -268,16 +268,95 @@ class TransactionRepository implements AbstractTransactionRepository {
   ///   accurate financial records.
   @override
   Future<int> deleteTransaction(TransactionDbModel transaction) async {
-    if (!_validateTransactionForDeletion(transaction)) return -1;
+    try {
+      if (!_validateTransactionForDeletion(transaction)) return -1;
 
-    int deleted = await _store.deleteTransactionId(transaction.transId!);
+      int deleted = await deleteTransactionByValues(
+        transId: transaction.transId!,
+        date: transaction.transDate,
+        value: transaction.transValue,
+      );
 
-    if (deleted > 0) {
-      await _delAdjustSubsequentBalances(transaction);
+      return deleted;
+    } catch (err) {
+      log('TransactionRepository: deleteTransaction -> $err');
+      return -1;
     }
-
-    return deleted;
   }
+
+  /// Deletes a transaction by transId from the database and adjusts subsequent
+  /// balance records.
+  ///
+  /// This method removes a transaction of id transId and updates the opening
+  /// and closing balances of all subsequent balance records to reflect the
+  /// deletion. It first validates the transaction to ensure it has both a
+  /// transaction ID and a balance ID before proceeding with the deletion.
+  ///
+  /// Parameters:
+  ///   - transId: The transaction id to deleted;
+  ///   - date: the transaction.transDate;
+  ///   - value: the transaction.transValue.
+  ///
+  /// Returns:
+  ///   The number of transactions deleted. Returns -1 if the transaction fails
+  ///   validation checks.
+  ///
+  /// Note:
+  ///   This method also triggers adjustments to subsequent balances to maintain
+  ///   accurate financial records.
+  @override
+  Future<int> deleteTransactionByValues({
+    required int transId,
+    required ExtendedDate date,
+    required double value,
+  }) async {
+    try {
+      int deleted = await _store.deleteTransactionId(transId);
+
+      if (deleted != 1) {
+        final message =
+            'TransactionRepository: deleteTransactionById return $deleted';
+        log(message);
+        throw Exception(message);
+      }
+
+      await _delAdjustSubsequentBalancesByValues(
+        transDate: date.onlyDate,
+        transValue: value,
+      );
+
+      return deleted;
+    } catch (err) {
+      log('TransactionRepository: deleteTransaction -> $err');
+      return -1;
+    }
+  }
+
+  // @override
+  // Future<int> deleteTransactionByValues({
+  //   required int transId,
+  //   required ExtendedDate transDate,
+  //   required double transValue,
+  // }) async {
+  //   try {
+  //     int deleted = await _store.deleteTransactionId(transId);
+
+  //     if (deleted != 1) {
+  //       final message =
+  //           'TransactionRepository: deleteTransactionByValues return $deleted';
+  //       log(message);
+  //       throw Exception(message);
+  //     }
+  //     await _delAdjustSubsequentBalancesByValues(
+  //       transDate: transDate,
+  //       transValue: transValue,
+  //     );
+  //     return deleted;
+  //   } catch (err) {
+  //     log('TransactionRepository: $err');
+  //     return -1;
+  //   }
+  // }
 
   /// Validates a transaction for deletion.
   ///
@@ -316,22 +395,48 @@ class TransactionRepository implements AbstractTransactionRepository {
   ///   The actual balance adjustments are informed by the transaction's value and
   ///   date, ensuring that all subsequent balances are correctly updated to remain
   ///   consistent with the current financial state.
-  Future<void> _delAdjustSubsequentBalances(
-    TransactionDbModel transaction,
-  ) async {
-    // Get only the date of transaction
-    final onlyDate = transaction.transDate.onlyDate;
-    final value = transaction.transValue;
+  // Future<void> _delAdjustSubsequentBalances(
+  //   TransactionDbModel transaction,
+  // ) async {
+  //   // Get only the date of transaction
+  //   final onlyDate = transaction.transDate.onlyDate;
+  //   final value = transaction.transValue;
 
+  //   await _delAdjustSubsequentBalancesByValues(
+  //     transDate: onlyDate,
+  //     transValue: value,
+  //   );
+  // }
+
+  /// Adjusts subsequent balance records after a transaction deletion.
+  ///
+  /// Following the deletion of a transaction, this method updates the opening and
+  /// closing balances of all balance records dated after the transaction's date.
+  /// The adjustments ensure that the financial records accurately reflect the removal
+  /// of the transaction.
+  ///
+  /// Parameters:
+  ///   - transDate: A ExtendedDate date of transaction.
+  ///   - transValue: A double value of transaction.
+  ///
+  /// Note:
+  ///   The actual balance adjustments are informed by the transaction's value and
+  ///   date, ensuring that all subsequent balances are correctly updated to remain
+  ///   consistent with the current financial state.
+  Future<void> _delAdjustSubsequentBalancesByValues({
+    required ExtendedDate transDate,
+    required double transValue,
+  }) async {
     // Get all balances after date
+    final onlyDate = transDate.onlyDate;
     final balancesAfterDate = await _balanceRespository.getAllBalanceAfterDate(
       date: onlyDate,
     );
 
     // Update all ballances after date
     for (final balance in balancesAfterDate) {
-      balance.balanceOpen += value;
-      balance.balanceClose += value;
+      balance.balanceOpen += transValue;
+      balance.balanceClose += transValue;
 
       await _balanceRespository.updateBalance(balance);
     }
@@ -416,5 +521,59 @@ class TransactionRepository implements AbstractTransactionRepository {
       log('updateTransactionStatus return $result');
     }
     return result;
+  }
+
+  /// Retrieves a list of transactions for a specific account up to a specified
+  /// start date, limited to a maximum number of transactions.
+  ///
+  /// This method queries the database for transactions associated with the
+  /// provided account ID that occurred on or before the provided start date.
+  /// The transactions are returned in descending order by date, allowing for
+  /// the retrieval of the most recent transactions first. The number of
+  /// transactions returned is capped at the specified maximum number to
+  /// prevent excessive data loading.
+  ///
+  /// Parameters:
+  ///   - startDate: An `ExtendedDate` instance representing the upper bound of
+  ///                the date range for the query. Only transactions on or before
+  ///                this date will be considered.
+  ///   - accountId: The unique identifier of the account for which transactions
+  ///                are to be retrieved.
+  ///   - maxTransactions: The maximum number of transactions to retrieve. This
+  ///                      limits the result set to the most recent transactions
+  ///                      up to the specified number for the given account.
+  ///
+  /// Returns:
+  ///   A list of maps, each representing a transaction's data for the specified
+  ///   account, limited to the number specified by `maxTransactions`. If an error
+  ///   occurs during the query, an empty list is returned.
+  ///
+  /// Throws:
+  ///   Logs an error message and returns an empty list if there is an issue
+  ///   executing the query.
+  ///
+  /// Note:
+  ///   This method is particularly useful for generating reports or summaries
+  ///   of recent transactions for a specific account up to a certain date,
+  ///   facilitating financial analysis and record-keeping for individual accounts.
+  @override
+  Future<List<TransactionDbModel>> getNTransactionsFromDate({
+    required ExtendedDate startDate,
+    required int accountId,
+    required int maxTransactions,
+  }) async {
+    final result = await _store.queryNTransactionsFromDate(
+      startDate: startDate,
+      accountId: accountId,
+      maxTransactions: maxTransactions,
+    );
+
+    final List<TransactionDbModel> transactions = [];
+
+    transactions.addAll(
+      result.map((element) => TransactionDbModel.fromMap(element)),
+    );
+
+    return transactions;
   }
 }

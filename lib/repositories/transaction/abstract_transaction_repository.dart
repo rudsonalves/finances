@@ -8,9 +8,19 @@ abstract class AbstractTransactionRepository {
   Future<TransactionDbModel?> getTransId(int id);
   Future<void> updateTransaction(TransactionDbModel transaction);
   Future<int> deleteTransaction(TransactionDbModel transaction);
+  Future<int> deleteTransactionByValues({
+    required int transId,
+    required ExtendedDate date,
+    required double value,
+  });
   Future<int> updateTransStatus(int id, TransStatus status);
   Future<void> getCardBalance({
     required CardBalanceModel cardBalance,
     ExtendedDate? date,
+  });
+  Future<List<TransactionDbModel>> getNTransactionsFromDate({
+    required ExtendedDate startDate,
+    required int accountId,
+    required int maxTransactions,
   });
 }

@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage>
 
   Future<void> loadMoreTransactions() async {
     final listViewPosition = _listViewController.position.pixels;
-    await _controller.getNextTransactions();
+    await _controller.getTransactions();
     _listViewController.jumpTo(listViewPosition);
   }
 
@@ -311,7 +311,7 @@ class _HomePageState extends State<HomePage>
                                     bottom: 8,
                                   ),
                                   child: ElevatedButton(
-                                    onPressed: _controller.lastDate != null
+                                    onPressed: _controller.haveMoreTransactions
                                         ? loadMoreTransactions
                                         : null,
                                     style: ElevatedButton.styleFrom(

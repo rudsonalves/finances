@@ -1,3 +1,6 @@
+import '../../common/current_models/current_account.dart';
+import '../../common/models/balance_db_model.dart';
+import '../../common/models/extends_date.dart';
 import '../../locator.dart';
 import '../../common/models/account_db_model.dart';
 import '../../common/current_models/current_user.dart';
@@ -103,5 +106,31 @@ class AccountRepository implements AbstractAccountRepository {
   @override
   AccountDbModel? getAccount(int accountId) {
     return accountsMap[accountId];
+  }
+
+  /// This method returns the current date balance of the [account] passed.
+  /// If no balance is found, a new one will be injected on the current date.
+  Future<BalanceDbModel> getAccountTodayBalance(
+    AccountDbModel? account,
+  ) async {
+    final balanceRepository = locator<AbstractBalanceRepository>();
+    account ??= locator<CurrentAccount>();
+    final onlyDate = ExtendedDate.nowDate();
+
+    BalanceDbModel? balance = await balanceRepository.getBalanceInDate(
+      date: onlyDate,
+      accountId: account.accountId,
+    );
+
+    // insert a new balance in the account (accountId)
+    if (balance == null) {
+      balance = BalanceDbModel(
+        balanceAccountId: account.accountId,
+        balanceDate: onlyDate,
+      );
+      balanceRepository.addNewBalance(balance);
+    }
+
+    return balance;
   }
 }

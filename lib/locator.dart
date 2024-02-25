@@ -42,8 +42,8 @@ import 'common/constants/themes/app_icons.dart';
 import 'common/models/icons_model.dart';
 import 'repositories/icons/abstract_icons_repository.dart';
 import 'repositories/icons/icons_repository.dart';
-import 'repositories/transfer_repository/transfer_repository.dart';
-import 'repositories/transfer_repository/abstract_transfer_repository.dart';
+import 'repositories/transfer/transfer_repository.dart';
+import 'repositories/transfer/abstract_transfer_repository.dart';
 
 final locator = GetIt.instance;
 

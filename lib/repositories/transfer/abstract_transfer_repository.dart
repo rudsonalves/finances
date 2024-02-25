@@ -1,4 +1,5 @@
 import '../../common/models/transaction_db_model.dart';
+import '../../common/models/transfer_db_model.dart';
 
 abstract class AbstractTransferRepository {
   Future<void> addTranfer({
@@ -10,4 +11,5 @@ abstract class AbstractTransferRepository {
     required TransactionDbModel transOrigin,
     required int accountDestinyId,
   });
+  Future<TransferDbModel?> getTransferById(int id);
 }
