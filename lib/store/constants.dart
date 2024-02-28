@@ -203,40 +203,40 @@ const createTransfersSQL = 'CREATE TABLE IF NOT EXISTS $transfersTable ('
     ' $transferAccount0 INTEGER,'
     ' $transferAccount1 INTEGER,'
     ' FOREIGN KEY ($transferTransId0)'
-    '   REFERENCES $transactionsTable ($transId)'
+    '   REFERENCES $transactionsTable ($transId),'
     ' FOREIGN KEY ($transferTransId1)'
-    '   REFERENCES $transactionsTable ($transId)'
+    '   REFERENCES $transactionsTable ($transId),'
     ' FOREIGN KEY ($transferAccount0)'
     '   REFERENCES $accountTable ($accountId)'
     '   ON DELETE RESTRICT,'
-    ' FOREIGN KEY $transferAccount1'
+    ' FOREIGN KEY ($transferAccount1)'
     '   REFERENCES $accountTable ($accountId)'
     '   ON DELETE RESTRICT'
     ')';
 
 const createTriggerAfterInsertTransaction =
     'CREATE TRIGGER IF NOT EXISTS $triggerAfterInsertTransaction'
-    'AFTER INSERT ON $transactionsTable'
-    'FOR EACH ROW'
-    'BEGIN'
-    '  UPDATE $balanceTable'
-    '  SET $balanceClose = $balanceClose - NEW.$transValue,'
-    '      $balanceTransCount = IFNULL($balanceTransCount, 0) + 1'
-    '  WHERE $balanceAccountId = NEW.$transAccountId'
-    '    AND $balanceDate = NEW.$transDate;'
-    'END';
+    ' AFTER INSERT ON $transactionsTable'
+    ' FOR EACH ROW'
+    ' BEGIN'
+    '   UPDATE $balanceTable'
+    '   SET $balanceClose = $balanceClose - NEW.$transValue,'
+    '     $balanceTransCount = IFNULL($balanceTransCount, 0) + 1'
+    '   WHERE $balanceAccountId = NEW.$transAccountId'
+    '     AND $balanceDate = NEW.$transDate;'
+    ' END';
 
 const createTriggerAfterDeleteTransaction =
     'CREATE TRIGGER IF NOT EXISTS $triggerAfterDeleteTransaction'
-    'AFTER DELETE ON $transactionsTable'
-    'FOR EACH ROW'
-    'BEGIN'
-    '  UPDATE $balanceTable'
-    "  SET $balanceClose = $balanceClose + OLD.$transValue,"
-    '      $balanceTransCount = IFNULL($balanceTransCount, 0) - 1'
-    '  WHERE $balanceAccountId = OLD.$transAccountId'
-    '    AND $balanceDate = OLD.$transDate;'
-    'END';
+    ' AFTER DELETE ON $transactionsTable'
+    ' FOR EACH ROW'
+    ' BEGIN'
+    '   UPDATE $balanceTable'
+    '   SET $balanceClose = $balanceClose + OLD.$transValue,'
+    '     $balanceTransCount = IFNULL($balanceTransCount, 0) - 1'
+    '   WHERE $balanceAccountId = OLD.$transAccountId'
+    '     AND $balanceDate = OLD.$transDate;'
+    ' END';
 
 const getIncomeBetweenDatesSQL = 'SELECT SUM($transValue) AS totalIncomes'
     ' FROM $transactionsTable'
@@ -254,4 +254,4 @@ const countTransactionForCategoryIdSQL =
     'SELECT COUNT(*) FROM $transactionsTable WHERE $transCategoryId = ?';
 
 const countTransactionsForAccountIdSQL =
-    'SELECT COUNT(*) FROM $transactionsTable WHERE $accountId = ?';
+    'SELECT COUNT(*) FROM $transactionsTable WHERE $transAccountId = ?';

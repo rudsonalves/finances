@@ -30,6 +30,7 @@
   "settingsPageSettingsError": "¡Error de Ajustes!",
   "settingsPageCreateRestoreBackup": "Crear/Restaurar Copia de Seguridad",
   "settingsPageAppVersion": "Version",
+  "settingsPageUserNameMsg": "Haga clic aquí para agregar su nombre",
   "splashPageMsg0": "Gestiona tus Finanzas Personales",
   "splashPageGetStarted": "Empezar",
   "splashPageHaveAccount": "¿Ya tienes una cuenta?",

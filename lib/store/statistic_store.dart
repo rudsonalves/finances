@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import '../locator.dart';
 import 'constants.dart';
 import 'database_manager.dart';
 
@@ -13,7 +14,7 @@ abstract class StatisticStorer {
 /// Utilizes [DatabaseManager] to perform complex queries for statistical analysis,
 /// such as summing transactions by category over a specified date range.
 class StatisticStore implements StatisticStorer {
-  final _databaseManager = DatabaseManager();
+  final _databaseManager = locator<DatabaseManager>();
 
   /// Retrieves the sum of transactions by category within a specified date range.
   ///

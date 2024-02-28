@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:sqflite/sqflite.dart';
 
+import '../locator.dart';
 import 'constants.dart';
 import 'database_manager.dart';
 
@@ -17,7 +18,7 @@ abstract class TransferStorer {
 /// Facilitates the insertion, querying, updating, and deletion of transfer records
 /// in the database, using the DatabaseManager for database interactions.
 class TransferStore implements TransferStorer {
-  final _databaseManager = DatabaseManager();
+  final _databaseManager = locator<DatabaseManager>();
 
   /// Inserts a new transfer record into the database.
   ///

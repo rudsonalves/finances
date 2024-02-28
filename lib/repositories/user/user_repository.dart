@@ -40,8 +40,7 @@ class UserRepository implements AbstractUserRepository {
   @override
   Future<void> addUser(UserDbModel user) async {
     user.userName ??= '';
-    Map<String, dynamic> userMap = user.toMap();
-    int result = await _store.insertUser(userMap);
+    int result = await _store.insertUser(user.toMap());
     if (result < 0) {
       throw Exception('addUser return id $result');
     }

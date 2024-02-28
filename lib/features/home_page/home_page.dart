@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin {
   final _controller = locator<HomePageController>();
   final _balanceController = locator<BalanceCardController>();
-  final ScrollController _listViewController = ScrollController();
+  final _listViewController = ScrollController();
   final _userNameNotifier = locator<UserNameNotifier>();
   String _filterText = '';
   bool _filterIsDescription = true;
@@ -74,9 +74,13 @@ class _HomePageState extends State<HomePage>
     int hour = DateTime.now().hour;
     final locale = AppLocalizations.of(context)!;
 
-    if (hour < 12) return locale.greetingsGoodMorning;
-    if (hour < 18) return locale.greetingsGoodAfternoon;
-    return locale.greetingsGoodNight;
+    if (hour < 12) {
+      return locale.greetingsGoodMorning;
+    } else if (hour < 18) {
+      return locale.greetingsGoodAfternoon;
+    } else {
+      return locale.greetingsGoodNight;
+    }
   }
 
   Future<void> loadMoreTransactions() async {
@@ -133,8 +137,12 @@ class _HomePageState extends State<HomePage>
             AnimatedBuilder(
                 animation: _userNameNotifier,
                 builder: (context, _) {
+                  final userName = currentUser.userName == null ||
+                          currentUser.userName!.isEmpty
+                      ? '***'
+                      : currentUser.userName!;
                   return Text(
-                    currentUser.userName ?? '',
+                    userName,
                     style: AppTextStyles.textStyleSemiBold20.copyWith(
                       color: onPrimary,
                     ),
@@ -259,10 +267,10 @@ class _HomePageState extends State<HomePage>
                                 (_) =>
                                     managerTutorial(context, introductionHelp),
                               );
+                              _showTutorial = false;
                             }
                             return noTransactions(locale, primary);
                           }
-                          _showTutorial = false;
 
                           List<TransactionDbModel> transactions = [];
 

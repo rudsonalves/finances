@@ -288,6 +288,33 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
+## 2024/02/28 - version: 1.1.00+70:
+
+This commit finalizes the database migration process for the app, encompassing the removal and addition of various columns, the elimination of the `transDay` table, the introduction of new triggers, and many other changes. The project now moves into the testing phase and final adjustments.
+
+- **Refactoring and Functionality Enhancements**:
+  - Replaced calls to `balanceRepository.createTodayBalance` with `BalanceManager.balanceInDate` in `current_balance.dart` for more direct balance management.
+  - Removed the `updateTransaction` method from `transaction_db_model.dart`, centralizing transaction management within the `TransactionManager`.
+  - Updated `account_controller.dart` to use `BalanceManager.balanceInDate` instead of `AccountManager.getAccountTodayBalance`, streamlining balance retrieval.
+  - Reworked the `greetingText()` method in `home_page.dart` for improved code readability, including a fallback to display `***` when the user's name is undefined, and repositioned `_showTutorial` to disable the automatic help page on the app's first launch.
+  - Transitioned from using locators to delete transactions in `transaction_dismissible_tile.dart` to employing `TransactionManager.removeTransaction`, enhancing encapsulation.
+  - Added user feedback in `settings_page.dart` for instances where the user's name is not declared, making the option to change the name more discoverable.
+  - Re-enabled a 2-second delay in the splash screen within `splash_controller.dart` for a smoother user experience during app startup.
+  - In `transaction_controller.dart`, replaced repository calls with `TransactionManager` methods for adding and updating transactions, aligning with the managerial approach.
+  - Modified `transaction_page.dart` to use `TransferManager` for adding and updating transfers, further consolidating the management layer.
+
+- **Manager Packages Introduction**:
+  - Introduced `balance_manager.dart`, `transaction_manager.dart`, and `transfer_manager.dart` to encapsulate complex operations and promote decoupling across the app. These managers handle a variety of tasks, including balance retrieval and adjustments, transaction and transfer operations, enhancing the app's architectural integrity.
+
+- **Repository Refactoring**:
+  - Refactored repository packages to focus solely on interactions with the store layer and app models, moving all business logic to the newly introduced manager packages. This shift towards a cleaner separation of concerns ensures a more maintainable codebase.
+
+- **Store Package Overhaul**:
+  - The store package has been reorganized by responsibilities, removing the `store/manager` folder and restructuring its contents to align with the new database schema. This comprehensive refactor addresses the need for a more organized and responsibility-driven code structure, setting the stage for enhanced maintainability and scalability of the app's data layer.
+
+This extensive set of changes marks a pivotal step towards optimizing the app's database structure and streamlining its internal architecture, laying the groundwork for the upcoming testing and finalization phase.
+
+
 ## 2024/02/22 - version 1.1.00+70
 
 This update encompasses a comprehensive refactor related to database table changes, leading to a significant number of modifications throughout the project.

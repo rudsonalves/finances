@@ -2,16 +2,17 @@ import 'dart:developer';
 
 import 'package:sqflite/sqflite.dart';
 
+import '../locator.dart';
 import 'constants.dart';
 import 'database_manager.dart';
 
 abstract class BalanceStorer {
   Future<int> insertBalance(Map<String, dynamic> balanceMap);
   Future<Map<String, dynamic>?> queryBalanceId(int id);
-  Future<Map<String, dynamic>?> queryBalanceDate(
+  Future<Map<String, dynamic>?> queryBalanceInDate(
       {required int account, required int date});
-  Future<Map<String, dynamic>?> queryBalanceBeforeDate(
-      {required int account, required int date});
+  // Future<Map<String, dynamic>?> queryBalanceBeforeDate(
+  //     {required int account, required int date});
   Future<List<Map<String, dynamic>>> queryAllBalanceAfterDate(
       {required int account, required int date});
   Future<void> updateBalance(Map<String, dynamic> balanceMap);
@@ -23,7 +24,7 @@ abstract class BalanceStorer {
 /// This class provides methods to insert, query, update, and delete balance records
 /// in the database. It uses the DatabaseManager to facilitate interactions with the database.
 class BalanceStore implements BalanceStorer {
-  final _databaseManager = DatabaseManager();
+  final _databaseManager = locator<DatabaseManager>();
 
   /// Inserts a new balance record into the database.
   ///
@@ -81,7 +82,7 @@ class BalanceStore implements BalanceStorer {
   /// Returns a map representing the balance's data for the specified account and date,
   /// or null if no record is found.
   @override
-  Future<Map<String, dynamic>?> queryBalanceDate({
+  Future<Map<String, dynamic>?> queryBalanceInDate({
     required int account,
     required int date,
   }) async {
@@ -90,7 +91,7 @@ class BalanceStore implements BalanceStorer {
     try {
       final result = await database.query(
         balanceTable,
-        where: '$balanceAccountId = ? AND $balanceDate = ?',
+        where: '$balanceAccountId = ? AND $balanceDate <= ?',
         whereArgs: [account, date],
       );
       if (result.isEmpty) return null;
@@ -110,27 +111,27 @@ class BalanceStore implements BalanceStorer {
   ///
   /// Returns a map representing the balance's data for the specified account
   /// immediately before the given date, or null if no record is found.
-  @override
-  Future<Map<String, dynamic>?> queryBalanceBeforeDate({
-    required int account,
-    required int date,
-  }) async {
-    final database = await _databaseManager.database;
+  // @override
+  // Future<Map<String, dynamic>?> queryBalanceBeforeDate({
+  //   required int account,
+  //   required int date,
+  // }) async {
+  //   final database = await _databaseManager.database;
 
-    try {
-      final result = await database.query(
-        balanceTable,
-        where: '$balanceAccountId = ? AND $balanceDate < ?',
-        whereArgs: [account, date],
-        orderBy: '$balanceDate DESC',
-      );
-      if (result.isEmpty) return null;
-      return result[0];
-    } catch (err) {
-      log('Error: $err');
-      return null;
-    }
-  }
+  //   try {
+  //     final result = await database.query(
+  //       balanceTable,
+  //       where: '$balanceAccountId = ? AND $balanceDate < ?',
+  //       whereArgs: [account, date],
+  //       orderBy: '$balanceDate DESC',
+  //     );
+  //     if (result.isEmpty) return null;
+  //     return result[0];
+  //   } catch (err) {
+  //     log('Error: $err');
+  //     return null;
+  //   }
+  // }
 
   /// Queries the most recent balance record before a specified date for a given account.
   ///

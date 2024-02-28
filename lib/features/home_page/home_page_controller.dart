@@ -5,7 +5,7 @@ import '../../common/current_models/current_account.dart';
 import '../../common/current_models/current_user.dart';
 import '../../common/models/account_db_model.dart';
 import '../../locator.dart';
-import '../../repositories/transaction/transaction_repository.dart';
+import '../../repositories/transaction/abstract_transaction_repository.dart';
 import './home_page_state.dart';
 import '../../common/models/extends_date.dart';
 import '../../common/models/transaction_db_model.dart';
@@ -29,7 +29,7 @@ class HomePageController extends ChangeNotifier {
   // maximum number of transactions to be popped from the database
   int maxTransactions = 35;
   // instace of TransactionRepository
-  final _transactionsRepository = locator<TransactionRepository>();
+  final _transactionsRepository = locator<AbstractTransactionRepository>();
   // instance of CurrentAccount
   final _currentAccount = locator<CurrentAccount>();
 

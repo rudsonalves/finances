@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:sqflite/sqflite.dart';
 
+import '../locator.dart';
 import 'constants.dart';
 import 'database_manager.dart';
 
@@ -18,7 +19,7 @@ abstract class CatgoryStorer {
 /// Provides methods to insert, query, update, and delete category records in the database,
 /// facilitating interactions with the categories table through the DatabaseManager.
 class CatgoryStore implements CatgoryStorer {
-  final _databaseManager = DatabaseManager();
+  final _databaseManager = locator<DatabaseManager>();
 
   /// Inserts a new category record into the database.
   ///

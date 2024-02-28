@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:sqflite/sqflite.dart';
 
+import '../locator.dart';
 import 'constants.dart';
 import 'database_manager.dart';
 
@@ -15,7 +16,7 @@ abstract class ManageCounter {
 /// Utilizes the DatabaseManager to execute queries that count transactions
 /// based on specific criteria, such as category or account ID.
 class ManageCount implements ManageCounter {
-  final _databaseManager = DatabaseManager();
+  final _databaseManager = locator<DatabaseManager>();
 
   /// Counts the number of transactions associated with a specific category ID.
   ///

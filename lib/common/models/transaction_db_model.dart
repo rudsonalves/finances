@@ -44,7 +44,7 @@ class TransactionDbModel {
     _toggleStatus();
     await locator
         .get<AbstractTransactionRepository>()
-        .updateTransStatus(transId!, transStatus);
+        .updateTransStatus(transId: transId!, status: transStatus);
   }
 
   static List<TransactionDbModel> listOfTransactions(
@@ -135,8 +135,4 @@ class TransactionDbModel {
 
   factory TransactionDbModel.fromJson(String source) =>
       TransactionDbModel.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  Future<void> updateTransaction() async {
-    await locator<AbstractTransactionRepository>().updateTransaction(this);
-  }
 }

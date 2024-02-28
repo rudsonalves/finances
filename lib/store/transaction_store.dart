@@ -3,20 +3,103 @@ import 'dart:developer';
 import 'package:finances/common/models/extends_date.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../locator.dart';
 import 'constants.dart';
 import 'database_manager.dart';
 
+/// Handles transaction-related operations in the database.
+///
+/// This class implements the `TransactionStorer` interface, facilitating
+/// CRUD operations on transaction data using a database manager.
 abstract class TransactionStorer {
+  /// Inserts a transaction into the database.
+  ///
+  /// Parameters:
+  /// - `transactionMap`: A map of the transaction data to insert.
+  /// Returns:
+  /// - The ID of the inserted transaction, or -1 in case of failure.
   Future<int> insertTransaction(Map<String, dynamic> transactionMap);
+
+  /// Updates a transaction in the database.
+  ///
+  /// Parameters:
+  /// - `transMap`: A map of the updated transaction data.
+  /// Returns:
+  /// - The number of rows affected, or -1 in case of failure.
   Future<int> updateTransaction(Map<String, dynamic> transMap);
-  Future<int> updateTransactionStatus(int id, int newStatus);
+
+  /// Updates the status of a transaction.
+  ///
+  /// Parameters:
+  /// - `id`: The ID of the transaction to update.
+  /// - `newStatus`: The new status value.
+  /// Returns:
+  /// - The number of rows affected, or -1 in case of failure.
+  Future<int> updateTransactionStatus({
+    required int id,
+    required int newStatus,
+  });
+
+  /// Deletes a transaction by its ID.
+  ///
+  /// Parameters:
+  /// - `id`: The ID of the transaction to delete.
+  /// Returns:
+  /// - The number of rows affected, or -1 in case of failure.
   Future<int> deleteTransactionId(int id);
+
+  /// Queries a transaction by its ID.
+  ///
+  /// Parameters:
+  /// - `id`: The ID of the transaction to query.
+  /// Returns:
+  /// - A map of the transaction data, or null if not found.
   Future<Map<String, Object?>?> queryTransactionAtId(int id);
+
+  /// Queries transactions for a specific balance ID.
+  ///
+  /// Parameters:
+  /// - `balanceId`: The balance ID associated with the transactions.
+  /// Returns:
+  /// - A list of maps of the transaction data.
   Future<List<Map<String, dynamic>>> queryTransactionForBalanceId(int id);
-  Future<double> getIncomeBetweenDates(
-      {required int startDate, required int endDate, required int accountId});
-  Future<double> getExpenseBetweenDates(
-      {required int startDate, required int endDate, required int accountId});
+
+  /// Queries a set number of transactions from a start date.
+  ///
+  /// Parameters:
+  /// - `startDate`: The start date for the query.
+  /// - `accountId`: The account ID associated with the transactions.
+  /// - `maxTransactions`: The maximum number of transactions to return.
+  /// Returns:
+  /// - A list of maps of the transaction data.
+  Future<double> getIncomeBetweenDates({
+    required int startDate,
+    required int endDate,
+    required int accountId,
+  });
+
+  /// Gets the total income between two dates for an account.
+  ///
+  /// Parameters:
+  /// - `startDate`: The start date of the period.
+  /// - `endDate`: The end date of the period.
+  /// - `accountId`: The account ID for which to calculate income.
+  /// Returns:
+  /// - The total income as a double.
+  Future<double> getExpenseBetweenDates({
+    required int startDate,
+    required int endDate,
+    required int accountId,
+  });
+
+  /// Gets the total expenses between two dates for an account.
+  ///
+  /// Parameters:
+  /// - `startDate`: The start date of the period.
+  /// - `endDate`: The end date of the period.
+  /// - `accountId`: The account ID for which to calculate expenses.
+  /// Returns:
+  /// - The total expenses as a double.
   Future<List<Map<String, dynamic>>> queryNTransactionsFromDate({
     required final ExtendedDate startDate,
     required final int accountId,
@@ -24,19 +107,9 @@ abstract class TransactionStorer {
   });
 }
 
-/// Manages database operations for transaction-related data.
-///
-/// Provides methods to insert, query, update, and delete transaction records
-/// in the database, utilizing the DatabaseManager for interactions with the database.
 class TransactionStore implements TransactionStorer {
-  final _databaseManager = DatabaseManager();
+  final _databaseManager = locator<DatabaseManager>();
 
-  /// Inserts a new transaction record into the database.
-  ///
-  /// Parameters:
-  ///   - transactionMap: A map containing the transaction data to be inserted.
-  ///
-  /// Returns the row ID of the newly inserted transaction, or -1 if an error occurs.
   @override
   Future<int> insertTransaction(Map<String, dynamic> transactionMap) async {
     final database = await _databaseManager.database;
@@ -54,13 +127,6 @@ class TransactionStore implements TransactionStorer {
     }
   }
 
-  /// Updates an existing transaction record in the database.
-  ///
-  /// Parameters:
-  ///   - transMap: A map containing the updated transaction data, including the
-  ///     transaction's unique ID.
-  ///
-  /// Returns the number of rows affected, or -1 if an error occurs.
   @override
   Future<int> updateTransaction(Map<String, dynamic> transMap) async {
     final database = await _databaseManager.database;
@@ -80,15 +146,11 @@ class TransactionStore implements TransactionStorer {
     }
   }
 
-  /// Updates the status of an existing transaction in the database.
-  ///
-  /// Parameters:
-  ///   - id: The unique identifier of the transaction to be updated.
-  ///   - newStatus: The new status value for the transaction.
-  ///
-  /// Returns the number of rows affected, or -1 if an error occurs.
   @override
-  Future<int> updateTransactionStatus(int id, int newStatus) async {
+  Future<int> updateTransactionStatus({
+    required int id,
+    required int newStatus,
+  }) async {
     final database = await _databaseManager.database;
 
     try {
@@ -105,12 +167,6 @@ class TransactionStore implements TransactionStorer {
     }
   }
 
-  /// Deletes a transaction record by its unique ID.
-  ///
-  /// Parameters:
-  ///   - id: The unique identifier of the transaction to be deleted.
-  ///
-  /// Returns the number of rows affected, or -1 if an error occurs.
   @override
   Future<int> deleteTransactionId(int id) async {
     final database = await _databaseManager.database;
@@ -128,12 +184,6 @@ class TransactionStore implements TransactionStorer {
     }
   }
 
-  /// Queries a transaction record by its unique ID.
-  ///
-  /// Parameters:
-  ///   - id: The unique identifier of the transaction to be queried.
-  ///
-  /// Returns a map representing the transaction's data if found, or null if not found.
   @override
   Future<Map<String, Object?>?> queryTransactionAtId(int id) async {
     final database = await _databaseManager.database;
@@ -154,13 +204,6 @@ class TransactionStore implements TransactionStorer {
     }
   }
 
-  /// Executes a raw SQL query to retrieve transactions associated with a specific
-  /// balance ID.
-  ///
-  /// Parameters:
-  ///   - id: The balance ID related to the transactions to be queried.
-  ///
-  /// Returns a list of maps, each representing a transaction's data.
   @override
   Future<List<Map<String, dynamic>>> queryTransactionForBalanceId(
       int balanceId) async {
@@ -181,39 +224,6 @@ class TransactionStore implements TransactionStorer {
     }
   }
 
-  /// Retrieves a list of transactions for a specific account up to a specified
-  /// start date, limited to a maximum number of transactions.
-  ///
-  /// This method queries the database for transactions associated with the
-  /// provided account ID that occurred on or before the provided start date.
-  /// The transactions are returned in descending order by date, allowing for
-  /// the retrieval of the most recent transactions first. The number of
-  /// transactions returned is capped at the specified maximum number to
-  /// prevent excessive data loading.
-  ///
-  /// Parameters:
-  ///   - startDate: An `ExtendedDate` instance representing the upper bound of
-  ///                the date range for the query. Only transactions on or before
-  ///                this date will be considered.
-  ///   - accountId: The unique identifier of the account for which transactions
-  ///                are to be retrieved.
-  ///   - maxTransactions: The maximum number of transactions to retrieve. This
-  ///                      limits the result set to the most recent transactions
-  ///                      up to the specified number for the given account.
-  ///
-  /// Returns:
-  ///   A list of maps, each representing a transaction's data for the specified
-  ///   account, limited to the number specified by `maxTransactions`. If an error
-  ///   occurs during the query, an empty list is returned.
-  ///
-  /// Throws:
-  ///   Logs an error message and returns an empty list if there is an issue
-  ///   executing the query.
-  ///
-  /// Note:
-  ///   This method is particularly useful for generating reports or summaries
-  ///   of recent transactions for a specific account up to a certain date,
-  ///   facilitating financial analysis and record-keeping for individual accounts.
   @override
   Future<List<Map<String, dynamic>>> queryNTransactionsFromDate({
     required final ExtendedDate startDate,
@@ -238,15 +248,6 @@ class TransactionStore implements TransactionStorer {
     }
   }
 
-  /// Retrieves the sum of income transactions within a specified date range for
-  /// a given account.
-  ///
-  /// Parameters:
-  ///   - startDate: The start of the date range as an integer.
-  ///   - endDate: The end of the date range as an integer.
-  ///   - accountId: The account ID for which to sum income transactions.
-  ///
-  /// Returns the sum of income transactions as a double, or 0.0 if an error occurs.
   @override
   Future<double> getIncomeBetweenDates({
     required int startDate,
@@ -268,15 +269,6 @@ class TransactionStore implements TransactionStorer {
     }
   }
 
-  /// Retrieves the sum of expense transactions within a specified date range
-  /// for a given account.
-  ///
-  /// Parameters:
-  ///   - startDate: The start of the date range as an integer.
-  ///   - endDate: The end of the date range as an integer.
-  ///   - accountId: The account ID for which to sum expense transactions.
-  ///
-  /// Returns the sum of expense transactions as a double, or 0.0 if an error occurs.
   @override
   Future<double> getExpenseBetweenDates({
     required int startDate,

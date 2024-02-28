@@ -1,4 +1,6 @@
 import '../../locator.dart';
+import '../../manager/balance_manager.dart';
+import '../models/extends_date.dart';
 import 'current_account.dart';
 import '../models/balance_db_model.dart';
 import '../../repositories/balance/abstract_balance_repository.dart';
@@ -10,7 +12,11 @@ class CurrentBalance extends BalanceDbModel {
   final currentAccount = locator<CurrentAccount>();
 
   Future<void> start() async {
-    final balance = await balanceRepository.createTodayBalance(currentAccount);
+    final balance = await BalanceManager.balanceInDate(
+      date: ExtendedDate.nowDate(),
+      accountId: currentAccount.accountId!,
+    );
+
     setFromBalanceDbModel(balance);
   }
 

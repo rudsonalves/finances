@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../common/current_models/current_account.dart';
 import '../../common/models/account_db_model.dart';
 import '../../locator.dart';
-import '../../repositories/transaction/abstract_transaction_repository.dart';
+import '../../manager/transaction_manager.dart';
 import '../../repositories/transfer/abstract_transfer_repository.dart';
 import './transaction_state.dart';
 import '../../common/models/category_db_model.dart';
@@ -11,7 +11,6 @@ import '../../common/models/transaction_db_model.dart';
 import '../../repositories/category/abstract_category_repository.dart';
 
 class TransactionController extends ChangeNotifier {
-  final _transactionRepository = locator<AbstractTransactionRepository>();
   final _transferRepository = locator<AbstractTransferRepository>();
   final _categoryRepository = locator<AbstractCategoryRepository>();
   int _currentAccountId = locator<CurrentAccount>().accountId!;
@@ -60,14 +59,14 @@ class TransactionController extends ChangeNotifier {
     required TransactionDbModel transaction,
     AccountDbModel? account,
   }) async {
-    await _transactionRepository.addNewTransaction(transaction);
+    await TransactionManager.addNewTransaction(transaction);
   }
 
   Future<void> updateTransactions({
     required TransactionDbModel transaction,
     AccountDbModel? account,
   }) async {
-    await _transactionRepository.updateTransaction(transaction);
+    await TransactionManager.updateTransaction(transaction);
   }
 
   Future<void> getTransferAccountName({

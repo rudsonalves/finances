@@ -5,18 +5,11 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../locator.dart';
 import 'constants.dart';
 import 'database_backup.dart';
 import 'database_manager.dart';
 import 'database_migrations.dart';
-
-abstract class DatabaseProvider {
-  Future<void> init();
-  Future<void> deleteDatabase();
-  Future<void> updateAppVersion(String appVersion);
-  Future<String> queryAppVersion();
-  Future<void> dispose();
-}
 
 /// Provides high-level database operations and lifecycle management.
 ///
@@ -25,30 +18,73 @@ abstract class DatabaseProvider {
 /// It relies on [DatabaseManager] for database connection management,
 /// [DatabaseMigrations] for schema versioning and migrations, and
 /// [DatabaseBackuper] for backup and restore functionality.
-class DatabaseProvide implements DatabaseProvider {
-  final DatabaseManager _databaseManager = DatabaseManager();
-
+abstract class DatabaseProvider {
   /// Initializes the database, applies necessary migrations, and updates the
   /// schema version.
   ///
   /// This method checks the current schema version of the database and applies
   /// any pending migrations to bring the database up to the latest schema version.
   /// It also backs up the database before applying migrations as a safety measure.
+  Future<void> init();
+
+  /// Deletes the current database file from the device.
+  ///
+  /// This method is useful for resetting the database or during uninstallation processes.
+  /// It ensures that the database file is completely removed from the device's storage.
+  Future<void> deleteDatabase();
+
+  /// Updates the application version stored in the appControl table.
+  ///
+  /// This method can be used to keep track of the application version that last modified the database.
+  /// It helps in troubleshooting and migrations tied to specific app versions.
+  ///
+  /// Parameters:
+  ///   - appVersion: The current version of the application to be recorded.
+  Future<void> updateAppVersion(String appVersion);
+
+  /// Queries the current application version stored in the database.
+  ///
+  /// This method retrieves the app version from the appControl table, which reflects
+  /// the version of the application that last interacted with the database.
+  ///
+  /// Returns the application version as a string.
+  Future<String> queryAppVersion();
+
+  /// Closes the database connection when the DatabaseProvider is being disposed.
+  ///
+  /// This method ensures that the database connection is cleanly closed to prevent
+  /// any potential resource leaks or locking issues.
+  Future<void> dispose();
+}
+
+class DatabaseProvide implements DatabaseProvider {
+  final _databaseManager = locator<DatabaseManager>();
+
   @override
   Future<void> init() async {
     final database = await _databaseManager.database;
 
-    int currentVersion = await _getCurrentDatabaseSchemeVersion();
-    if (DatabaseMigrations.databaseSchemeVersion > currentVersion) {
-      await DatabaseBackup().backupDatabase();
-      Batch batch = database.batch();
-      DatabaseMigrations.applyMigrations(
-        batch: batch,
-        currentVersion: currentVersion,
-        targetVersion: DatabaseMigrations.databaseSchemeVersion,
-      );
-      await batch.commit();
-      await _recordUpdateMigration(DatabaseMigrations.databaseSchemeVersion);
+    final backupDatabase = await DatabaseBackup().backupDatabase();
+    try {
+      int currentVersion = await _getCurrentDatabaseSchemeVersion();
+      if (DatabaseMigrations.databaseSchemeVersion > currentVersion) {
+        await database.execute('PRAGMA foreign_keys=OFF');
+        Batch batch = database.batch();
+        DatabaseMigrations.applyMigrations(
+          batch: batch,
+          currentVersion: currentVersion,
+          targetVersion: DatabaseMigrations.databaseSchemeVersion,
+        );
+        await batch.commit();
+        await database.execute('PRAGMA foreign_keys=ON');
+        await _recordUpdateMigration(DatabaseMigrations.databaseSchemeVersion);
+      }
+    } catch (err) {
+      if (backupDatabase != null) {
+        await DatabaseBackup().restoreDatabase(backupDatabase);
+      }
+      log('DatabaseProvider.init: $err');
+      await database.execute('PRAGMA foreign_keys=ON');
     }
   }
 
@@ -114,10 +150,6 @@ class DatabaseProvide implements DatabaseProvider {
     );
   }
 
-  /// Deletes the current database file from the device.
-  ///
-  /// This method is useful for resetting the database or during uninstallation processes.
-  /// It ensures that the database file is completely removed from the device's storage.
   @override
   Future<void> deleteDatabase() async {
     final Directory directory = await getApplicationDocumentsDirectory();
@@ -131,13 +163,6 @@ class DatabaseProvide implements DatabaseProvider {
     await databaseFactory.deleteDatabase(path);
   }
 
-  /// Updates the application version stored in the appControl table.
-  ///
-  /// This method can be used to keep track of the application version that last modified the database.
-  /// It helps in troubleshooting and migrations tied to specific app versions.
-  ///
-  /// Parameters:
-  ///   - appVersion: The current version of the application to be recorded.
   @override
   Future<void> updateAppVersion(String appVersion) async {
     final database = await _databaseManager.database;
@@ -155,12 +180,6 @@ class DatabaseProvide implements DatabaseProvider {
     }
   }
 
-  /// Queries the current application version stored in the database.
-  ///
-  /// This method retrieves the app version from the appControl table, which reflects
-  /// the version of the application that last interacted with the database.
-  ///
-  /// Returns the application version as a string.
   @override
   Future<String> queryAppVersion() async {
     final database = await _databaseManager.database;
@@ -177,10 +196,6 @@ class DatabaseProvide implements DatabaseProvider {
     }
   }
 
-  /// Closes the database connection when the DatabaseProvider is being disposed.
-  ///
-  /// This method ensures that the database connection is cleanly closed to prevent
-  /// any potential resource leaks or locking issues.
   @override
   Future<void> dispose() async {
     _databaseManager.databaseClose();

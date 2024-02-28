@@ -5,8 +5,7 @@ import '../../../common/constants/themes/colors/app_colors.dart';
 import '../../../common/constants/themes/colors/custom_color.g.dart';
 import '../../../common/models/extends_date.dart';
 import '../../../locator.dart';
-import '../../../repositories/transaction/transaction_repository.dart';
-import '../../../repositories/transfer/transfer_repository.dart';
+import '../../../manager/transaction_manager.dart';
 import '../../statistics/statistic_controller.dart';
 import '../home_page_controller.dart';
 import '../balance_card/balance_card_controller.dart';
@@ -260,11 +259,9 @@ class _TransactionDismissibleTileState
             if (action ?? false) {
               try {
                 if (transaction.transTransferId == null) {
-                  await locator<TransactionRepository>()
-                      .deleteTransaction(transaction);
+                  await TransactionManager.removeTransaction(transaction);
                 } else {
-                  await locator<TransferRepository>()
-                      .deleteTransfer(transaction);
+                  await TransactionManager.removeTransaction(transaction);
                 }
                 locator<StatisticsController>().recalculate();
                 _homePageController.getTransactions();
