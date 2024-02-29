@@ -49,7 +49,8 @@ class _DatabaseRecoverState extends State<DatabaseRecover> {
           _message = locale.databaseRecoverRetrievedSuccessfully;
         });
 
-        await Restart.restartApp(webOrigin: AppRoute.onboard.name);
+        // FIXME: remove this...
+        // await Restart.restartApp(webOrigin: AppRoute.onboard.name);
       }
     } catch (err) {
       setState(() {

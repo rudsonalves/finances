@@ -68,15 +68,11 @@ class DatabaseProvide implements DatabaseProvider {
     try {
       int currentVersion = await _getCurrentDatabaseSchemeVersion();
       if (DatabaseMigrations.databaseSchemeVersion > currentVersion) {
-        await database.execute('PRAGMA foreign_keys=OFF');
-        Batch batch = database.batch();
-        DatabaseMigrations.applyMigrations(
-          batch: batch,
+        await DatabaseMigrations.applyMigrations(
+          db: database,
           currentVersion: currentVersion,
           targetVersion: DatabaseMigrations.databaseSchemeVersion,
         );
-        await batch.commit();
-        await database.execute('PRAGMA foreign_keys=ON');
         await _recordUpdateMigration(DatabaseMigrations.databaseSchemeVersion);
       }
     } catch (err) {

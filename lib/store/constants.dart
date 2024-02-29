@@ -57,7 +57,7 @@ const categoryIcon = 'categoryIcon';
 const categoryBudget = 'categoryBudget';
 const categoryIsIncome = 'categoryIsIncome';
 
-const transactionsTable = 'transactonsTable';
+const transactionsTable = 'transactionsTable';
 const transactionsDateIndex = 'idxTransactionsDate';
 const transactionsCategoryIndex = 'idxTransactionsCategory';
 const transId = 'transId';
@@ -126,9 +126,8 @@ const createAccountsSQL = 'CREATE TABLE IF NOT EXISTS $accountTable ('
     '  ON DELETE RESTRICT'
     ')';
 
-const createAccountUserIndexSQL =
-    'CREATE INDEX IF NOT EXISTS $accountUserIndex '
-    'ON $accountTable ($accountUserId)';
+const createAccountUserIndexSQL = 'CREATE INDEX IF NOT EXISTS $accountUserIndex'
+    ' ON $accountTable ($accountUserId)';
 
 const createBalanceSQL = 'CREATE TABLE IF NOT EXISTS $balanceTable ('
     ' $balanceId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'

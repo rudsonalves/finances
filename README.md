@@ -288,6 +288,25 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
+## 2024/02/29 - version 1.1.00+71:
+
+This commit, version 1.1.00+71, implements significant adjustments and corrections in the database migration process and its integration within the app, ensuring a more robust and error-free update mechanism.
+
+- **Database Migration Enhancements**:
+  - **database_migrations.dart**:
+    - Refined the sequence of the database migration scripts to ensure a logical and error-free application of updates.
+    - Corrected the spelling of `transactionsTable` to match the intended table name, eliminating potential confusion or errors during migrations.
+    - Modified `applyMigrations` to now require the `Database db` parameter, ensuring migrations are explicitly applied to the intended database instance.
+    - Implemented a `PRAGMA foreign_keys=off/on` command at the start and end of the migration process, safeguarding relational integrity by temporarily disabling foreign key constraints during schema updates.
+    - Consolidated migrations to execute as a single block, streamlining the process regardless of the number of schema versions to be updated.
+
+- **Database Provider Update**:
+  - **database_provider.dart**:
+    - Adapted to accommodate the changes in `DatabaseMigrations.applyMigrations`, ensuring seamless interaction with the updated migration strategy.
+
+These modifications enhance the database migration framework's efficiency and reliability, laying a solid foundation for future expansions and updates of the app's database schema.
+
+
 ## 2024/02/28 - version: 1.1.00+70:
 
 This commit finalizes the database migration process for the app, encompassing the removal and addition of various columns, the elimination of the `transDay` table, the introduction of new triggers, and many other changes. The project now moves into the testing phase and final adjustments.

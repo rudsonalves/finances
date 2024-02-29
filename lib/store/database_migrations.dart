@@ -58,17 +58,17 @@ class DatabaseMigrations {
       'BEGIN TRANSACTION',
       'DROP TRIGGER IF EXISTS $checkBalanceNextId',
       'DROP TRIGGER IF EXISTS $checkBalancePreviousId',
-      'ALTER TABLE $transactionsTable ADD COLUMN $transBalanceId INTEGER',
-      'ALTER TABLE $transactionsTable ADD COLUMN $transAccountId INTEGER',
-      'UPDATE $transactionsTable SET $transBalanceId = ('
+      'ALTER TABLE transactonsTable ADD COLUMN $transBalanceId INTEGER',
+      'ALTER TABLE transactonsTable ADD COLUMN $transAccountId INTEGER',
+      'UPDATE transactonsTable SET $transBalanceId = ('
           'SELECT transDayBalanceId FROM transDayTable '
-          '  WHERE transDayTable.transDayTransId = $transactionsTable.$transId'
+          '  WHERE transDayTable.transDayTransId = transactonsTable.$transId'
           ')',
-      'UPDATE $transactionsTable SET $transAccountId = ('
+      'UPDATE transactonsTable SET $transAccountId = ('
           'SELECT $balanceAccountId FROM $balanceTable'
-          '  WHERE $balanceTable.$balanceId = $transactionsTable.$transBalanceId'
+          '  WHERE $balanceTable.$balanceId = transactonsTable.$transBalanceId'
           ')',
-      'CREATE TABLE IF NOT EXISTS ${transactionsTable}_new ('
+      'CREATE TABLE IF NOT EXISTS $transactionsTable ('
           ' $transId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
           ' $transBalanceId INTEGER NOT NULL,'
           ' $transAccountId INTEGER NOT NULL,'
@@ -91,12 +91,12 @@ class DatabaseMigrations {
           '   REFERENCES $transfersTable ($transferId)'
           '   ON DELETE RESTRICT'
           ')',
-      'INSERT INTO ${transactionsTable}_new ($transId, $transBalanceId,'
+      'INSERT INTO $transactionsTable ($transId, $transBalanceId,'
           ' $transAccountId, $transDescription, $transCategoryId, $transValue, '
           ' $transStatus, $transTransferId, $transDate) '
           ' SELECT $transId, $transBalanceId, $transAccountId, $transDescription,'
           '   $transCategoryId, $transValue, $transStatus, $transTransferId,'
-          '   $transDate FROM $transactionsTable',
+          '   $transDate FROM transactonsTable',
       'CREATE TABLE IF NOT EXISTS ${balanceTable}_new ('
           ' $balanceId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
           ' $balanceAccountId INTEGER NOT NULL,'
@@ -155,6 +155,25 @@ class DatabaseMigrations {
           '   $transferAccount0, $transferAccount1'
           '  FROM $transfersTable',
       'DROP TABLE transDayTable',
+      'DROP TABLE $balanceTable',
+      'DROP TABLE $transfersTable',
+      'DROP TABLE transactonsTable',
+      'DROP TABLE $accountTable',
+      'ALTER TABLE ${balanceTable}_new RENAME TO $balanceTable',
+      'ALTER TABLE ${transfersTable}_new RENAME TO $transfersTable',
+      'ALTER TABLE ${accountTable}_new RENAME TO $accountTable',
+      'CREATE INDEX IF NOT EXISTS $accountUserIndex'
+          ' ON $accountTable ($accountUserId)',
+      'CREATE INDEX IF NOT EXISTS $balanceAccountIndex'
+          ' ON $balanceTable ($balanceAccountId)',
+      'CREATE INDEX IF NOT EXISTS $balanceDateIndex'
+          ' ON $balanceTable ($balanceDate)',
+      'CREATE INDEX IF NOT EXISTS $categoriesNameIndex'
+          ' ON $categoriesTable ($categoryName)',
+      'CREATE INDEX IF NOT EXISTS $transactionsDateIndex'
+          ' ON $transactionsTable ($transDate)',
+      'CREATE INDEX IF NOT EXISTS $transactionsCategoryIndex'
+          ' ON $transactionsTable ($transCategoryId)',
       'CREATE TRIGGER IF NOT EXISTS $triggerAfterInsertTransaction'
           ' AFTER INSERT ON $transactionsTable'
           ' FOR EACH ROW'
@@ -175,14 +194,6 @@ class DatabaseMigrations {
           '   WHERE $balanceAccountId = OLD.$transAccountId'
           '     AND $balanceDate = OLD.$transDate;'
           ' END',
-      'DROP TABLE $balanceTable',
-      'DROP TABLE $transfersTable',
-      'DROP TABLE $transactionsTable',
-      'DROP TABLE $accountTable',
-      'ALTER TABLE ${balanceTable}_new RENAME TO $balanceTable',
-      'ALTER TABLE ${transfersTable}_new RENAME TO $transfersTable',
-      'ALTER TABLE ${transactionsTable}_new RENAME TO $transactionsTable',
-      'ALTER TABLE ${accountTable}_new RENAME TO $accountTable',
       'COMMIT',
     ],
   };
@@ -198,13 +209,13 @@ class DatabaseMigrations {
   ///   - currentVersion: The current version of the database schema.
   ///   - targetVersion: The target version to which the database should
   ///     be migrated.
-  static void applyMigrations({
-    required Batch batch,
+  static Future<void> applyMigrations({
+    required Database db,
     required int currentVersion,
     required int targetVersion,
-  }) {
-    batch.execute('PRAGMA foreign_keys=off');
-    batch.commit();
+  }) async {
+    await db.execute('PRAGMA foreign_keys=off');
+    final batch = db.batch();
     for (var version = currentVersion + 1;
         version <= targetVersion;
         version++) {
@@ -214,9 +225,9 @@ class DatabaseMigrations {
           batch.execute(script);
         }
       }
+      // await batch.commit(noResult: true);
     }
-    batch.commit();
-    batch.execute('PRAGMA foreign_keys=on');
-    batch.commit();
+    await batch.commit(noResult: true);
+    await db.execute('PRAGMA foreign_keys=on');
   }
 }
