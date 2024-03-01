@@ -288,6 +288,40 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
+## 2024/03/01 - version 1.1.00+72:
+
+This commit implements a series of crucial adjustments and enhancements across the application, focusing on database integrity, synchronous operation handling, and UI responsiveness. Below are the summarized changes:
+
+- **Model and Controller Adjustments**:
+  - Updated `current_balance.dart` to handle a `null` return from `BalanceManager.getClosedBalanceToDate`, improving error handling and null safety.
+  - Corrected attribute names from `transferAccountId?` to `transferAccount?` in `transfer_db_model.dart`, aligning with database field names to prevent future errors.
+  - Enhanced `account_dropdown_form_field.dart` to utilize `BalanceManager.getClosedBalanceToDate`, gracefully handling `null` scenarios for balances.
+
+- **Database and App Synchronization**:
+  - Restored app reboot functionality in `database_recover.dart` post-database restoration, ensuring app state consistency.
+  - Reintroduced 50ms delays in `balance_card_controller.dart` for resource synchronization, enhancing UI responsiveness.
+  - Made `_transactions` attribute final in `home_page_controller.dart`, and modified `_initialLastDate()` to return an `ExtendedDate` based on current data and future transaction visibility settings. Also, updated `getTransactions` to include an optional `next` parameter for flexible date handling.
+
+- **Sign-in and Sign-up Enhancements**:
+  - Added `await` in `sign_in_controller.dart` and `sign_up_controller.dart` before `currentUser.addUser()`, ensuring synchronous user addition.
+
+- **Transaction Management**:
+  - Implemented a true/false return for `Navigator.of(context).pop()` in `transaction_page.dart`, indicating operation cancellation.
+  - Introduced `await` for database operations in `balance_manager.dart`, `transaction_manager.dart`, and `transfer_manager.dart`, ensuring operations complete before proceeding.
+  - Renamed `balanceInDate` to `returnBalanceInDate` and added `getClosedBalanceToDate` in `balance_manager.dart` for clearer method functionality.
+
+- **Error Logging and Database Query Optimization**:
+  - Standardized error logging across `transaction_store.dart`, `transfer_store.dart`, and `user_store.dart`.
+  - Corrected `queryBalanceInDate` in `balance_store.dart` to order balance results and return the first entry, and fixed `queryAllBalanceAfterDate` to return all balances after a specified date.
+
+- **Database Integrity and Migration**:
+  - Made `balanceDate` in `balanceTable` UNIQUE in `constants.dart` to prevent duplicates, and corrected triggers for updating `balanceClose` and `balanceTransCount` accurately.
+  - Included `await` for `databaseClose()` in `database_backup.dart`, and adjusted migration scripts in `database_migrations.dart` to reflect discussed database changes.
+  - Added `await` to database operation calls in `database_provider.dart`, ensuring data consistency.
+
+This comprehensive update not only bolsters the app's data handling and user interface but also sets a strong foundation for the testing phase, with a focus on achieving a seamless and robust user experience.
+
+
 ## 2024/02/29 - version 1.1.00+71:
 
 This commit, version 1.1.00+71, implements significant adjustments and corrections in the database migration process and its integration within the app, ensuring a more robust and error-free update mechanism.

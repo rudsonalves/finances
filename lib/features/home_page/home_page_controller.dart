@@ -64,7 +64,7 @@ class HomePageController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> init() async {
+  void init() {
     // set state as HomePageStateSuccess
     _state = HomePageStateSuccess();
 
@@ -74,9 +74,6 @@ class HomePageController extends ChangeNotifier {
 
     // start _lastDate
     _lastDate = _initialLastDate();
-
-    //
-    await locator<AbstractCategoryRepository>().init();
 
     // get transactions
     getTransactions();
@@ -108,6 +105,7 @@ class HomePageController extends ChangeNotifier {
         _lastDate = _initialLastDate();
       }
 
+      await locator<AbstractCategoryRepository>().init();
       final accountId = _currentAccount.accountId!;
 
       // get the next maxTransactions transactions before _lastdate
