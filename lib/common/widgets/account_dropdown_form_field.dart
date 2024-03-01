@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -59,7 +57,6 @@ class _AccountDropdownFormFieldState extends State<AccountDropdownFormField> {
   Widget build(BuildContext context) {
     final accountIds = accountsMap.keys.toList();
     final locale = AppLocalizations.of(context)!;
-    log('inputs: $_selectedAccountIndex ${widget.originAccountId}');
     accountIds.remove(widget.originAccountId);
     if (widget.originAccountId == _selectedAccountIndex) {
       _selectedAccountIndex = null;

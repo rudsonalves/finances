@@ -37,11 +37,11 @@ class AccountController extends ChangeNotifier {
     try {
       _balances.clear();
       for (AccountDbModel account in _accountRepository.accountsList) {
-        final balance = await BalanceManager.balanceInDate(
+        final balance = await BalanceManager.getClosedBalanceToDate(
           date: ExtendedDate.nowDate(),
           accountId: account.accountId!,
         );
-        _balances.add(balance.balanceClose);
+        _balances.add(balance?.balanceClose ?? 0.0);
       }
       await Future.delayed(const Duration(microseconds: 50));
       _changeState(AccountStateSuccess());

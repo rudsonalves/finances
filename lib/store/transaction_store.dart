@@ -122,7 +122,7 @@ class TransactionStore implements TransactionStorer {
       );
       return result;
     } catch (err) {
-      log('Error: $err');
+      log('TransactionStore.insertTransaction: $err');
       return -1;
     }
   }
@@ -141,7 +141,7 @@ class TransactionStore implements TransactionStorer {
       );
       return result;
     } catch (err) {
-      log('Error: $err');
+      log('TransactionStore.updateTransaction: $err');
       return -1;
     }
   }
@@ -162,7 +162,7 @@ class TransactionStore implements TransactionStorer {
       );
       return result;
     } catch (err) {
-      log('Error: $err');
+      log('TransactionStore.updateTransactionStatus: $err');
       return -1;
     }
   }
@@ -179,7 +179,7 @@ class TransactionStore implements TransactionStorer {
       );
       return result;
     } catch (err) {
-      log('Error: $err');
+      log('TransactionStore.deleteTransactionId: $err');
       return -1;
     }
   }
@@ -199,7 +199,7 @@ class TransactionStore implements TransactionStorer {
 
       return result.first;
     } catch (err) {
-      log('Error: $err');
+      log('TransactionStore.queryTransactionAtId: $err');
       return {};
     }
   }
@@ -219,7 +219,7 @@ class TransactionStore implements TransactionStorer {
 
       return result;
     } catch (err) {
-      log('Error: $err');
+      log('TransactionStore.queryTransactionForBalanceId: $err');
       return [];
     }
   }
@@ -243,7 +243,7 @@ class TransactionStore implements TransactionStorer {
 
       return result;
     } catch (err) {
-      log('Error: $err');
+      log('TransactionStore.queryNTransactionsFromDate: $err');
       return [];
     }
   }
@@ -264,7 +264,7 @@ class TransactionStore implements TransactionStorer {
       double totalEntries = (result.first['totalIncomes'] ?? 0.0) as double;
       return totalEntries;
     } catch (err) {
-      log('Error: $err');
+      log('TransactionStore.getIncomeBetweenDates: $err');
       return 0.0;
     }
   }
@@ -285,7 +285,7 @@ class TransactionStore implements TransactionStorer {
       double totalEntries = (result.first['totalExpenses'] ?? 0.0) as double;
       return totalEntries;
     } catch (err) {
-      log('Error: $err');
+      log('TransactionStore.getExpenseBetweenDates: $err');
       return 0.0;
     }
   }

@@ -89,7 +89,7 @@ class SignInController extends ChangeNotifier {
         currentUser.setFromUserModel(user);
         currentUser.userLogged = true;
         currentUser.userLanguage = language;
-        currentUser.addUser();
+        await currentUser.addUser();
         await locator<CurrentAccount>().init();
         await locator<CurrentBalance>().start();
         await locator<AbstractCategoryRepository>().firstCategory(locale);

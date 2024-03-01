@@ -46,7 +46,7 @@ class UserStore implements UserStorer {
       );
       return result;
     } catch (err) {
-      log('Error: $err');
+      log('UserStore.insertUser: $err');
       return -1;
     }
   }
@@ -72,7 +72,7 @@ class UserStore implements UserStorer {
 
       return result.first;
     } catch (err) {
-      log('Error: $err');
+      log('UserStore.queryUserId: $err');
       return {};
     }
   }
@@ -88,7 +88,7 @@ class UserStore implements UserStorer {
       List<Map<String, dynamic>> result = await database.query(usersTable);
       return result;
     } catch (err) {
-      log('Error: $err');
+      log('UserStore.queryAllUsers: $err');
       return [];
     }
   }
@@ -113,7 +113,7 @@ class UserStore implements UserStorer {
       );
       return result;
     } catch (err) {
-      log('Error: $err');
+      log('UserStore.updateUser: $err');
       return -1;
     }
   }
@@ -138,7 +138,7 @@ class UserStore implements UserStorer {
       );
       return result;
     } catch (err) {
-      log('Error: $err');
+      log('UserStore.updateUserBudgetRef: $err');
       return -1;
     }
   }
@@ -163,7 +163,7 @@ class UserStore implements UserStorer {
       );
       return result;
     } catch (err) {
-      log('Error: $err');
+      log('UserStore.updateUserGrpShowGrid: $err');
       return -1;
     }
   }
@@ -188,7 +188,7 @@ class UserStore implements UserStorer {
       );
       return result;
     } catch (err) {
-      log('Error: $err');
+      log('UserStore.updateUserGrpShowDots: $err');
       return -1;
     }
   }
@@ -213,7 +213,7 @@ class UserStore implements UserStorer {
       );
       return result;
     } catch (err) {
-      log('Error: $err');
+      log('UserStore.updateUserGrpIsCurved: $err');
       return -1;
     }
   }
@@ -238,7 +238,7 @@ class UserStore implements UserStorer {
       );
       return result;
     } catch (err) {
-      log('Error: $err');
+      log('UserStore.updateUserGrpAreaChart: $err');
       return -1;
     }
   }
@@ -263,7 +263,7 @@ class UserStore implements UserStorer {
       );
       return result;
     } catch (err) {
-      log('Error: $err');
+      log('UserStore.updateUserLanguage: $err');
       return -1;
     }
   }
@@ -288,7 +288,7 @@ class UserStore implements UserStorer {
       );
       return result;
     } catch (err) {
-      log('Error: $err');
+      log('UserStore.updateUserTheme: $err');
       return -1;
     }
   }
@@ -313,7 +313,7 @@ class UserStore implements UserStorer {
       );
       return result;
     } catch (err) {
-      log('Error: $err');
+      log('UserStore.updateUserMaxTransactions: $err');
       return -1;
     }
   }

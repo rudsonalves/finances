@@ -4,15 +4,15 @@ class TransferDbModel {
   int? transferId;
   int? transferTransId0;
   int? transferTransId1;
-  int? transferAccountId0;
-  int? transferAccountId1;
+  int? transferAccount0;
+  int? transferAccount1;
 
   TransferDbModel({
     this.transferId,
     this.transferTransId0,
     this.transferTransId1,
-    this.transferAccountId0,
-    this.transferAccountId1,
+    this.transferAccount0,
+    this.transferAccount1,
   });
 
   Map<String, dynamic> toMap() {
@@ -20,8 +20,8 @@ class TransferDbModel {
       'transferId': transferId,
       'transferTransId0': transferTransId0,
       'transferTransId1': transferTransId1,
-      'transferAccountId0': transferAccountId0,
-      'transferAccountId1': transferAccountId1,
+      'transferAccount0': transferAccount0,
+      'transferAccount1': transferAccount1,
     };
   }
 
@@ -30,8 +30,8 @@ class TransferDbModel {
       transferId: map['transferId'] != null ? map['transferId'] as int : null,
       transferTransId0: map['transferTransId0'] as int,
       transferTransId1: map['transferTransId1'] as int,
-      transferAccountId0: map['transferAccountId0'] as int,
-      transferAccountId1: map['transferAccountId1'] as int,
+      transferAccount0: map['transferAccount0'] as int,
+      transferAccount1: map['transferAccount1'] as int,
     );
   }
 
@@ -46,6 +46,8 @@ class TransferDbModel {
         'transferId: $transferId;'
         ' transferTransId0: $transferTransId0;'
         ' transferTransId1: $transferTransId1;'
+        ' transferAccount0: $transferAccount0;'
+        ' transferAccount1: $transferAccount1'
         ')';
   }
 }

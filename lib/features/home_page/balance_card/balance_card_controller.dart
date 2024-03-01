@@ -89,14 +89,14 @@ class BalanceCardController extends ChangeNotifier {
   Future<void> toggleTransStatusCheck() async {
     changeState(BalanceCardStateLoading());
     _transStatusCheck = !_transStatusCheck;
-    Future.delayed(const Duration(milliseconds: 50));
+    await Future.delayed(const Duration(milliseconds: 50));
     changeState(BalanceCardStateSuccess());
   }
 
   Future<void> changeFutureTransactions(FutureTrans newFutureTrans) async {
     changeState(BalanceCardStateLoading());
     _futureTransactions = newFutureTrans;
-    Future.delayed(const Duration(milliseconds: 50));
+    await Future.delayed(const Duration(milliseconds: 50));
     changeState(BalanceCardStateSuccess());
     locator<HomePageController>().getTransactions();
   }

@@ -111,7 +111,7 @@ class _TransactionPageState extends State<TransactionPage> {
   }
 
   void cancelTransactionsAction() {
-    Navigator.pop(context);
+    Navigator.pop(context, false);
   }
 
   bool get isTransfer => _categoryId == 1;
@@ -186,14 +186,14 @@ class _TransactionPageState extends State<TransactionPage> {
               accountDestinyId: destinyAccount.accountId!,
             );
           }
-          navigator.pop();
+          navigator.pop(true);
         } else {
           await TransferManager.updateTransfer(
             transOrigin: transaction,
             accountDestinyId: destinyAccount.accountId!,
           );
 
-          navigator.pop();
+          navigator.pop(true);
         }
       } else {
         if (transaction.transId == null) {
@@ -218,13 +218,13 @@ class _TransactionPageState extends State<TransactionPage> {
               account: _originAccount.value,
             );
           }
-          navigator.pop();
+          navigator.pop(true);
         } else {
           await _controller.updateTransactions(
             transaction: transaction,
             account: _originAccount.value,
           );
-          navigator.pop();
+          navigator.pop(true);
         }
       }
     }
@@ -383,7 +383,7 @@ class _TransactionPageState extends State<TransactionPage> {
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.pop(context, false),
         ),
         actions: [
           IconButton(

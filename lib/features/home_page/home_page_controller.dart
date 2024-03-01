@@ -1,5 +1,6 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 
 import '../../common/current_models/current_account.dart';
 import '../../common/current_models/current_user.dart';
@@ -13,7 +14,6 @@ import '../../repositories/category/abstract_category_repository.dart';
 import 'balance_card/balance_card_controller.dart';
 
 class HomePageController extends ChangeNotifier {
-  final _logger = Logger();
   // cached descriptions for search
   final Map<String, int> _cacheDescriptions = {};
   // controller state
@@ -25,7 +25,7 @@ class HomePageController extends ChangeNotifier {
   // FIXME: redraw key. **Adjust the code so that key is no longer needed**
   bool _redraw = false;
   // list of transactions in display
-  List<TransactionDbModel> _transactions = [];
+  final List<TransactionDbModel> _transactions = [];
   // maximum number of transactions to be popped from the database
   int maxTransactions = 35;
   // instace of TransactionRepository
@@ -60,10 +60,11 @@ class HomePageController extends ChangeNotifier {
 
   void _changeState(HomePageState newState) {
     _state = newState;
+    log(_state.toString());
     notifyListeners();
   }
 
-  void init() {
+  Future<void> init() async {
     // set state as HomePageStateSuccess
     _state = HomePageStateSuccess();
 
@@ -72,42 +73,53 @@ class HomePageController extends ChangeNotifier {
     maxTransactions = userMaxTransactions < 25 ? 25 : userMaxTransactions;
 
     // start _lastDate
-    _initialLastDate();
+    _lastDate = _initialLastDate();
+
+    //
+    await locator<AbstractCategoryRepository>().init();
 
     // get transactions
     getTransactions();
   }
 
-  void _initialLastDate() {
+  ExtendedDate _initialLastDate() {
     // Start a _lastDate with a date after today. This is necessary because
     // getTransactions returns transactions < _lastDate and not <=
-    final date = ExtendedDate.now().add(const Duration(days: 1));
+    final date = ExtendedDate.nowDate().add(const Duration(days: 1));
     final futureTransactions =
         locator<BalanceCardController>().futureTransactions;
     switch (futureTransactions) {
       case FutureTrans.hide:
-        _lastDate = date;
+        return date;
       case FutureTrans.week:
-        _lastDate = date.nextWeek();
+        return date.nextWeek();
       case FutureTrans.month:
-        _lastDate = date.nextMonth();
+        return date.nextMonth();
       case FutureTrans.year:
-        _lastDate = date.nextYear();
+        return date.nextYear();
     }
   }
 
-  Future<void> getTransactions() async {
+  Future<void> getTransactions([bool next = false]) async {
     _changeState(HomePageStateLoading());
     try {
-      await locator<AbstractCategoryRepository>().init();
+      if (!next) {
+        _transactions.clear();
+        _lastDate = _initialLastDate();
+      }
+
       final accountId = _currentAccount.accountId!;
 
       // get the next maxTransactions transactions before _lastdate
       final newTrans = await _transactionsRepository.getNTransactionsFromDate(
-        startDate: _lastDate,
+        startDate: ExtendedDate.now(), //_lastDate,
         accountId: accountId,
         maxTransactions: maxTransactions,
       );
+
+      // for (final trans in newTrans) {
+      //   log(' > ${trans.transDescription}');
+      // }
 
       // add newTrans in the _transactions list, update _lastDate and
       // _cacheDescriptions
@@ -127,7 +139,7 @@ class HomePageController extends ChangeNotifier {
 
       _changeState(HomePageStateSuccess());
     } catch (err) {
-      _logger.e(err);
+      log('HomePageController.getTransactions: $err');
       _changeState(HomePageStateError());
     }
   }
@@ -144,20 +156,4 @@ class HomePageController extends ChangeNotifier {
       _cacheDescriptions[trans.transDescription] = trans.transCategoryId;
     }
   }
-
-  // Future<void> getNextTransactions([int? more]) async {
-  //   if (_lastDate == null) return;
-  //   List<TransactionDbModel> newsTransactions;
-  //   more ??= maxTransactions;
-  //   newsTransactions = await TransactionsManager.getNTransFromDate(
-  //     maxItens: more,
-  //     date: _lastDate!.previusDay(),
-  //   );
-  //   if (newsTransactions.isEmpty) {
-  //     _lastDate == null;
-  //   }
-  //   _transactions.addAll(newsTransactions);
-  //   // await _updateLastDate();
-  //   notifyListeners();
-  // }
 }

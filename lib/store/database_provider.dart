@@ -95,7 +95,7 @@ class DatabaseProvide implements DatabaseProvider {
   Future<void> _recordUpdateMigration(int targetVersion) async {
     final database = await _databaseManager.database;
 
-    database.update(
+    await database.update(
       appControlTable,
       {
         appControlVersion: targetVersion,
@@ -136,7 +136,7 @@ class DatabaseProvide implements DatabaseProvider {
   Future<void> _recordMigration(int targetVersion) async {
     final database = await _databaseManager.database;
 
-    database.insert(
+    await database.insert(
       appControlTable,
       {
         appControlId: 1,
@@ -164,7 +164,7 @@ class DatabaseProvide implements DatabaseProvider {
     final database = await _databaseManager.database;
 
     try {
-      database.update(
+      await database.update(
         appControlTable,
         {
           appControlApp: appVersion,
@@ -194,6 +194,6 @@ class DatabaseProvide implements DatabaseProvider {
 
   @override
   Future<void> dispose() async {
-    _databaseManager.databaseClose();
+    await _databaseManager.databaseClose();
   }
 }

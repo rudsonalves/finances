@@ -53,7 +53,7 @@ class SignUpController extends ChangeNotifier {
         currentUser.setFromUserModel(user);
         currentUser.userLogged = true;
         currentUser.userLanguage = language;
-        currentUser.addUser();
+        await currentUser.addUser();
         // Create a first account and set as currentAccount
         await locator<CurrentAccount>().init();
         // Create a initial balance

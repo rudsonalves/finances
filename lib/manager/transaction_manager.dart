@@ -30,7 +30,7 @@ class TransactionManager {
   /// value.
   static Future<void> addNewTransaction(TransactionDbModel transaction) async {
     // Get or create a balance in the transaction date
-    final balance = await BalanceManager.balanceInDate(
+    final balance = await BalanceManager.returnBalanceInDate(
       date: transaction.transDate,
       accountId: transaction.transAccountId,
     );
@@ -205,14 +205,14 @@ class TransactionManager {
   /// This method provides a way to handle transaction updates that require
   /// recalculating and adjusting balances and transaction counts in the system.
   static Future<int> updateTransaction(TransactionDbModel transaction) async {
-    removeTransactionByValues(
+    await removeTransactionByValues(
       id: transaction.transId!,
       value: transaction.transValue,
       date: transaction.transDate,
     );
 
     transaction.transId = null;
-    addNewTransaction(transaction);
+    await addNewTransaction(transaction);
 
     return transaction.transId!;
   }

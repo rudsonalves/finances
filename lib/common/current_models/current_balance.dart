@@ -12,7 +12,7 @@ class CurrentBalance extends BalanceDbModel {
   final currentAccount = locator<CurrentAccount>();
 
   Future<void> start() async {
-    final balance = await BalanceManager.balanceInDate(
+    final balance = await BalanceManager.getClosedBalanceToDate(
       date: ExtendedDate.nowDate(),
       accountId: currentAccount.accountId!,
     );
@@ -21,12 +21,12 @@ class CurrentBalance extends BalanceDbModel {
   }
 
   // replace currentBalance by a passed balance
-  void setFromBalanceDbModel(BalanceDbModel balance) {
-    balanceId = balance.balanceId;
-    balanceAccountId = balance.balanceAccountId;
-    balanceDate = balance.balanceDate;
-    balanceOpen = balance.balanceOpen;
-    balanceClose = balance.balanceClose;
+  void setFromBalanceDbModel(BalanceDbModel? balance) {
+    balanceId = balance?.balanceId;
+    balanceAccountId = balance?.balanceAccountId;
+    balanceDate = balance?.balanceDate;
+    balanceOpen = balance?.balanceOpen ?? 0.0;
+    balanceClose = balance?.balanceClose ?? 0.0;
   }
 
   factory CurrentBalance.fromAccountDbModel(BalanceDbModel balance) {

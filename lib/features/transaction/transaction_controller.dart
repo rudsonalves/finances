@@ -79,9 +79,9 @@ class TransactionController extends ChangeNotifier {
 
       final transfer = await _transferRepository.getTransferById(transferId);
 
-      _destinyAccountId = transfer!.transferAccountId0 == _currentAccountId
-          ? transfer.transferAccountId1
-          : transfer.transferAccountId0;
+      _destinyAccountId = transfer!.transferAccount0 == _currentAccountId
+          ? transfer.transferAccount1
+          : transfer.transferAccount0;
 
       _changeState(TransactionStateSuccess());
     } catch (err) {

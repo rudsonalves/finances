@@ -6,6 +6,7 @@ import '../account/widgets/add_account_page.dart';
 import '../categories/categories_controller.dart';
 import '../categories/categories_page.dart';
 import '../categories/widget/add_category_page.dart';
+import '../home_page/balance_card/balance_card_controller.dart';
 import '../home_page/home_page.dart';
 import '../account/account_page.dart';
 import '../statistics/statistic_controller.dart';
@@ -14,7 +15,6 @@ import '../home_page/home_page_controller.dart';
 import '../../common/constants/routes/app_route.dart';
 import '../../common/widgets/custom_floating_action_button.dart';
 import '../../common/widgets/custom_botton_navigator_bar.dart';
-import '../home_page/balance_card/balance_card_controller.dart';
 
 class HomePageView extends StatefulWidget {
   const HomePageView({super.key});
@@ -51,12 +51,12 @@ class _HomePageViewState extends State<HomePageView> {
     // 1 AccountPage(),
     // 2 BudgetPage(),
     // 3 StatisticsPage(),
-    _addFunction = addTransaction;
 
     setState(() {
       _pageIndex = page;
       _floatAppButton = (page != 3) ? true : false;
       if (page == 0) {
+        _addFunction = addTransaction;
       } else if (page == 1) {
         _addFunction = addAccount;
       } else if (page == 2) {
@@ -84,11 +84,13 @@ class _HomePageViewState extends State<HomePageView> {
   }
 
   Future<void> addTransaction() async {
-    await Navigator.pushNamed(context, AppRoute.transaction.name);
-    await locator<HomePageController>().getTransactions().then(
-          (value) => locator<BalanceCardController>().getBalance(),
-        );
-    _statisticsController.recalculate();
+    final added = await Navigator.pushNamed(context, AppRoute.transaction.name);
+    if (added != null && added == true) {
+      locator<HomePageController>().getTransactions().then(
+            (value) => locator<BalanceCardController>().getBalance(),
+          );
+      _statisticsController.recalculate();
+    }
   }
 
   Future<void> addAccount() async {

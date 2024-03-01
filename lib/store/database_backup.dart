@@ -62,7 +62,7 @@ class DatabaseBackup implements DatabaseBackuper {
       // if error restore backup file
       if (await backupFile.exists()) {
         // Close database before restore database backup
-        if (database.isOpen) _databaseManager.databaseClose();
+        if (database.isOpen) await _databaseManager.databaseClose();
         // Copy backup file to original original database file
         await backupFile.copy(originalPath);
         // Reopen database file.

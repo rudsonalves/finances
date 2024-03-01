@@ -131,7 +131,7 @@ class TransactionRepository implements AbstractTransactionRepository {
 
       return transactions;
     } catch (err) {
-      log('TransactionRepository.getCardBalance: $err');
+      log('TransactionRepository.getNTransactionsFromDate: $err');
       return [];
     }
   }
@@ -149,7 +149,7 @@ class TransactionRepository implements AbstractTransactionRepository {
 
       return result;
     } catch (err) {
-      log('TransactionRepository.getCardBalance: $err');
+      log('TransactionRepository.updateTransStatus: $err');
       return -1;
     }
   }

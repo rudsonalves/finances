@@ -23,9 +23,7 @@ import 'widgets/home_popup_menu_buttons.dart';
 import 'widgets/update_message.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({
-    super.key,
-  });
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();

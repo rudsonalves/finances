@@ -41,7 +41,7 @@ class TransferStore implements TransferStorer {
       );
       return result;
     } catch (err) {
-      log('Error: $err');
+      log('TransferStore.insertTransfer: $err');
       return -1;
     }
   }
@@ -67,7 +67,7 @@ class TransferStore implements TransferStorer {
       );
       return result;
     } catch (err) {
-      log('Error: $err');
+      log('TransferStore.deleteTransferId: $err');
       return -1;
     }
   }
@@ -94,7 +94,7 @@ class TransferStore implements TransferStorer {
       if (maps.isEmpty) return null;
       return maps[0];
     } catch (err) {
-      log('Error: $err');
+      log('TransferStore.queryTranferId: $err');
       return null;
     }
   }
@@ -123,7 +123,7 @@ class TransferStore implements TransferStorer {
       );
       return result;
     } catch (err) {
-      log('Error: $err');
+      log('TransferStore.updateTransfer: $err');
       return -1;
     }
   }

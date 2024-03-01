@@ -100,7 +100,7 @@ class DatabaseMigrations {
       'CREATE TABLE IF NOT EXISTS ${balanceTable}_new ('
           ' $balanceId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
           ' $balanceAccountId INTEGER NOT NULL,'
-          ' $balanceDate INTEGER NOT NULL,'
+          ' $balanceDate INTEGER UNIQUE NOT NULL,'
           ' $balanceTransCount INTEGER,'
           ' $balanceOpen REAL NOT NULL,'
           ' $balanceClose REAL NOT NULL,'
@@ -180,9 +180,8 @@ class DatabaseMigrations {
           ' BEGIN'
           '   UPDATE $balanceTable'
           '   SET $balanceClose = $balanceClose + NEW.$transValue,'
-          '     $balanceTransCount = IFNULL($balanceTransCount, 0) + 1'
-          '   WHERE $balanceAccountId = NEW.$transAccountId'
-          '     AND $balanceDate = NEW.$transDate;'
+          '       $balanceTransCount = IFNULL($balanceTransCount, 0) + 1'
+          '   WHERE $balanceId = NEW.$transBalanceId;'
           ' END',
       'CREATE TRIGGER IF NOT EXISTS $triggerAfterDeleteTransaction'
           ' AFTER DELETE ON $transactionsTable'
@@ -190,9 +189,8 @@ class DatabaseMigrations {
           ' BEGIN'
           '   UPDATE $balanceTable'
           '   SET $balanceClose = $balanceClose - OLD.$transValue,'
-          '     $balanceTransCount = IFNULL($balanceTransCount, 0) - 1'
-          '   WHERE $balanceAccountId = OLD.$transAccountId'
-          '     AND $balanceDate = OLD.$transDate;'
+          '       $balanceTransCount = IFNULL($balanceTransCount, 0) - 1'
+          '   WHERE $balanceId = OLD.$transBalanceId;'
           ' END',
       'COMMIT',
     ],

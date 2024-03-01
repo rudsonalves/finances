@@ -46,16 +46,14 @@ class BalanceManager {
   /// This method is particularly useful for ensuring that financial
   /// applications maintain continuity in balance tracking, automatically
   /// handling missing balance entries for specific dates.
-  static Future<BalanceDbModel> balanceInDate({
+  static Future<BalanceDbModel> returnBalanceInDate({
     required ExtendedDate date,
     required int accountId,
   }) async {
-    // get today date only
+    // // get date only
     final onlyDate = date.onlyDate;
 
-    final balanceRepository = locator<AbstractBalanceRepository>();
-    // get a balance from accountId in this date
-    var balance = await balanceRepository.getBalanceInDate(
+    var balance = await getClosedBalanceToDate(
       date: onlyDate,
       accountId: accountId,
     );
@@ -79,7 +77,60 @@ class BalanceManager {
     }
 
     // Write new balance and return it
-    balanceRepository.insertBalance(balance);
+    await locator<AbstractBalanceRepository>().insertBalance(balance);
+
+    return balance;
+  }
+
+  /// Retrieves the most recent closed balance for a given account up to a
+  /// specified date.
+  ///
+  /// This method fetches the last balance record for the specified account that
+  /// is on or before the provided date. It is useful for obtaining the state of
+  /// an account's balance as of a particular date without considering any
+  /// transactions that occurred after that date.
+  ///
+  /// Parameters:
+  /// - `date`: An `ExtendedDate` object representing the date up to which the
+  ///   balance is requested. The time component is ignored, focusing solely on
+  ///   the date.
+  /// - `accountId`: The ID of the account for which the balance is being
+  ///   requested.
+  ///
+  /// Returns:
+  /// - A `Future<BalanceDbModel?>` that completes with the balance model if a
+  ///   balance record exists for the given date and account ID. If no such
+  ///   balance is found, returns null.
+  ///
+  /// Usage:
+  /// ```dart
+  /// var closedBalance = await TransferManager.getClosedBalanceToDate(
+  ///   date: ExtendedDate.now(),
+  ///   accountId: 1,
+  /// );
+  /// if (closedBalance != null) {
+  ///   print("Balance as of date: ${closedBalance.balanceClose}");
+  /// } else {
+  ///   print("No balance record found for the given date and account.");
+  /// }
+  /// ```
+  ///
+  /// Note:
+  /// - This method is particularly useful for financial reporting and audit
+  ///   purposes, where it is necessary to ascertain the account balance at the
+  ///   close of a specific date.
+  static Future<BalanceDbModel?> getClosedBalanceToDate({
+    required ExtendedDate date,
+    required int accountId,
+  }) async {
+    // get date only
+    final onlyDate = date.onlyDate;
+
+    // get a balance from accountId in this date
+    var balance = await locator<AbstractBalanceRepository>().getBalanceInDate(
+      date: onlyDate,
+      accountId: accountId,
+    );
 
     return balance;
   }

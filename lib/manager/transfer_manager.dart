@@ -97,11 +97,11 @@ class TransferManager {
       // transOrigin and transDestiny transId, respectively.
       transfer.transferTransId0 = transOrigin.transId;
       transfer.transferTransId1 = transDestiny.transId;
-      transfer.transferAccountId0 = transOrigin.transAccountId;
-      transfer.transferAccountId1 = transDestiny.transAccountId;
+      transfer.transferAccount0 = transOrigin.transAccountId;
+      transfer.transferAccount1 = transDestiny.transAccountId;
       await locator<AbstractTransferRepository>().updateTransfer(transfer);
     } catch (err) {
-      log('addTranfer: $err');
+      log('TransferManager.addTranfer: $err');
     }
   }
 
@@ -131,7 +131,7 @@ class TransferManager {
     // Create a Exception if id <= 0.
     if (id <= 0) {
       final message =
-          'TransferRepository: _createEmptyTransfer transferId return $id';
+          'TransferRepository_createEmptyTransfer: transferId return $id';
       log(message);
       throw Exception(message);
     }
@@ -165,7 +165,7 @@ class TransferManager {
 
     // FIXME: never happens. Remove after some tests
     if (transOrigin.transId == null || transDestiny.transId == null) {
-      throw Exception('TransferRepository: _createTransactions error');
+      throw Exception('TransferRepository._insertTransactions: error');
     }
   }
 
@@ -236,7 +236,7 @@ class TransferManager {
       // remove transfer by your id
       return await _removeTransferById(transferId);
     } catch (err) {
-      log('addTranfer: $err');
+      log('TransferRepository.removeTransfer: $err');
       return -1;
     }
   }
@@ -327,7 +327,7 @@ class TransferManager {
         accountDestinyId: accountDestinyId,
       );
     } catch (err) {
-      log('updateTransfer: $err');
+      log('TransferRepository.updateTransfer: $err');
     }
   }
 }

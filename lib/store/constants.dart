@@ -132,7 +132,7 @@ const createAccountUserIndexSQL = 'CREATE INDEX IF NOT EXISTS $accountUserIndex'
 const createBalanceSQL = 'CREATE TABLE IF NOT EXISTS $balanceTable ('
     ' $balanceId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
     ' $balanceAccountId INTEGER NOT NULL,'
-    ' $balanceDate INTEGER NOT NULL,'
+    ' $balanceDate INTEGER UNIQUE NOT NULL,'
     ' $balanceTransCount INTEGER,'
     ' $balanceOpen REAL NOT NULL,'
     ' $balanceClose REAL NOT NULL,'
@@ -219,10 +219,9 @@ const createTriggerAfterInsertTransaction =
     ' FOR EACH ROW'
     ' BEGIN'
     '   UPDATE $balanceTable'
-    '   SET $balanceClose = $balanceClose - NEW.$transValue,'
-    '     $balanceTransCount = IFNULL($balanceTransCount, 0) + 1'
-    '   WHERE $balanceAccountId = NEW.$transAccountId'
-    '     AND $balanceDate = NEW.$transDate;'
+    '   SET $balanceClose = $balanceClose + NEW.$transValue,'
+    '       $balanceTransCount = IFNULL($balanceTransCount, 0) + 1'
+    '   WHERE $balanceId = NEW.$transBalanceId;'
     ' END';
 
 const createTriggerAfterDeleteTransaction =
@@ -231,10 +230,9 @@ const createTriggerAfterDeleteTransaction =
     ' FOR EACH ROW'
     ' BEGIN'
     '   UPDATE $balanceTable'
-    '   SET $balanceClose = $balanceClose + OLD.$transValue,'
-    '     $balanceTransCount = IFNULL($balanceTransCount, 0) - 1'
-    '   WHERE $balanceAccountId = OLD.$transAccountId'
-    '     AND $balanceDate = OLD.$transDate;'
+    '   SET $balanceClose = $balanceClose - OLD.$transValue,'
+    '       $balanceTransCount = IFNULL($balanceTransCount, 0) - 1'
+    '   WHERE $balanceId = OLD.$transBalanceId;'
     ' END';
 
 const getIncomeBetweenDatesSQL = 'SELECT SUM($transValue) AS totalIncomes'
