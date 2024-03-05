@@ -46,4 +46,16 @@ class TransferRepository implements AbstractTransferRepository {
 
     return result;
   }
+
+  @override
+  Future<int> setNullTransferId(int transferId) async {
+    try {
+      final result = await _store.setNullTransferId(transferId);
+      return result;
+    } catch (err) {
+      final message = 'TransactionRepository.updateTransStatus: $err';
+      log(message);
+      throw Exception(message);
+    }
+  }
 }

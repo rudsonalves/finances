@@ -46,7 +46,7 @@ class BalanceRepository implements AbstractBalanceRepository {
     accountId ??= _currentAccount.accountId!;
 
     final map = await _store.queryBalanceInDate(
-      account: accountId,
+      accountId: accountId,
       date: date.millisecondsSinceEpoch,
     );
     if (map != null) return BalanceDbModel.fromMap(map);
@@ -56,13 +56,11 @@ class BalanceRepository implements AbstractBalanceRepository {
   @override
   Future<List<BalanceDbModel>> getAllBalanceAfterDate({
     required ExtendedDate date,
-    int? accountId,
+    required int accountId,
   }) async {
-    accountId ??= _currentAccount.accountId!;
-
     final mapsList = await _store.queryAllBalanceAfterDate(
-      account: accountId,
-      date: date.microsecondsSinceEpoch,
+      accountId: accountId,
+      date: date.millisecondsSinceEpoch,
     );
 
     final List<BalanceDbModel> balancesList =
@@ -79,5 +77,10 @@ class BalanceRepository implements AbstractBalanceRepository {
   @override
   Future<void> updateBalance(BalanceDbModel balance) async {
     await _store.updateBalance(balance.toMap());
+  }
+
+  @override
+  Future<void> deleteEmptyBalance(int id) async {
+    await _store.deleteEmptyBalance(id);
   }
 }

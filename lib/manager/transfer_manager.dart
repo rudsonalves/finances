@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:finances/repositories/transaction/abstract_transaction_repository.dart';
+
 import '../../common/models/transaction_db_model.dart';
 import '../../common/models/transfer_db_model.dart';
 import '../locator.dart';
@@ -83,12 +85,11 @@ class TransferManager {
       // Creat a empty transfer
       final transfer = await _createEmptyTransfer();
 
-      // Instantiate a TransactionDbModel destiny transaction
-      final transDestiny = transOrigin.copyToTransfer(accountDestinyId);
-
       // Update transTransferId in transOrigin and transDestiny
       transOrigin.transTransferId = transfer.transferId;
-      transDestiny.transTransferId = transfer.transferId;
+
+      // Instantiate a TransactionDbModel destiny transaction
+      final transDestiny = transOrigin.copyToTransfer(accountDestinyId);
 
       // Write the new transOrigin and transDestiny transactions
       await _insertTransactions(transOrigin, transDestiny);
@@ -207,34 +208,66 @@ class TransferManager {
   /// maintain database integrity and consistency.
   static Future<int> removeTransfer(TransactionDbModel transOrigin) async {
     try {
-      final transOriginId = transOrigin.transId!;
-      final date = transOrigin.transDate;
-      final value = transOrigin.transValue;
-      final transferId = transOrigin.transTransferId!;
+      final transferRepository = locator<AbstractTransferRepository>();
 
       // Get transfer by id transOrigin.transTransferId
-      final transfer = await locator<AbstractTransferRepository>()
-          .getTransferById(transferId);
+      final transfer = await transferRepository
+          .getTransferById(transOrigin.transTransferId!);
+      if (transfer == null) {
+        throw Exception(
+            'transfer id ${transOrigin.transTransferId!} not found');
+      }
 
       // Select transaction destiny id
-      final transDestinyId = transfer!.transferTransId0 != transOrigin.transId
+      final transDestinyId = transfer.transferTransId0 != transOrigin.transId
           ? transfer.transferTransId0
           : transfer.transferTransId1;
 
-      // remove transOrigin and transDestiny transactions by id
-      await TransactionManager.removeTransactionByValues(
-        id: transOriginId,
-        date: date,
-        value: value,
-      );
-      await TransactionManager.removeTransactionByValues(
-        id: transDestinyId!,
-        date: date,
-        value: -value,
+      // Obtain destiny transaction to get your balanceId
+      final transDestiny = await locator<AbstractTransactionRepository>()
+          .getTransactionId(transDestinyId!);
+      if (transDestiny == null) {
+        throw Exception('transaction id $transDestinyId not found');
+      }
+
+      // remove transfer references to transOrigin and transDestiny transactions
+      await transferRepository.setNullTransferId(transfer.transferId!);
+
+      // Remove transOrigin and transDestiny transactions by id
+      var result = await TransactionManager.removeTransactionByValues(
+        id: transOrigin.transId!,
+        balanceId: transOrigin.transBalanceId!,
+        accountId: transOrigin.transAccountId,
+        date: transOrigin.transDate,
+        value: transOrigin.transValue,
       );
 
+      if (result < 0) {
+        throw Exception(
+            'TransactionManager.removeTransactionByValues return $result');
+      }
+
+      // Remove transDestiny and transDestiny transactions by id
+      result = await TransactionManager.removeTransactionByValues(
+        id: transDestiny.transId!,
+        balanceId: transDestiny.transBalanceId!,
+        accountId: transDestiny.transAccountId,
+        date: transDestiny.transDate,
+        value: transDestiny.transValue,
+      );
+
+      if (result < 0) {
+        throw Exception(
+            'TransactionManager.removeTransactionByValues return $result');
+      }
+
       // remove transfer by your id
-      return await _removeTransferById(transferId);
+      result = await _removeTransferById(transOrigin.transTransferId!);
+      if (result < 0) {
+        throw Exception(
+            'TransactionManager.removeTransactionByValues return $result');
+      }
+      return result;
     } catch (err) {
       log('TransferRepository.removeTransfer: $err');
       return -1;
@@ -318,7 +351,10 @@ class TransferManager {
   }) async {
     try {
       // remove origin transaction by id
-      await removeTransfer(transOrigin);
+      final result = await removeTransfer(transOrigin);
+      if (result < 0) {
+        throw Exception('removeTransfer($transOrigin) return $result');
+      }
 
       // create a new transfer
       transOrigin.transId = null;

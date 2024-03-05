@@ -71,4 +71,26 @@ abstract class AbstractTransferRepository {
   /// - The function does not perform a pre-existence check of the transfer in
   ///   the database, assuming the provided `id` is valid and exists.
   Future<int> updateTransfer(TransferDbModel transfer);
+
+  /// Sets the transfer IDs and account IDs to null for a specified transfer record.
+  ///
+  /// This method is used to disassociate a transfer record in the `transfersTable`
+  /// from its related transactions and accounts by setting `transferTransId0`,
+  /// `transferTransId1`, `transferAccount0`, and `transferAccount1` fields to null.
+  /// This operation targets the record identified by the provided [id].
+  ///
+  /// Parameters:
+  ///   - id: The unique identifier of the transfer to be updated.
+  ///
+  /// Returns the number of rows affected by the operation. Typically, this will
+  /// be 1 if the update is successful, indicating that one record was updated.
+  /// A return value of 0 indicates that no record was found with the provided
+  /// `transferId`.
+  ///
+  /// Throws:
+  ///   - Exception: If the update operation fails, an exception is thrown with
+  ///     an error message detailing the cause of the failure. This ensures that
+  ///     any failure in the process of disassociating the transfer is clearly
+  ///     communicated to the caller.
+  Future<int> setNullTransferId(int id);
 }

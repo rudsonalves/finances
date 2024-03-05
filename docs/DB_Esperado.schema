@@ -1,11 +1,9 @@
-!ok
 CREATE TABLE IF NOT EXISTS versionControl (
   id INTEGER PRIMARY KEY,
   version INTEGER NOT NULL,
   appVersion TEXT DEFAULT ""
 );
 
-!ok
 CREATE TABLE IF NOT EXISTS usersTable (
   userId TEXT PRIMARY KEY NOT NULL,
   userName TEXT NOT NULL,
@@ -26,7 +24,6 @@ CREATE TABLE IF NOT EXISTS usersTable (
     ON DELETE CASCADE
 );
 
-!ok
 CREATE TABLE IF NOT EXISTS iconsTable (
   iconId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   iconName TEXT NOT NULL,
@@ -34,7 +31,41 @@ CREATE TABLE IF NOT EXISTS iconsTable (
   iconColor INTEGER NOT NULL
 );
 
-!ok
+CREATE TABLE IF NOT EXISTS accountTable (
+  accountId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  accountName TEXT NOT NULL,
+  accountDescription TEXT,
+  accountUserId TEXT NOT NULL,
+  accountIcon INTEGER,
+  FOREIGN KEY (accountIcon)
+    REFERENCES iconsTable (iconId)
+    ON DELETE CASCADE,
+  FOREIGN KEY (accountUserId)
+    REFERENCES usersTable (userId)
+    ON DELETE RESTRICT
+);
+
+CREATE INDEX IF NOT EXISTS idxAccountUserId
+  ON accountTable (accountUserId);
+
+CREATE TABLE IF NOT EXISTS balanceTable (
+  balanceId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  balanceAccountId INTEGER NOT NULL,
+  balanceDate INTEGER NOT NULL,
+  balanceTransCount INTEGER,
+  balanceOpen REAL NOT NULL,
+  balanceClose REAL NOT NULL,
+  FOREIGN KEY (balanceAccountId)
+    REFERENCES accountTable (accountId)
+    ON DELETE RESTRICT
+);
+
+CREATE INDEX IF NOT EXISTS idxBalanceDate
+  ON balanceTable (balanceDate);
+
+CREATE INDEX IF NOT EXISTS idxBalanceAccount
+  ON balanceTable (balanceAccountId);
+
 CREATE TABLE IF NOT EXISTS categoriesTable (
   categoryId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   categoryName TEXT UNIQUE NOT NULL,
@@ -42,11 +73,13 @@ CREATE TABLE IF NOT EXISTS categoriesTable (
   categoryBudget REAL DEFAULT 0,
   categoryIsIncome INTEGER DEFAULT 0,
   FOREIGN KEY (categoryIcon)
-   REFERENCES iconsTable (iconId)
-   ON DELETE CASCADE
+    REFERENCES iconsTable (iconId)
+    ON DELETE CASCADE
 );
 
-!ok
+CREATE INDEX IF NOT EXISTS idxCategoriesName
+  ON categoriesTable (categoryName);
+
 CREATE TABLE IF NOT EXISTS transactionsTable (
   transId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   transBalanceId INTEGER NOT NULL,
@@ -71,35 +104,12 @@ CREATE TABLE IF NOT EXISTS transactionsTable (
     ON DELETE RESTRICT
 );
 
-!ok
-CREATE TABLE IF NOT EXISTS balanceTable (
-  balanceId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-  balanceAccountId INTEGER NOT NULL,
-  balanceDate INTEGER NOT NULL,
-  balanceTransCount INTEGER,
-  balanceOpen REAL NOT NULL,
-  balanceClose REAL NOT NULL,
-  FOREIGN KEY (balanceAccountId)
-   REFERENCES accountTable (accountId)
-   ON DELETE RESTRICT
-);
+CREATE INDEX IF NOT EXISTS idxTransactionsDate
+  ON transactionsTable (transDate);
 
-!ok
-CREATE TABLE IF NOT EXISTS accountTable (
-  accountId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-  accountName TEXT NOT NULL,
-  accountDescription TEXT,
-  accountUserId TEXT NOT NULL,
-  accountIcon INTEGER,
-  FOREIGN KEY (accountIcon)
-   REFERENCES iconsTable (iconId)
-   ON DELETE CASCADE,
-  FOREIGN KEY (accountUserId)
-   REFERENCES usersTable (userId)
-   ON DELETE RESTRICT
-);
+CREATE INDEX IF NOT EXISTS idxTransactionsCategory
+  ON transactionsTable (transCategoryId);
 
-!ok
 CREATE TABLE IF NOT EXISTS transfersTable (
   transferId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   transferTransId0 INTEGER,
@@ -118,57 +128,22 @@ CREATE TABLE IF NOT EXISTS transfersTable (
     ON DELETE RESTRICT
 );
 
-
-## TRIGGERS ##
-!ok
 CREATE TRIGGER IF NOT EXISTS tr_after_insert_transaction
   AFTER INSERT ON transactionsTable
   FOR EACH ROW
-  BEGIN
-    UPDATE balanceTable
-    SET balanceClose = balanceClose - NEW.transValue,
-      balanceTransCount = IFNULL(balanceTransCount, 0) + 1
-    WHERE balanceAccountId = NEW.transAccountId
-      AND balanceDate = NEW.transDate;
-  END;
+    BEGIN
+      UPDATE balanceTable SET
+        balanceClose = balanceClose + NEW.transValue,
+        balanceTransCount = IFNULL(balanceTransCount, 0) + 1
+      WHERE balanceId = NEW.transBalanceId;
+    END;
 
-!ok
 CREATE TRIGGER IF NOT EXISTS tr_after_delete_transaction
   AFTER DELETE ON transactionsTable
   FOR EACH ROW
-  BEGIN
-    UPDATE balanceTable
-    SET balanceClose = balanceClose + OLD.transValue,
-      balanceTransCount = IFNULL(balanceTransCount, 0) - 1
-    WHERE balanceAccountId = OLD.transAccountId
-      AND balanceDate = OLD.transDate;
-  END;
-
-
-## INDEX ##
-!ok
-CREATE INDEX IF NOT EXISTS idxAccountUserId
-    ON accountTable (accountUserId);
-
-!ok
-CREATE INDEX IF NOT EXISTS idxBalanceAccount
-  ON balanceTable (balanceAccountId);
-
-!ok
-CREATE INDEX IF NOT EXISTS idxCategoriesName
-  ON categoriesTable (categoryName);
-
-!ok
-CREATE INDEX IF NOT EXISTS idxTransactionsDate
-  ON transactionsTable (transDate);
-
-!ok
-CREATE INDEX IF NOT EXISTS idxTransactionsCategory
-  ON transactionsTable (transCategoryId);
-  
-!ok
-CREATE INDEX IF NOT EXISTS idxBalanceDate
-  ON balanceTable (balanceDate);
-    
-
-
+    BEGIN
+      UPDATE balanceTable SET
+        balanceClose = balanceClose - OLD.transValue,
+        balanceTransCount = IFNULL(balanceTransCount, 0) - 1
+      WHERE balanceId = OLD.transBalanceId;
+    END;

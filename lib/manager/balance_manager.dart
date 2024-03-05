@@ -70,9 +70,10 @@ class BalanceManager {
         balanceDate: onlyDate,
       );
     } else {
-      // Create a new balance with the closing of the previus one
+      // Create a NEW balance with the closing of the previus one
       balance.balanceId = null;
       balance.balanceDate = onlyDate;
+      balance.balanceTransCount = 0;
       balance.balanceOpen = balance.balanceClose;
     }
 

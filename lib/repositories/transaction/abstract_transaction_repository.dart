@@ -20,7 +20,7 @@ abstract class AbstractTransactionRepository {
   /// Note:
   ///   Utilizing this method supports detailed financial analysis and auditing
   ///   by providing a complete view of transactions for a specific balance.
-  Future<List<TransactionDbModel>> getTransForBalanceId(int balanceId);
+  Future<List<TransactionDbModel>> getTransactionForBalanceId(int balanceId);
 
   /// Fetches a single transaction by its ID.
   ///
@@ -38,7 +38,7 @@ abstract class AbstractTransactionRepository {
   /// Note:
   ///   This method is essential for operations that require interaction with
   ///   individual transaction records.
-  Future<TransactionDbModel?> getTransId(int id);
+  Future<TransactionDbModel?> getTransactionId(int id);
   Future<int> insertTransaction(TransactionDbModel transaction);
 
   /// Deletes a transaction from the database and adjusts subsequent balance
@@ -159,7 +159,7 @@ abstract class AbstractTransactionRepository {
   ///
   /// This method is useful for toggling the active/inactive status of transactions,
   /// allowing for enhanced control over transaction records.
-  Future<int> updateTransStatus({
+  Future<int> updateTransactionStatus({
     required int transId,
     required TransStatus status,
   });

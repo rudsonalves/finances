@@ -32,7 +32,8 @@ class TransactionRepository implements AbstractTransactionRepository {
   }
 
   @override
-  Future<List<TransactionDbModel>> getTransForBalanceId(int balanceId) async {
+  Future<List<TransactionDbModel>> getTransactionForBalanceId(
+      int balanceId) async {
     try {
       var maps = await _store.queryTransactionForBalanceId(balanceId);
 
@@ -46,7 +47,7 @@ class TransactionRepository implements AbstractTransactionRepository {
   }
 
   @override
-  Future<TransactionDbModel?> getTransId(int id) async {
+  Future<TransactionDbModel?> getTransactionId(int id) async {
     try {
       Map<String, Object?>? transMap = await _store.queryTransactionAtId(id);
 
@@ -63,10 +64,7 @@ class TransactionRepository implements AbstractTransactionRepository {
     try {
       final result = await _store.deleteTransactionId(transId);
       if (result != 1) {
-        final message =
-            'TransactionRepository.deleteTransaction: return $result';
-        log(message);
-        throw Exception(message);
+        throw Exception('_store.deleteTransactionId return $result');
       }
 
       return result;
@@ -137,7 +135,7 @@ class TransactionRepository implements AbstractTransactionRepository {
   }
 
   @override
-  Future<int> updateTransStatus({
+  Future<int> updateTransactionStatus({
     required int transId,
     required TransStatus status,
   }) async {

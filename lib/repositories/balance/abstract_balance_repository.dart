@@ -146,7 +146,7 @@ abstract class AbstractBalanceRepository {
   /// in forecasting future balances based on past patterns.
   Future<List<BalanceDbModel>> getAllBalanceAfterDate({
     required ExtendedDate date,
-    int? accountId,
+    required int accountId,
   });
 
   /// Deletes a balance record by its ID.
@@ -210,4 +210,27 @@ abstract class AbstractBalanceRepository {
   /// most current information and maintaining the integrity of the financial data within
   /// the application.
   Future<void> deleteBalance(int id);
+
+  /// Deletes a balance record if it has no associated transactions.
+  ///
+  /// This method removes a balance entry from the `balanceTable` if, and only if,
+  /// the `balanceTransCount` is zero, indicating no transactions are linked to this
+  /// balance. It is particularly useful for cleaning up placeholder or erroneously
+  /// created balance records that remain unused.
+  ///
+  /// Parameters:
+  /// - `id`: The ID of the balance record to be conditionally deleted.
+  ///
+  /// Exceptions:
+  /// - Catches and logs any errors encountered during the conditional deletion
+  ///   process. Similar to the other methods, errors are logged for troubleshooting.
+  ///
+  /// Usage:
+  /// ```dart
+  /// await deleteEmptyBalance(1);
+  /// ```
+  ///
+  /// This method enhances data integrity by ensuring only meaningful balance records
+  /// are retained within the database, avoiding clutter from unused entries.
+  Future<void> deleteEmptyBalance(int id);
 }

@@ -100,7 +100,7 @@ class DatabaseMigrations {
       'CREATE TABLE IF NOT EXISTS ${balanceTable}_new ('
           ' $balanceId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
           ' $balanceAccountId INTEGER NOT NULL,'
-          ' $balanceDate INTEGER UNIQUE NOT NULL,'
+          ' $balanceDate INTEGER NOT NULL,'
           ' $balanceTransCount INTEGER,'
           ' $balanceOpen REAL NOT NULL,'
           ' $balanceClose REAL NOT NULL,'

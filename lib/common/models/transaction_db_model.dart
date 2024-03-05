@@ -44,7 +44,7 @@ class TransactionDbModel {
     _toggleStatus();
     await locator
         .get<AbstractTransactionRepository>()
-        .updateTransStatus(transId: transId!, status: transStatus);
+        .updateTransactionStatus(transId: transId!, status: transStatus);
   }
 
   static List<TransactionDbModel> listOfTransactions(

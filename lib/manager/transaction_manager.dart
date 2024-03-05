@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import '../common/models/extends_date.dart';
 import '../common/models/transaction_db_model.dart';
 import '../locator.dart';
@@ -46,6 +48,7 @@ class TransactionManager {
     await _addAdjustSubsequentBalances(
       date: transaction.transDate,
       value: transaction.transValue,
+      accountId: transaction.transAccountId,
     );
   }
 
@@ -64,20 +67,21 @@ class TransactionManager {
   static Future<void> _addAdjustSubsequentBalances({
     required ExtendedDate date,
     required double value,
+    required int accountId,
   }) async {
     final balanceRepository = locator<AbstractBalanceRepository>();
 
     // Get all balance before transaction date
     final balancesAfterDate = await balanceRepository.getAllBalanceAfterDate(
       date: date,
+      accountId: accountId,
     );
 
     // Update all ballances after date
     // IMPORTANT: The current balance is updated by SQL trigger
     for (final balance in balancesAfterDate) {
-      balance.balanceOpen -= value;
-      balance.balanceClose -= value;
-      balance.balanceTransCount++;
+      balance.balanceOpen += value;
+      balance.balanceClose += value;
 
       await balanceRepository.updateBalance(balance);
     }
@@ -98,6 +102,8 @@ class TransactionManager {
   static Future<void> removeTransaction(TransactionDbModel transaction) async {
     await removeTransactionByValues(
       id: transaction.transId!,
+      balanceId: transaction.transBalanceId!,
+      accountId: transaction.transAccountId,
       date: transaction.transDate,
       value: transaction.transValue,
     );
@@ -117,19 +123,28 @@ class TransactionManager {
   /// The method adjusts the opening and closing balances of all subsequent
   /// balance records after the transaction date to account for the removal of
   /// the transaction value.
-  static Future<void> removeTransactionByValues({
+  static Future<int> removeTransactionByValues({
     required int id,
+    required int balanceId,
+    required int accountId,
     required ExtendedDate date,
     required double value,
   }) async {
     // Remove transaction by your id
-    await locator<AbstractTransactionRepository>().deleteTransactionById(id);
+    final result = await locator<AbstractTransactionRepository>()
+        .deleteTransactionById(id);
 
-    // Update balances
+    // Update subsequents balances
     await _subtractAdjustSubsequentBalances(
       date: date,
       value: value,
+      accountId: accountId,
     );
+
+    // Remove balance if there have no more transactions
+    await locator<AbstractBalanceRepository>().deleteEmptyBalance(balanceId);
+
+    return result;
   }
 
   /// Internally adjusts subsequent balances after removing a transaction.
@@ -147,20 +162,21 @@ class TransactionManager {
   static Future<void> _subtractAdjustSubsequentBalances({
     required ExtendedDate date,
     required double value,
+    required int accountId,
   }) async {
     final balanceRepository = locator<AbstractBalanceRepository>();
 
     // Get all balance before transaction date
     final balancesAfterDate = await balanceRepository.getAllBalanceAfterDate(
       date: date,
+      accountId: accountId,
     );
 
     // Update all ballances after date
     // IMPORTANT: The current balance is updated by SQL trigger
     for (final balance in balancesAfterDate) {
-      balance.balanceOpen += value;
-      balance.balanceClose += value;
-      balance.balanceTransCount--;
+      balance.balanceOpen -= value;
+      balance.balanceClose -= value;
 
       await balanceRepository.updateBalance(balance);
     }
@@ -205,10 +221,25 @@ class TransactionManager {
   /// This method provides a way to handle transaction updates that require
   /// recalculating and adjusting balances and transaction counts in the system.
   static Future<int> updateTransaction(TransactionDbModel transaction) async {
+    // Obtain original transaction register to avoid editing the transaction
+    // value or date.
+    final removeTransaction = await locator<AbstractTransactionRepository>()
+        .getTransactionId(transaction.transId!);
+
+    if (removeTransaction == null) {
+      final message =
+          'TransactionManager.updateTransaction: transaction id ${transaction.transId!} not found';
+      log(message);
+      return -1;
+    }
+
+    // Pass the value and date from original transaction
     await removeTransactionByValues(
       id: transaction.transId!,
-      value: transaction.transValue,
-      date: transaction.transDate,
+      balanceId: transaction.transBalanceId!,
+      accountId: transaction.transAccountId,
+      value: removeTransaction.transValue,
+      date: removeTransaction.transDate,
     );
 
     transaction.transId = null;

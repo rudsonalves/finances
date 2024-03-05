@@ -6,29 +6,111 @@ import '../locator.dart';
 import 'constants.dart';
 import 'database_manager.dart';
 
-abstract class TransferStorer {
-  Future<int> insertTransfer(Map<String, dynamic> transferMap);
-  Future<int> deleteTransferId(int id);
-  Future<Map<String, Object?>?> queryTranferId(int id);
-  Future<int> updateTransfer(Map<String, dynamic> transferMap);
-}
-
 /// Manages database operations for transfer-related data.
 ///
 /// Facilitates the insertion, querying, updating, and deletion of transfer records
 /// in the database, using the DatabaseManager for database interactions.
+abstract class TransferStorer {
+  /// Inserts a new transfer record into the database.
+  ///
+  /// This method attempts to insert a new transfer defined by [transferMap] into
+  /// the `transfersTable`. The operation uses `ConflictAlgorithm.abort` to cancel
+  /// the insertion if a conflict occurs, ensuring data integrity.
+  ///
+  /// Parameters:
+  ///   - transferMap: A map containing the data for the new transfer to be inserted.
+  ///
+  /// Returns the row ID of the newly inserted transfer if successful, otherwise
+  /// throws an exception with a detailed error message.
+  ///
+  /// Throws:
+  ///   - Exception: If the insertion fails, an exception is thrown with the error
+  ///     message detailing the cause of the failure.
+  Future<int> insertTransfer(Map<String, dynamic> transferMap);
+
+  /// Deletes a transfer record from the database by its ID.
+  ///
+  /// This method attempts to delete a transfer record from the `transfersTable`
+  /// based on the provided [id]. It constructs a deletion query that targets
+  /// the record with a matching `transferId`.
+  ///
+  /// Parameters:
+  ///   - id: The unique identifier of the transfer to be deleted.
+  ///
+  /// Returns the number of rows affected by the operation. If the deletion is
+  /// successful, this number should be 1, indicating that one record was deleted.
+  /// If no rows are affected, the transfer was not found, and 0 is returned.
+  ///
+  /// Throws:
+  ///   - Exception: If the deletion fails, an exception is thrown with the error
+  ///     message detailing the cause of the failure.
+  Future<int> deleteTransferId(int id);
+
+  /// Queries the database for a transfer record by its ID.
+  ///
+  /// This method fetches a transfer record from the `transfersTable` using the
+  /// provided [id] as the search criterion. It constructs a query that targets
+  /// the record with a matching `transferId`.
+  ///
+  /// Parameters:
+  ///   - id: The unique identifier of the transfer to be queried.
+  ///
+  /// Returns a map representing the transfer record if found, otherwise null.
+  /// The map contains key-value pairs corresponding to the transfer's column
+  /// names and their values in the database.
+  ///
+  /// Throws:
+  ///   - Exception: If the query operation fails, an exception is thrown with
+  ///     an error message detailing the cause of the failure.
+  Future<Map<String, Object?>?> queryTranferId(int id);
+
+  /// Updates an existing transfer record in the database.
+  ///
+  /// This method updates a transfer record in the `transfersTable` using data
+  /// provided in [transferMap]. The record to be updated is identified by the
+  /// `transferId` key in the map.
+  ///
+  /// Parameters:
+  ///   - transferMap: A map containing the updated data for the transfer. Must
+  ///     include `transferId` to specify which record to update.
+  ///
+  /// Returns the number of rows affected by the operation. Typically, this will
+  /// be 1 if the update is successful, indicating that one record was updated.
+  /// A return value of 0 indicates that no record was found with the provided
+  /// `transferId`.
+  ///
+  /// Throws:
+  ///   - Exception: If the update operation fails, an exception is thrown with
+  ///     an error message detailing the cause of the failure. This ensures that
+  ///     any failure in the update process is clearly communicated to the caller.
+  Future<int> updateTransfer(Map<String, dynamic> transferMap);
+
+  /// Sets the transfer IDs and account IDs to null for a specified transfer record.
+  ///
+  /// This method is used to disassociate a transfer record in the `transfersTable`
+  /// from its related transactions and accounts by setting `transferTransId0`,
+  /// `transferTransId1`, `transferAccount0`, and `transferAccount1` fields to null.
+  /// This operation targets the record identified by the provided [id].
+  ///
+  /// Parameters:
+  ///   - id: The unique identifier of the transfer to be updated.
+  ///
+  /// Returns the number of rows affected by the operation. Typically, this will
+  /// be 1 if the update is successful, indicating that one record was updated.
+  /// A return value of 0 indicates that no record was found with the provided
+  /// `transferId`.
+  ///
+  /// Throws:
+  ///   - Exception: If the update operation fails, an exception is thrown with
+  ///     an error message detailing the cause of the failure. This ensures that
+  ///     any failure in the process of disassociating the transfer is clearly
+  ///     communicated to the caller.
+  Future<int> setNullTransferId(int id);
+}
+
 class TransferStore implements TransferStorer {
   final _databaseManager = locator<DatabaseManager>();
 
-  /// Inserts a new transfer record into the database.
-  ///
-  /// Parameters:
-  ///   - transferMap: A map containing the transfer data to be inserted.
-  ///
-  /// Returns the row ID of the newly inserted transfer, or -1 if an error occurs.
-  ///
-  /// This method allows for the recording of transfers between accounts, capturing
-  /// essential information like amounts, accounts involved, and transfer dates.
   @override
   Future<int> insertTransfer(Map<String, dynamic> transferMap) async {
     final database = await _databaseManager.database;
@@ -41,20 +123,12 @@ class TransferStore implements TransferStorer {
       );
       return result;
     } catch (err) {
-      log('TransferStore.insertTransfer: $err');
-      return -1;
+      final message = 'TransferStore.insertTransfer: $err';
+      log(message);
+      throw Exception(message);
     }
   }
 
-  /// Deletes a transfer record by its unique ID.
-  ///
-  /// Parameters:
-  ///   - id: The unique identifier of the transfer to be deleted.
-  ///
-  /// Returns the number of rows affected, or -1 if an error occurs.
-  ///
-  /// Useful for removing transfers that are no longer valid or were entered in
-  /// error.
   @override
   Future<int> deleteTransferId(int id) async {
     final database = await _databaseManager.database;
@@ -67,20 +141,12 @@ class TransferStore implements TransferStorer {
       );
       return result;
     } catch (err) {
-      log('TransferStore.deleteTransferId: $err');
-      return -1;
+      final message = 'TransferStore.deleteTransferId: $err';
+      log(message);
+      throw Exception(message);
     }
   }
 
-  /// Queries a transfer record by its unique ID.
-  ///
-  /// Parameters:
-  ///   - id: The unique identifier of the transfer to be queried.
-  ///
-  /// Returns a map representing the transfer's data if found, or null if not found.
-  ///
-  /// This method enables the retrieval of specific transfer details for review
-  /// or editing.
   @override
   Future<Map<String, Object?>?> queryTranferId(int id) async {
     final database = await _databaseManager.database;
@@ -94,21 +160,12 @@ class TransferStore implements TransferStorer {
       if (maps.isEmpty) return null;
       return maps[0];
     } catch (err) {
-      log('TransferStore.queryTranferId: $err');
-      return null;
+      final message = 'TransferStore.queryTranferId: $err';
+      log(message);
+      throw Exception(message);
     }
   }
 
-  /// Updates an existing transfer record in the database.
-  ///
-  /// Parameters:
-  ///   - transferMap: A map containing the updated transfer data, including the
-  ///     transfer's unique ID.
-  ///
-  /// Returns the number of rows affected, or -1 if an error occurs.
-  ///
-  /// Allows for the modification of transfer details, accommodating changes in
-  /// transfer amounts, dates, or involved accounts.
   @override
   Future<int> updateTransfer(Map<String, dynamic> transferMap) async {
     final database = await _databaseManager.database;
@@ -123,8 +180,33 @@ class TransferStore implements TransferStorer {
       );
       return result;
     } catch (err) {
-      log('TransferStore.updateTransfer: $err');
-      return -1;
+      final message = 'TransferStore.updateTransfer: $err';
+      log(message);
+      throw Exception(message);
+    }
+  }
+
+  @override
+  Future<int> setNullTransferId(int id) async {
+    final database = await _databaseManager.database;
+
+    try {
+      final result = await database.update(
+        transfersTable,
+        {
+          transferTransId0: null,
+          transferTransId1: null,
+          transferAccount0: null,
+          transferAccount1: null,
+        },
+        where: '$transferId = ?',
+        whereArgs: [id],
+      );
+      return result;
+    } catch (err) {
+      final message = 'TransferStore.setNullTransferId: $err';
+      log(message);
+      throw Exception(message);
     }
   }
 }
