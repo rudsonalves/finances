@@ -288,6 +288,37 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
+## 2024/02/04 - version 1.1.00+73:
+
+This commit encompasses a suite of refinements and bug fixes across the application, particularly focusing on transaction management, balance updates, and error handling strategies. Here's a concise overview:
+
+- **HomePage and Transaction Management Enhancements**:
+  - Restored `_lastDate` functionality in `home_page_controller.dart` to track the date of the last transaction displayed on the HomePage, providing temporal context to transaction listings.
+  - Corrected an erroneous call in `transaction_dismissible_tile.dart`, switching from `TransactionManager.removeTransaction` to `TransferManager.removeTransfer`, rectifying a mix-up from a recent database upgrade.
+
+- **Balance and Transaction Management Revisions**:
+  - Reset `balanceTransCount` when creating a new balance in `balance_manager.dart`, ensuring accurate transaction count tracking.
+  - Introduced `accountId` attribute in `balanceRepository.getAllBalanceAfterDate` and refined balance open/close handling upon transaction addition/removal in `transaction_manager.dart`, enhancing balance accuracy and consistency.
+  - Optimized transaction removal logic to prevent the retention of unnecessary balance records and improved transaction destination retrieval for better transaction management control.
+
+- **Transfer Manager and Error Handling Improvements**:
+  - Shifted error handling to the app's frontend in `transfer_manager.dart`, aiming for clearer error identification and confinement of error resolution to the repository and manager layers.
+  - Implemented pre-removal attribute resetting in transfer records to address circular references between `transactionsTable` and `transfersTable`, ensuring data integrity.
+
+- **Repository Layer Adjustments**:
+  - Made `accountId` parameter mandatory in balance repository methods, corrected date handling, and introduced `deleteEmptyBalance` method in balance repositories to allow for the removal of empty balance records.
+  - Standardized method naming in transaction and transfer repositories, aligning with best practices and clarifying method purposes.
+
+- **Store Layer Documentation and Schema Adjustments**:
+  - Enhanced documentation within `balance_store.dart` and `transfer_store.dart`, and adjusted method parameters for clarity and accuracy.
+  - Removed the `UNIQUE` constraint from `balanceDate` in the `balanceTable` creation within `database_migrations.dart`, correcting a schema oversight.
+
+- **General Codebase Improvements**:
+  - Added comprehensive documentation, refined error propagation strategies, and introduced necessary methods across the store layer to support the application's refined logic and data handling requirements.
+
+This commit significantly advances the application's robustness, particularly in handling transactions, balances, and transfers, while also laying down improved practices for error management and data schema integrity.
+
+
 ## 2024/03/01 - version 1.1.00+72:
 
 This commit implements a series of crucial adjustments and enhancements across the application, focusing on database integrity, synchronous operation handling, and UI responsiveness. Below are the summarized changes:
