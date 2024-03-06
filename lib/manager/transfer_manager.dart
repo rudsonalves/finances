@@ -230,7 +230,7 @@ class TransferManager {
         throw Exception('transaction id $transDestinyId not found');
       }
 
-      // remove transfer references to transOrigin and transDestiny transactions
+      // Reset transfer references to transOrigin and transDestiny transactions
       await transferRepository.setNullTransferId(transfer.transferId!);
 
       // Remove transOrigin and transDestiny transactions by id
@@ -346,24 +346,61 @@ class TransferManager {
   /// This method provides a robust mechanism for updating transfers, ensuring
   /// the integrity and consistency of financial data within the system.
   static Future<void> updateTransfer({
-    required TransactionDbModel transOrigin,
+    required TransactionDbModel newTransaction,
     required int accountDestinyId,
   }) async {
     try {
+      final transferRepository = locator<AbstractTransferRepository>();
+      final transactionRepository = locator<AbstractTransactionRepository>();
+
+      // get transfer
+      final transfer = await transferRepository.getTransferById(
+        newTransaction.transTransferId!,
+      );
+      if (transfer == null) {
+        throw Exception('TransactionManager.updateTransfer return null');
+      }
+
+      // get original transaction
+      final transOrigin = await transactionRepository
+          .getTransactionId(transfer.transferTransId0!);
+
+      // Reset transfer references to transOrigin and transDestiny transactions
+      await transferRepository.setNullTransferId(transfer.transferId!);
+
       // remove origin transaction by id
-      final result = await removeTransfer(transOrigin);
+      final result = await removeTransfer(transOrigin!);
       if (result < 0) {
-        throw Exception('removeTransfer($transOrigin) return $result');
+        throw Exception('return $result');
       }
 
       // create a new transfer
-      transOrigin.transId = null;
+      newTransaction.transId = null;
       await addTranfer(
-        transOrigin: transOrigin,
+        transOrigin: newTransaction,
         accountDestinyId: accountDestinyId,
       );
     } catch (err) {
       log('TransferRepository.updateTransfer: $err');
+    }
+  }
+
+  /// Retrieves a transfer record by its ID.
+  ///
+  /// Parameters:
+  /// - `id`: The integer ID of the transfer to retrieve.
+  ///
+  /// Returns:
+  /// - A `Future<TransferDbModel?>` that completes with the transfer record
+  ///   if found, or `null` if no transfer with the given ID exists.
+  ///
+  /// This method logs a message if the transfer record is not found.
+  static Future<TransferDbModel?> getTransferById(int id) async {
+    try {
+      return await locator<AbstractTransferRepository>().getTransferById(id);
+    } catch (err) {
+      log('TransferRepository.getTransferById: $err');
+      return null;
     }
   }
 }

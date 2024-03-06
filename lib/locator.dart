@@ -156,9 +156,9 @@ void setupDependencies() {
       () => AccountController(),
     );
 
-    locator.registerLazySingleton<TransactionController>(
-      () => TransactionController(),
-    );
+    // locator.registerLazySingleton<TransactionController>(
+    //   () => TransactionController(),
+    // );
 
     locator.registerLazySingleton<StatisticsController>(
       () => StatisticsController(),

@@ -15,7 +15,7 @@ import 'balance_card/balance_card_controller.dart';
 
 class HomePageController extends ChangeNotifier {
   // cached descriptions for search
-  final Map<String, int> _cacheDescriptions = {};
+  // final Map<String, int> _cacheDescriptions = {};
   // controller state
   HomePageState _state = HomePageStateInitial();
   // last date from controller getTransactions
@@ -41,7 +41,15 @@ class HomePageController extends ChangeNotifier {
 
   HomePageState get state => _state;
 
-  Map<String, int> get cacheDescriptions => _cacheDescriptions;
+  Map<String, int> get cacheDescriptions {
+    Map<String, int> descMap = {};
+
+    for (final transaction in _transactions) {
+      descMap[transaction.transDescription] = transaction.transCategoryId;
+    }
+
+    return descMap;
+  }
 
   List<TransactionDbModel> get transactions => _transactions;
 
@@ -115,22 +123,11 @@ class HomePageController extends ChangeNotifier {
         maxTransactions: maxTransactions,
       );
 
-      // for (final trans in newTrans) {
-      //   log(' > ${trans.transDescription}');
-      // }
-
-      // add newTrans in the _transactions list, update _lastDate and
-      // _cacheDescriptions
-      /* FIXME: Rethink how to thrat this cache of descriptions. I believe
-                it would be more sensible to create the cache only when 
-                searching the descrition is required 
-      */
       if (newTrans.isNotEmpty) {
         _transactions.addAll(newTrans);
         _lastDate = newTrans.last.transDate;
-        _updateCacheDescriptions();
       } else {
-        _initialLastDate();
+        _lastDate = _initialLastDate();
       }
 
       _haveMoreTransactions = newTrans.length == maxTransactions;
@@ -146,12 +143,5 @@ class HomePageController extends ChangeNotifier {
     locator<CurrentAccount>().changeCurrenteAccount(account);
     locator<BalanceCardController>().getBalance();
     getTransactions();
-  }
-
-  void _updateCacheDescriptions() {
-    _cacheDescriptions.clear();
-    for (final trans in _transactions) {
-      _cacheDescriptions[trans.transDescription] = trans.transCategoryId;
-    }
   }
 }

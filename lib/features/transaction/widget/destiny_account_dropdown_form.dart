@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../locator.dart';
-import '../../repositories/account/abstract_account_repository.dart';
+import '../../../locator.dart';
+import '../../../repositories/account/abstract_account_repository.dart';
 
-class AccountDropdownFormField extends StatefulWidget {
+class DestinyAccountDropdownForm extends StatefulWidget {
   final GlobalKey<FormFieldState<int>> globalKey;
   final int originAccountId;
-  final int? destinationAccountId;
+  final int? destinyAccountId;
   final String? Function(int?)? validate;
   final String hintText;
   final String labelText;
@@ -15,12 +15,12 @@ class AccountDropdownFormField extends StatefulWidget {
   final void Function(int) accountIdSelected;
   final Widget? suffixIcon;
 
-  const AccountDropdownFormField({
+  const DestinyAccountDropdownForm({
     super.key,
     required this.globalKey,
     required this.originAccountId,
     required this.validate,
-    this.destinationAccountId,
+    this.destinyAccountId,
     required this.hintText,
     required this.labelText,
     this.validator,
@@ -29,20 +29,21 @@ class AccountDropdownFormField extends StatefulWidget {
   });
 
   @override
-  State<AccountDropdownFormField> createState() =>
-      _AccountDropdownFormFieldState();
+  State<DestinyAccountDropdownForm> createState() =>
+      _DestinyAccountDropdownFormState();
 }
 
-class _AccountDropdownFormFieldState extends State<AccountDropdownFormField> {
+class _DestinyAccountDropdownFormState
+    extends State<DestinyAccountDropdownForm> {
   final TextEditingController _controller = TextEditingController();
   final accountsMap = locator<AbstractAccountRepository>().accountsMap;
-  int? _selectedAccountIndex;
+  int? _selectedAccountId;
 
   @override
   void initState() {
-    _selectedAccountIndex = widget.destinationAccountId;
-    _controller.text = _selectedAccountIndex != null
-        ? accountsMap[_selectedAccountIndex!]!.accountName
+    _selectedAccountId = widget.destinyAccountId;
+    _controller.text = _selectedAccountId != null
+        ? accountsMap[_selectedAccountId!]!.accountName
         : '';
     super.initState();
   }
@@ -58,18 +59,18 @@ class _AccountDropdownFormFieldState extends State<AccountDropdownFormField> {
     final accountIds = accountsMap.keys.toList();
     final locale = AppLocalizations.of(context)!;
     accountIds.remove(widget.originAccountId);
-    if (widget.originAccountId == _selectedAccountIndex) {
-      _selectedAccountIndex = null;
+    if (widget.originAccountId == _selectedAccountId) {
+      _selectedAccountId = null;
     }
-    _controller.text = _selectedAccountIndex != null
-        ? accountsMap[_selectedAccountIndex!]!.accountName
-        : '';
+    // _controller.text = _selectedAccountId != null
+    //     ? accountsMap[_selectedAccountId!]!.accountName
+    //     : '';
 
     return Padding(
       padding: const EdgeInsets.only(top: 5, bottom: 10),
       child: DropdownButtonFormField<int>(
         key: widget.globalKey,
-        value: _selectedAccountIndex,
+        value: _selectedAccountId,
         validator: widget.validate,
         decoration: InputDecoration(
           suffixIcon: widget.suffixIcon,
@@ -101,7 +102,7 @@ class _AccountDropdownFormFieldState extends State<AccountDropdownFormField> {
             .toList(),
         onChanged: (index) {
           if (index != null) {
-            _selectedAccountIndex = index;
+            _selectedAccountId = index;
             _controller.text = accountsMap[index]!.accountName;
             widget.accountIdSelected(index);
           }

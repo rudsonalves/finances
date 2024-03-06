@@ -14,6 +14,7 @@ import '../../../common/extensions/money_masked_text.dart';
 import '../../../common/current_models/current_balance.dart';
 import '../../../common/constants/themes/app_text_styles.dart';
 import '../../../common/widgets/custom_circular_progress_indicator.dart';
+import 'widget/main_card_popup_account.dart';
 
 class BalanceCard extends StatefulWidget {
   final double textScale;
@@ -92,50 +93,10 @@ class _BalanceCardState extends State<BalanceCard> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              PopupMenuButton<int>(
-                                tooltip: locale.cardBalanceMenuTip,
-                                child: Row(
-                                  children: [
-                                    currentAccount.accountIcon.iconWidget(
-                                      size: 20,
-                                      color: customColors.sourceLightyellow,
-                                    ),
-                                    const SizedBox(width: 6),
-                                    Text(
-                                      currentAccount.accountName,
-                                      maxLines: 1,
-                                      style: AppTextStyles.textStyleSemiBold16
-                                          .copyWith(
-                                        color: customColors.sourceLightyellow,
-                                      ),
-                                    ),
-                                    Icon(
-                                      Icons.arrow_drop_down,
-                                      color: customColors.sourceLightyellow,
-                                    ),
-                                  ],
-                                ),
-                                onSelected: (accountId) {
-                                  final account =
-                                      widget.controller.accountsMap[accountId]!;
-                                  widget.balanceCallBack(account);
-                                },
-                                itemBuilder: (BuildContext context) {
-                                  return widget.controller.accountsList
-                                      .map((account) {
-                                    return PopupMenuItem(
-                                      value: account.accountId,
-                                      child: Row(
-                                        children: [
-                                          account.accountIcon
-                                              .iconWidget(size: 16),
-                                          const SizedBox(width: 8),
-                                          Text(account.accountName),
-                                        ],
-                                      ),
-                                    );
-                                  }).toList();
-                                },
+                              MainCardPopupAccount(
+                                currentAccount: currentAccount,
+                                customColors: customColors,
+                                widget: widget,
                               ),
                               Row(
                                 children: [
