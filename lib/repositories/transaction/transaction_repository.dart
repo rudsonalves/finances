@@ -18,16 +18,16 @@ class TransactionRepository implements AbstractTransactionRepository {
       int id = await _store.insertTransaction(transaction.toMap());
       // This exception is a program logical error
       if (id <= 0) {
-        final message =
-            'TransactionRepository.insertTransaction: return id $id!!!';
-        log(message);
+        final message = 'return id $id!!!';
+
         throw Exception(message);
       }
       transaction.transId = id;
       return id;
     } catch (err) {
-      log('TransactionRepository.insertTransaction: $err');
-      return -1;
+      final message = 'TransactionRepository.insertTransaction: $err';
+      log(message);
+      throw Exception(message);
     }
   }
 
@@ -41,8 +41,9 @@ class TransactionRepository implements AbstractTransactionRepository {
           .map((transMap) => TransactionDbModel.fromMap(transMap))
           .toList();
     } catch (err) {
-      log('TransactionRepository.getTransId: $err');
-      return [];
+      final message = 'TransactionRepository.getTransId: $err';
+      log(message);
+      throw Exception(message);
     }
   }
 
@@ -54,8 +55,9 @@ class TransactionRepository implements AbstractTransactionRepository {
       if (transMap == null) return null;
       return TransactionDbModel.fromMap(transMap);
     } catch (err) {
-      log('TransactionRepository.getTransId: $err');
-      return null;
+      final message = 'TransactionRepository.getTransId: $err';
+      log(message);
+      throw Exception(message);
     }
   }
 
@@ -69,8 +71,9 @@ class TransactionRepository implements AbstractTransactionRepository {
 
       return result;
     } catch (err) {
-      log('TransactionRepository.deleteTransaction: $err');
-      return -1;
+      final message = 'TransactionRepository.deleteTransaction: $err';
+      log(message);
+      throw Exception(message);
     }
   }
 
@@ -104,7 +107,9 @@ class TransactionRepository implements AbstractTransactionRepository {
       cardBalance.incomes = incomes;
       cardBalance.expanses = expanses;
     } catch (err) {
-      log('TransactionRepository.getCardBalance: $err');
+      final message = 'TransactionRepository.getCardBalance: $err';
+      log(message);
+      throw Exception(message);
     }
   }
 
@@ -129,8 +134,9 @@ class TransactionRepository implements AbstractTransactionRepository {
 
       return transactions;
     } catch (err) {
-      log('TransactionRepository.getNTransactionsFromDate: $err');
-      return [];
+      final message = 'TransactionRepository.getNTransactionsFromDate: $err';
+      log(message);
+      throw Exception(message);
     }
   }
 
@@ -147,8 +153,9 @@ class TransactionRepository implements AbstractTransactionRepository {
 
       return result;
     } catch (err) {
-      log('TransactionRepository.updateTransStatus: $err');
-      return -1;
+      final message = 'TransactionRepository.updateTransStatus: $err';
+      log(message);
+      throw Exception(message);
     }
   }
 }

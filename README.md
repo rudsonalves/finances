@@ -288,7 +288,34 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
-## 2024/02/05 - version 1.1.00+74:
+## 2024/02/06 - version 1.1.00+75:
+
+This commit introduces a comprehensive overhaul of the transaction management logic within our application. It streamlines interactions between the `TransactionController` and underlying repositories, enhancing code readability, maintainability, and the overall architecture of transaction processing. Notably, the commit deprecates direct usage of the `AbstractTransferRepository` within the transaction controller, opting instead for a cleaner, more encapsulated approach to managing transaction data.
+
+**Key Changes:**
+
+- **Transaction Controller Enhancements:** The transaction controller has been enriched with detailed documentation, clarifying the role and functionality of each component. This includes better management of transaction states, initialization, and disposal processes, improving the controller's lifecycle management.
+
+- **Category and Transaction Handling:** Introduced more intuitive methods for setting transaction categories and managing transaction details, such as income status and repetition flags. This approach simplifies the user interface logic and improves the application's data handling efficiency.
+
+- **Repository Interaction Refinements:** Streamlined the interactions with the `AccountRepository`, `CategoryRepository`, and `TransactionManager`, focusing on enhancing the reliability and scalability of data operations. This includes refined methods for adding, updating, and processing transactions with improved error handling and logging.
+
+- **Balance Repository Updates:** Expanded the balance repository's capabilities with methods to clean up unused balance records, thereby ensuring data integrity and optimizing database storage.
+
+**Technical Details:**
+
+- Deprecated direct references to the transfer repository in favor of centralized transaction management through the transaction manager and controller.
+- Introduced utility methods within the transaction controller for better state management and UI interaction, encapsulating business logic more effectively.
+- Refined error handling across transaction and balance repository operations, ensuring more robust application behavior in edge cases.
+
+**Future Directions:**
+
+- The commit lays the groundwork for further refinements in transaction processing and user interface interaction. Future work will focus on enhancing the application's scalability, user experience, and integration with additional financial data sources.
+
+**Note:** Some parts of the code are marked with `FIXME` to indicate areas where further optimization or refactoring is planned.
+
+
+## 2024/03/05 - version 1.1.00+74:
 
 This commit introduces a suite of enhancements across various components of the application, focusing on improving user interface behavior, refining controller logic, and enhancing data integrity during transaction updates. Below is a detailed summary of the updates made:
 
@@ -314,7 +341,7 @@ This commit introduces a suite of enhancements across various components of the 
 These adjustments not only address specific functional and architectural needs but also lay the groundwork for further refinement, particularly in ensuring UI components and data handling processes are both efficient and user-friendly. The move towards a more demand-driven and decoupled component instantiation model signifies a significant step towards enhancing the app's maintainability and scalability.
 
 
-## 2024/02/04 - version 1.1.00+73:
+## 2024/03/04 - version 1.1.00+73:
 
 This commit encompasses a suite of refinements and bug fixes across the application, particularly focusing on transaction management, balance updates, and error handling strategies. Here's a concise overview:
 

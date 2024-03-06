@@ -21,7 +21,6 @@ import '../../common/validate/transaction_validator.dart';
 import '../../features/transaction/transaction_state.dart';
 import '../../features/home_page/home_page_controller.dart';
 import '../../common/constants/themes/app_text_styles.dart';
-import '../../repositories/category/abstract_category_repository.dart';
 import '../../common/widgets/category_dropdown_form_field.dart';
 import '../../common/widgets/autocomplete_text_form_field.dart';
 import '../../common/widgets/custom_circular_progress_indicator.dart';
@@ -42,16 +41,12 @@ class TransactionPage extends StatefulWidget {
 
 class _TransactionPageState extends State<TransactionPage> {
   final _focusNodeBasicTextFormField = FocusNode();
-  final _categoryRepository = locator<AbstractCategoryRepository>();
   final _homePageController = locator<HomePageController>();
 
-  bool _income = false;
-  bool _repeat = false;
   bool _lockCategory = false;
   bool _removeTransfer = false;
 
   final _controller = TransactionController();
-  int? _categoryId;
 
   final _formKey = GlobalKey<FormState>();
   final _originKey = GlobalKey<FormFieldState<int>>();
@@ -60,12 +55,14 @@ class _TransactionPageState extends State<TransactionPage> {
   @override
   void initState() {
     super.initState();
+    locator<CategoriesController>().init();
+
     _controller.init(widget.transaction);
 
     _focusNodeBasicTextFormField.requestFocus();
 
     if (widget.transaction != null) {
-      _income = widget.transaction!.transValue >= 0;
+      _controller.setIncome(widget.transaction!.transValue >= 0);
 
       if (widget.transaction!.transCategoryId == 1) {
         _lockCategory = true;
@@ -82,16 +79,10 @@ class _TransactionPageState extends State<TransactionPage> {
     super.dispose();
   }
 
-  void cancelTransactionsAction() {
-    Navigator.pop(context, false);
-  }
-
-  bool get isTransfer => _categoryId == 1;
-
   void addTransactionsAction() async {
     bool valit =
         _formKey.currentState != null && _formKey.currentState!.validate();
-    if (isTransfer) {
+    if (_controller.isTransfer) {
       valit = valit &&
           _destinyKey.currentState != null &&
           _destinyKey.currentState!.validate();
@@ -99,8 +90,8 @@ class _TransactionPageState extends State<TransactionPage> {
     if (valit) {
       _controller.addTransactionsAction(
         context,
-        income: _income,
-        repeat: _repeat,
+        income: _controller.income,
+        repeat: _controller.repeat,
       );
     }
   }
@@ -109,126 +100,15 @@ class _TransactionPageState extends State<TransactionPage> {
     final CategoryDbModel? newCategory = await showDialog(
       context: context,
       builder: (context) => AddCategoryPage(
-        callBack: addCategoryCallBak,
+        callBack: locator<CategoriesController>().getAllCategories,
       ),
     );
 
     if (newCategory != null && !_lockCategory) {
-      _categoryId = newCategory.categoryId;
-      _controller.category.text = newCategory.categoryName;
+      _controller.setCategoryByModel(newCategory);
     }
 
     setState(() {});
-  }
-
-  void editCategoryAction() async {
-    if (_categoryId != null) {
-      final category = _categoryRepository.getCategoryId(_categoryId!);
-      await showDialog(
-        context: context,
-        builder: (context) => AddCategoryPage(
-          editCategory: category,
-          callBack: addCategoryCallBak,
-        ),
-      );
-    }
-  }
-
-  Future<void> addCategoryCallBak() async {
-    await locator<CategoriesController>().getAllCategories();
-  }
-
-  void changeState(bool state) {
-    setState(() {
-      _income = state;
-    });
-  }
-
-  void toogleRepeat() {
-    setState(() {
-      _repeat = !_repeat;
-    });
-  }
-
-  void selectCategory(categoryName) {
-    if (categoryName != null) {
-      final category = _categoryRepository.categoriesMap[categoryName];
-      if (category != null) {
-        setState(() {
-          _categoryId = category.categoryId!;
-          _income = category.categoryIsIncome;
-        });
-      }
-    }
-  }
-
-  void onEditDescription(description) {
-    int? categoryId = _homePageController.cacheDescriptions[description];
-    if (categoryId != null) {
-      final category = _categoryRepository.getCategoryId(categoryId);
-      _controller.category.text = category.categoryName;
-      setState(() {
-        _categoryId = categoryId;
-        _controller.category.text = category.categoryName;
-      });
-    }
-  }
-
-  PopupMenuButton<int> accountPopupMenuButton(
-    AppLocalizations locale,
-    Color primary,
-  ) {
-    return PopupMenuButton<int>(
-      key: _originKey,
-      tooltip: locale.cardBalanceMenuTip,
-      onSelected: setOriginAccountId,
-      itemBuilder: (BuildContext context) {
-        return _controller.accountsMap.values.map((account) {
-          return PopupMenuItem(
-            value: account.accountId,
-            child: Row(
-              children: [
-                account.accountIcon.iconWidget(size: 16),
-                const SizedBox(width: 8),
-                Text(account.accountName),
-              ],
-            ),
-          );
-        }).toList();
-      },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _controller.originAccount.accountIcon.iconWidget(size: 24),
-          const SizedBox(width: 6),
-          Text(
-            _controller.originAccount.accountName,
-            maxLines: 1,
-            style: AppTextStyles.textStyleSemiBold20.copyWith(color: primary),
-          ),
-          Icon(
-            Icons.arrow_drop_down,
-            color: primary,
-          ),
-        ],
-      ),
-    );
-  }
-
-  void setOriginAccountId(int id) {
-    // if (id == _controller.destinyAccountId) {
-    //   _controller.setDestinyAccountId(null);
-    //   _destinyKey.currentState?.reset();
-    // }
-
-    // _controller.originAccountId = id;
-    // _originAccount.value = _accountsMap[id]!;
-    // log('setOriginAccountId $id');
-  }
-
-  void setDestinationAccountId(int id) {
-    _controller.setDestinyAccountId(id);
-    // _destinationAccountId.value = id;
   }
 
   @override
@@ -239,7 +119,7 @@ class _TransactionPageState extends State<TransactionPage> {
     final primary = Theme.of(context).colorScheme.primary;
 
     if (widget.transaction != null) {
-      _categoryId = widget.transaction!.transCategoryId;
+      _controller.setCategoryById(widget.transaction!.transCategoryId);
     }
 
     return Scaffold(
@@ -347,15 +227,15 @@ class _TransactionPageState extends State<TransactionPage> {
                               ),
                               // Income Buttons
                               RowOfTwoBottons(
-                                income: _income,
-                                changeState: changeState,
+                                income: _controller.income,
+                                changeState: _controller.setIncome,
                               ),
                               const SizedBox(height: 4),
                               // Amount
                               BasicTextFormField(
                                 labelText: locale.transPageAmount,
                                 style: AppTextStyles.textStyleBold16.copyWith(
-                                  color: !_income
+                                  color: !_controller.income
                                       ? customColors.minusred
                                       : customColors.lowgreen,
                                 ),
@@ -365,14 +245,14 @@ class _TransactionPageState extends State<TransactionPage> {
                                 focusNode: _focusNodeBasicTextFormField,
                                 suffixIcon: ExcludeSemantics(
                                   child: IconButton(
-                                    tooltip: _income
+                                    tooltip: _controller.income
                                         ? locale.rowOfTwoBottonsIncome
                                         : locale.rowOfTwoBottonsExpense,
                                     autofocus: false,
-                                    icon: _income
+                                    icon: _controller.income
                                         ? const Icon(Icons.thumb_up)
                                         : const Icon(Icons.thumb_down),
-                                    onPressed: () => changeState(!_income),
+                                    onPressed: _controller.toogleIncome,
                                   ),
                                 ),
                               ),
@@ -385,7 +265,8 @@ class _TransactionPageState extends State<TransactionPage> {
                                 suggestions: _homePageController
                                     .cacheDescriptions.keys
                                     .toList(),
-                                onEditingComplete: onEditDescription,
+                                onEditingComplete:
+                                    _controller.setCategoryByDescription,
                               ),
                               // Category
                               CategoryDropdownFormField(
@@ -397,7 +278,6 @@ class _TransactionPageState extends State<TransactionPage> {
                                 validator: transValidator.categoryValidator,
                                 suffixIcon: InkWell(
                                   onTap: addCategoryAction,
-                                  onLongPress: editCategoryAction,
                                   child: Ink(
                                     decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
@@ -405,10 +285,10 @@ class _TransactionPageState extends State<TransactionPage> {
                                     child: const Icon(Icons.add),
                                   ),
                                 ),
-                                onChanged: selectCategory,
+                                onChanged: _controller.setCategoryByName,
                               ),
                               // Destiny Account
-                              if (isTransfer)
+                              if (_controller.isTransfer)
                                 DestinyAccountDropdownForm(
                                   globalKey: _destinyKey,
                                   originAccountId: _controller.originAccountId,
@@ -418,7 +298,8 @@ class _TransactionPageState extends State<TransactionPage> {
                                       .accountForTransferValidator,
                                   hintText: locale.transPageSelectAccTransfer,
                                   labelText: locale.transPageAccTransfer,
-                                  accountIdSelected: setDestinationAccountId,
+                                  accountIdSelected:
+                                      _controller.setDestinyAccountId,
                                 ),
                               // Date x Time
                               Semantics(
@@ -430,9 +311,10 @@ class _TransactionPageState extends State<TransactionPage> {
                               ),
                               // Installments - Repeat Monthly
                               TextButton.icon(
-                                onPressed:
-                                    widget.addTransaction ? toogleRepeat : null,
-                                icon: _repeat
+                                onPressed: widget.addTransaction
+                                    ? _controller.toogleRepeat
+                                    : null,
+                                icon: _controller.repeat
                                     ? const Icon(Icons.task_alt)
                                     : const Icon(Icons.radio_button_unchecked),
                                 label: Text(
@@ -441,7 +323,7 @@ class _TransactionPageState extends State<TransactionPage> {
                                 ),
                               ),
                               // Installments - Repeat times
-                              if (_repeat)
+                              if (_controller.repeat)
                                 SimpleSpinBoxField(
                                   labelText: locale.transactionRepeatTimes,
                                   style: AppTextStyles.textStyleBold16.copyWith(
@@ -458,7 +340,8 @@ class _TransactionPageState extends State<TransactionPage> {
                                     ? locale.transPageButtonAdd
                                     : locale.transPageButtonUpdate,
                                 addCallback: addTransactionsAction,
-                                cancelCallback: cancelTransactionsAction,
+                                cancelCallback: () =>
+                                    Navigator.pop(context, false),
                               ),
                             ],
                           ),

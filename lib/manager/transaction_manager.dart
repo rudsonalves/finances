@@ -223,10 +223,10 @@ class TransactionManager {
   static Future<int> updateTransaction(TransactionDbModel transaction) async {
     // Obtain original transaction register to avoid editing the transaction
     // value or date.
-    final removeTransaction = await locator<AbstractTransactionRepository>()
+    final originTransaction = await locator<AbstractTransactionRepository>()
         .getTransactionId(transaction.transId!);
 
-    if (removeTransaction == null) {
+    if (originTransaction == null) {
       final message =
           'TransactionManager.updateTransaction: transaction id ${transaction.transId!} not found';
       log(message);
@@ -235,11 +235,11 @@ class TransactionManager {
 
     // Pass the value and date from original transaction
     await removeTransactionByValues(
-      id: transaction.transId!,
-      balanceId: transaction.transBalanceId!,
-      accountId: transaction.transAccountId,
-      value: removeTransaction.transValue,
-      date: removeTransaction.transDate,
+      id: originTransaction.transId!,
+      balanceId: originTransaction.transBalanceId!,
+      accountId: originTransaction.transAccountId,
+      value: originTransaction.transValue,
+      date: originTransaction.transDate,
     );
 
     transaction.transId = null;

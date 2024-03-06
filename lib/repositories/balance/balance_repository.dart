@@ -83,4 +83,9 @@ class BalanceRepository implements AbstractBalanceRepository {
   Future<void> deleteEmptyBalance(int id) async {
     await _store.deleteEmptyBalance(id);
   }
+
+  @override
+  Future<int> deleteAllEmptyBalances() async {
+    return await _store.deleteAllEmptyBalances();
+  }
 }

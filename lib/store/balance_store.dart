@@ -252,6 +252,26 @@ abstract class BalanceStorer {
   /// records are retained within the database, avoiding clutter from unused
   /// entries.
   Future<void> deleteEmptyBalance(int id);
+
+  /// Deletes all balance records with no associated transactions from the
+  /// database.
+  ///
+  /// This method searches the `balanceTable` for balance records where the
+  /// count of associated transactions (`balanceTransCount`) is zero and deletes
+  /// them. It is useful for cleaning up balance records that were initialized
+  /// but never used due to the lack of transactions affecting them.
+  ///
+  /// Returns the number of rows (balance records) affected by the operation. If
+  /// the operation is successful, this number represents the count of balance
+  /// records that were deleted because they had no associated transactions. A
+  /// return value of 0 indicates that no such balance records were found.
+  ///
+  /// Throws:
+  ///   - Exception: If the delete operation encounters an error, an exception
+  ///     is thrown with a detailed error message. This ensures that any issues
+  ///     encountered during the execution of this method are communicated back
+  ///     to the caller, facilitating error handling and debugging.
+  Future<int> deleteAllEmptyBalances();
 }
 
 class BalanceStore implements BalanceStorer {
@@ -269,8 +289,9 @@ class BalanceStore implements BalanceStorer {
       );
       return result;
     } catch (err) {
-      log('Error: $err');
-      return -1;
+      final message = 'BalanceStore.insertBalance: $err';
+      log(message);
+      throw Exception(message);
     }
   }
 
@@ -287,8 +308,9 @@ class BalanceStore implements BalanceStorer {
       if (result.isEmpty) return null;
       return result[0];
     } catch (err) {
-      log('Error: $err');
-      return null;
+      final message = 'BalanceStore.queryBalanceId: $err';
+      log(message);
+      throw Exception(message);
     }
   }
 
@@ -310,8 +332,9 @@ class BalanceStore implements BalanceStorer {
       if (result.isEmpty) return null;
       return result[0];
     } catch (err) {
-      log('Error: $err');
-      return null;
+      final message = 'BalanceStore.queryBalanceInDate: $err';
+      log(message);
+      throw Exception(message);
     }
   }
 
@@ -332,8 +355,9 @@ class BalanceStore implements BalanceStorer {
       if (result.isEmpty) return [];
       return result;
     } catch (err) {
-      log('Error: $err');
-      return [];
+      final message = 'BalanceStore.queryAllBalanceAfterDate: $err';
+      log(message);
+      throw Exception(message);
     }
   }
 
@@ -350,7 +374,9 @@ class BalanceStore implements BalanceStorer {
         whereArgs: [id],
       );
     } catch (err) {
-      log('Error: $err');
+      final message = 'BalanceStore.updateBalance: $err';
+      log(message);
+      throw Exception(message);
     }
   }
 
@@ -365,7 +391,9 @@ class BalanceStore implements BalanceStorer {
         whereArgs: [id],
       );
     } catch (err) {
-      log('Error: $err');
+      final message = 'BalanceStore.deleteBalance: $err';
+      log(message);
+      throw Exception(message);
     }
   }
 
@@ -380,7 +408,28 @@ class BalanceStore implements BalanceStorer {
         whereArgs: [id, 0],
       );
     } catch (err) {
-      log('Error: $err');
+      final message = 'BalanceStore.deleteEmptyBalance: $err';
+      log(message);
+      throw Exception(message);
+    }
+  }
+
+  @override
+  Future<int> deleteAllEmptyBalances() async {
+    try {
+      final database = await _databaseManager.database;
+
+      final result = await database.delete(
+        balanceTable,
+        where: '$balanceTransCount = ?',
+        whereArgs: [0],
+      );
+
+      return result;
+    } catch (err) {
+      final message = 'BalanceStore.deleteEmptyBalances: $err';
+      log(message);
+      throw Exception(message);
     }
   }
 }

@@ -12,94 +12,189 @@ import 'database_manager.dart';
 /// This class implements the `TransactionStorer` interface, facilitating
 /// CRUD operations on transaction data using a database manager.
 abstract class TransactionStorer {
-  /// Inserts a transaction into the database.
+  /// Inserts a new transaction into the database.
+  ///
+  /// This asynchronous method takes a map representation of a transaction and
+  /// attempts to insert it into the transactions table. It utilizes the
+  /// ConflictAlgorithm.abort to prevent duplicate entries based on primary key
+  /// constraints. If the insertion is successful, the method returns the ID of
+  /// the newly inserted transaction. In case of failure, it logs the error and
+  /// throws an exception with the error message.
   ///
   /// Parameters:
-  /// - `transactionMap`: A map of the transaction data to insert.
+  /// - [transactionMap]: A map containing the key-value pairs representing the
+  ///   transaction's attributes to be inserted.
+  ///
   /// Returns:
-  /// - The ID of the inserted transaction, or -1 in case of failure.
+  /// - The integer ID of the newly inserted transaction.
+  ///
+  /// Throws:
+  /// - An Exception with a descriptive error message if the insertion fails.
   Future<int> insertTransaction(Map<String, dynamic> transactionMap);
 
-  /// Updates a transaction in the database.
+  /// Updates an existing transaction in the database.
+  ///
+  /// This method updates a transaction specified by the transaction ID in the map
+  /// parameter [transMap]. It first retrieves the database instance and then
+  /// performs the update operation using the provided transaction map. The `where`
+  /// clause ensures only the record with the matching transaction ID is updated.
+  /// If successful, the method returns the count of records affected by the update
+  /// operation, typically one. In case of failure, it logs the error and throws
+  /// an exception with a descriptive error message.
   ///
   /// Parameters:
-  /// - `transMap`: A map of the updated transaction data.
+  /// - [transMap]: A map containing the key-value pairs of the transaction's
+  ///   attributes to be updated, including the transaction ID.
+  ///
   /// Returns:
-  /// - The number of rows affected, or -1 in case of failure.
+  /// - The number of records affected by the update operation.
+  ///
+  /// Throws:
+  /// - An Exception with a descriptive error message if the update operation fails.
   Future<int> updateTransaction(Map<String, dynamic> transMap);
 
-  /// Updates the status of a transaction.
+  /// Updates the status of a specified transaction in the database.
+  ///
+  /// Attempts to update the status of the transaction identified by [id]
+  /// to the new status provided in [newStatus]. It fetches the database
+  /// instance and executes the update operation. If the operation is
+  /// successful, returns the count of records affected (typically one).
+  /// In case of an exception, logs the error and throws a descriptive
+  /// exception.
   ///
   /// Parameters:
-  /// - `id`: The ID of the transaction to update.
-  /// - `newStatus`: The new status value.
+  /// - [id]: The unique identifier of the transaction to update.
+  /// - [newStatus]: The new status value for the transaction.
+  ///
   /// Returns:
-  /// - The number of rows affected, or -1 in case of failure.
+  /// - The number of records affected by the update.
+  ///
+  /// Throws:
+  /// - An Exception if the update operation fails.
   Future<int> updateTransactionStatus({
     required int id,
     required int newStatus,
   });
 
-  /// Deletes a transaction by its ID.
+  /// Deletes a transaction from the database by its ID.
+  ///
+  /// Connects to the database and attempts to delete the transaction
+  /// identified by the given [id]. On successful deletion, returns the
+  /// count of records affected (should be one if the transaction existed).
+  /// Encounters with errors during the deletion process are logged and
+  /// rethrown as exceptions with a descriptive message.
   ///
   /// Parameters:
-  /// - `id`: The ID of the transaction to delete.
+  /// - [id]: The unique identifier of the transaction to delete.
+  ///
   /// Returns:
-  /// - The number of rows affected, or -1 in case of failure.
+  /// - The number of records affected by the delete operation.
+  ///
+  /// Throws:
+  /// - An Exception if the delete operation encounters an error.
   Future<int> deleteTransactionId(int id);
 
-  /// Queries a transaction by its ID.
+  /// Queries the database for a transaction by its unique identifier.
+  ///
+  /// Retrieves the transaction details from the database corresponding
+  /// to the provided [id]. If the transaction is found, returns a map
+  /// containing the transaction's attributes. Returns `null` if no
+  /// transaction with the specified [id] exists in the database.
   ///
   /// Parameters:
-  /// - `id`: The ID of the transaction to query.
+  /// - [id]: The unique identifier of the transaction to retrieve.
+  ///
   /// Returns:
-  /// - A map of the transaction data, or null if not found.
+  /// - A map of the transaction's attributes if found, otherwise `null`.
+  ///
+  /// Throws:
+  /// - An Exception with a descriptive error message if the query fails.
   Future<Map<String, Object?>?> queryTransactionAtId(int id);
 
-  /// Queries transactions for a specific balance ID.
+  /// Retrieves transactions associated with a specific balance ID.
+  ///
+  /// Performs a database query to fetch transactions linked to the given
+  /// [balanceId]. The transactions are ordered by their date in descending
+  /// order. If the query is successful, a list of maps detailing the
+  /// transactions is returned. Each map contains the transaction attributes.
   ///
   /// Parameters:
-  /// - `balanceId`: The balance ID associated with the transactions.
+  /// - [balanceId]: The ID of the balance for which transactions are queried.
+  ///
   /// Returns:
-  /// - A list of maps of the transaction data.
+  /// - A list of maps, where each map represents a transaction's attributes.
+  ///
+  /// Throws:
+  /// - An Exception with a descriptive error message if the query operation fails.
   Future<List<Map<String, dynamic>>> queryTransactionForBalanceId(int id);
 
-  /// Queries a set number of transactions from a start date.
+  /// Calculates the total income for an account within a specified date range.
+  ///
+  /// Queries the database to sum up the income transactions for [accountId]
+  /// between [startDate] and [endDate]. It executes a raw SQL query defined by
+  /// `getIncomeBetweenDatesSQL` with the provided parameters. The method returns
+  /// the total sum of income transactions as a double. If no income transactions
+  /// are found within the specified range, the method returns 0.0.
   ///
   /// Parameters:
-  /// - `startDate`: The start date for the query.
-  /// - `accountId`: The account ID associated with the transactions.
-  /// - `maxTransactions`: The maximum number of transactions to return.
+  /// - [startDate]: The start of the date range, represented as an integer
+  ///   timestamp.
+  /// - [endDate]: The end of the date range, also as an integer timestamp.
+  /// - [accountId]: The ID of the account for which to calculate total income.
+  ///
   /// Returns:
-  /// - A list of maps of the transaction data.
+  /// - The total sum of income transactions as a double.
+  ///
+  /// Throws:
+  /// - An Exception with a descriptive error message if the query operation fails.
   Future<double> getIncomeBetweenDates({
     required int startDate,
     required int endDate,
     required int accountId,
   });
 
-  /// Gets the total income between two dates for an account.
+  /// Calculates the total expenses for an account within a specified date range.
+  ///
+  /// Executes a database query to sum up the expense transactions for the specified
+  /// [accountId] between [startDate] and [endDate]. Utilizes the raw SQL query defined
+  /// by `getExpenseBetweenDatesSQL` with the input parameters to perform this operation.
+  /// Returns the aggregated sum of expenses as a double. If no expense transactions
+  /// are found within the given range, returns 0.0.
   ///
   /// Parameters:
-  /// - `startDate`: The start date of the period.
-  /// - `endDate`: The end date of the period.
-  /// - `accountId`: The account ID for which to calculate income.
+  /// - [startDate]: The beginning of the date range, given as an integer timestamp.
+  /// - [endDate]: The end of the date range, also as an integer timestamp.
+  /// - [accountId]: The ID of the account whose expenses are being calculated.
+  ///
   /// Returns:
-  /// - The total income as a double.
+  /// - The total sum of expenses transactions as a double.
+  ///
+  /// Throws:
+  /// - An Exception with a descriptive error message if the query fails.
   Future<double> getExpenseBetweenDates({
     required int startDate,
     required int endDate,
     required int accountId,
   });
 
-  /// Gets the total expenses between two dates for an account.
+  /// Fetches a specified number of transactions for an account starting from a given date.
+  ///
+  /// This method queries the database for transactions associated with [accountId],
+  /// starting before [startDate]. The transactions are retrieved in descending order
+  /// by date, up to the [maxTransactions] limit. It returns a list of transaction maps,
+  /// each representing a transaction's data.
   ///
   /// Parameters:
-  /// - `startDate`: The start date of the period.
-  /// - `endDate`: The end date of the period.
-  /// - `accountId`: The account ID for which to calculate expenses.
+  /// - [startDate]: The starting point (exclusive) to fetch transactions from, represented
+  ///   as an ExtendedDate.
+  /// - [accountId]: The ID of the account whose transactions are to be fetched.
+  /// - [maxTransactions]: The maximum number of transactions to retrieve.
+  ///
   /// Returns:
-  /// - The total expenses as a double.
+  /// - A list of maps, where each map details a transaction's attributes.
+  ///
+  /// Throws:
+  /// - An Exception with a descriptive error message if the query operation fails.
   Future<List<Map<String, dynamic>>> queryNTransactionsFromDate({
     required final ExtendedDate startDate,
     required final int accountId,
@@ -122,8 +217,9 @@ class TransactionStore implements TransactionStorer {
       );
       return result;
     } catch (err) {
-      log('TransactionStore.insertTransaction: $err');
-      return -1;
+      final message = 'TransactionStore.insertTransaction: $err';
+      log(message);
+      throw Exception(message);
     }
   }
 
@@ -141,8 +237,9 @@ class TransactionStore implements TransactionStorer {
       );
       return result;
     } catch (err) {
-      log('TransactionStore.updateTransaction: $err');
-      return -1;
+      final message = 'TransactionStore.updateTransaction: $err';
+      log(message);
+      throw Exception(message);
     }
   }
 
@@ -162,8 +259,9 @@ class TransactionStore implements TransactionStorer {
       );
       return result;
     } catch (err) {
-      log('TransactionStore.updateTransactionStatus: $err');
-      return -1;
+      final message = 'TransactionStore.updateTransactionStatus: $err';
+      log(message);
+      throw Exception(message);
     }
   }
 
@@ -179,8 +277,9 @@ class TransactionStore implements TransactionStorer {
       );
       return result;
     } catch (err) {
-      log('TransactionStore.deleteTransactionId: $err');
-      return -1;
+      final message = 'TransactionStore.deleteTransactionId: $err';
+      log(message);
+      throw Exception(message);
     }
   }
 
@@ -199,8 +298,9 @@ class TransactionStore implements TransactionStorer {
 
       return result.first;
     } catch (err) {
-      log('TransactionStore.queryTransactionAtId: $err');
-      return {};
+      final message = 'TransactionStore.queryTransactionAtId: $err';
+      log(message);
+      throw Exception(message);
     }
   }
 
@@ -219,8 +319,9 @@ class TransactionStore implements TransactionStorer {
 
       return result;
     } catch (err) {
-      log('TransactionStore.queryTransactionForBalanceId: $err');
-      return [];
+      final message = 'TransactionStore.queryTransactionForBalanceId: $err';
+      log(message);
+      throw Exception(message);
     }
   }
 
@@ -243,8 +344,9 @@ class TransactionStore implements TransactionStorer {
 
       return result;
     } catch (err) {
-      log('TransactionStore.queryNTransactionsFromDate: $err');
-      return [];
+      final message = 'TransactionStore.queryNTransactionsFromDate: $err';
+      log(message);
+      throw Exception(message);
     }
   }
 
@@ -264,8 +366,9 @@ class TransactionStore implements TransactionStorer {
       double totalEntries = (result.first['totalIncomes'] ?? 0.0) as double;
       return totalEntries;
     } catch (err) {
-      log('TransactionStore.getIncomeBetweenDates: $err');
-      return 0.0;
+      final message = 'TransactionStore.getIncomeBetweenDates: $err';
+      log(message);
+      throw Exception(message);
     }
   }
 
@@ -285,8 +388,9 @@ class TransactionStore implements TransactionStorer {
       double totalEntries = (result.first['totalExpenses'] ?? 0.0) as double;
       return totalEntries;
     } catch (err) {
-      log('TransactionStore.getExpenseBetweenDates: $err');
-      return 0.0;
+      final message = 'TransactionStore.getExpenseBetweenDates: $err';
+      log(message);
+      throw Exception(message);
     }
   }
 }

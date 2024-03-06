@@ -269,6 +269,7 @@ class _HomePageState extends State<HomePage>
                             }
                             return noTransactions(locale, primary);
                           }
+                          _showTutorial = false;
 
                           List<TransactionDbModel> transactions = [];
 

@@ -230,7 +230,28 @@ abstract class AbstractBalanceRepository {
   /// await deleteEmptyBalance(1);
   /// ```
   ///
-  /// This method enhances data integrity by ensuring only meaningful balance records
-  /// are retained within the database, avoiding clutter from unused entries.
+  /// This method enhances data integrity by ensuring only meaningful balance
+  /// records are retained within the database, avoiding clutter from unused
+  /// entries.
   Future<void> deleteEmptyBalance(int id);
+
+  /// Deletes all balance records with no associated transactions from the
+  /// database.
+  ///
+  /// This method searches the `balanceTable` for balance records where the
+  /// count of associated transactions (`balanceTransCount`) is zero and deletes
+  /// them. It is useful for cleaning up balance records that were initialized
+  /// but never used due to the lack of transactions affecting them.
+  ///
+  /// Returns the number of rows (balance records) affected by the operation. If
+  /// the operation is successful, this number represents the count of balance
+  /// records that were deleted because they had no associated transactions. A
+  /// return value of 0 indicates that no such balance records were found.
+  ///
+  /// Throws:
+  ///   - Exception: If the delete operation encounters an error, an exception
+  ///     is thrown with a detailed error message. This ensures that any issues
+  ///     encountered during the execution of this method are communicated back
+  ///     to the caller, facilitating error handling and debugging.
+  Future<int> deleteAllEmptyBalances();
 }
