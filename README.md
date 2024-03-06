@@ -288,6 +288,32 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
+## 2024/02/05 - version 1.1.00+74:
+
+This commit introduces a suite of enhancements across various components of the application, focusing on improving user interface behavior, refining controller logic, and enhancing data integrity during transaction updates. Below is a detailed summary of the updates made:
+
+- **UI and Reactivity Enhancements**:
+  - **AutocompleteTextFormField**: Added a `mounted` check in `_onTextChanged` to prevent `setState` errors if the widget is unmounted.
+  - **CategoryDropdownFormField**: Introduced `lockCategory` and `removeTransfer` attributes to allow locking category changes and removing the 'Transfer' category (id 1) from the list. This facilitates distinct reactivities for editing transactions involving transfers.
+
+- **PopupMenuButton Customization**:
+  - Customized `PopupMenuButton<int>` in `MainCardPopupAccount` to manage the popup more effectively and refactor the code, providing a cleaner implementation in both `balance_card.dart` and `widget/main_card_popup_account.dart`.
+
+- **HomePage Controller and Widget Refactoring**:
+  - Transformed `cacheDescriptions` into a getter in `home_page_controller.dart`, generating the description map on demand. Also, re-enabled `_lastDate` with pending tests.
+  - Refactored `transaction_dismissible_tile.dart` by separating `dismissActions`, `editDismiss`, and `deleteDismiss` methods, with plans to further isolate these from the UI.
+
+- **Transaction Management and Integrity**:
+  - Transitioned business logic to `TransactionController` in `transaction_controller.dart` and `transaction_page.dart`, moving all `TextEditingController` instances to the controller with additional adjustments pending.
+  - Made `DestinyAccountDropdownForm` exclusive to `TransactionPage`, ensuring a focused and streamlined user experience.
+  - Updated `transfer_manager.dart` with a static `updateTransfer` method redesign to maintain transaction integrity during updates, and introduced `getTransferById` for better abstraction over the transfer repository layer.
+
+- **Dependency Injection and Singleton Management**:
+  - Removed the lazy singleton instantiation of `TransactionController` from `locator.dart`, opting for demand-based generation without state retention. This change supports a cleaner, more modular architecture, reducing unnecessary state persistence and enhancing overall app performance.
+
+These adjustments not only address specific functional and architectural needs but also lay the groundwork for further refinement, particularly in ensuring UI components and data handling processes are both efficient and user-friendly. The move towards a more demand-driven and decoupled component instantiation model signifies a significant step towards enhancing the app's maintainability and scalability.
+
+
 ## 2024/02/04 - version 1.1.00+73:
 
 This commit encompasses a suite of refinements and bug fixes across the application, particularly focusing on transaction management, balance updates, and error handling strategies. Here's a concise overview:
