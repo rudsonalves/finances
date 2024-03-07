@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../common/constants/themes/app_button_styles.dart';
 import '../../../common/constants/themes/app_text_styles.dart';
 import '../../../common/widgets/autocomplete_text_form_field.dart';
 import '../../../locator.dart';
@@ -141,12 +140,11 @@ class _FilterDialogState extends State<FilterDialog> {
                   );
                 }),
             const SizedBox(height: 8),
-            ElevatedButton(
+            FilledButton(
               onPressed: () => Navigator.of(context).pop((
                 _controller.text,
                 _filterByDescription.value,
               )),
-              style: AppButtonStyles.primaryButtonColor(context),
               child: Text(locale.filterDialogButton),
             ),
           ],

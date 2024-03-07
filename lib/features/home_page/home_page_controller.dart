@@ -14,8 +14,6 @@ import '../../repositories/category/abstract_category_repository.dart';
 import 'balance_card/balance_card_controller.dart';
 
 class HomePageController extends ChangeNotifier {
-  // cached descriptions for search
-  // final Map<String, int> _cacheDescriptions = {};
   // controller state
   HomePageState _state = HomePageStateInitial();
   // last date from controller getTransactions
@@ -32,6 +30,16 @@ class HomePageController extends ChangeNotifier {
   final _transactionsRepository = locator<AbstractTransactionRepository>();
   // instance of CurrentAccount
   final _currentAccount = locator<CurrentAccount>();
+
+  String _filterText = '';
+  bool _filterIsDescription = true;
+  int _filterCategoryId = 0;
+  final isFiltred$ = ValueNotifier<bool>(false);
+
+  String get filterText => _filterText;
+  bool get filterIsDescription => _filterIsDescription;
+  int get filterCategoryId => _filterCategoryId;
+  bool get isFiltred => isFiltred$.value;
 
   // Default constructor
   HomePageController();
@@ -51,6 +59,12 @@ class HomePageController extends ChangeNotifier {
     return descMap;
   }
 
+  @override
+  void dispose() {
+    isFiltred$.dispose();
+    super.dispose();
+  }
+
   List<TransactionDbModel> get transactions => _transactions;
 
   bool get redraw => _redraw;
@@ -68,7 +82,6 @@ class HomePageController extends ChangeNotifier {
 
   void _changeState(HomePageState newState) {
     _state = newState;
-    log(_state.toString());
     notifyListeners();
   }
 
@@ -143,5 +156,49 @@ class HomePageController extends ChangeNotifier {
     locator<CurrentAccount>().changeCurrenteAccount(account);
     locator<BalanceCardController>().getBalance();
     getTransactions();
+  }
+
+  Future<void> setFilterValues({
+    required String text,
+    required bool isDescription,
+  }) async {
+    _filterText = text;
+    _filterIsDescription = isDescription;
+    _filterCategoryId = !isDescription
+        ? locator.get<AbstractCategoryRepository>().getIdByName(_filterText)
+        : 0;
+    isFiltred$.value = true;
+    getTransactions();
+  }
+
+  Future<void> cleanFilterValues() async {
+    _filterText = '';
+    _filterIsDescription = false;
+    _filterCategoryId = 0;
+    isFiltred$.value = false;
+    getTransactions();
+  }
+
+  List<TransactionDbModel> filterTransactions() {
+    List<TransactionDbModel> transactions = [];
+
+    if (filterText.isNotEmpty) {
+      for (final trans in _transactions) {
+        if (filterIsDescription) {
+          if (trans.transDescription
+              .toLowerCase()
+              .contains(filterText.toLowerCase())) {
+            transactions.add(trans);
+          }
+        } else {
+          if (trans.transCategoryId == filterCategoryId) {
+            transactions.add(trans);
+          }
+        }
+      }
+    } else {
+      transactions = _transactions;
+    }
+    return transactions;
   }
 }

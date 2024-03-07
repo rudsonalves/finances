@@ -223,7 +223,15 @@ class DatabaseMigrations {
           batch.execute(script);
         }
       }
-      // await batch.commit(noResult: true);
+
+      if (version == 1008) {
+        // Remove empty balances
+        await db.delete(
+          balanceTable,
+          where: '$balanceTransCount = ?',
+          whereArgs: [0],
+        );
+      }
     }
     await batch.commit(noResult: true);
     await db.execute('PRAGMA foreign_keys=on');

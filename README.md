@@ -288,7 +288,42 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
-## 2024/02/06 - version 1.1.00+75:
+## 2024/03/07 - version 1.1.00+76:
+
+Refine Balance Management and Enhance User Interface Controls
+
+This update introduces significant improvements to the balance management workflow and user interface controls within our finance management application. Key modifications include simplifying month navigation in date utilities, refining the balance card interface, centralizing filter controls, and ensuring a more intuitive and responsive user experience.
+
+**Details of Changes:**
+
+- **ExtendedDate Simplification:** Updated `nextMonth()` and `previousMonth()` methods in `extends_date.dart` for a more straightforward approach, prioritizing simplicity over complexity.
+
+- **BalanceCard Refactoring:** Introduced the `CardPopupMenu` class, streamlining the balance card's popup menu. Month navigation controls are now managed by `BalanceCardController`, enhancing control and separation of concerns.
+
+- **HomePage Enhancements:**
+  - Filter management has been migrated to `HomePageController`, centralizing filter logic and streamlining UI interactions.
+  - Improved the `loadMoreTransactions()` method to better manage ListView positioning after loading additional transactions.
+  - Implemented `openFilter()` method, isolating transaction filter controls.
+  - Integrated a `ValueListenableBuilder` to dynamically update the filter icon based on filter status.
+  - Re-enabled the disposal of `HomePageController`, ensuring resource efficiency.
+  - Enhanced transaction filtering through controller-based management.
+
+- **HomePageController Updates:**
+  - Added attributes `_filterText`, `_filterIsDescription`, `_filterCategoryId`, and `ValueNotifier<bool> isFiltered$` to manage transaction filters effectively.
+  - Introduced `dispose` method for `isFiltered$` cleanup, alongside methods `setFilterValues()` for filter activation and `cleanFilterValues()` for deactivation.
+  - Implemented `filterTransactions()` method, providing a filtered transaction list based on user-defined criteria.
+
+- **UI Component Adjustments:**
+  - Transitioned from `ElevatedButton` to `FilledButton` in various UI components, aligning with design consistency and user interface guidelines.
+
+- **Database Migration:** Performed a cleanup in the `balanceTable` as part of the database migration to version 1008, removing balance records without transactions to optimize storage and enhance data integrity.
+
+**Implications:**
+
+These changes collectively enhance the application's usability, making balance management more intuitive and efficient. By refining backend processes and user interface elements, we ensure a smoother and more responsive user experience. Future updates will continue to build on this foundation, focusing on performance optimization and feature enhancements.
+
+
+## 2024/03/06 - version 1.1.00+75:
 
 This commit introduces a comprehensive overhaul of the transaction management logic within our application. It streamlines interactions between the `TransactionController` and underlying repositories, enhancing code readability, maintainability, and the overall architecture of transaction processing. Notably, the commit deprecates direct usage of the `AbstractTransferRepository` within the transaction controller, opting instead for a cleaner, more encapsulated approach to managing transaction data.
 

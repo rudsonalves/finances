@@ -314,13 +314,18 @@ class ExtendedDate extends DateTime {
   ///   Since months vary in length, the actual day might not correspond exactly to "one month later,"
   ///   especially for dates towards the end of months with more days than the subsequent month.
   ExtendedDate nextMonth() {
-    int addDays = 31;
-    if ([4, 6, 9, 11].contains(month)) {
-      addDays = 30;
-    } else if (month == 2) {
-      addDays = _isLeapYear(year) ? 29 : 28;
+    int newDay = day;
+    int newMonth = month + 1;
+    int newYear = year;
+
+    if (newMonth > 12) {
+      newMonth = 1;
+      newYear++;
     }
-    return add(Duration(days: addDays));
+
+    newDay = _adjustDay(newDay, newMonth, newYear);
+
+    return ExtendedDate(newYear, newMonth, newDay, hour, minute, second);
   }
 
   /// Calculates the ExtendedDate approximately one month before the current date.
@@ -335,15 +340,28 @@ class ExtendedDate extends DateTime {
   ///   Since months vary in length, this approximation might not precisely match "one month earlier,"
   ///   especially for dates at the start of months following shorter months.
   ExtendedDate previousMonth() {
-    int previousMonth = month == 1 ? 12 : month - 1;
+    int newDay = day;
+    int newMonth = month - 1;
+    int newYear = year;
 
-    int addDays = 31;
-    if ([4, 6, 9, 11].contains(previousMonth)) {
-      addDays = 30;
-    } else if (month == 2) {
-      addDays = _isLeapYear(year) ? 29 : 28;
+    if (newMonth < 1) {
+      newMonth = 12;
+      newYear--;
     }
-    return subtract(Duration(days: addDays));
+
+    newDay = _adjustDay(newDay, newMonth, newYear);
+
+    return ExtendedDate(newYear, newMonth, newDay, hour, minute, second);
+  }
+
+  int _adjustDay(int day, int month, int year) {
+    if (month == 2 && day > 28) {
+      day = _isLeapYear(year) ? 29 : 28;
+    } else if ([4, 6, 9, 11].contains(month) && day > 30) {
+      day = 30;
+    }
+
+    return day;
   }
 
   /// Adds a specified duration to the current date, returning a new ExtendedDate.

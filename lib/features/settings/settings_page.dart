@@ -213,16 +213,14 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ],
         actions: [
-          ElevatedButton(
+          FilledButton(
             onPressed: () => Navigator.of(context).pop(
               int.parse(_maxTransValueController.text),
             ),
-            style: AppButtonStyles.primaryButtonColor(context),
             child: Text(locale.genericSelect),
           ),
-          ElevatedButton(
+          FilledButton(
             onPressed: () => Navigator.of(context).pop(null),
-            style: AppButtonStyles.primaryButtonColor(context),
             child: Text(locale.genericClose),
           ),
         ],
@@ -262,8 +260,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           const SizedBox(height: 4),
           Center(
-            child: ElevatedButton(
-              style: AppButtonStyles.primaryButtonColor(context),
+            child: FilledButton(
               onPressed: _resetData,
               child: Text(
                 locale.resetDialogData,
@@ -277,8 +274,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           const SizedBox(height: 4),
           Center(
-            child: ElevatedButton(
-              style: AppButtonStyles.primaryButtonColor(context),
+            child: FilledButton(
               onPressed: _resetAccount,
               child: Text(
                 locale.resetDialogReset,
@@ -287,9 +283,8 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ],
         actions: [
-          ElevatedButton(
+          FilledButton(
             onPressed: () => Navigator.of(context).pop(),
-            style: AppButtonStyles.primaryButtonColor(context),
             child: Text(locale.genericCancel),
           ),
         ],

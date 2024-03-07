@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../common/constants/themes/app_button_styles.dart';
 import '../../common/widgets/markdown_rich_text.dart';
 import 'index_help.dart';
 import 'pages/accounts_delete_help.dart';
@@ -313,11 +312,10 @@ class MainHelpManager extends StatelessWidget {
                 color: buttons._previus ? primary : outlineVariant,
               ),
             ),
-            ElevatedButton(
+            FilledButton(
               onPressed: buttons.close
                   ? () => Navigator.of(context).pop(HelpCommand.close)
                   : null,
-              style: AppButtonStyles.primaryButtonColor(context),
               child: Text(locale.genericClose),
             ),
             IconButton(

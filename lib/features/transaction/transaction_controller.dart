@@ -212,10 +212,10 @@ class TransactionController extends ChangeNotifier {
   /// [TransactionStateLoading] to reflect the beginning of an update operation.
   /// It then updates the origin account ID with the provided [id]. If the new
   /// origin account ID matches the currently set destination account ID, the
-  /// destination account ID is cleared to ensure that the origin and destination
-  /// accounts are not the same, preserving transaction integrity. Finally, the
-  /// state is set to [TransactionStateSuccess] to indicate the completion of
-  /// the operation.
+  /// destination account ID is cleared to ensure that the origin and
+  /// destination accounts are not the same, preserving transaction integrity.
+  /// Finally, the state is set to [TransactionStateSuccess] to indicate the
+  /// completion of the operation.
   ///
   /// The asynchronous signature allows for future expansion where waiting for
   /// external operations (such as data validation or fetching additional
@@ -255,20 +255,20 @@ class TransactionController extends ChangeNotifier {
 
   /// Sets the transaction category based on the provided description.
   ///
-  /// This method attempts to match the provided [description] with a category ID
-  /// from the cache managed by [HomePageController]. If a match is found, it updates
-  /// the transaction's category using the `_setCategory` method with the corresponding
-  /// [CategoryDbModel]. The state transitions to [TransactionStateLoading] at the
-  /// start and to [TransactionStateSuccess] upon successful category assignment. If
-  /// the description does not match any category or an error occurs, the state is
-  /// set to [TransactionStateError].
+  /// This method attempts to match the provided [description] with a category
+  /// ID from the cache managed by [HomePageController]. If a match is found, it
+  /// updates the transaction's category using the `_setCategory` method with
+  /// the corresponding [CategoryDbModel]. The state transitions to
+  /// [TransactionStateLoading] at the start and to [TransactionStateSuccess]
+  /// upon successful category assignment. If the description does not match any
+  /// category or an error occurs, the state is set to [TransactionStateError].
   ///
-  /// [description] is a string representing the category's description. It is used
-  /// to look up the category ID and then fetch the corresponding category model from
-  /// the category repository.
+  /// [description] is a string representing the category's description. It is
+  /// used to look up the category ID and then fetch the corresponding category
+  /// model from the category repository.
   ///
-  /// Catches and logs any errors encountered during the category lookup or update
-  /// process.
+  /// Catches and logs any errors encountered during the category lookup or
+  /// update process.
   void setCategoryByDescription(String description) {
     try {
       _changeState(TransactionStateLoading());
@@ -292,8 +292,8 @@ class TransactionController extends ChangeNotifier {
   /// [TransactionStateLoading]. It then retrieves the category corresponding
   /// to the provided [id] from the category repository. If successful, the
   /// category is updated through the `_setCategory` method, and the state is
-  /// set to [TransactionStateSuccess]. In case of any errors during the process,
-  /// an error message is logged, and the state is updated to
+  /// set to [TransactionStateSuccess]. In case of any errors during the
+  /// process, an error message is logged, and the state is updated to
   /// [TransactionStateError], indicating the failure of the operation.
   ///
   /// [id] is the unique identifier of the category to be associated with
@@ -314,10 +314,10 @@ class TransactionController extends ChangeNotifier {
 
   /// Sets the transaction's category using the given category name.
   ///
-  /// It initiates by marking the process state as loading. If the [categoryName]
-  /// is found within the category repository, the transaction's category is
-  /// updated accordingly. The state transitions to success or error based
-  /// on the operation outcome.
+  /// It initiates by marking the process state as loading. If the
+  /// [categoryName] is found within the category repository, the transaction's
+  /// category is updated accordingly. The state transitions to success or error
+  /// based on the operation outcome.
   ///
   /// - [categoryName] is the name used to find the corresponding category.
   /// If it is `null` or if no matching category is found, the method exits
@@ -407,7 +407,8 @@ class TransactionController extends ChangeNotifier {
   /// It begins by marking the operational state as loading. The method then
   /// attempts to add the given [category] to the repository. If successful,
   /// the state transitions to success. In case of failure, catches any thrown
-  /// errors and updates the state to error, reflecting the unsuccessful attempt.
+  /// errors and updates the state to error, reflecting the unsuccessful
+  /// attempt.
   ///
   /// - [category]: An instance of [CategoryDbModel] representing the category
   ///   to be added to the repository.
@@ -420,26 +421,6 @@ class TransactionController extends ChangeNotifier {
       _changeState(TransactionStateError());
     }
   }
-
-  // Future<void> getTransferAccountName({
-  //   required TransactionDbModel transaction,
-  // }) async {
-  //   _changeState(TransactionStateLoading());
-  //   try {
-  //     int? transferId = transaction.transTransferId;
-  //     if (transferId == null) return;
-
-  //     final transfer = await _transferRepository.getTransferById(transferId);
-
-  //     _destinyAccountId = transfer!.transferAccount0 == _originAccountId
-  //         ? transfer.transferAccount1
-  //         : transfer.transferAccount0;
-
-  //     _changeState(TransactionStateSuccess());
-  //   } catch (err) {
-  //     _changeState(TransactionStateError());
-  //   }
-  // }
 
   /// Initiates the process of adding or updating a transaction based on the
   /// provided parameters and current state of the controller.
