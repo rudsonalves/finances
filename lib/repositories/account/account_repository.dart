@@ -2,7 +2,6 @@ import '../../locator.dart';
 import '../../common/models/account_db_model.dart';
 import '../../common/current_models/current_user.dart';
 import '../../store/account_store.dart';
-import '../balance/abstract_balance_repository.dart';
 import '../icons/abstract_icons_repository.dart';
 import 'abstract_account_repository.dart';
 
@@ -61,7 +60,8 @@ class AccountRepository implements AbstractAccountRepository {
   @override
   Future<int> addAccount(AccountDbModel account) async {
     int id = await _addOnly(account);
-    await locator<AbstractBalanceRepository>().createTodayBalance(account);
+    // FIXME: This is necessary???
+    // await _balanceRepository.createTodayBalance(account);
 
     await _getUserAccounts();
     return id;

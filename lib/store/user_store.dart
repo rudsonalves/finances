@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:sqflite/sqflite.dart';
 
+import '../locator.dart';
 import 'constants.dart';
 import 'database_manager.dart';
 
@@ -25,7 +26,7 @@ abstract class UserStorer {
 /// Facilitates the insertion, querying, and updating of user records in the database,
 /// leveraging the DatabaseManager for interactions with the database.
 class UserStore implements UserStorer {
-  final _databaseManager = DatabaseManager();
+  final _databaseManager = locator<DatabaseManager>();
 
   /// Inserts a new user record into the database.
   ///
@@ -35,9 +36,9 @@ class UserStore implements UserStorer {
   /// Returns the row ID of the newly inserted user, or -1 if an error occurs.
   @override
   Future<int> insertUser(Map<String, dynamic> userMap) async {
-    final database = await _databaseManager.database;
-
     try {
+      final database = await _databaseManager.database;
+
       int result = await database.insert(
         usersTable,
         userMap,
@@ -45,7 +46,7 @@ class UserStore implements UserStorer {
       );
       return result;
     } catch (err) {
-      log('Error: $err');
+      log('UserStore.insertUser: $err');
       return -1;
     }
   }
@@ -58,9 +59,9 @@ class UserStore implements UserStorer {
   /// Returns a map representing the user's data if found, or null if not found.
   @override
   Future<Map<String, Object?>?> queryUserId(String id) async {
-    final database = await _databaseManager.database;
-
     try {
+      final database = await _databaseManager.database;
+
       final List<Map<String, Object?>> result = await database.query(
         usersTable,
         where: '$userId = ?',
@@ -71,7 +72,7 @@ class UserStore implements UserStorer {
 
       return result.first;
     } catch (err) {
-      log('Error: $err');
+      log('UserStore.queryUserId: $err');
       return {};
     }
   }
@@ -81,13 +82,13 @@ class UserStore implements UserStorer {
   /// Returns a list of maps, each representing a user's data.
   @override
   Future<List<Map<String, dynamic>>> queryAllUsers() async {
-    final database = await _databaseManager.database;
-
     try {
+      final database = await _databaseManager.database;
+
       List<Map<String, dynamic>> result = await database.query(usersTable);
       return result;
     } catch (err) {
-      log('Error: $err');
+      log('UserStore.queryAllUsers: $err');
       return [];
     }
   }
@@ -100,9 +101,9 @@ class UserStore implements UserStorer {
   /// Returns the number of rows affected, or -1 if an error occurs.
   @override
   Future<int> updateUser(Map<String, dynamic> userMap) async {
-    final database = await _databaseManager.database;
-
     try {
+      final database = await _databaseManager.database;
+
       String id = userMap[userId];
       int result = await database.update(
         usersTable,
@@ -112,7 +113,7 @@ class UserStore implements UserStorer {
       );
       return result;
     } catch (err) {
-      log('Error: $err');
+      log('UserStore.updateUser: $err');
       return -1;
     }
   }
@@ -126,9 +127,9 @@ class UserStore implements UserStorer {
   /// Returns the number of rows affected, or -1 if an error occurs.
   @override
   Future<int> updateUserBudgetRef(String id, int budgetRef) async {
-    final database = await _databaseManager.database;
-
     try {
+      final database = await _databaseManager.database;
+
       int result = await database.update(
         usersTable,
         {userBudgetRef: budgetRef},
@@ -137,7 +138,7 @@ class UserStore implements UserStorer {
       );
       return result;
     } catch (err) {
-      log('Error: $err');
+      log('UserStore.updateUserBudgetRef: $err');
       return -1;
     }
   }
@@ -151,9 +152,9 @@ class UserStore implements UserStorer {
   /// Returns the number of rows affected, or -1 if an error occurs.
   @override
   Future<int> updateUserGrpShowGrid(String id, int grpShowGrid) async {
-    final database = await _databaseManager.database;
-
     try {
+      final database = await _databaseManager.database;
+
       int result = await database.update(
         usersTable,
         {userGrpShowGrid: grpShowGrid},
@@ -162,7 +163,7 @@ class UserStore implements UserStorer {
       );
       return result;
     } catch (err) {
-      log('Error: $err');
+      log('UserStore.updateUserGrpShowGrid: $err');
       return -1;
     }
   }
@@ -176,9 +177,9 @@ class UserStore implements UserStorer {
   /// Returns the number of rows affected, or -1 if an error occurs.
   @override
   Future<int> updateUserGrpShowDots(String id, int grpShowDots) async {
-    final database = await _databaseManager.database;
-
     try {
+      final database = await _databaseManager.database;
+
       int result = await database.update(
         usersTable,
         {userGrpShowDots: grpShowDots},
@@ -187,7 +188,7 @@ class UserStore implements UserStorer {
       );
       return result;
     } catch (err) {
-      log('Error: $err');
+      log('UserStore.updateUserGrpShowDots: $err');
       return -1;
     }
   }
@@ -201,9 +202,9 @@ class UserStore implements UserStorer {
   /// Returns the number of rows affected, or -1 if an error occurs.
   @override
   Future<int> updateUserGrpIsCurved(String id, int grpIsCurved) async {
-    final database = await _databaseManager.database;
-
     try {
+      final database = await _databaseManager.database;
+
       int result = await database.update(
         usersTable,
         {userGrpIsCurved: grpIsCurved},
@@ -212,7 +213,7 @@ class UserStore implements UserStorer {
       );
       return result;
     } catch (err) {
-      log('Error: $err');
+      log('UserStore.updateUserGrpIsCurved: $err');
       return -1;
     }
   }
@@ -226,9 +227,9 @@ class UserStore implements UserStorer {
   /// Returns the number of rows affected, or -1 if an error occurs.
   @override
   Future<int> updateUserGrpAreaChart(String id, int grpAreaChart) async {
-    final database = await _databaseManager.database;
-
     try {
+      final database = await _databaseManager.database;
+
       int result = await database.update(
         usersTable,
         {userGrpAreaChart: grpAreaChart},
@@ -237,7 +238,7 @@ class UserStore implements UserStorer {
       );
       return result;
     } catch (err) {
-      log('Error: $err');
+      log('UserStore.updateUserGrpAreaChart: $err');
       return -1;
     }
   }
@@ -251,9 +252,9 @@ class UserStore implements UserStorer {
   /// Returns the number of rows affected, or -1 if an error occurs.
   @override
   Future<int> updateUserLanguage(String id, String language) async {
-    final database = await _databaseManager.database;
-
     try {
+      final database = await _databaseManager.database;
+
       int result = await database.update(
         usersTable,
         {userLanguage: language},
@@ -262,7 +263,7 @@ class UserStore implements UserStorer {
       );
       return result;
     } catch (err) {
-      log('Error: $err');
+      log('UserStore.updateUserLanguage: $err');
       return -1;
     }
   }
@@ -276,9 +277,9 @@ class UserStore implements UserStorer {
   /// Returns the number of rows affected, or -1 if an error occurs.
   @override
   Future<int> updateUserTheme(String id, String theme) async {
-    final database = await _databaseManager.database;
-
     try {
+      final database = await _databaseManager.database;
+
       int result = await database.update(
         usersTable,
         {userTheme: theme},
@@ -287,7 +288,7 @@ class UserStore implements UserStorer {
       );
       return result;
     } catch (err) {
-      log('Error: $err');
+      log('UserStore.updateUserTheme: $err');
       return -1;
     }
   }
@@ -301,9 +302,9 @@ class UserStore implements UserStorer {
   /// Returns the number of rows affected, or -1 if an error occurs.
   @override
   Future<int> updateUserMaxTransactions(String id, int maxTransactions) async {
-    final database = await _databaseManager.database;
-
     try {
+      final database = await _databaseManager.database;
+
       int result = await database.update(
         usersTable,
         {userMaxTransactions: maxTransactions},
@@ -312,7 +313,7 @@ class UserStore implements UserStorer {
       );
       return result;
     } catch (err) {
-      log('Error: $err');
+      log('UserStore.updateUserMaxTransactions: $err');
       return -1;
     }
   }

@@ -49,15 +49,17 @@ class _AutocompleteTextFormFieldState extends State<AutocompleteTextFormField> {
 
   void _onTextChanged() {
     final text = widget.controller.text.toLowerCase();
-    setState(() {
-      if (text.length > 2) {
-        _filteredSuggestions = widget.suggestions
-            .where((suggestion) => suggestion.toLowerCase().contains(text))
-            .toList();
-      } else {
-        _filteredSuggestions = [];
-      }
-    });
+    if (mounted) {
+      setState(() {
+        if (text.length > 2) {
+          _filteredSuggestions = widget.suggestions
+              .where((suggestion) => suggestion.toLowerCase().contains(text))
+              .toList();
+        } else {
+          _filteredSuggestions = [];
+        }
+      });
+    }
   }
 
   void _onSuggestionSelected(String suggestion) {

@@ -10,6 +10,8 @@ class CategoryDropdownFormField extends StatelessWidget {
   final void Function(String?)? onChanged;
   final Widget? suffixIcon;
   final TextEditingController? controller;
+  final bool lockCategory;
+  final bool removeTransfer;
 
   const CategoryDropdownFormField({
     super.key,
@@ -19,12 +21,26 @@ class CategoryDropdownFormField extends StatelessWidget {
     this.onChanged,
     this.suffixIcon,
     required this.controller,
+    this.lockCategory = false,
+    this.removeTransfer = false,
   });
+
+  List<String> items() {
+    final categoryRepository = locator<AbstractCategoryRepository>();
+
+    final items = <String>[];
+    if (removeTransfer) {
+      items.addAll(categoryRepository.categoriesMap.keys.where(
+          (key) => categoryRepository.categoriesMap[key]!.categoryId != 1));
+    } else {
+      items.addAll(categoryRepository.categoriesMap.keys);
+    }
+    return items;
+  }
 
   @override
   Widget build(BuildContext context) {
     final categoryRepository = locator<AbstractCategoryRepository>();
-    final items = categoryRepository.categoriesMap.keys.toList();
 
     return Padding(
       padding: const EdgeInsets.only(top: 5, bottom: 10),
@@ -42,7 +58,7 @@ class CategoryDropdownFormField extends StatelessWidget {
             ),
           ),
         ),
-        items: items
+        items: items()
             .map(
               (item) => DropdownMenuItem(
                 value: item,
@@ -58,10 +74,12 @@ class CategoryDropdownFormField extends StatelessWidget {
               ),
             )
             .toList(),
-        onChanged: (value) {
-          if (controller != null) controller!.text = value!;
-          if (onChanged != null) onChanged!(value);
-        },
+        onChanged: !lockCategory
+            ? (value) {
+                if (controller != null) controller!.text = value!;
+                if (onChanged != null) onChanged!(value);
+              }
+            : null,
       ),
     );
   }

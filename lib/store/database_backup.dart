@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../locator.dart';
 import 'constants.dart';
 import 'database_manager.dart';
 
@@ -15,7 +16,7 @@ abstract class DatabaseBackuper {
 
 /// Defines the interface for database backup and restoration operations.
 class DatabaseBackup implements DatabaseBackuper {
-  final _databaseManager = DatabaseManager();
+  final _databaseManager = locator<DatabaseManager>();
 
   /// Restores the database from a backup located at [newDbPath].
   ///
@@ -61,7 +62,7 @@ class DatabaseBackup implements DatabaseBackuper {
       // if error restore backup file
       if (await backupFile.exists()) {
         // Close database before restore database backup
-        if (database.isOpen) _databaseManager.databaseClose();
+        if (database.isOpen) await _databaseManager.databaseClose();
         // Copy backup file to original original database file
         await backupFile.copy(originalPath);
         // Reopen database file.

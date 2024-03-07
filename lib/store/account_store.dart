@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:sqflite/sqflite.dart';
 
+import '../locator.dart';
 import 'constants.dart';
 import 'database_manager.dart';
 
@@ -19,7 +20,7 @@ abstract class AccountStorer {
 /// This class provides methods to insert, query, update, and delete accounts
 /// and their associated data (like transactions and balances) in the database.
 class AccountStore implements AccountStorer {
-  final _databaseManager = DatabaseManager();
+  final _databaseManager = locator<DatabaseManager>();
 
   /// Inserts a new account record into the database.
   ///
@@ -117,10 +118,8 @@ class AccountStore implements AccountStorer {
 
     try {
       await database.delete(
-        transDayTable,
-        where: '$transDayBalanceId IN ('
-            ' SELECT $balanceId FROM $balanceTable WHERE $balanceAccountId = ?'
-            ')',
+        transactionsTable,
+        where: '$transAccountId = ?',
         whereArgs: [id],
       );
     } catch (err) {

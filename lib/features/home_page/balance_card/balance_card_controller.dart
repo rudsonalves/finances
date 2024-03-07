@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// import '../../../common/current_models/current_balance.dart';
 import '../../../common/current_models/current_balance.dart';
 import '../../../common/models/extends_date.dart';
 import '../../../common/models/account_db_model.dart';
@@ -18,20 +19,19 @@ enum FutureTrans {
 }
 
 class BalanceCardController extends ChangeNotifier {
+  BalanceCardController();
+
   final transactionRepository = locator<AbstractTransactionRepository>();
   final accountRepository = locator<AbstractAccountRepository>();
   ExtendedDate _balanceDate = ExtendedDate.nowDate();
   bool _transStatusCheck = false;
+  FutureTrans _futureTransactions = FutureTrans.week;
+  BalanceCardState _state = BalanceCardStateInitial();
+  bool _isRedrawSheduled = false;
 
   bool get transStatusCheck => _transStatusCheck;
 
-  FutureTrans _futureTransactions = FutureTrans.week;
-
   FutureTrans get futureTransactions => _futureTransactions;
-
-  BalanceCardController();
-
-  BalanceCardState _state = BalanceCardStateInitial();
 
   BalanceCardState get state => _state;
 
@@ -40,8 +40,6 @@ class BalanceCardController extends ChangeNotifier {
   List<AccountDbModel> get accountsList => accountRepository.accountsList;
 
   Map<int, AccountDbModel> get accountsMap => accountRepository.accountsMap;
-
-  bool _isRedrawSheduled = false;
 
   void requestRedraw() {
     if (!_isRedrawSheduled) {
@@ -89,19 +87,29 @@ class BalanceCardController extends ChangeNotifier {
   Future<void> toggleTransStatusCheck() async {
     changeState(BalanceCardStateLoading());
     _transStatusCheck = !_transStatusCheck;
-    Future.delayed(const Duration(milliseconds: 50));
+    await Future.delayed(const Duration(milliseconds: 50));
     changeState(BalanceCardStateSuccess());
   }
 
   Future<void> changeFutureTransactions(FutureTrans newFutureTrans) async {
     changeState(BalanceCardStateLoading());
     _futureTransactions = newFutureTrans;
-    Future.delayed(const Duration(milliseconds: 50));
+    await Future.delayed(const Duration(milliseconds: 50));
     changeState(BalanceCardStateSuccess());
     locator<HomePageController>().getTransactions();
   }
 
   bool isFutureTrans(FutureTrans futureTrans) {
     return _futureTransactions == futureTrans;
+  }
+
+  void previousMonth() {
+    final newDate = _balanceDate.previousMonth();
+    setBalanceDate(newDate);
+  }
+
+  void nextMonth() {
+    final newDate = _balanceDate.nextMonth();
+    setBalanceDate(newDate);
   }
 }

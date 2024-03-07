@@ -1,8 +1,8 @@
+import 'package:finances/common/constants/app_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:restart_app/restart_app.dart';
 
-import '../../common/constants/app_info.dart';
 import '../../common/constants/laguage_constants.dart';
 import '../../common/constants/routes/app_route.dart';
 import '../../common/constants/themes/app_button_styles.dart';
@@ -213,16 +213,14 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ],
         actions: [
-          ElevatedButton(
+          FilledButton(
             onPressed: () => Navigator.of(context).pop(
               int.parse(_maxTransValueController.text),
             ),
-            style: AppButtonStyles.primaryButtonColor(context),
             child: Text(locale.genericSelect),
           ),
-          ElevatedButton(
+          FilledButton(
             onPressed: () => Navigator.of(context).pop(null),
-            style: AppButtonStyles.primaryButtonColor(context),
             child: Text(locale.genericClose),
           ),
         ],
@@ -262,8 +260,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           const SizedBox(height: 4),
           Center(
-            child: ElevatedButton(
-              style: AppButtonStyles.primaryButtonColor(context),
+            child: FilledButton(
               onPressed: _resetData,
               child: Text(
                 locale.resetDialogData,
@@ -277,8 +274,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           const SizedBox(height: 4),
           Center(
-            child: ElevatedButton(
-              style: AppButtonStyles.primaryButtonColor(context),
+            child: FilledButton(
               onPressed: _resetAccount,
               child: Text(
                 locale.resetDialogReset,
@@ -287,9 +283,8 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ],
         actions: [
-          ElevatedButton(
+          FilledButton(
             onPressed: () => Navigator.of(context).pop(),
-            style: AppButtonStyles.primaryButtonColor(context),
             child: Text(locale.genericCancel),
           ),
         ],
@@ -363,7 +358,9 @@ class _SettingsPageState extends State<SettingsPage> {
                               animation: _currentUserName,
                               builder: (context, _) {
                                 return Text(
-                                  _userNameController.text,
+                                  _userNameController.text.isNotEmpty
+                                      ? _userNameController.text
+                                      : locale.settingsPageUserNameMsg,
                                   style: AppTextStyles.textStyleSemiBold18,
                                 );
                               }),

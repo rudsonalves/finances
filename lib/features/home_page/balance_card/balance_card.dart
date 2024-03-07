@@ -8,12 +8,13 @@ import '../../../locator.dart';
 import './balance_cart_state.dart';
 import './balance_card_controller.dart';
 import '../../../common/models/account_db_model.dart';
-import '../../../common/models/extends_date.dart';
 import '../../../common/current_models/current_account.dart';
 import '../../../common/extensions/money_masked_text.dart';
 import '../../../common/current_models/current_balance.dart';
 import '../../../common/constants/themes/app_text_styles.dart';
 import '../../../common/widgets/custom_circular_progress_indicator.dart';
+import 'widget/card_popup_menu.dart';
+import 'widget/main_card_popup_account.dart';
 
 class BalanceCard extends StatefulWidget {
   final double textScale;
@@ -42,19 +43,6 @@ class _BalanceCardState extends State<BalanceCard> {
     final currentBalance = locator<CurrentBalance>();
     final currentAccount = locator<CurrentAccount>();
     final formattedDate = DateFormat('MMMM y', locale.localeName);
-
-    IconData futureTransIcon() {
-      switch (widget.controller.futureTransactions) {
-        case FutureTrans.hide:
-          return Icons.event_busy;
-        case FutureTrans.week:
-          return Icons.date_range;
-        case FutureTrans.month:
-          return Icons.calendar_month;
-        case FutureTrans.year:
-          return Icons.event_available;
-      }
-    }
 
     return Positioned(
       left: 24,
@@ -92,50 +80,10 @@ class _BalanceCardState extends State<BalanceCard> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              PopupMenuButton<int>(
-                                tooltip: locale.cardBalanceMenuTip,
-                                child: Row(
-                                  children: [
-                                    currentAccount.accountIcon.iconWidget(
-                                      size: 20,
-                                      color: customColors.sourceLightyellow,
-                                    ),
-                                    const SizedBox(width: 6),
-                                    Text(
-                                      currentAccount.accountName,
-                                      maxLines: 1,
-                                      style: AppTextStyles.textStyleSemiBold16
-                                          .copyWith(
-                                        color: customColors.sourceLightyellow,
-                                      ),
-                                    ),
-                                    Icon(
-                                      Icons.arrow_drop_down,
-                                      color: customColors.sourceLightyellow,
-                                    ),
-                                  ],
-                                ),
-                                onSelected: (accountId) {
-                                  final account =
-                                      widget.controller.accountsMap[accountId]!;
-                                  widget.balanceCallBack(account);
-                                },
-                                itemBuilder: (BuildContext context) {
-                                  return widget.controller.accountsList
-                                      .map((account) {
-                                    return PopupMenuItem(
-                                      value: account.accountId,
-                                      child: Row(
-                                        children: [
-                                          account.accountIcon
-                                              .iconWidget(size: 16),
-                                          const SizedBox(width: 8),
-                                          Text(account.accountName),
-                                        ],
-                                      ),
-                                    );
-                                  }).toList();
-                                },
+                              MainCardPopupAccount(
+                                currentAccount: currentAccount,
+                                customColors: customColors,
+                                widget: widget,
                               ),
                               Row(
                                 children: [
@@ -157,105 +105,9 @@ class _BalanceCardState extends State<BalanceCard> {
                           ),
                         ),
                         const Spacer(),
-                        PopupMenuButton<String>(
-                          itemBuilder: (context) => [
-                            PopupMenuItem(
-                              value: 'transactionStatus',
-                              child: ListTile(
-                                leading: Icon(
-                                  widget.controller.transStatusCheck
-                                      ? Icons.lock_open
-                                      : Icons.lock,
-                                  color: colorScheme.primary,
-                                  size: 22,
-                                ),
-                                title: Text(
-                                  widget.controller.transStatusCheck
-                                      ? locale.balanceCardLockTrans
-                                      : locale.balanceCardUnLockTrans,
-                                ),
-                              ),
-                            ),
-                            PopupMenuItem(
-                              value: 'futureTransactions',
-                              child: PopupMenuButton<FutureTrans>(
-                                elevation: 10,
-                                itemBuilder: (context) => [
-                                  CheckedPopupMenuItem(
-                                    checked: widget.controller
-                                        .isFutureTrans(FutureTrans.hide),
-                                    value: FutureTrans.hide,
-                                    child: ListTile(
-                                      leading: const Icon(Icons.event_busy),
-                                      title: Text(locale.cardBalanceMenuHide),
-                                    ),
-                                  ),
-                                  CheckedPopupMenuItem(
-                                    checked: widget.controller
-                                        .isFutureTrans(FutureTrans.week),
-                                    value: FutureTrans.week,
-                                    child: ListTile(
-                                      leading: const Icon(Icons.date_range),
-                                      title: Text(locale.cardBalanceMenuWeek),
-                                    ),
-                                  ),
-                                  CheckedPopupMenuItem(
-                                    checked: widget.controller
-                                        .isFutureTrans(FutureTrans.month),
-                                    value: FutureTrans.month,
-                                    child: ListTile(
-                                      leading: const Icon(Icons.calendar_month),
-                                      title: Text(locale.cardBalanceMenuMonth),
-                                    ),
-                                  ),
-                                  CheckedPopupMenuItem(
-                                    checked: widget.controller
-                                        .isFutureTrans(FutureTrans.year),
-                                    value: FutureTrans.year,
-                                    child: ListTile(
-                                      leading:
-                                          const Icon(Icons.event_available),
-                                      title: Text(locale.cardBalanceMenuYear),
-                                    ),
-                                  ),
-                                ],
-                                child: ListTile(
-                                  leading: Icon(
-                                    Icons.event,
-                                    color: colorScheme.primary,
-                                  ),
-                                  title: Text(locale.cardBalanceMenuShow),
-                                  trailing: const Icon(Icons.arrow_forward_ios),
-                                ),
-                                onSelected: (value) {
-                                  Navigator.of(context).pop();
-                                  widget.controller
-                                      .changeFutureTransactions(value);
-                                },
-                              ),
-                            ),
-                          ],
-                          onSelected: (value) {
-                            if (value == 'transactionStatus') {
-                              widget.controller.toggleTransStatusCheck();
-                            }
-                          },
-                          child: Row(
-                            children: [
-                              Icon(
-                                widget.controller.transStatusCheck
-                                    ? Icons.lock_open
-                                    : Icons.lock,
-                                color: colorScheme.onPrimary,
-                                size: 22,
-                              ),
-                              Icon(
-                                futureTransIcon(),
-                                color: colorScheme.onPrimary,
-                                size: 22,
-                              ),
-                            ],
-                          ),
+                        CardPopupMenu(
+                          controller: widget.controller,
+                          colorScheme: colorScheme,
                         ),
                       ],
                     ),
@@ -268,12 +120,7 @@ class _BalanceCardState extends State<BalanceCard> {
                           child: Tooltip(
                             message: locale.statisticCardPreviusMonth,
                             child: InkWell(
-                              onTap: () {
-                                ExtendedDate date =
-                                    widget.controller.balanceDate;
-                                final newDate = date.previousMonth();
-                                widget.controller.setBalanceDate(newDate);
-                              },
+                              onTap: widget.controller.previousMonth,
                               child: Icon(
                                 Icons.arrow_back_ios,
                                 color: colorScheme.onPrimary,
@@ -293,12 +140,7 @@ class _BalanceCardState extends State<BalanceCard> {
                           child: Tooltip(
                             message: locale.statisticCardNextMonth,
                             child: InkWell(
-                              onTap: () {
-                                ExtendedDate date =
-                                    widget.controller.balanceDate;
-                                final newDate = date.nextMonth();
-                                widget.controller.setBalanceDate(newDate);
-                              },
+                              onTap: widget.controller.nextMonth,
                               child: Icon(
                                 Icons.arrow_forward_ios,
                                 color: colorScheme.onPrimary,

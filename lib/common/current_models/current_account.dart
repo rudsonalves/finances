@@ -7,7 +7,7 @@ import '../constants/themes/app_icons.dart';
 import '../../repositories/account/abstract_account_repository.dart';
 
 class CurrentAccount extends AccountDbModel {
-  final accountRepository = locator<AbstractAccountRepository>();
+  final _accountRepository = locator<AbstractAccountRepository>();
 
   CurrentAccount({
     int? accountId,
@@ -25,7 +25,7 @@ class CurrentAccount extends AccountDbModel {
         );
 
   Future<void> init() async {
-    await accountRepository.init();
+    await _accountRepository.init();
 
     final currentUser = locator<CurrentUser>();
 
@@ -39,14 +39,14 @@ class CurrentAccount extends AccountDbModel {
           iconFontFamily: IconsFontFamily.MaterialIcons,
         ),
       );
-      int id = await accountRepository.addAccount(account);
+      int id = await _accountRepository.addAccount(account);
       currentUser.userMainAccountId = id;
       account.accountId = id;
       currentUser.updateUser();
     }
 
     setFromAccountDbModel(
-      accountRepository.accountsMap[currentUser.userMainAccountId]!,
+      _accountRepository.accountsMap[currentUser.userMainAccountId]!,
     );
   }
 

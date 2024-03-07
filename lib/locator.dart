@@ -28,22 +28,21 @@ import './features/home_page/home_page_controller.dart';
 import 'repositories/balance/abstract_balance_repository.dart';
 import 'repositories/category/abstract_category_repository.dart';
 import 'repositories/user/user_repository.dart';
-// import 'repositories/trans_day/abstract_trans_day_repository.dart';
 import './features/transaction/transaction_controller.dart';
 import './services/authentication/firebase_auth_service.dart';
 import 'repositories/account/account_repository.dart';
 import 'repositories/balance/balance_repository.dart';
 import 'repositories/transaction/abstract_transaction_repository.dart';
 import 'repositories/category/category_repository.dart';
-// import './repositories/trans_day/sqflite_trans_day_repository.dart';
 import './features/home_page/balance_card/balance_card_controller.dart';
 import 'repositories/transaction/transaction_repository.dart';
 import 'common/constants/themes/app_icons.dart';
 import 'common/models/icons_model.dart';
 import 'repositories/icons/abstract_icons_repository.dart';
 import 'repositories/icons/icons_repository.dart';
-import 'repositories/transfer_repository/transfer_repository.dart';
-import 'repositories/transfer_repository/abstract_transfer_repository.dart';
+import 'repositories/transfer/transfer_repository.dart';
+import 'repositories/transfer/abstract_transfer_repository.dart';
+import 'store/database_manager.dart';
 
 final locator = GetIt.instance;
 
@@ -52,6 +51,8 @@ void setupDependencies() {
     locator.registerSingleton<AuthService>(
       FirebaseAuthService(),
     );
+
+    locator.registerSingleton<DatabaseManager>(DatabaseManager());
 
     locator.registerSingleton<AbstractDatabaseRepository>(
       DatabaseRepository(),
@@ -155,9 +156,9 @@ void setupDependencies() {
       () => AccountController(),
     );
 
-    locator.registerLazySingleton<TransactionController>(
-      () => TransactionController(),
-    );
+    // locator.registerLazySingleton<TransactionController>(
+    //   () => TransactionController(),
+    // );
 
     locator.registerLazySingleton<StatisticsController>(
       () => StatisticsController(),

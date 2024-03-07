@@ -288,6 +288,205 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
+## 2024/03/07 - version 1.1.00+76:
+
+Refine Balance Management and Enhance User Interface Controls
+
+This update introduces significant improvements to the balance management workflow and user interface controls within our finance management application. Key modifications include simplifying month navigation in date utilities, refining the balance card interface, centralizing filter controls, and ensuring a more intuitive and responsive user experience.
+
+**Details of Changes:**
+
+- **ExtendedDate Simplification:** Updated `nextMonth()` and `previousMonth()` methods in `extends_date.dart` for a more straightforward approach, prioritizing simplicity over complexity.
+
+- **BalanceCard Refactoring:** Introduced the `CardPopupMenu` class, streamlining the balance card's popup menu. Month navigation controls are now managed by `BalanceCardController`, enhancing control and separation of concerns.
+
+- **HomePage Enhancements:**
+  - Filter management has been migrated to `HomePageController`, centralizing filter logic and streamlining UI interactions.
+  - Improved the `loadMoreTransactions()` method to better manage ListView positioning after loading additional transactions.
+  - Implemented `openFilter()` method, isolating transaction filter controls.
+  - Integrated a `ValueListenableBuilder` to dynamically update the filter icon based on filter status.
+  - Re-enabled the disposal of `HomePageController`, ensuring resource efficiency.
+  - Enhanced transaction filtering through controller-based management.
+
+- **HomePageController Updates:**
+  - Added attributes `_filterText`, `_filterIsDescription`, `_filterCategoryId`, and `ValueNotifier<bool> isFiltered$` to manage transaction filters effectively.
+  - Introduced `dispose` method for `isFiltered$` cleanup, alongside methods `setFilterValues()` for filter activation and `cleanFilterValues()` for deactivation.
+  - Implemented `filterTransactions()` method, providing a filtered transaction list based on user-defined criteria.
+
+- **UI Component Adjustments:**
+  - Transitioned from `ElevatedButton` to `FilledButton` in various UI components, aligning with design consistency and user interface guidelines.
+
+- **Database Migration:** Performed a cleanup in the `balanceTable` as part of the database migration to version 1008, removing balance records without transactions to optimize storage and enhance data integrity.
+
+**Implications:**
+
+These changes collectively enhance the application's usability, making balance management more intuitive and efficient. By refining backend processes and user interface elements, we ensure a smoother and more responsive user experience. Future updates will continue to build on this foundation, focusing on performance optimization and feature enhancements.
+
+
+## 2024/03/06 - version 1.1.00+75:
+
+This commit introduces a comprehensive overhaul of the transaction management logic within our application. It streamlines interactions between the `TransactionController` and underlying repositories, enhancing code readability, maintainability, and the overall architecture of transaction processing. Notably, the commit deprecates direct usage of the `AbstractTransferRepository` within the transaction controller, opting instead for a cleaner, more encapsulated approach to managing transaction data.
+
+**Key Changes:**
+
+- **Transaction Controller Enhancements:** The transaction controller has been enriched with detailed documentation, clarifying the role and functionality of each component. This includes better management of transaction states, initialization, and disposal processes, improving the controller's lifecycle management.
+
+- **Category and Transaction Handling:** Introduced more intuitive methods for setting transaction categories and managing transaction details, such as income status and repetition flags. This approach simplifies the user interface logic and improves the application's data handling efficiency.
+
+- **Repository Interaction Refinements:** Streamlined the interactions with the `AccountRepository`, `CategoryRepository`, and `TransactionManager`, focusing on enhancing the reliability and scalability of data operations. This includes refined methods for adding, updating, and processing transactions with improved error handling and logging.
+
+- **Balance Repository Updates:** Expanded the balance repository's capabilities with methods to clean up unused balance records, thereby ensuring data integrity and optimizing database storage.
+
+**Technical Details:**
+
+- Deprecated direct references to the transfer repository in favor of centralized transaction management through the transaction manager and controller.
+- Introduced utility methods within the transaction controller for better state management and UI interaction, encapsulating business logic more effectively.
+- Refined error handling across transaction and balance repository operations, ensuring more robust application behavior in edge cases.
+
+**Future Directions:**
+
+- The commit lays the groundwork for further refinements in transaction processing and user interface interaction. Future work will focus on enhancing the application's scalability, user experience, and integration with additional financial data sources.
+
+**Note:** Some parts of the code are marked with `FIXME` to indicate areas where further optimization or refactoring is planned.
+
+
+## 2024/03/05 - version 1.1.00+74:
+
+This commit introduces a suite of enhancements across various components of the application, focusing on improving user interface behavior, refining controller logic, and enhancing data integrity during transaction updates. Below is a detailed summary of the updates made:
+
+- **UI and Reactivity Enhancements**:
+  - **AutocompleteTextFormField**: Added a `mounted` check in `_onTextChanged` to prevent `setState` errors if the widget is unmounted.
+  - **CategoryDropdownFormField**: Introduced `lockCategory` and `removeTransfer` attributes to allow locking category changes and removing the 'Transfer' category (id 1) from the list. This facilitates distinct reactivities for editing transactions involving transfers.
+
+- **PopupMenuButton Customization**:
+  - Customized `PopupMenuButton<int>` in `MainCardPopupAccount` to manage the popup more effectively and refactor the code, providing a cleaner implementation in both `balance_card.dart` and `widget/main_card_popup_account.dart`.
+
+- **HomePage Controller and Widget Refactoring**:
+  - Transformed `cacheDescriptions` into a getter in `home_page_controller.dart`, generating the description map on demand. Also, re-enabled `_lastDate` with pending tests.
+  - Refactored `transaction_dismissible_tile.dart` by separating `dismissActions`, `editDismiss`, and `deleteDismiss` methods, with plans to further isolate these from the UI.
+
+- **Transaction Management and Integrity**:
+  - Transitioned business logic to `TransactionController` in `transaction_controller.dart` and `transaction_page.dart`, moving all `TextEditingController` instances to the controller with additional adjustments pending.
+  - Made `DestinyAccountDropdownForm` exclusive to `TransactionPage`, ensuring a focused and streamlined user experience.
+  - Updated `transfer_manager.dart` with a static `updateTransfer` method redesign to maintain transaction integrity during updates, and introduced `getTransferById` for better abstraction over the transfer repository layer.
+
+- **Dependency Injection and Singleton Management**:
+  - Removed the lazy singleton instantiation of `TransactionController` from `locator.dart`, opting for demand-based generation without state retention. This change supports a cleaner, more modular architecture, reducing unnecessary state persistence and enhancing overall app performance.
+
+These adjustments not only address specific functional and architectural needs but also lay the groundwork for further refinement, particularly in ensuring UI components and data handling processes are both efficient and user-friendly. The move towards a more demand-driven and decoupled component instantiation model signifies a significant step towards enhancing the app's maintainability and scalability.
+
+
+## 2024/03/04 - version 1.1.00+73:
+
+This commit encompasses a suite of refinements and bug fixes across the application, particularly focusing on transaction management, balance updates, and error handling strategies. Here's a concise overview:
+
+- **HomePage and Transaction Management Enhancements**:
+  - Restored `_lastDate` functionality in `home_page_controller.dart` to track the date of the last transaction displayed on the HomePage, providing temporal context to transaction listings.
+  - Corrected an erroneous call in `transaction_dismissible_tile.dart`, switching from `TransactionManager.removeTransaction` to `TransferManager.removeTransfer`, rectifying a mix-up from a recent database upgrade.
+
+- **Balance and Transaction Management Revisions**:
+  - Reset `balanceTransCount` when creating a new balance in `balance_manager.dart`, ensuring accurate transaction count tracking.
+  - Introduced `accountId` attribute in `balanceRepository.getAllBalanceAfterDate` and refined balance open/close handling upon transaction addition/removal in `transaction_manager.dart`, enhancing balance accuracy and consistency.
+  - Optimized transaction removal logic to prevent the retention of unnecessary balance records and improved transaction destination retrieval for better transaction management control.
+
+- **Transfer Manager and Error Handling Improvements**:
+  - Shifted error handling to the app's frontend in `transfer_manager.dart`, aiming for clearer error identification and confinement of error resolution to the repository and manager layers.
+  - Implemented pre-removal attribute resetting in transfer records to address circular references between `transactionsTable` and `transfersTable`, ensuring data integrity.
+
+- **Repository Layer Adjustments**:
+  - Made `accountId` parameter mandatory in balance repository methods, corrected date handling, and introduced `deleteEmptyBalance` method in balance repositories to allow for the removal of empty balance records.
+  - Standardized method naming in transaction and transfer repositories, aligning with best practices and clarifying method purposes.
+
+- **Store Layer Documentation and Schema Adjustments**:
+  - Enhanced documentation within `balance_store.dart` and `transfer_store.dart`, and adjusted method parameters for clarity and accuracy.
+  - Removed the `UNIQUE` constraint from `balanceDate` in the `balanceTable` creation within `database_migrations.dart`, correcting a schema oversight.
+
+- **General Codebase Improvements**:
+  - Added comprehensive documentation, refined error propagation strategies, and introduced necessary methods across the store layer to support the application's refined logic and data handling requirements.
+
+This commit significantly advances the application's robustness, particularly in handling transactions, balances, and transfers, while also laying down improved practices for error management and data schema integrity.
+
+
+## 2024/03/01 - version 1.1.00+72:
+
+This commit implements a series of crucial adjustments and enhancements across the application, focusing on database integrity, synchronous operation handling, and UI responsiveness. Below are the summarized changes:
+
+- **Model and Controller Adjustments**:
+  - Updated `current_balance.dart` to handle a `null` return from `BalanceManager.getClosedBalanceToDate`, improving error handling and null safety.
+  - Corrected attribute names from `transferAccountId?` to `transferAccount?` in `transfer_db_model.dart`, aligning with database field names to prevent future errors.
+  - Enhanced `account_dropdown_form_field.dart` to utilize `BalanceManager.getClosedBalanceToDate`, gracefully handling `null` scenarios for balances.
+
+- **Database and App Synchronization**:
+  - Restored app reboot functionality in `database_recover.dart` post-database restoration, ensuring app state consistency.
+  - Reintroduced 50ms delays in `balance_card_controller.dart` for resource synchronization, enhancing UI responsiveness.
+  - Made `_transactions` attribute final in `home_page_controller.dart`, and modified `_initialLastDate()` to return an `ExtendedDate` based on current data and future transaction visibility settings. Also, updated `getTransactions` to include an optional `next` parameter for flexible date handling.
+
+- **Sign-in and Sign-up Enhancements**:
+  - Added `await` in `sign_in_controller.dart` and `sign_up_controller.dart` before `currentUser.addUser()`, ensuring synchronous user addition.
+
+- **Transaction Management**:
+  - Implemented a true/false return for `Navigator.of(context).pop()` in `transaction_page.dart`, indicating operation cancellation.
+  - Introduced `await` for database operations in `balance_manager.dart`, `transaction_manager.dart`, and `transfer_manager.dart`, ensuring operations complete before proceeding.
+  - Renamed `balanceInDate` to `returnBalanceInDate` and added `getClosedBalanceToDate` in `balance_manager.dart` for clearer method functionality.
+
+- **Error Logging and Database Query Optimization**:
+  - Standardized error logging across `transaction_store.dart`, `transfer_store.dart`, and `user_store.dart`.
+  - Corrected `queryBalanceInDate` in `balance_store.dart` to order balance results and return the first entry, and fixed `queryAllBalanceAfterDate` to return all balances after a specified date.
+
+- **Database Integrity and Migration**:
+  - Made `balanceDate` in `balanceTable` UNIQUE in `constants.dart` to prevent duplicates, and corrected triggers for updating `balanceClose` and `balanceTransCount` accurately.
+  - Included `await` for `databaseClose()` in `database_backup.dart`, and adjusted migration scripts in `database_migrations.dart` to reflect discussed database changes.
+  - Added `await` to database operation calls in `database_provider.dart`, ensuring data consistency.
+
+This comprehensive update not only bolsters the app's data handling and user interface but also sets a strong foundation for the testing phase, with a focus on achieving a seamless and robust user experience.
+
+
+## 2024/02/29 - version 1.1.00+71:
+
+This commit, version 1.1.00+71, implements significant adjustments and corrections in the database migration process and its integration within the app, ensuring a more robust and error-free update mechanism.
+
+- **Database Migration Enhancements**:
+  - **database_migrations.dart**:
+    - Refined the sequence of the database migration scripts to ensure a logical and error-free application of updates.
+    - Corrected the spelling of `transactionsTable` to match the intended table name, eliminating potential confusion or errors during migrations.
+    - Modified `applyMigrations` to now require the `Database db` parameter, ensuring migrations are explicitly applied to the intended database instance.
+    - Implemented a `PRAGMA foreign_keys=off/on` command at the start and end of the migration process, safeguarding relational integrity by temporarily disabling foreign key constraints during schema updates.
+    - Consolidated migrations to execute as a single block, streamlining the process regardless of the number of schema versions to be updated.
+
+- **Database Provider Update**:
+  - **database_provider.dart**:
+    - Adapted to accommodate the changes in `DatabaseMigrations.applyMigrations`, ensuring seamless interaction with the updated migration strategy.
+
+These modifications enhance the database migration framework's efficiency and reliability, laying a solid foundation for future expansions and updates of the app's database schema.
+
+
+## 2024/02/28 - version: 1.1.00+70:
+
+This commit finalizes the database migration process for the app, encompassing the removal and addition of various columns, the elimination of the `transDay` table, the introduction of new triggers, and many other changes. The project now moves into the testing phase and final adjustments.
+
+- **Refactoring and Functionality Enhancements**:
+  - Replaced calls to `balanceRepository.createTodayBalance` with `BalanceManager.balanceInDate` in `current_balance.dart` for more direct balance management.
+  - Removed the `updateTransaction` method from `transaction_db_model.dart`, centralizing transaction management within the `TransactionManager`.
+  - Updated `account_controller.dart` to use `BalanceManager.balanceInDate` instead of `AccountManager.getAccountTodayBalance`, streamlining balance retrieval.
+  - Reworked the `greetingText()` method in `home_page.dart` for improved code readability, including a fallback to display `***` when the user's name is undefined, and repositioned `_showTutorial` to disable the automatic help page on the app's first launch.
+  - Transitioned from using locators to delete transactions in `transaction_dismissible_tile.dart` to employing `TransactionManager.removeTransaction`, enhancing encapsulation.
+  - Added user feedback in `settings_page.dart` for instances where the user's name is not declared, making the option to change the name more discoverable.
+  - Re-enabled a 2-second delay in the splash screen within `splash_controller.dart` for a smoother user experience during app startup.
+  - In `transaction_controller.dart`, replaced repository calls with `TransactionManager` methods for adding and updating transactions, aligning with the managerial approach.
+  - Modified `transaction_page.dart` to use `TransferManager` for adding and updating transfers, further consolidating the management layer.
+
+- **Manager Packages Introduction**:
+  - Introduced `balance_manager.dart`, `transaction_manager.dart`, and `transfer_manager.dart` to encapsulate complex operations and promote decoupling across the app. These managers handle a variety of tasks, including balance retrieval and adjustments, transaction and transfer operations, enhancing the app's architectural integrity.
+
+- **Repository Refactoring**:
+  - Refactored repository packages to focus solely on interactions with the store layer and app models, moving all business logic to the newly introduced manager packages. This shift towards a cleaner separation of concerns ensures a more maintainable codebase.
+
+- **Store Package Overhaul**:
+  - The store package has been reorganized by responsibilities, removing the `store/manager` folder and restructuring its contents to align with the new database schema. This comprehensive refactor addresses the need for a more organized and responsibility-driven code structure, setting the stage for enhanced maintainability and scalability of the app's data layer.
+
+This extensive set of changes marks a pivotal step towards optimizing the app's database structure and streamlining its internal architecture, laying the groundwork for the upcoming testing and finalization phase.
+
+
 ## 2024/02/22 - version 1.1.00+70
 
 This update encompasses a comprehensive refactor related to database table changes, leading to a significant number of modifications throughout the project.

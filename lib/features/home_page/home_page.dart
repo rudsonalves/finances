@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../common/models/transaction_db_model.dart';
 import '../../common/models/user_name_notifier.dart';
 import '../../locator.dart';
-import '../../repositories/category/abstract_category_repository.dart';
 import '../help_manager/main_manager.dart';
 import './home_page_state.dart';
 import './home_page_controller.dart';
@@ -23,9 +21,7 @@ import 'widgets/home_popup_menu_buttons.dart';
 import 'widgets/update_message.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({
-    super.key,
-  });
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -35,11 +31,8 @@ class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin {
   final _controller = locator<HomePageController>();
   final _balanceController = locator<BalanceCardController>();
-  final ScrollController _listViewController = ScrollController();
+  final _listViewController = ScrollController();
   final _userNameNotifier = locator<UserNameNotifier>();
-  String _filterText = '';
-  bool _filterIsDescription = true;
-  int _filterCategoryId = 0;
 
   ExtendedDate lastDate = ExtendedDate(1980, 1, 1);
 
@@ -47,7 +40,7 @@ class _HomePageState extends State<HomePage>
 
   @override
   void dispose() {
-    // _controller.dispose();
+    _controller.dispose();
     _balanceController.dispose();
     _listViewController.dispose();
     _userNameNotifier.dispose();
@@ -74,15 +67,24 @@ class _HomePageState extends State<HomePage>
     int hour = DateTime.now().hour;
     final locale = AppLocalizations.of(context)!;
 
-    if (hour < 12) return locale.greetingsGoodMorning;
-    if (hour < 18) return locale.greetingsGoodAfternoon;
-    return locale.greetingsGoodNight;
+    if (hour < 12) {
+      return locale.greetingsGoodMorning;
+    } else if (hour < 18) {
+      return locale.greetingsGoodAfternoon;
+    } else {
+      return locale.greetingsGoodNight;
+    }
   }
 
   Future<void> loadMoreTransactions() async {
     final listViewPosition = _listViewController.position.pixels;
-    await _controller.getNextTransactions();
-    _listViewController.jumpTo(listViewPosition);
+    await _controller.getTransactions(true);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_listViewController.hasClients) {
+        _listViewController.jumpTo(listViewPosition);
+      }
+    });
   }
 
   Widget noTransactions(AppLocalizations locale, Color primary) {
@@ -108,6 +110,27 @@ class _HomePageState extends State<HomePage>
     );
   }
 
+  // Open filter dialog and set _filterText and _filterIsDescription
+  Future<void> openFilter() async {
+    String? text;
+    bool? isDescription;
+    try {
+      (text, isDescription) = await showDialog(
+        context: context,
+        builder: (context) => const FilterDialog(),
+      );
+      _controller.setFilterValues(
+        text: text ?? '',
+        isDescription: isDescription ?? true,
+      );
+    } catch (err) {
+      _controller.setFilterValues(
+        text: '',
+        isDescription: true,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -130,11 +153,16 @@ class _HomePageState extends State<HomePage>
                 color: onPrimary,
               ),
             ),
+            // Page Header Name and Greeting
             AnimatedBuilder(
                 animation: _userNameNotifier,
                 builder: (context, _) {
+                  final userName = currentUser.userName == null ||
+                          currentUser.userName!.isEmpty
+                      ? '***'
+                      : currentUser.userName!;
                   return Text(
-                    currentUser.userName ?? '',
+                    userName,
                     style: AppTextStyles.textStyleSemiBold20.copyWith(
                       color: onPrimary,
                     ),
@@ -143,6 +171,7 @@ class _HomePageState extends State<HomePage>
           ],
         ),
         actions: [
+          // Manager Tutorial call
           SizedBox(
             width: 32,
             height: 32,
@@ -163,7 +192,9 @@ class _HomePageState extends State<HomePage>
       ),
       body: Stack(
         children: [
+          // Background Image
           const AppTopBorder(),
+          // Balance Card
           BalanceCard(
             textScale: textScaleFactor,
             controller: _balanceController,
@@ -180,11 +211,13 @@ class _HomePageState extends State<HomePage>
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Column(
                 children: [
+                  // Transaction History and Filter
                   Padding(
                     padding: const EdgeInsets.all(8),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        // Transaction History title
                         Text(
                           locale.homePageTransHistory,
                           style: AppTextStyles.textStyleSemiBold18.copyWith(
@@ -192,47 +225,25 @@ class _HomePageState extends State<HomePage>
                           ),
                         ),
                         const Spacer(),
+                        // Filter Icon
                         InkWell(
                           customBorder: const CircleBorder(),
-                          onLongPress: () {
-                            _filterText = '';
-                            _filterIsDescription = true;
-                            setState(() {});
-                          },
-                          onTap: () async {
-                            String? text;
-                            bool? isDescription;
-                            try {
-                              (text, isDescription) = await showDialog(
-                                context: context,
-                                builder: (context) => const FilterDialog(),
-                              );
-                              _filterText = text ?? '';
-                              _filterIsDescription = isDescription ?? true;
-
-                              if (!_filterIsDescription) {
-                                _filterCategoryId = locator
-                                    .get<AbstractCategoryRepository>()
-                                    .getIdByName(_filterText);
-                              }
-                            } catch (err) {
-                              _filterText = '';
-                              _filterIsDescription = true;
-                            }
-
-                            setState(() {});
-                          },
+                          onLongPress: _controller.cleanFilterValues,
+                          onTap: openFilter,
                           child: Ink(
                             decoration: const BoxDecoration(
                               shape: BoxShape.circle,
                             ),
                             width: 32,
                             height: 32,
-                            child: Icon(
-                              _filterText.isEmpty
-                                  ? Icons.filter_alt_outlined
-                                  : Icons.filter_alt,
-                              color: primary,
+                            child: ValueListenableBuilder(
+                              valueListenable: _controller.isFiltred$,
+                              builder: (context, value, _) => Icon(
+                                !value
+                                    ? Icons.filter_alt_outlined
+                                    : Icons.filter_alt,
+                                color: primary,
+                              ),
                             ),
                           ),
                         ),
@@ -259,31 +270,15 @@ class _HomePageState extends State<HomePage>
                                 (_) =>
                                     managerTutorial(context, introductionHelp),
                               );
+                              _showTutorial = false;
                             }
                             return noTransactions(locale, primary);
                           }
                           _showTutorial = false;
 
-                          List<TransactionDbModel> transactions = [];
+                          // if necessary, filter transactions
+                          final transactions = _controller.filterTransactions();
 
-                          if (_filterText.isNotEmpty) {
-                            for (final trans in _controller.transactions) {
-                              if (_filterIsDescription) {
-                                if (trans.transDescription
-                                    .toLowerCase()
-                                    .contains(_filterText.toLowerCase())) {
-                                  transactions.add(trans);
-                                }
-                              } else {
-                                if (trans.transCategoryId ==
-                                    _filterCategoryId) {
-                                  transactions.add(trans);
-                                }
-                              }
-                            }
-                          } else {
-                            transactions = _controller.transactions;
-                          }
                           // building...
                           return ListView.builder(
                             controller: _listViewController,
@@ -311,7 +306,7 @@ class _HomePageState extends State<HomePage>
                                     bottom: 8,
                                   ),
                                   child: ElevatedButton(
-                                    onPressed: _controller.lastDate != null
+                                    onPressed: _controller.haveMoreTransactions
                                         ? loadMoreTransactions
                                         : null,
                                     style: ElevatedButton.styleFrom(

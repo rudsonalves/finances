@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:sqflite/sqflite.dart';
 
+import '../locator.dart';
 import 'constants.dart';
 import 'database_manager.dart';
 
@@ -17,7 +18,7 @@ abstract class IconStorer {
 /// Utilizes [DatabaseManager] to execute counting queries related to transactions
 /// based on category or account IDs.
 class IconStore implements IconStorer {
-  final _databaseManager = DatabaseManager();
+  final _databaseManager = locator<DatabaseManager>();
 
   /// Updates an existing icon record in the database.
   ///

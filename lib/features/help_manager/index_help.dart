@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../common/constants/themes/app_button_styles.dart';
 import 'main_manager.dart';
 
 class IndexHelp extends StatelessWidget {
@@ -73,9 +72,8 @@ class IndexHelp extends StatelessWidget {
         ButtonBar(
           alignment: MainAxisAlignment.spaceAround,
           children: [
-            ElevatedButton(
+            FilledButton(
               onPressed: () => Navigator.of(context).pop(HelpCommand.close),
-              style: AppButtonStyles.primaryButtonColor(context),
               child: Text(locale.genericClose),
             ),
           ],

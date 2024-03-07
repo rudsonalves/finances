@@ -57,7 +57,7 @@ const categoryIcon = 'categoryIcon';
 const categoryBudget = 'categoryBudget';
 const categoryIsIncome = 'categoryIsIncome';
 
-const transactionsTable = 'transactonsTable';
+const transactionsTable = 'transactionsTable';
 const transactionsDateIndex = 'idxTransactionsDate';
 const transactionsCategoryIndex = 'idxTransactionsCategory';
 const transId = 'transId';
@@ -126,9 +126,8 @@ const createAccountsSQL = 'CREATE TABLE IF NOT EXISTS $accountTable ('
     '  ON DELETE RESTRICT'
     ')';
 
-const createAccountUserIndexSQL =
-    'CREATE INDEX IF NOT EXISTS $accountUserIndex '
-    'ON $accountTable ($accountUserId)';
+const createAccountUserIndexSQL = 'CREATE INDEX IF NOT EXISTS $accountUserIndex'
+    ' ON $accountTable ($accountUserId)';
 
 const createBalanceSQL = 'CREATE TABLE IF NOT EXISTS $balanceTable ('
     ' $balanceId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
@@ -175,15 +174,17 @@ const createTransactionsSQL = 'CREATE TABLE IF NOT EXISTS $transactionsTable ('
     ' $transTransferId INTEGER,'
     ' $transDate INTEGER NOT NULL,'
     ' FOREIGN KEY ($transCategoryId)'
-    '  REFERENCES $categoriesTable ($categoryId)'
-    '  ON DELETE RESTRICT,'
+    '   REFERENCES $categoriesTable ($categoryId)'
+    '   ON DELETE RESTRICT,'
     ' FOREIGN KEY ($transBalanceId)'
-    '  REFERENCES $balanceTable ($balanceId)'
-    '  ON DELETE RESTRICT,'
-    '  ON DELETE RESTRICT,'
+    '   REFERENCES $balanceTable ($balanceId)'
+    '   ON DELETE RESTRICT,'
     ' FOREIGN KEY ($transAccountId)'
-    '  REFERENCES $accountTable ($accountId)'
-    '  ON DELETE RESTRICT'
+    '   REFERENCES $accountTable ($accountId)'
+    '   ON DELETE RESTRICT,'
+    ' FOREIGN KEY ($transTransferId)'
+    '   REFERENCES $transfersTable ($transferId)'
+    '   ON DELETE RESTRICT'
     ')';
 
 const createTransactionsDateIndexSQL =
@@ -198,69 +199,56 @@ const createTransfersSQL = 'CREATE TABLE IF NOT EXISTS $transfersTable ('
     ' $transferId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
     ' $transferTransId0 INTEGER,'
     ' $transferTransId1 INTEGER,'
+    ' $transferAccount0 INTEGER,'
+    ' $transferAccount1 INTEGER,'
     ' FOREIGN KEY ($transferTransId0)'
-    '  REFERENCES $transactionsTable ($transId)'
-    '  ON DELETE RESTRICT,'
+    '   REFERENCES $transactionsTable ($transId),'
     ' FOREIGN KEY ($transferTransId1)'
-    '  REFERENCES $transactionsTable ($transId)'
-    '  ON DELETE RESTRICT,'
+    '   REFERENCES $transactionsTable ($transId),'
+    ' FOREIGN KEY ($transferAccount0)'
+    '   REFERENCES $accountTable ($accountId)'
+    '   ON DELETE RESTRICT,'
+    ' FOREIGN KEY ($transferAccount1)'
+    '   REFERENCES $accountTable ($accountId)'
+    '   ON DELETE RESTRICT'
     ')';
 
 const createTriggerAfterInsertTransaction =
     'CREATE TRIGGER IF NOT EXISTS $triggerAfterInsertTransaction'
-    'AFTER INSERT ON $transactionsTable'
-    'FOR EACH ROW'
-    'BEGIN'
-    '  UPDATE $balanceTable'
-    '  SET $balanceClose = $balanceClose - NEW.$transValue,'
-    '      $balanceTransCount = IFNULL($balanceTransCount, 0) + 1'
-    '  WHERE $balanceAccountId = NEW.$transAccountId'
-    '    AND $balanceDate = NEW.$transDate;'
-    'END';
+    ' AFTER INSERT ON $transactionsTable'
+    ' FOR EACH ROW'
+    ' BEGIN'
+    '   UPDATE $balanceTable'
+    '   SET $balanceClose = $balanceClose + NEW.$transValue,'
+    '       $balanceTransCount = IFNULL($balanceTransCount, 0) + 1'
+    '   WHERE $balanceId = NEW.$transBalanceId;'
+    ' END';
 
 const createTriggerAfterDeleteTransaction =
     'CREATE TRIGGER IF NOT EXISTS $triggerAfterDeleteTransaction'
-    'AFTER DELETE ON $transactionsTable'
-    'FOR EACH ROW'
-    'BEGIN'
-    '  UPDATE $balanceTable'
-    "  SET $balanceClose = $balanceClose + OLD.$transValue,"
-    '      $balanceTransCount = IFNULL($balanceTransCount, 0) - 1'
-    '  WHERE $balanceAccountId = OLD.$transAccountId'
-    '    AND $balanceDate = OLD.$transDate;'
-    'END';
-
-const rawQueryTransForBalanceIdSQL = 'SELECT t.*'
-    ' FROM $balanceTable b'
-    ' JOIN $transDayTable td ON b.$balanceId = td.$transDayBalanceId'
-    ' JOIN $transactionsTable t ON td.$transDayTransId = t.$transId'
-    ' WHERE b.$balanceId = ?'
-    ' ORDER BY t.transDate DESC';
+    ' AFTER DELETE ON $transactionsTable'
+    ' FOR EACH ROW'
+    ' BEGIN'
+    '   UPDATE $balanceTable'
+    '   SET $balanceClose = $balanceClose - OLD.$transValue,'
+    '       $balanceTransCount = IFNULL($balanceTransCount, 0) - 1'
+    '   WHERE $balanceId = OLD.$transBalanceId;'
+    ' END';
 
 const getIncomeBetweenDatesSQL = 'SELECT SUM($transValue) AS totalIncomes'
     ' FROM $transactionsTable'
     ' WHERE $transDate BETWEEN ? AND ?'
     '   AND $transValue > 0'
-    '   AND $transId IN ('
-    '     SELECT $transDayTransId'
-    '     FROM $transDayTable'
-    '     WHERE $transDayBalanceId IN ('
-    '       SELECT $balanceId'
-    '       FROM $balanceTable'
-    '       WHERE $balanceAccountId = ?'
-    '     )'
-    '   )';
+    '   AND $transAccountId = ?';
 
 const getExpenseBetweenDatesSQL = 'SELECT SUM($transValue) AS totalExpenses'
     ' FROM $transactionsTable'
     ' WHERE $transDate BETWEEN ? AND ?'
     '   AND $transValue < 0'
-    '   AND $transId IN ('
-    '     SELECT $transDayTransId'
-    '     FROM $transDayTable'
-    '     WHERE $transDayBalanceId IN ('
-    '       SELECT $balanceId'
-    '       FROM $balanceTable'
-    '       WHERE $balanceAccountId = ?'
-    '     )'
-    '   )';
+    '   AND $transAccountId = ?';
+
+const countTransactionForCategoryIdSQL =
+    'SELECT COUNT(*) FROM $transactionsTable WHERE $transCategoryId = ?';
+
+const countTransactionsForAccountIdSQL =
+    'SELECT COUNT(*) FROM $transactionsTable WHERE $transAccountId = ?';

@@ -5,7 +5,8 @@ import '../../../common/constants/themes/colors/app_colors.dart';
 import '../../../common/constants/themes/colors/custom_color.g.dart';
 import '../../../common/models/extends_date.dart';
 import '../../../locator.dart';
-import '../../../store/managers/transfers_manager.dart';
+import '../../../manager/transaction_manager.dart';
+import '../../../manager/transfer_manager.dart';
 import '../../statistics/statistic_controller.dart';
 import '../home_page_controller.dart';
 import '../balance_card/balance_card_controller.dart';
@@ -17,7 +18,6 @@ import '../../../common/functions/function_alert_dialog.dart';
 import '../../../common/constants/themes/app_text_styles.dart';
 import '../../../repositories/category/abstract_category_repository.dart';
 import '../../../common/functions/base_dismissible_container.dart';
-import '../../../store/managers/transactions_manager.dart';
 
 class TransactionDismissibleTile extends StatefulWidget {
   final double textScale;
@@ -137,6 +137,101 @@ class _TransactionDismissibleTileState
     }
   }
 
+  Future<bool> dismissActions(
+    BuildContext context, {
+    required TransactionDbModel transaction,
+    required DismissDirection direction,
+    required BalanceCardController controller,
+  }) async {
+    // return if transaction.transStatus is transactionChecked. Checked
+    // transactions can not be edited or deleted.
+    if (transaction.transStatus == TransStatus.transactionChecked) {
+      return false;
+    }
+    if (direction == DismissDirection.startToEnd) {
+      // Edit
+      return await editDismiss(
+        context,
+        transaction: transaction,
+        controller: controller,
+      );
+    } else if (direction == DismissDirection.endToStart) {
+      // Delete
+      return await deleteDismiss(
+        context,
+        transaction: transaction,
+        controller: controller,
+      );
+    }
+    return false;
+  }
+
+  // FIXME: remove dis code to a separeted package.
+  Future<bool> editDismiss(
+    BuildContext context, {
+    required TransactionDbModel transaction,
+    required BalanceCardController controller,
+  }) async {
+    final navigator = Navigator.of(context);
+
+    int? accountDestinyId;
+    if (transaction.transTransferId != null) {
+      final transfer =
+          await TransferManager.getTransferById(transaction.transTransferId!);
+      accountDestinyId = transfer!.transferTransId0 == transaction.transId
+          ? transfer.transferAccount1
+          : transfer.transferAccount0;
+    }
+
+    await navigator.pushNamed(
+      AppRoute.transaction.name,
+      arguments: {
+        'addTransaction': false,
+        'transaction': transaction,
+        'accountDestinyId': accountDestinyId,
+      },
+    );
+    locator<StatisticsController>().recalculate();
+    _homePageController.getTransactions();
+    controller.getBalance();
+    return false;
+  }
+
+  // FIXME: remove dis code to a separeted package.
+  Future<bool> deleteDismiss(
+    BuildContext context, {
+    required TransactionDbModel transaction,
+    required BalanceCardController controller,
+  }) async {
+    final locale = AppLocalizations.of(context)!;
+
+    bool? action = await deleteTransactionDialog(context, transaction);
+
+    if (action ?? false) {
+      try {
+        if (transaction.transTransferId == null) {
+          await TransactionManager.removeTransaction(transaction);
+        } else {
+          await TransferManager.removeTransfer(transaction);
+        }
+        locator<StatisticsController>().recalculate();
+        _homePageController.getTransactions();
+        controller.getBalance();
+        return true;
+      } catch (err) {
+        if (!context.mounted) return false;
+        functionAlertDialog(
+          context,
+          title: locale.transactionListTileSorry,
+          content: err.toString(),
+        );
+        return false;
+      }
+    }
+
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -153,7 +248,7 @@ class _TransactionDismissibleTileState
         locator<AbstractCategoryRepository>().getCategoryId(
       transaction.transCategoryId,
     );
-    final AppLocalizations locale = AppLocalizations.of(context)!;
+    final locale = AppLocalizations.of(context)!;
 
     bool isFutureTransaction =
         transaction.transDate.onlyDate > ExtendedDate.now();
@@ -233,56 +328,12 @@ class _TransactionDismissibleTileState
             onTap: isFutureTransaction ? onTabFuture : onTabCheck,
           ),
         ),
-        confirmDismiss: (direction) async {
-          // return if transaction.transStatus is transactionChecked
-          if (transaction.transStatus == TransStatus.transactionChecked) {
-            return false;
-          }
-          if (direction == DismissDirection.startToEnd) {
-            // Edit
-            await Navigator.pushNamed(
-              context,
-              AppRoute.transaction.name,
-              arguments: {
-                'addTransaction': false,
-                'transaction': transaction,
-              },
-            );
-            locator<StatisticsController>().recalculate();
-            _homePageController.getTransactions();
-            balanceCardController.getBalance();
-            return false;
-          }
-          if (direction == DismissDirection.endToStart) {
-            // Delete
-            bool? action = await deleteTransactionDialog(context, transaction);
-
-            if (action ?? false) {
-              try {
-                if (transaction.transTransferId == null) {
-                  await TransactionsManager.removeTransaction(transaction);
-                } else {
-                  await TransfersManager.removeTransfer(transaction);
-                }
-                locator<StatisticsController>().recalculate();
-                _homePageController.getTransactions();
-                balanceCardController.getBalance();
-                return true;
-              } catch (err) {
-                if (!context.mounted) return false;
-                functionAlertDialog(
-                  context,
-                  title: locale.transactionListTileSorry,
-                  content: err.toString(),
-                );
-                return false;
-              }
-            }
-
-            return false;
-          }
-          return false;
-        },
+        confirmDismiss: (direction) async => await dismissActions(
+          context,
+          transaction: transaction,
+          direction: direction,
+          controller: balanceCardController,
+        ),
       ),
     );
   }

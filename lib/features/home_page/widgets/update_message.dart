@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../common/constants/app_info.dart';
-import '../../../common/constants/themes/app_button_styles.dart';
 import '../../../common/widgets/markdown_rich_text.dart';
 import '../../../locator.dart';
 import '../../../repositories/database/abstract_database_repository.dart';
@@ -57,14 +56,12 @@ Future<void> updateMessage(BuildContext context) async {
               ),
             ),
             actions: [
-              ElevatedButton(
+              FilledButton(
                 onPressed: () => AppInfo.launchUrl(AppInfo.privacyPolicyUrl),
-                style: AppButtonStyles.primaryButtonColor(context),
                 child: Text(locale.updatePoliceButton),
               ),
-              ElevatedButton(
+              FilledButton(
                 onPressed: () => Navigator.pop(context),
-                style: AppButtonStyles.primaryButtonColor(context),
                 child: Text(locale.genericClose),
               )
             ],

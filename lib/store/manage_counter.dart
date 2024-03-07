@@ -2,10 +2,11 @@ import 'dart:developer';
 
 import 'package:sqflite/sqflite.dart';
 
+import '../locator.dart';
 import 'constants.dart';
 import 'database_manager.dart';
 
-abstract class CountStorer {
+abstract class ManageCounter {
   Future<int> countTransactionForCategoryId(int id);
   Future<int> countTransactionsForAccountId(int id);
 }
@@ -14,8 +15,8 @@ abstract class CountStorer {
 ///
 /// Utilizes the DatabaseManager to execute queries that count transactions
 /// based on specific criteria, such as category or account ID.
-class CountStore implements CountStorer {
-  final _databaseManager = DatabaseManager();
+class ManageCount implements ManageCounter {
+  final _databaseManager = locator<DatabaseManager>();
 
   /// Counts the number of transactions associated with a specific category ID.
   ///
@@ -28,9 +29,12 @@ class CountStore implements CountStorer {
   Future<int> countTransactionForCategoryId(int id) async {
     final database = await _databaseManager.database;
 
+    // const countTransactionForCategoryIdSQL =
+    // 'SELECT COUNT(*) FROM $transactionsTable WHERE $transCategoryId = ?';
+
     try {
       int count = Sqflite.firstIntValue(await database.rawQuery(
-            'SELECT COUNT(*) FROM $transactionsTable WHERE $transCategoryId = ?',
+            countTransactionForCategoryIdSQL,
             [id],
           )) ??
           0;
@@ -41,33 +45,27 @@ class CountStore implements CountStorer {
     }
   }
 
-  /// Counts the number of transactions associated with a specific account ID.
+  /// Counts the number of transactions directly associated with a specific account ID.
   ///
-  /// This method performs a nested query to count all transactions linked to
-  /// an account ID through the balance and transaction day tables. It's
-  /// designed to account for the relational structure where transactions are
-  /// linked to accounts indirectly.
+  /// This method queries the transactions table to count all transactions
+  /// directly linked to the given account ID. It simplifies the process of
+  /// determining the volume of transactions for a particular account,
+  /// providing a straightforward count that can be useful for analysis or
+  /// reporting purposes.
   ///
   /// Parameters:
   ///   - id: The unique identifier of the account for which to count transactions.
   ///
-  /// Returns the count of transactions for the specified account ID, or -1 if
-  /// an error occurs.
+  /// Returns:
+  ///   The count of transactions associated with the specified account ID,
+  ///   or -1 if an error occurs during the query execution.
   @override
   Future<int> countTransactionsForAccountId(int id) async {
     final database = await _databaseManager.database;
 
     try {
       int count = Sqflite.firstIntValue(await database.rawQuery(
-            'SELECT COUNT(*) FROM $transactionsTable '
-            ' WHERE $transId IN ('
-            '  SELECT $transDayTransId FROM $transDayTable '
-            '   WHERE $transDayBalanceId IN ('
-            '    SELECT $balanceId FROM $balanceTable '
-            '     WHERE $balanceAccountId IN ('
-            '      SELECT $accountId FROM $accountTable WHERE $accountId = ?)'
-            '  )'
-            ')',
+            countTransactionsForAccountIdSQL,
             [id],
           )) ??
           0;

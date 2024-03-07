@@ -1,41 +1,71 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 
 import '../../common/current_models/current_account.dart';
 import '../../common/current_models/current_user.dart';
 import '../../common/models/account_db_model.dart';
 import '../../locator.dart';
+import '../../repositories/transaction/abstract_transaction_repository.dart';
 import './home_page_state.dart';
 import '../../common/models/extends_date.dart';
 import '../../common/models/transaction_db_model.dart';
-import '../../repositories/balance/abstract_balance_repository.dart';
 import '../../repositories/category/abstract_category_repository.dart';
-import '../../store/managers/transactions_manager.dart';
 import 'balance_card/balance_card_controller.dart';
 
 class HomePageController extends ChangeNotifier {
-  HomePageController();
-  final logger = Logger();
-
+  // controller state
   HomePageState _state = HomePageStateInitial();
+  // last date from controller getTransactions
+  late ExtendedDate _lastDate;
+  // true if have more transactions in database
+  bool _haveMoreTransactions = true;
+  // FIXME: redraw key. **Adjust the code so that key is no longer needed**
+  bool _redraw = false;
+  // list of transactions in display
+  final List<TransactionDbModel> _transactions = [];
+  // maximum number of transactions to be popped from the database
+  int maxTransactions = 35;
+  // instace of TransactionRepository
+  final _transactionsRepository = locator<AbstractTransactionRepository>();
+  // instance of CurrentAccount
+  final _currentAccount = locator<CurrentAccount>();
+
+  String _filterText = '';
+  bool _filterIsDescription = true;
+  int _filterCategoryId = 0;
+  final isFiltred$ = ValueNotifier<bool>(false);
+
+  String get filterText => _filterText;
+  bool get filterIsDescription => _filterIsDescription;
+  int get filterCategoryId => _filterCategoryId;
+  bool get isFiltred => isFiltred$.value;
+
+  // Default constructor
+  HomePageController();
+
+  // true if have more transactions in database
+  bool get haveMoreTransactions => _haveMoreTransactions;
 
   HomePageState get state => _state;
 
-  ExtendedDate? _lastDate;
+  Map<String, int> get cacheDescriptions {
+    Map<String, int> descMap = {};
 
-  ExtendedDate? get lastDate => _lastDate;
+    for (final transaction in _transactions) {
+      descMap[transaction.transDescription] = transaction.transCategoryId;
+    }
 
-  List<TransactionDbModel> _transactions = [];
+    return descMap;
+  }
 
-  final Map<String, int> _cacheDescriptions = {};
-
-  Map<String, int> get cacheDescriptions => _cacheDescriptions;
+  @override
+  void dispose() {
+    isFiltred$.dispose();
+    super.dispose();
+  }
 
   List<TransactionDbModel> get transactions => _transactions;
-
-  int maxTransactions = 35;
-
-  bool _redraw = false;
 
   bool get redraw => _redraw;
 
@@ -56,14 +86,24 @@ class HomePageController extends ChangeNotifier {
   }
 
   void init() {
+    // set state as HomePageStateSuccess
     _state = HomePageStateSuccess();
-    maxTransactions = locator<CurrentUser>().userMaxTransactions;
-    if (maxTransactions < 25) maxTransactions = 25;
+
+    // start maxTransactions
+    final userMaxTransactions = locator<CurrentUser>().userMaxTransactions;
+    maxTransactions = userMaxTransactions < 25 ? 25 : userMaxTransactions;
+
+    // start _lastDate
+    _lastDate = _initialLastDate();
+
+    // get transactions
     getTransactions();
   }
 
-  ExtendedDate getInitialDate() {
-    final date = ExtendedDate.now();
+  ExtendedDate _initialLastDate() {
+    // Start a _lastDate with a date after today. This is necessary because
+    // getTransactions returns transactions < _lastDate and not <=
+    final date = ExtendedDate.nowDate().add(const Duration(days: 1));
     final futureTransactions =
         locator<BalanceCardController>().futureTransactions;
     switch (futureTransactions) {
@@ -78,26 +118,36 @@ class HomePageController extends ChangeNotifier {
     }
   }
 
-  Future<void> getTransactions() async {
+  Future<void> getTransactions([bool next = false]) async {
     _changeState(HomePageStateLoading());
     try {
-      await locator<AbstractCategoryRepository>().init();
-
-      final date = getInitialDate();
-
-      _transactions = await TransactionsManager.getNTransFromDate(
-        maxItens: maxTransactions,
-        date: date,
-      );
-      if (_transactions.isNotEmpty) {
-        await _updateLastDate();
-      } else {
-        await _updateLastDate(ExtendedDate.nowDate());
+      if (!next) {
+        _transactions.clear();
+        _lastDate = _initialLastDate();
       }
+
+      await locator<AbstractCategoryRepository>().init();
+      final accountId = _currentAccount.accountId!;
+
+      // get the next maxTransactions transactions before _lastdate
+      final newTrans = await _transactionsRepository.getNTransactionsFromDate(
+        startDate: _lastDate,
+        accountId: accountId,
+        maxTransactions: maxTransactions,
+      );
+
+      if (newTrans.isNotEmpty) {
+        _transactions.addAll(newTrans);
+        _lastDate = newTrans.last.transDate;
+      } else {
+        _lastDate = _initialLastDate();
+      }
+
+      _haveMoreTransactions = newTrans.length == maxTransactions;
 
       _changeState(HomePageStateSuccess());
     } catch (err) {
-      logger.e(err);
+      log('HomePageController.getTransactions: $err');
       _changeState(HomePageStateError());
     }
   }
@@ -108,38 +158,47 @@ class HomePageController extends ChangeNotifier {
     getTransactions();
   }
 
-  Future<void> _updateLastDate([ExtendedDate? date]) async {
-    if (date != null) {
-      _lastDate = date.onlyDate;
-    } else {
-      _lastDate = _transactions.last.transDate.onlyDate;
-    }
-    final balance = await locator
-        .get<AbstractBalanceRepository>()
-        .getBalanceInDate(date: _lastDate!);
-    if (balance!.balancePreviousId == null) {
-      _lastDate = null;
-    }
-
-    _cacheDescriptions.clear();
-    for (final trans in _transactions) {
-      _cacheDescriptions[trans.transDescription] = trans.transCategoryId;
-    }
+  Future<void> setFilterValues({
+    required String text,
+    required bool isDescription,
+  }) async {
+    _filterText = text;
+    _filterIsDescription = isDescription;
+    _filterCategoryId = !isDescription
+        ? locator.get<AbstractCategoryRepository>().getIdByName(_filterText)
+        : 0;
+    isFiltred$.value = true;
+    getTransactions();
   }
 
-  Future<void> getNextTransactions([int? more]) async {
-    if (_lastDate == null) return;
-    List<TransactionDbModel> newsTransactions;
-    more ??= maxTransactions;
-    newsTransactions = await TransactionsManager.getNTransFromDate(
-      maxItens: more,
-      date: _lastDate!.previusDay(),
-    );
-    if (newsTransactions.isEmpty) {
-      _lastDate == null;
+  Future<void> cleanFilterValues() async {
+    _filterText = '';
+    _filterIsDescription = false;
+    _filterCategoryId = 0;
+    isFiltred$.value = false;
+    getTransactions();
+  }
+
+  List<TransactionDbModel> filterTransactions() {
+    List<TransactionDbModel> transactions = [];
+
+    if (filterText.isNotEmpty) {
+      for (final trans in _transactions) {
+        if (filterIsDescription) {
+          if (trans.transDescription
+              .toLowerCase()
+              .contains(filterText.toLowerCase())) {
+            transactions.add(trans);
+          }
+        } else {
+          if (trans.transCategoryId == filterCategoryId) {
+            transactions.add(trans);
+          }
+        }
+      }
+    } else {
+      transactions = _transactions;
     }
-    _transactions.addAll(newsTransactions);
-    await _updateLastDate();
-    notifyListeners();
+    return transactions;
   }
 }

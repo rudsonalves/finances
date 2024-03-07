@@ -3,7 +3,6 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_swiper_view/flutter_swiper_view.dart';
 
-import '../constants/themes/app_button_styles.dart';
 import '../constants/themes/app_icons.dart';
 import '../constants/themes/app_text_styles.dart';
 import '../models/icons_model.dart';
@@ -84,13 +83,11 @@ class _NewIconSelectionState extends State<NewIconSelection> {
           ),
         ),
         actions: [
-          ElevatedButton(
-            style: AppButtonStyles.primaryButtonColor(context),
+          FilledButton(
             onPressed: () => Navigator.of(context).pop(true),
             child: const Text('Select'),
           ),
-          ElevatedButton(
-            style: AppButtonStyles.primaryButtonColor(context),
+          FilledButton(
             onPressed: () => Navigator.of(context).pop(false),
             child: const Text('Cancel'),
           ),
@@ -316,8 +313,7 @@ class _NewIconSelectionState extends State<NewIconSelection> {
             const SizedBox(height: 12),
             ButtonBar(
               children: [
-                ElevatedButton(
-                  style: AppButtonStyles.primaryButtonColor(context),
+                FilledButton(
                   onPressed: () {
                     IconModel newIcon = IconModel(
                       iconId: iconId,
@@ -330,8 +326,7 @@ class _NewIconSelectionState extends State<NewIconSelection> {
                   },
                   child: Text(locale.genericSelect),
                 ),
-                ElevatedButton(
-                  style: AppButtonStyles.primaryButtonColor(context),
+                FilledButton(
                   onPressed: () => Navigator.of(context).pop(),
                   child: Text(locale.accountPageCancel),
                 ),
