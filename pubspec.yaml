@@ -3,7 +3,7 @@ description: "financial control app"
 
 publish_to: 'none' 
 
-version: 1.1.00+76
+version: 1.1.00+77
 
 environment:
   sdk: '>=3.1.5 <4.0.0' 
@@ -32,6 +32,7 @@ dependencies:
   flutter_swiper_view: ^1.1.8
   logger: ^2.0.2+1
   url_launcher: ^6.2.2
+  xml2json: ^6.2.2
 
 dev_dependencies:
   flutter_test:

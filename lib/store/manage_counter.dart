@@ -6,17 +6,17 @@ import '../locator.dart';
 import 'constants.dart';
 import 'database_manager.dart';
 
-abstract class ManageCounter {
-  Future<int> countTransactionForCategoryId(int id);
-  Future<int> countTransactionsForAccountId(int id);
-}
+// abstract class ManageCounter {
+//   Future<int> countTransactionForCategoryId(int id);
+//   Future<int> countTransactionsForAccountId(int id);
+// }
 
 /// Manages count queries related to transactions within the database.
 ///
 /// Utilizes the DatabaseManager to execute queries that count transactions
 /// based on specific criteria, such as category or account ID.
-class ManageCount implements ManageCounter {
-  final _databaseManager = locator<DatabaseManager>();
+class ManageCount {
+  static final _databaseManager = locator<DatabaseManager>();
 
   /// Counts the number of transactions associated with a specific category ID.
   ///
@@ -25,8 +25,7 @@ class ManageCount implements ManageCounter {
   ///
   /// Returns the count of transactions for the specified category ID, or -1 if
   /// an error occurs.
-  @override
-  Future<int> countTransactionForCategoryId(int id) async {
+  static Future<int> countTransactionForCategoryId(int id) async {
     final database = await _databaseManager.database;
 
     // const countTransactionForCategoryIdSQL =
@@ -59,8 +58,7 @@ class ManageCount implements ManageCounter {
   /// Returns:
   ///   The count of transactions associated with the specified account ID,
   ///   or -1 if an error occurs during the query execution.
-  @override
-  Future<int> countTransactionsForAccountId(int id) async {
+  static Future<int> countTransactionsForAccountId(int id) async {
     final database = await _databaseManager.database;
 
     try {

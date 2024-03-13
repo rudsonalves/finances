@@ -15,7 +15,7 @@ class DatabaseMigrations {
   /// This is the database scheme current version. To futures upgrades
   /// in database increment this value and add a new update script in
   /// _migrationScripts Map.
-  static const databaseSchemeVersion = 1008;
+  static const databaseSchemeVersion = 1009;
 
   // Retrieves the database schema version in a readable format (e.g., "1.0.07").
   static String get dbSchemeVersion {
@@ -192,6 +192,84 @@ class DatabaseMigrations {
           '       $balanceTransCount = IFNULL($balanceTransCount, 0) - 1'
           '   WHERE $balanceId = OLD.$transBalanceId;'
           ' END',
+      'COMMIT',
+    ],
+    1009: [
+      'BEGIN TRANSACTION',
+      'CREATE TABLE IF NOT EXISTS $ofxACCTable ('
+          ' $ofxACCId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+          ' $ofxACCBankId TEXT UNIQUE NOT NULL,'
+          ' $ofxACCAccountId INTEGER NOT NULL,'
+          ' $ofxACCType TEXT NOT NULL,'
+          ' $ofxACCNTrans INTEGER NOT NULL,'
+          ' $ofxACCStartDate INTEGER NOT NULL,'
+          ' $ofxACCEndDate INTEGER NOT NULL'
+          ')',
+      'CREATE INDEX IF NOT EXISTS $ofxAccountBankIndex'
+          ' ON $ofxACCTable ($ofxACCBankId)',
+      'CREATE TABLE IF NOT EXISTS $ofxRelationshipTable ('
+          ' $ofxRelId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+          ' $ofxRelBankId TEXT UNIQUE NOT NULL,'
+          ' $ofxRelAccountId INTEGER NOT NULL,'
+          ' FOREIGN KEY ($ofxRelBankId)'
+          '   REFERENCES $ofxACCTable ($ofxACCBankId),'
+          ' FOREIGN KEY ($ofxRelAccountId)'
+          '   REFERENCES $accountTable ($accountId)'
+          ')',
+      'CREATE INDEX IF NOT EXISTS $ofxRelaltionshipIndex'
+          ' ON $ofxRelationshipTable ($ofxRelBankId)',
+      'CREATE TABLE IF NOT EXISTS $ofxTransactionsTable ('
+          ' $ofxTransId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+          ' $ofxTransMemo TEXT NOT NULL,'
+          ' $ofxTransAccountId INTEGER NOT NULL,'
+          ' $ofxTransCategoryId INTEGER NOT NULL,'
+          ' $ofxTransDescription TEXT,'
+          ' $ofxTransTransferAccountId INTEGER,'
+          ' FOREIGN KEY ($ofxTransAccountId)'
+          '   REFERENCES $accountTable ($accountId),'
+          ' FOREIGN KEY ($ofxTransCategoryId)'
+          '   REFERENCES $categoriesTable ($categoryId),'
+          ' FOREIGN KEY ($ofxTransTransferAccountId)'
+          '   REFERENCES $accountTable ($accountId)'
+          ')',
+      'CREATE INDEX IF NOT EXISTS $ofxTransMemoIndex'
+          ' ON $ofxTransactionsTable ($ofxTransMemo)',
+      'CREATE INDEX IF NOT EXISTS $ofxTransAccountIndex'
+          ' ON $ofxTransactionsTable ($ofxTransAccountId)',
+      'CREATE TABLE IF NOT EXISTS ${transactionsTable}_new ('
+          ' $transId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+          ' $transBalanceId INTEGER NOT NULL,'
+          ' $transAccountId INTEGER NOT NULL,'
+          ' $transDescription TEXT NOT NULL,'
+          ' $transCategoryId INTEGER NOT NULL,'
+          ' $transValue REAL NOT NULL,'
+          ' $transStatus INTEGER NOT NULL,'
+          ' $transTransferId INTEGER,'
+          ' $transDate INTEGER NOT NULL,'
+          ' $transOfxId INTEGER,'
+          ' FOREIGN KEY ($transCategoryId)'
+          '   REFERENCES $categoriesTable ($categoryId)'
+          '   ON DELETE RESTRICT,'
+          ' FOREIGN KEY ($transBalanceId)'
+          '   REFERENCES $balanceTable ($balanceId)'
+          '   ON DELETE RESTRICT,'
+          ' FOREIGN KEY ($transAccountId)'
+          '   REFERENCES $accountTable ($accountId)'
+          '   ON DELETE RESTRICT,'
+          ' FOREIGN KEY ($transTransferId)'
+          '   REFERENCES $transfersTable ($transferId)'
+          '   ON DELETE RESTRICT,'
+          ' FOREIGN KEY ($transOfxId)'
+          '   REFERENCES $ofxACCTable ($ofxACCId)'
+          ')',
+      'INSERT INTO ${transactionsTable}_new ($transId, $transBalanceId,'
+          ' $transAccountId, $transDescription, $transCategoryId, $transValue, '
+          ' $transStatus, $transTransferId, $transDate) '
+          ' SELECT $transId, $transBalanceId, $transAccountId, $transDescription,'
+          '   $transCategoryId, $transValue, $transStatus, $transTransferId,'
+          '   $transDate FROM $transactionsTable',
+      'DROP TABLE $transactionsTable',
+      'ALTER TABLE ${transactionsTable}_new RENAME TO $transactionsTable',
       'COMMIT',
     ],
   };

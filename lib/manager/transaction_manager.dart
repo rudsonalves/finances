@@ -12,7 +12,7 @@ import 'balance_manager.dart';
 /// This class provides static methods to handle the creation and deletion of
 /// transactions within the database. It ensures that balance records are
 /// appropriately updated in response to transaction changes.
-class TransactionManager {
+sealed class TransactionManager {
   /// Private constructor to prevent instantiation.
   TransactionManager._();
 

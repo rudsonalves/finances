@@ -93,6 +93,7 @@ class AppFinances extends StatelessWidget {
                     AppRoute.accountPage.page,
                 AppRoute.budgetPage.name: (context) => AppRoute.budgetPage.page,
                 AppRoute.aboutPage.name: (context) => AppRoute.aboutPage.page,
+                AppRoute.ofxPage.name: (context) => AppRoute.ofxPage.page,
               },
             );
           },

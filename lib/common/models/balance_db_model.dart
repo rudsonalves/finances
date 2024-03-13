@@ -44,7 +44,7 @@ class BalanceDbModel {
 
   factory BalanceDbModel.fromMap(Map<String, dynamic> map) {
     return BalanceDbModel(
-      balanceId: map['balanceId'] != null ? map['balanceId'] as int : null,
+      balanceId: map['balanceId'] as int?,
       balanceAccountId: map['balanceAccountId'] as int,
       balanceDate:
           ExtendedDate.fromMillisecondsSinceEpoch(map['balanceDate'] as int),

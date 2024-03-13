@@ -6,27 +6,50 @@ import '../locator.dart';
 import 'constants.dart';
 import 'database_manager.dart';
 
-abstract class CatgoryStorer {
-  Future<int> insertCategory(Map<String, dynamic> categoryMap);
-  Future<List<Map<String, dynamic>>> queryAllCategories();
-  Future<void> updateCategory(Map<String, dynamic> categoryMap);
-  Future<void> updateCategoryBudget(int id, double budget);
-  Future<void> deleteCategoryId(int id);
-}
-
 /// Manages database operations for category-related data.
 ///
-/// Provides methods to insert, query, update, and delete category records in the database,
-/// facilitating interactions with the categories table through the DatabaseManager.
-class CatgoryStore implements CatgoryStorer {
-  final _databaseManager = locator<DatabaseManager>();
-
+/// Provides methods to insert, query, update, and delete category records in
+/// the database, facilitating interactions with the categories table through
+/// the DatabaseManager.
+abstract class CatgoryStorer {
   /// Inserts a new category record into the database.
   ///
   /// Parameters:
   ///   - categoryMap: A map containing the category data to be inserted.
   ///
-  /// Returns the row ID of the newly inserted category, or -1 if an error occurs.
+  /// Returns the row ID of the newly inserted category, or -1 if an error
+  /// occurs.
+  Future<int> insertCategory(Map<String, dynamic> categoryMap);
+
+  /// Queries all categories sorted by name in ascending order.
+  ///
+  /// Returns a list of maps, each representing a category's data.
+  Future<List<Map<String, dynamic>>> queryAllCategories();
+
+  /// Updates an existing category record in the database.
+  ///
+  /// Parameters:
+  ///   - categoryMap: A map containing the updated category data, including the
+  ///     category's unique ID.
+  Future<void> updateCategory(Map<String, dynamic> categoryMap);
+
+  /// Updates the budget for a specific category by its ID.
+  ///
+  /// Parameters:
+  ///   - id: The unique identifier of the category to be updated.
+  ///   - budget: The new budget value for the category.
+  Future<void> updateCategoryBudget(int id, double budget);
+
+  /// Deletes a category record by its unique ID.
+  ///
+  /// Parameters:
+  ///   - id: The unique identifier of the category to be deleted.
+  Future<void> deleteCategoryId(int id);
+}
+
+class CatgoryStore implements CatgoryStorer {
+  final _databaseManager = locator<DatabaseManager>();
+
   @override
   Future<int> insertCategory(Map<String, dynamic> categoryMap) async {
     final database = await _databaseManager.database;
@@ -44,9 +67,6 @@ class CatgoryStore implements CatgoryStorer {
     }
   }
 
-  /// Queries all categories sorted by name in ascending order.
-  ///
-  /// Returns a list of maps, each representing a category's data.
   @override
   Future<List<Map<String, dynamic>>> queryAllCategories() async {
     final database = await _databaseManager.database;
@@ -63,10 +83,6 @@ class CatgoryStore implements CatgoryStorer {
     }
   }
 
-  /// Updates an existing category record in the database.
-  ///
-  /// Parameters:
-  ///   - categoryMap: A map containing the updated category data, including the category's unique ID.
   @override
   Future<void> updateCategory(Map<String, dynamic> categoryMap) async {
     final database = await _databaseManager.database;
@@ -84,11 +100,6 @@ class CatgoryStore implements CatgoryStorer {
     }
   }
 
-  /// Updates the budget for a specific category by its ID.
-  ///
-  /// Parameters:
-  ///   - id: The unique identifier of the category to be updated.
-  ///   - budget: The new budget value for the category.
   @override
   Future<void> updateCategoryBudget(int id, double budget) async {
     final database = await _databaseManager.database;
@@ -105,10 +116,6 @@ class CatgoryStore implements CatgoryStorer {
     }
   }
 
-  /// Deletes a category record by its unique ID.
-  ///
-  /// Parameters:
-  ///   - id: The unique identifier of the category to be deleted.
   @override
   Future<void> deleteCategoryId(int id) async {
     final database = await _databaseManager.database;

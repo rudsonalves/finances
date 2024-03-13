@@ -62,6 +62,17 @@ class ExtendedDate extends DateTime {
     );
   }
 
+  factory ExtendedDate.fromDateTime(DateTime date) {
+    return ExtendedDate(
+      date.year,
+      date.month,
+      date.day,
+      date.hour,
+      date.minute,
+      date.second,
+    );
+  }
+
   /// Retrieves an ExtendedDate instance representing only the date part of the current instance,
   /// with the time set to midnight.
   ///

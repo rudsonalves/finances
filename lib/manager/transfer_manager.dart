@@ -1,14 +1,14 @@
 import 'dart:developer';
 
-import 'package:finances/repositories/transaction/abstract_transaction_repository.dart';
-
 import '../../common/models/transaction_db_model.dart';
 import '../../common/models/transfer_db_model.dart';
 import '../locator.dart';
+import '../repositories/transaction/abstract_transaction_repository.dart';
 import '../repositories/transfer/abstract_transfer_repository.dart';
 import 'transaction_manager.dart';
 
-/// Manages the creation, update, and removal of financial transfers between accounts.
+/// Manages the creation, update, and removal of financial transfers between
+/// accounts.
 ///
 /// This class provides static methods to facilitate the management of transfers
 /// within a financial application. It ensures that transfers are processed
@@ -20,14 +20,15 @@ import 'transaction_manager.dart';
 /// Methods:
 /// - `addTransfer`: Creates a new transfer between two accounts, generating
 ///   corresponding transactions for both the origin and destination accounts.
-/// - `removeTransfer`: Removes an existing transfer and its associated transactions
-///   based on the originating transaction's details.
-/// - `updateTransfer`: Updates a transfer by removing the existing one and creating
-///   a new transfer with updated account details.
+/// - `removeTransfer`: Removes an existing transfer and its associated
+///   transactions based on the originating transaction's details.
+/// - `updateTransfer`: Updates a transfer by removing the existing one and
+///   creating a new transfer with updated account details.
 ///
 /// Usage:
 /// The class is used statically and does not require instantiation. Methods are
-/// accessed directly through the class name, e.g., `TransferManager.addTransfer(...)`.
+/// accessed directly through the class name, e.g.,
+/// `TransferManager.addTransfer(...)`.
 ///
 /// Example:
 /// ```dart
@@ -39,7 +40,7 @@ import 'transaction_manager.dart';
 ///
 /// This approach ensures that transfer-related operations are handled in a
 /// consistent manner, providing a clear and concise API for managing transfers.
-class TransferManager {
+sealed class TransferManager {
   /// Private constructor to prevent instantiation.
   TransferManager._();
 
@@ -63,9 +64,9 @@ class TransferManager {
   ///    account IDs.
   ///
   /// Exceptions:
-  /// - Logs any encountered errors and throws an exception for critical failures,
-  ///   especially when creating the empty transfer record or during transactions
-  ///   insertion.
+  /// - Logs any encountered errors and throws an exception for critical
+  ///   failures, especially when creating the empty transfer record or during
+  ///   transactions insertion.
   ///
   /// Usage:
   /// ```dart
@@ -75,8 +76,8 @@ class TransferManager {
   /// );
   /// ```
   ///
-  /// Ensures financial transactions are mirrored across accounts with a consistent
-  /// link for traceability and auditing purposes.
+  /// Ensures financial transactions are mirrored across accounts with a
+  /// consistent link for traceability and auditing purposes.
   static Future<void> addTranfer({
     required TransactionDbModel transOrigin,
     required int accountDestinyId,
@@ -143,9 +144,9 @@ class TransferManager {
 
   /// Inserts the origin and destination transactions into the database.
   ///
-  /// This internal method adds both the originating and destination transactions
-  /// of a transfer to the database, ensuring they are linked to the same transfer
-  /// record.
+  /// This internal method adds both the originating and destination
+  /// transactions of a transfer to the database, ensuring they are linked to
+  /// the same transfer record.
   ///
   /// Parameters:
   /// - `transOrigin`: The originating transaction model.

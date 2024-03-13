@@ -49,6 +49,9 @@ class _DatabaseRecoverState extends State<DatabaseRecover> {
           _message = locale.databaseRecoverRetrievedSuccessfully;
         });
 
+        if (!mounted) return;
+        Navigator.pop(context);
+
         await Restart.restartApp(webOrigin: AppRoute.onboard.name);
       }
     } catch (err) {

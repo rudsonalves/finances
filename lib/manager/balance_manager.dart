@@ -3,7 +3,7 @@ import '../common/models/extends_date.dart';
 import '../locator.dart';
 import '../repositories/balance/abstract_balance_repository.dart';
 
-class BalanceManager {
+sealed class BalanceManager {
   BalanceManager._();
 
   /// Adds or retrieves a balance for a specific account on a given date.

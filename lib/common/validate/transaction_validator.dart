@@ -5,8 +5,7 @@ class TransactionValidator {
 
   TransactionValidator(this.locale);
 
-  static String _getOnlyNumbers(String text) =>
-      text.replaceAll(RegExp(r'[^\d]'), '');
+  String _getOnlyNumbers(String text) => text.replaceAll(RegExp(r'[^\d]'), '');
 
   double _numberValue(String text) {
     int precision = 2;
