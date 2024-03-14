@@ -22,10 +22,10 @@ class OfxAccountRepository implements AbstractOfxAccountRepository {
   }
 
   @override
-  Future<OfxAccountModel?> queryBankIdStartDate(
-      String bankId, ExtendedDate date) async {
-    final ofxMap = await _store.queryBankIdStartDate(
-      bankId,
+  Future<OfxAccountModel?> queryBankAccountIdStartDate(
+      String bankAccountId, ExtendedDate date) async {
+    final ofxMap = await _store.queryBankAccountIdStartDate(
+      bankAccountId,
       date.millisecondsSinceEpoch,
     );
 

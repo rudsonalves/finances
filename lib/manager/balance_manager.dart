@@ -4,6 +4,8 @@ import '../locator.dart';
 import '../repositories/balance/abstract_balance_repository.dart';
 
 sealed class BalanceManager {
+  static final repository = locator<AbstractBalanceRepository>();
+
   BalanceManager._();
 
   /// Adds or retrieves a balance for a specific account on a given date.
@@ -78,7 +80,7 @@ sealed class BalanceManager {
     }
 
     // Write new balance and return it
-    await locator<AbstractBalanceRepository>().insertBalance(balance);
+    await repository.insertBalance(balance);
 
     return balance;
   }
@@ -128,7 +130,7 @@ sealed class BalanceManager {
     final onlyDate = date.onlyDate;
 
     // get a balance from accountId in this date
-    var balance = await locator<AbstractBalanceRepository>().getBalanceInDate(
+    var balance = await repository.getBalanceInDate(
       date: onlyDate,
       accountId: accountId,
     );

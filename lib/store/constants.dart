@@ -82,7 +82,7 @@ const ofxACCTable = 'ofxAccountTable';
 const ofxAccountBankIndex = 'idxOfxAccountBank';
 const ofxACCId = 'id';
 const ofxACCAccountId = 'accountId';
-const ofxACCBankId = 'bankId';
+const ofxACCBankAccountId = 'bankAccountId';
 const ofxACCBankName = 'bankName';
 const ofxACCType = 'accountType';
 const ofxACCNTrans = 'nTrans';
@@ -92,7 +92,8 @@ const ofxACCEndDate = 'endDate';
 const ofxRelationshipTable = 'ofxRelationshipTable';
 const ofxRelaltionshipIndex = 'idxOfxRelationship';
 const ofxRelId = 'id';
-const ofxRelBankId = 'bankId';
+const ofxRelBankAccountId = 'bankAccountId';
+const ofxRelBankName = 'bankName';
 const ofxRelAccountId = 'accountId';
 
 const ofxTransactionsTable = 'ofxTransactionsTable';
@@ -247,32 +248,35 @@ const createTransfersSQL = 'CREATE TABLE IF NOT EXISTS $transfersTable ('
 const createOfxACCSQL = 'CREATE TABLE IF NOT EXISTS $ofxACCTable ('
     ' $ofxACCId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
     ' $ofxACCAccountId INTEGER NOT NULL,'
-    ' $ofxACCBankId TEXT UNIQUE NOT NULL,'
+    ' $ofxACCBankAccountId TEXT NOT NULL,'
     ' $ofxACCBankName TEXT,'
     ' $ofxACCType TEXT NOT NULL,'
     ' $ofxACCNTrans INTEGER NOT NULL,'
     ' $ofxACCStartDate INTEGER NOT NULL,'
-    ' $ofxACCEndDate INTEGER NOT NULL'
+    ' $ofxACCEndDate INTEGER NOT NULL,'
+    ' FOREIGN KEY ($ofxACCAccountId)'
+    '   REFERENCES $accountTable ($accountId),'
+    ' FOREIGN KEY ($ofxACCBankAccountId)'
+    '   REFERENCES $ofxRelationshipTable ($ofxRelBankAccountId)'
     ')';
 
 const createOfxACCBankIndexSQL =
     'CREATE INDEX IF NOT EXISTS $ofxAccountBankIndex'
-    ' ON $ofxACCTable ($ofxACCBankId)';
+    ' ON $ofxACCTable ($ofxACCStartDate)';
 
 const createOfxRelationshipTableSQL =
     'CREATE TABLE IF NOT EXISTS $ofxRelationshipTable ('
     ' $ofxRelId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
-    ' $ofxRelBankId TEXT UNIQUE NOT NULL,'
+    ' $ofxRelBankAccountId TEXT UNIQUE NOT NULL,'
     ' $ofxRelAccountId INTEGER NOT NULL,'
-    ' FOREIGN KEY ($ofxRelBankId)'
-    '   REFERENCES $ofxACCTable ($ofxACCBankId),'
+    ' $ofxRelBankName TEXT,'
     ' FOREIGN KEY ($ofxRelAccountId)'
     '   REFERENCES $accountTable ($accountId)'
     ')';
 
 const createOfxRelationshipIndexSQL =
     'CREATE INDEX IF NOT EXISTS $ofxRelaltionshipIndex'
-    ' ON $ofxRelationshipTable ($ofxRelBankId)';
+    ' ON $ofxRelationshipTable ($ofxRelBankAccountId)';
 
 const createOfxTransactionsSQL =
     'CREATE TABLE IF NOT EXISTS $ofxTransactionsTable ('

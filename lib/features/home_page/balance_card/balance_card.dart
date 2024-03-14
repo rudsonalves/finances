@@ -81,8 +81,7 @@ class _BalanceCardState extends State<BalanceCard> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               MainCardPopupAccount(
-                                currentAccount: currentAccount,
-                                customColors: customColors,
+                                account: currentAccount,
                                 widget: widget,
                               ),
                               Row(

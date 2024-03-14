@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:path/path.dart' as path;
@@ -43,7 +44,18 @@ class _DatabaseRecoverState extends State<DatabaseRecover> {
         PlatformFile selectedFile = result.files.first;
         selectedFileName = selectedFile.name;
 
-        await _backupRepository.restoreBackup(selectedFile.path!);
+        final String path = selectedFile.path!;
+
+        final RegExp dbER =
+            RegExp(r'^.*\/app_database\.db(_bkp_\d{4}_\d{2}_\d{2}_\d{4})?$');
+
+        if (!dbER.hasMatch(path.toLowerCase())) {
+          // FIXME: Show a message!!!
+          log('This is not a database file!');
+          return;
+        }
+
+        await _backupRepository.restoreBackup(path);
 
         setState(() {
           _message = locale.databaseRecoverRetrievedSuccessfully;
@@ -51,8 +63,9 @@ class _DatabaseRecoverState extends State<DatabaseRecover> {
 
         if (!mounted) return;
         Navigator.pop(context);
-
-        await Restart.restartApp(webOrigin: AppRoute.onboard.name);
+        if (!kDebugMode) {
+          await Restart.restartApp(webOrigin: AppRoute.onboard.name);
+        }
       }
     } catch (err) {
       setState(() {

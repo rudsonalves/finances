@@ -57,7 +57,7 @@ class _AccountPageState extends State<AccountPage> {
     );
 
     if (numberOfTrans > 0) {
-      if (!context.mounted) return false;
+      if (!mounted) return false;
       await showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -79,7 +79,7 @@ class _AccountPageState extends State<AccountPage> {
       return false;
     }
 
-    if (!context.mounted) return false;
+    if (!mounted) return false;
     bool delete = await showDialog<bool>(
           context: context,
           builder: (context) => AlertDialog(

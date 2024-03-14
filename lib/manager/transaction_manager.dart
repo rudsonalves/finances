@@ -13,6 +13,9 @@ import 'balance_manager.dart';
 /// transactions within the database. It ensures that balance records are
 /// appropriately updated in response to transaction changes.
 sealed class TransactionManager {
+  static final balanceRepository = locator<AbstractBalanceRepository>();
+  static final transactionRepository = locator<AbstractTransactionRepository>();
+
   /// Private constructor to prevent instantiation.
   TransactionManager._();
 
@@ -41,8 +44,7 @@ sealed class TransactionManager {
     transaction.transBalanceId = balance.balanceId!;
 
     // insert a new transaction in database
-    await locator<AbstractTransactionRepository>()
-        .insertTransaction(transaction);
+    await transactionRepository.insertTransaction(transaction);
 
     // update subsequent balances
     await _addAdjustSubsequentBalances(
@@ -69,8 +71,6 @@ sealed class TransactionManager {
     required double value,
     required int accountId,
   }) async {
-    final balanceRepository = locator<AbstractBalanceRepository>();
-
     // Get all balance before transaction date
     final balancesAfterDate = await balanceRepository.getAllBalanceAfterDate(
       date: date,
@@ -131,8 +131,7 @@ sealed class TransactionManager {
     required double value,
   }) async {
     // Remove transaction by your id
-    final result = await locator<AbstractTransactionRepository>()
-        .deleteTransactionById(id);
+    final result = await transactionRepository.deleteTransactionById(id);
 
     // Update subsequents balances
     await _subtractAdjustSubsequentBalances(
@@ -142,7 +141,7 @@ sealed class TransactionManager {
     );
 
     // Remove balance if there have no more transactions
-    await locator<AbstractBalanceRepository>().deleteEmptyBalance(balanceId);
+    await balanceRepository.deleteEmptyBalance(balanceId);
 
     return result;
   }
@@ -164,8 +163,6 @@ sealed class TransactionManager {
     required double value,
     required int accountId,
   }) async {
-    final balanceRepository = locator<AbstractBalanceRepository>();
-
     // Get all balance before transaction date
     final balancesAfterDate = await balanceRepository.getAllBalanceAfterDate(
       date: date,
@@ -223,8 +220,8 @@ sealed class TransactionManager {
   static Future<int> updateTransaction(TransactionDbModel transaction) async {
     // Obtain original transaction register to avoid editing the transaction
     // value or date.
-    final originTransaction = await locator<AbstractTransactionRepository>()
-        .getTransactionId(transaction.transId!);
+    final originTransaction =
+        await transactionRepository.getTransactionId(transaction.transId!);
 
     if (originTransaction == null) {
       final message =

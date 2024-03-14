@@ -288,7 +288,93 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
+## 2024/03/14 - version 1.1.00+78:
+
+**Enhancements and Adjustments for OFX Integration and System Upgrades**
+
+This commit introduces several optimizations and adjustments across the Finances app, focusing on enhancing the integration with OFX files, improving database and model structures, and updating system configurations for better plugin support in Gradle. Detailed changes are outlined below:
+
+**System and Gradle Plugin Support:**
+
+- **Android Gradle Settings:** Updated `settings.gradle` to support the new method of inserting Gradle plugins, streamlining the build process.
+
+**OFX Model Enhancements:**
+
+- **OFX Account Model Updates:**
+  - Modified the `accountId` attribute to be nullable (`int?`) to accommodate system account IDs.
+  - Renamed `bankId` to `bankAccountId` for clearer distinction and to avoid confusion with similar attributes in the OFX package.
+  - Introduced a `copy(OfxAccountModel ofxAccount)` method to facilitate attribute copying.
+
+- **OFX Relationship Model Refinements:**
+  - Renamed `bankId` to `bankAccountId` for consistency and clarity.
+  - The `accountId` attribute now supports null values (`int?`).
+  - Added `String? bankName` to store the names of financial institutions.
+  - Implemented `toString()` method for enhanced object representation.
+
+**Flutter Standardization and UI Adjustments:**
+
+- Simplified checks for widget mounting state across various pages (`account_page.dart`, `add_account_page.dart`, `add_category_page.dart`) by adopting the standard `if (!mounted)` test.
+
+**Database and Backup Handling:**
+
+- Implemented filename verification in `database_recover.dart` before loading backups into the app.
+- Utilized `if (!kDebugMode)` to prevent app restart during backup restoration in debug mode.
+
+**OFX File Import and UI Components:**
+
+- Completed OFX file reading implementation in `ofx_page.dart`.
+- Fine-tuned the `AccountPopupMenu` class.
+- Finalized the OFX file loading dialog in `ofx_file_dialog.dart`.
+
+**Manager and Repository Enhancements:**
+
+- Introduced a manager for `OfxRelationship` (`ofx_relationship_manager.dart`) with methods for addition, retrieval by bank account ID, and updates.
+- Added a repository for `OfxRelationship` (`ofx_relationship_repository.dart`) with comprehensive methods for insert, update, query, and delete operations based on bank account ID.
+
+**Database and Code Organization:**
+
+- Conducted further adjustments to the database schema and migration scripts, ensuring data integrity and smooth transitions between database versions.
+- Reorganized code within OFX account and relationship stores (`ofx_account_store.dart`, `ofx_relationship_store.dart`) for better clarity and maintenance.
+
+**Implications:**
+
+These changes mark significant progress in integrating OFX file support into the Finances app, enhancing the user's ability to import and manage financial data seamlessly. By refining model structures, optimizing database management, and aligning with Flutter standards, this commit ensures a more robust, efficient, and user-friendly application.
+
+
 ## 2024/03/13 - version 1.1.00+77:
+
+**Introduction of OFX Integration and Database Enhancements**
+
+This update introduces comprehensive enhancements focused on integrating OFX file import functionality into the Finances app, alongside optimizations and simplifications in the existing database models and structures. Key highlights include the addition of new models to manage OFX data, simplification of model properties, and the foundation for the OFX page with state management.
+
+**Major Changes:**
+
+- **UI and Routing Updates:**
+  - Added routing for a new `OfxPage` in the app's routing configurations, enhancing navigation capabilities.
+
+- **Model Optimizations:**
+  - Simplified property assignments in several models (`account_db_model.dart`, `balance_db_model.dart`, `category_db_model.dart`, `icons_model.dart`, `user_model.dart`) for clearer and more concise code.
+  - Introduced `ExtendedDate.fromDateTime(DateTime date)` factory method in `extends_date.dart` for improved date handling.
+  - New models `OfxAccountModel`, `OfxRelationshipModel`, and `OfxTransactionModel` have been added to store and manage imported OFX file information, relationships between OFX accounts and app accounts, and transaction templates for imported transactions, respectively.
+
+- **OFX Integration and Transaction Importing:**
+  - Started the creation of the `OfxPage` along with its controller and state management to facilitate the OFX file import process.
+  - Copied transaction page, controller, and state structures to be adapted for handling OFX-imported transaction entries.
+
+- **Widget Additions for OFX Information Display:**
+  - Added widgets like `OfxInfoButton`, `OfxInformation`, `SimpleEditDialog`, and `StatefulDialog` for displaying OFX file information and facilitating user interaction with imported data.
+
+- **Database and Repository Enhancements:**
+  - Introduced a new `OfxAccountManager` for managing OFX account additions.
+  - Established repositories for managing `OfxAccount`, `OfxRelationship`, and `OfxTransaction` data.
+  - Updated documentation and added SQL constants for creating new tables and indexes related to OFX data storage, including necessary migrations for database schema updates.
+
+- **Store Layer Extensions:**
+  - Expanded the store layer with the addition of `OfxAccountStore`, `OfxRelationshipStore`, and `OfxTransactionsStore` to handle data operations related to the newly introduced OFX functionality.
+
+### Forward-Looking Statements:
+
+This update not only enhances the app's capabilities with OFX file import functionality but also streamlines existing data models and expands the database schema to accommodate new financial data integration. Future plans include further refining these features, externalizing the OFX package, and continuing to optimize the app's data handling and user experience.
 
 ## 2024/03/07 - version 1.1.00+76:
 

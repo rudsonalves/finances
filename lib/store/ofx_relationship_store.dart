@@ -99,7 +99,7 @@ abstract class OfxRalationshipStorer {
   /// Use this method to retrieve an OFX relationship by its associated bank ID.
   /// This can be useful when needing to reference specific relationships based
   /// on banking information.
-  Future<Map<String, dynamic>?> queryBankId(String bankId);
+  Future<Map<String, dynamic>?> queryBanckAccountId(String bankId);
 
   /// Deletes an OFX relationship by ID from the database.
   ///
@@ -166,17 +166,19 @@ class OfxRalationshipStore implements OfxRalationshipStorer {
   }
 
   @override
-  Future<Map<String, dynamic>?> queryBankId(String bankId) async {
+  Future<Map<String, dynamic>?> queryBanckAccountId(
+      String bankAccountId) async {
     try {
       final database = await _databaseManager.database;
       List<Map<String, dynamic>> result = await database.query(
         ofxRelationshipTable,
-        where: '$ofxRelBankId = ?',
-        whereArgs: [bankId],
+        where: '$ofxRelBankAccountId = ?',
+        whereArgs: [bankAccountId],
       );
+      if (result.isEmpty) return null;
       return result.first;
     } catch (err) {
-      final message = 'OfxRalationshipStore.queryBankId: $err';
+      final message = 'OfxRalationshipStore.queryBanckAccountId: $err';
       log(message);
       throw Exception(message);
     }

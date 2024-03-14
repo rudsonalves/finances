@@ -94,7 +94,7 @@ abstract class AbtractOfxRelationshipRepository {
   /// details of the OFX relationship. If the method returns `null`, it
   /// indicates that no relationship associated with the provided bank ID exists
   /// in the repository.
-  Future<OfxRelationshipModel?> queryBankId(String bankId);
+  Future<OfxRelationshipModel?> queryBankAccountId(String bankId);
 
   /// Deletes an OFX relationship by its ID from the database.
   ///

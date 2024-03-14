@@ -90,7 +90,7 @@ abstract class OfxAccountStorer {
   /// the database. The method only returns the first matching account; in cases
   /// where multiple accounts may share the same bank ID, additional logic may
   /// be required to handle such scenarios.
-  Future<Map<String, dynamic>?> queryBankIdStartDate(
+  Future<Map<String, dynamic>?> queryBankAccountIdStartDate(
     String bankId,
     int startDate,
   );
@@ -160,17 +160,18 @@ class OfxAccountStore implements OfxAccountStorer {
   }
 
   @override
-  Future<Map<String, dynamic>?> queryBankIdStartDate(
-    String bankId,
+  Future<Map<String, dynamic>?> queryBankAccountIdStartDate(
+    String bankAccountId,
     int startDate,
   ) async {
     try {
       final database = await _databaseManager.database;
       List<Map<String, dynamic>> result = await database.query(
-        ofxTransactionsTable,
-        where: '$ofxACCBankId = ? AND $ofxACCStartDate = ?',
-        whereArgs: [bankId, startDate],
+        ofxACCTable,
+        where: '$ofxACCStartDate = ? AND $ofxACCBankAccountId = ?',
+        whereArgs: [startDate, bankAccountId],
       );
+      if (result.isEmpty) return null;
       return result.first;
     } catch (err) {
       final message = 'OfxTransactionStore.queryOfxAccountBankId: $err';

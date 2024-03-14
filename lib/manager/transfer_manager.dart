@@ -41,6 +41,8 @@ import 'transaction_manager.dart';
 /// This approach ensures that transfer-related operations are handled in a
 /// consistent manner, providing a clear and concise API for managing transfers.
 sealed class TransferManager {
+  static final repository = locator<AbstractTransferRepository>();
+
   /// Private constructor to prevent instantiation.
   TransferManager._();
 
@@ -101,7 +103,7 @@ sealed class TransferManager {
       transfer.transferTransId1 = transDestiny.transId;
       transfer.transferAccount0 = transOrigin.transAccountId;
       transfer.transferAccount1 = transDestiny.transAccountId;
-      await locator<AbstractTransferRepository>().updateTransfer(transfer);
+      await repository.updateTransfer(transfer);
     } catch (err) {
       log('TransferManager.addTranfer: $err');
     }
@@ -127,8 +129,7 @@ sealed class TransferManager {
     final transfer = TransferDbModel();
 
     // Write the transfer in the store to receive a transverId
-    final id =
-        await locator<AbstractTransferRepository>().insertTransfer(transfer);
+    final id = await repository.insertTransfer(transfer);
 
     // Create a Exception if id <= 0.
     if (id <= 0) {
@@ -209,11 +210,9 @@ sealed class TransferManager {
   /// maintain database integrity and consistency.
   static Future<int> removeTransfer(TransactionDbModel transOrigin) async {
     try {
-      final transferRepository = locator<AbstractTransferRepository>();
-
       // Get transfer by id transOrigin.transTransferId
-      final transfer = await transferRepository
-          .getTransferById(transOrigin.transTransferId!);
+      final transfer =
+          await repository.getTransferById(transOrigin.transTransferId!);
       if (transfer == null) {
         throw Exception(
             'transfer id ${transOrigin.transTransferId!} not found');
@@ -232,7 +231,7 @@ sealed class TransferManager {
       }
 
       // Reset transfer references to transOrigin and transDestiny transactions
-      await transferRepository.setNullTransferId(transfer.transferId!);
+      await repository.setNullTransferId(transfer.transferId!);
 
       // Remove transOrigin and transDestiny transactions by id
       var result = await TransactionManager.removeTransactionByValues(
@@ -297,8 +296,7 @@ sealed class TransferManager {
   /// Usage is strictly internal within `TransferManager` as part of the
   /// transfer removal process.
   static Future<int> _removeTransferById(int transferId) async {
-    final result =
-        await locator<AbstractTransferRepository>().deleteTransfer(transferId);
+    final result = await repository.deleteTransfer(transferId);
     if (result != 1) {
       final message = 'TransferRepository._removeTransferById: return $result';
       log(message);
@@ -351,11 +349,10 @@ sealed class TransferManager {
     required int accountDestinyId,
   }) async {
     try {
-      final transferRepository = locator<AbstractTransferRepository>();
       final transactionRepository = locator<AbstractTransactionRepository>();
 
       // get transfer
-      final transfer = await transferRepository.getTransferById(
+      final transfer = await repository.getTransferById(
         newTransaction.transTransferId!,
       );
       if (transfer == null) {
@@ -367,7 +364,7 @@ sealed class TransferManager {
           .getTransactionId(transfer.transferTransId0!);
 
       // Reset transfer references to transOrigin and transDestiny transactions
-      await transferRepository.setNullTransferId(transfer.transferId!);
+      await repository.setNullTransferId(transfer.transferId!);
 
       // remove origin transaction by id
       final result = await removeTransfer(transOrigin!);
@@ -398,7 +395,7 @@ sealed class TransferManager {
   /// This method logs a message if the transfer record is not found.
   static Future<TransferDbModel?> getTransferById(int id) async {
     try {
-      return await locator<AbstractTransferRepository>().getTransferById(id);
+      return await repository.getTransferById(id);
     } catch (err) {
       log('TransferRepository.getTransferById: $err');
       return null;

@@ -3,7 +3,7 @@ description: "financial control app"
 
 publish_to: 'none' 
 
-version: 1.1.00+77
+version: 1.1.00+78
 
 environment:
   sdk: '>=3.1.5 <4.0.0' 
@@ -21,7 +21,7 @@ dependencies:
   path: ^1.8.3
   intl: ^0.18.1
   dynamic_color: ^1.6.8
-  flutter_localization: ^0.1.14
+  flutter_localization: ^0.2.0
   image_picker: ^1.0.4
   flutter_colorpicker: ^1.0.3
   file_picker: ^6.0.0

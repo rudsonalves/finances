@@ -78,7 +78,7 @@ abstract class AbstractOfxAccountRepository {
   /// the database. The method only returns the first matching account; in cases
   /// where multiple accounts may share the same bank ID, additional logic may
   /// be required to handle such scenarios.
-  Future<OfxAccountModel?> queryBankIdStartDate(
+  Future<OfxAccountModel?> queryBankAccountIdStartDate(
     String bankId,
     ExtendedDate date,
   );

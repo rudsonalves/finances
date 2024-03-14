@@ -198,26 +198,30 @@ class DatabaseMigrations {
       'BEGIN TRANSACTION',
       'CREATE TABLE IF NOT EXISTS $ofxACCTable ('
           ' $ofxACCId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
-          ' $ofxACCBankId TEXT UNIQUE NOT NULL,'
           ' $ofxACCAccountId INTEGER NOT NULL,'
+          ' $ofxACCBankAccountId TEXT NOT NULL,'
+          ' $ofxACCBankName TEXT,'
           ' $ofxACCType TEXT NOT NULL,'
           ' $ofxACCNTrans INTEGER NOT NULL,'
           ' $ofxACCStartDate INTEGER NOT NULL,'
-          ' $ofxACCEndDate INTEGER NOT NULL'
+          ' $ofxACCEndDate INTEGER NOT NULL,'
+          ' FOREIGN KEY ($ofxACCAccountId)'
+          '   REFERENCES $accountTable ($accountId),'
+          ' FOREIGN KEY ($ofxACCBankAccountId)'
+          '   REFERENCES $ofxRelationshipTable ($ofxRelBankAccountId)'
           ')',
       'CREATE INDEX IF NOT EXISTS $ofxAccountBankIndex'
-          ' ON $ofxACCTable ($ofxACCBankId)',
+          ' ON $ofxACCTable ($ofxACCStartDate)',
       'CREATE TABLE IF NOT EXISTS $ofxRelationshipTable ('
           ' $ofxRelId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
-          ' $ofxRelBankId TEXT UNIQUE NOT NULL,'
+          ' $ofxRelBankAccountId TEXT UNIQUE NOT NULL,'
           ' $ofxRelAccountId INTEGER NOT NULL,'
-          ' FOREIGN KEY ($ofxRelBankId)'
-          '   REFERENCES $ofxACCTable ($ofxACCBankId),'
+          ' $ofxRelBankName TEXT,'
           ' FOREIGN KEY ($ofxRelAccountId)'
           '   REFERENCES $accountTable ($accountId)'
           ')',
       'CREATE INDEX IF NOT EXISTS $ofxRelaltionshipIndex'
-          ' ON $ofxRelationshipTable ($ofxRelBankId)',
+          ' ON $ofxRelationshipTable ($ofxRelBankAccountId)',
       'CREATE TABLE IF NOT EXISTS $ofxTransactionsTable ('
           ' $ofxTransId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
           ' $ofxTransMemo TEXT NOT NULL,'

@@ -6,8 +6,8 @@ import 'package:finances/packages/ofx/lib/ofx.dart';
 
 class OfxAccountModel {
   int? id;
-  String accountId;
-  String bankId;
+  int? accountId;
+  String bankAccountId;
   String? bankName;
   String accountType;
   int nTrans;
@@ -16,8 +16,8 @@ class OfxAccountModel {
 
   OfxAccountModel({
     this.id,
-    required this.accountId,
-    required this.bankId,
+    this.accountId,
+    required this.bankAccountId,
     this.bankName,
     required this.accountType,
     required this.nTrans,
@@ -29,7 +29,7 @@ class OfxAccountModel {
     return <String, dynamic>{
       'id': id,
       'accountId': accountId,
-      'bankId': bankId,
+      'bankAccountId': bankAccountId,
       'bankName': bankName,
       'accountType': accountType,
       'nTrans': nTrans,
@@ -38,10 +38,21 @@ class OfxAccountModel {
     };
   }
 
-  factory OfxAccountModel.fromOfx(Ofx ofx) {
+  void copy(OfxAccountModel ofxAccount) {
+    id = ofxAccount.id;
+    accountId = ofxAccount.accountId;
+    bankAccountId = ofxAccount.bankAccountId;
+    bankName = ofxAccount.bankName;
+    accountType = ofxAccount.accountType;
+    nTrans = ofxAccount.nTrans;
+    startDate = ofxAccount.startDate;
+    endDate = ofxAccount.endDate;
+  }
+
+  factory OfxAccountModel.fromOfx(Ofx ofx, [int? accountId]) {
     return OfxAccountModel(
-      accountId: ofx.accountID,
-      bankId: ofx.bankID,
+      accountId: accountId,
+      bankAccountId: ofx.accountID,
       bankName: ofx.financialInstitution.organization,
       accountType: ofx.accountType,
       nTrans: ofx.transactions.length,
@@ -53,8 +64,8 @@ class OfxAccountModel {
   factory OfxAccountModel.fromMap(Map<String, dynamic> map) {
     return OfxAccountModel(
       id: map['id'] as int?,
-      accountId: map['accountId'] as String,
-      bankId: map['bankId'] as String,
+      accountId: map['accountId'] as int,
+      bankAccountId: map['bankAccountId'] as String,
       bankName: map['bankName'] as String?,
       accountType: map['accountType'] as String,
       nTrans: map['nTrans'] as int,
@@ -73,7 +84,7 @@ class OfxAccountModel {
   String toString() {
     return 'OfxAccountModel(id: $id,'
         ' accountId: $accountId,'
-        ' bankId: $bankId,'
+        ' bankAccountId: $bankAccountId,'
         ' bankName: $bankName,'
         ' accountType: $accountType,'
         ' nTrans: $nTrans,'

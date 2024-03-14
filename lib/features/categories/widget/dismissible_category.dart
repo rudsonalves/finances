@@ -179,10 +179,8 @@ class _DismissibleCategoryState extends State<DismissibleCategory> {
             }
 
             if (!mounted) return false;
-            bool? result = await removeCategoryDialog(
-              context,
-              category.categoryName,
-            );
+            bool? result =
+                await removeCategoryDialog(context, category.categoryName);
 
             if (result == true) {
               await widget.controller.removeCategory(category);
