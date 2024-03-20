@@ -95,6 +95,38 @@ abstract class OfxAccountStorer {
     int startDate,
   );
 
+  /// Queries a list of all OFX accounts from the database, optionally limited
+  /// by a specified count.
+  ///
+  /// This method retrieves a list of OFX accounts ordered by the start date,
+  /// allowing an optional limit to specify the maximum number of records to
+  /// return. If no limit is provided, a default of 50 records is used. This
+  /// method is useful for obtaining a quick snapshot of OFX accounts without
+  /// needing to retrieve the entire dataset, which could be large.
+  ///
+  /// Parameters:
+  /// - `limit`: An optional integer specifying the maximum number of records to
+  ///   return. If null, defaults to 50.
+  ///
+  /// Returns:
+  /// - A list of maps, each representing an OFX account's data.
+  ///
+  /// Throws:
+  /// - An exception if the query fails due to an error in accessing the
+  ///   database.
+  ///
+  /// Usage:
+  /// This method can be called to display an overview of OFX accounts, such as
+  /// in a user interface where only a limited number of items are shown at a
+  /// time.
+  ///
+  /// Example:
+  /// ```dart
+  /// List<Map<String, dynamic>?> ofxAccounts = await repository.queryAll(20);
+  /// ```
+
+  Future<List<Map<String, dynamic>?>> queryAll(int? limit);
+
   /// Deletes an OFX account by its ID.
   ///
   /// This method removes an OFX account from the `ofxTransactionsTable` based
@@ -146,7 +178,7 @@ class OfxAccountStore implements OfxAccountStorer {
       final database = await _databaseManager.database;
       int id = map[ofxACCId];
       int result = await database.update(
-        ofxTransactionsTable,
+        ofxACCTable,
         map,
         where: '$ofxACCId = ?',
         whereArgs: [id],
@@ -181,11 +213,28 @@ class OfxAccountStore implements OfxAccountStorer {
   }
 
   @override
+  Future<List<Map<String, dynamic>?>> queryAll(int? limit) async {
+    try {
+      final databese = await _databaseManager.database;
+      final result = await databese.query(
+        ofxACCTable,
+        orderBy: '$ofxACCStartDate DESC',
+        limit: limit ?? 50,
+      );
+      return result;
+    } catch (err) {
+      final message = 'OfxTransactionStore.queryAll: $err';
+      log(message);
+      throw Exception(message);
+    }
+  }
+
+  @override
   Future<int> deleteId(int id) async {
     try {
       final database = await _databaseManager.database;
       int result = await database.delete(
-        ofxTransactionsTable,
+        ofxACCTable,
         where: '$ofxACCId = ?',
         whereArgs: [id],
       );

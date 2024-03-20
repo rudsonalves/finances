@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:sqflite/sqflite.dart';
 
 import 'constants.dart';
@@ -222,7 +224,7 @@ class DatabaseMigrations {
           ')',
       'CREATE INDEX IF NOT EXISTS $ofxRelaltionshipIndex'
           ' ON $ofxRelationshipTable ($ofxRelBankAccountId)',
-      'CREATE TABLE IF NOT EXISTS $ofxTransactionsTable ('
+      'CREATE TABLE IF NOT EXISTS $ofxTransTemplateTable ('
           ' $ofxTransId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
           ' $ofxTransMemo TEXT NOT NULL,'
           ' $ofxTransAccountId INTEGER NOT NULL,'
@@ -237,9 +239,9 @@ class DatabaseMigrations {
           '   REFERENCES $accountTable ($accountId)'
           ')',
       'CREATE INDEX IF NOT EXISTS $ofxTransMemoIndex'
-          ' ON $ofxTransactionsTable ($ofxTransMemo)',
+          ' ON $ofxTransTemplateTable ($ofxTransMemo)',
       'CREATE INDEX IF NOT EXISTS $ofxTransAccountIndex'
-          ' ON $ofxTransactionsTable ($ofxTransAccountId)',
+          ' ON $ofxTransTemplateTable ($ofxTransAccountId)',
       'CREATE TABLE IF NOT EXISTS ${transactionsTable}_new ('
           ' $transId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
           ' $transBalanceId INTEGER NOT NULL,'
@@ -274,6 +276,28 @@ class DatabaseMigrations {
           '   $transDate FROM $transactionsTable',
       'DROP TABLE $transactionsTable',
       'ALTER TABLE ${transactionsTable}_new RENAME TO $transactionsTable',
+      'CREATE INDEX IF NOT EXISTS $transactionsDateIndex'
+          ' ON $transactionsTable ($transDate)',
+      'CREATE INDEX IF NOT EXISTS $transactionsCategoryIndex'
+          ' ON $transactionsTable ($transCategoryId)',
+      'CREATE TRIGGER IF NOT EXISTS $triggerAfterInsertTransaction'
+          ' AFTER INSERT ON $transactionsTable'
+          ' FOR EACH ROW'
+          ' BEGIN'
+          '   UPDATE $balanceTable'
+          '   SET $balanceClose = $balanceClose + NEW.$transValue,'
+          '       $balanceTransCount = IFNULL($balanceTransCount, 0) + 1'
+          '   WHERE $balanceId = NEW.$transBalanceId;'
+          ' END',
+      'CREATE TRIGGER IF NOT EXISTS $triggerAfterDeleteTransaction'
+          ' AFTER DELETE ON $transactionsTable'
+          ' FOR EACH ROW'
+          ' BEGIN'
+          '   UPDATE $balanceTable'
+          '   SET $balanceClose = $balanceClose - OLD.$transValue,'
+          '       $balanceTransCount = IFNULL($balanceTransCount, 0) - 1'
+          '   WHERE $balanceId = OLD.$transBalanceId;'
+          ' END',
       'COMMIT',
     ],
   };
@@ -295,16 +319,18 @@ class DatabaseMigrations {
     required int targetVersion,
   }) async {
     await db.execute('PRAGMA foreign_keys=off');
-    final batch = db.batch();
     for (var version = currentVersion + 1;
         version <= targetVersion;
         version++) {
+      log('Database migrating to version: $version');
+      final batch = db.batch();
       final scripts = migrationScripts[version];
       if (scripts != null) {
         for (final script in scripts) {
           batch.execute(script);
         }
       }
+      await batch.commit(noResult: true);
 
       if (version == 1008) {
         // Remove empty balances
@@ -315,7 +341,6 @@ class DatabaseMigrations {
         );
       }
     }
-    await batch.commit(noResult: true);
     await db.execute('PRAGMA foreign_keys=on');
   }
 }

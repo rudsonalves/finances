@@ -33,9 +33,9 @@ sealed class TransactionManager {
   /// The method adjusts the opening and closing balances of all subsequent
   /// balance records after the transaction date to account for the transaction
   /// value.
-  static Future<void> addNewTransaction(TransactionDbModel transaction) async {
+  static Future<void> addNew(TransactionDbModel transaction) async {
     // Get or create a balance in the transaction date
-    final balance = await BalanceManager.returnBalanceInDate(
+    final balance = await BalanceManager.getBalanceInDate(
       date: transaction.transDate,
       accountId: transaction.transAccountId,
     );
@@ -44,7 +44,7 @@ sealed class TransactionManager {
     transaction.transBalanceId = balance.balanceId!;
 
     // insert a new transaction in database
-    await transactionRepository.insertTransaction(transaction);
+    await transactionRepository.insert(transaction);
 
     // update subsequent balances
     await _addAdjustSubsequentBalances(
@@ -72,7 +72,7 @@ sealed class TransactionManager {
     required int accountId,
   }) async {
     // Get all balance before transaction date
-    final balancesAfterDate = await balanceRepository.getAllBalanceAfterDate(
+    final balancesAfterDate = await balanceRepository.getAllAfterDate(
       date: date,
       accountId: accountId,
     );
@@ -83,7 +83,7 @@ sealed class TransactionManager {
       balance.balanceOpen += value;
       balance.balanceClose += value;
 
-      await balanceRepository.updateBalance(balance);
+      await balanceRepository.update(balance);
     }
   }
 
@@ -99,8 +99,8 @@ sealed class TransactionManager {
   /// The method adjusts the opening and closing balances of all subsequent
   /// balance records after the transaction date to account for the removal of
   /// the transaction value.
-  static Future<void> removeTransaction(TransactionDbModel transaction) async {
-    await removeTransactionByValues(
+  static Future<void> remove(TransactionDbModel transaction) async {
+    await removeByValues(
       id: transaction.transId!,
       balanceId: transaction.transBalanceId!,
       accountId: transaction.transAccountId,
@@ -123,7 +123,7 @@ sealed class TransactionManager {
   /// The method adjusts the opening and closing balances of all subsequent
   /// balance records after the transaction date to account for the removal of
   /// the transaction value.
-  static Future<int> removeTransactionByValues({
+  static Future<int> removeByValues({
     required int id,
     required int balanceId,
     required int accountId,
@@ -131,7 +131,7 @@ sealed class TransactionManager {
     required double value,
   }) async {
     // Remove transaction by your id
-    final result = await transactionRepository.deleteTransactionById(id);
+    final result = await transactionRepository.deleteById(id);
 
     // Update subsequents balances
     await _subtractAdjustSubsequentBalances(
@@ -164,7 +164,7 @@ sealed class TransactionManager {
     required int accountId,
   }) async {
     // Get all balance before transaction date
-    final balancesAfterDate = await balanceRepository.getAllBalanceAfterDate(
+    final balancesAfterDate = await balanceRepository.getAllAfterDate(
       date: date,
       accountId: accountId,
     );
@@ -175,7 +175,7 @@ sealed class TransactionManager {
       balance.balanceOpen -= value;
       balance.balanceClose -= value;
 
-      await balanceRepository.updateBalance(balance);
+      await balanceRepository.update(balance);
     }
   }
 
@@ -221,7 +221,7 @@ sealed class TransactionManager {
     // Obtain original transaction register to avoid editing the transaction
     // value or date.
     final originTransaction =
-        await transactionRepository.getTransactionId(transaction.transId!);
+        await transactionRepository.getId(transaction.transId!);
 
     if (originTransaction == null) {
       final message =
@@ -231,7 +231,7 @@ sealed class TransactionManager {
     }
 
     // Pass the value and date from original transaction
-    await removeTransactionByValues(
+    await removeByValues(
       id: originTransaction.transId!,
       balanceId: originTransaction.transBalanceId!,
       accountId: originTransaction.transAccountId,
@@ -240,7 +240,7 @@ sealed class TransactionManager {
     );
 
     transaction.transId = null;
-    await addNewTransaction(transaction);
+    await addNew(transaction);
 
     return transaction.transId!;
   }

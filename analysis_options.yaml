@@ -2,5 +2,5 @@ include: package:flutter_lints/flutter.yaml
 
 linter:
   rules:
-    # - unawaited_futures
+    # - unawaited_futures: true
     - await_only_futures

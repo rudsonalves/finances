@@ -5,7 +5,7 @@ import '../../../features/account/account_page.dart';
 import '../../../features/categories/categories_page.dart';
 import '../../../features/home_page/home_page.dart';
 import '../../../features/home_page_view/home_page_view.dart';
-import '../../../features/import_ofx/ofx_page.dart';
+import '../../../features/ofx_page/ofx_page.dart';
 import '../../../features/onboarding/onboarding_page.dart';
 import '../../../features/settings/settings_page.dart';
 import '../../../features/sign_in/sign_in_page.dart';

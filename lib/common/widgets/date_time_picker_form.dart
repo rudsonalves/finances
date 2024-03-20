@@ -7,12 +7,14 @@ class DateTimePickerForm extends StatefulWidget {
   final TextEditingController controller;
   final String labelText;
   final String? Function(String?)? validator;
+  final bool enable;
 
   const DateTimePickerForm({
     super.key,
     required this.controller,
     required this.labelText,
     this.validator,
+    this.enable = true,
   });
 
   @override
@@ -45,32 +47,34 @@ class _DateTimePickerFormState extends State<DateTimePickerForm> {
     return '$hour:$minute';
   }
 
+  Future<void> _onTapShowDatePicker() async {
+    await showDatePicker(
+      context: context,
+      firstDate: DateTime(2005),
+      initialDate: date,
+      lastDate: DateTime(2040),
+    ).then((selectDate) async {
+      if (selectDate != null) date = selectDate;
+
+      final TimeOfDay? selectTime = await showTimePicker(
+        context: context,
+        initialTime: time,
+      );
+
+      if (selectTime != null) time = selectTime;
+    });
+
+    setState(() {
+      widget.controller.text = formatDate(date, time);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 5, bottom: 10),
       child: InkWell(
-        onTap: () async {
-          await showDatePicker(
-            context: context,
-            firstDate: DateTime(2005),
-            initialDate: date,
-            lastDate: DateTime(2040),
-          ).then((selectDate) async {
-            if (selectDate != null) date = selectDate;
-
-            final TimeOfDay? selectTime = await showTimePicker(
-              context: context,
-              initialTime: time,
-            );
-
-            if (selectTime != null) time = selectTime;
-          });
-
-          setState(() {
-            widget.controller.text = formatDate(date, time);
-          });
-        },
+        onTap: widget.enable ? _onTapShowDatePicker : null,
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 18),
           decoration: BoxDecoration(

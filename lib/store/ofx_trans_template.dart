@@ -12,7 +12,7 @@ import 'database_manager.dart';
 /// and delete OFX transactions from the `ofxTransactionsTable`. These
 /// transactions represent financial activities fetched from an OFX (Open
 /// Financial Exchange) file or service.
-abstract class OfxTransactionStorer {
+abstract class OfxTransTemplateStorer {
   /// Inserts a new OFX transaction into the database.
   ///
   /// This method takes a map of OFX transaction data and inserts it into
@@ -21,7 +21,7 @@ abstract class OfxTransactionStorer {
   /// insertion, it logs the error and throws an exception.
   ///
   /// Parameters:
-  /// - `ofxTransactionMap`: A map containing the key-value pairs of OFX
+  /// - `map`: A map containing the key-value pairs of OFX
   ///   transaction data to be inserted.
   ///
   /// Returns:
@@ -45,7 +45,7 @@ abstract class OfxTransactionStorer {
   /// the update, it logs the error and throws an exception.
   ///
   /// Parameters:
-  /// - `ofxTransactionMap`: A map containing the key-value pairs of OFX
+  /// - `map`: A map containing the key-value pairs of OFX
   ///   transaction data to be updated. Must include the transaction ID.
   ///
   /// Returns:
@@ -108,7 +108,7 @@ abstract class OfxTransactionStorer {
   Future<int> deleteId(int id);
 }
 
-class OfxTransactionStore implements OfxTransactionStorer {
+class OfxTransTemplateStore implements OfxTransTemplateStorer {
   final _databaseManager = locator<DatabaseManager>();
 
   @override
@@ -117,7 +117,7 @@ class OfxTransactionStore implements OfxTransactionStorer {
 
     try {
       int result = await database.insert(
-        ofxTransactionsTable,
+        ofxTransTemplateTable,
         ofxTransactionMap,
         conflictAlgorithm: ConflictAlgorithm.abort,
       );
@@ -136,7 +136,7 @@ class OfxTransactionStore implements OfxTransactionStorer {
     try {
       int id = ofxTransactionMap[ofxTransId];
       int result = await database.update(
-        ofxTransactionsTable,
+        ofxTransTemplateTable,
         ofxTransactionMap,
         where: '$ofxTransId = ?',
         whereArgs: [id],
@@ -158,11 +158,12 @@ class OfxTransactionStore implements OfxTransactionStorer {
 
     try {
       List<Map<String, dynamic>> result = await database.query(
-        ofxTransactionsTable,
+        ofxTransTemplateTable,
         where: '$ofxTransMemo = ? AND $ofxTransAccountId = ?',
         whereArgs: [memo, accountId],
       );
 
+      if (result.isEmpty) return null;
       return result.first;
     } catch (err) {
       final message = 'OfxTransactionStore.queryMemo: $err';
@@ -177,7 +178,7 @@ class OfxTransactionStore implements OfxTransactionStorer {
 
     try {
       int result = await database.delete(
-        ofxTransactionsTable,
+        ofxTransTemplateTable,
         where: '$ofxTransId = ?',
         whereArgs: [id],
       );

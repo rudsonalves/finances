@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../common/constants/themes/app_text_styles.dart';
 import '../../../common/models/account_db_model.dart';
+import '../../../common/widgets/account_row.dart';
 import '../../../locator.dart';
 import '../../../repositories/account/abstract_account_repository.dart';
 
@@ -87,13 +88,7 @@ class _AccountPopupMenuState extends State<AccountPopupMenu> {
                   return accountList.map((account) {
                     return PopupMenuItem(
                       value: account.accountId,
-                      child: Row(
-                        children: [
-                          account.accountIcon.iconWidget(size: 16),
-                          const SizedBox(width: 8),
-                          Text(account.accountName),
-                        ],
-                      ),
+                      child: AccountRow(account: account),
                     );
                   }).toList();
                 },

@@ -11,6 +11,7 @@ import 'package:restart_app/restart_app.dart';
 import '../../common/constants/routes/app_route.dart';
 import '../../common/constants/themes/app_button_styles.dart';
 import '../../common/constants/themes/app_text_styles.dart';
+import '../../common/widgets/widget_alert_dialog.dart';
 import '../../repositories/backup/abstract_backup_repository.dart';
 import '../../repositories/backup/backup_repository.dart';
 
@@ -50,8 +51,7 @@ class _DatabaseRecoverState extends State<DatabaseRecover> {
             RegExp(r'^.*\/app_database\.db(_bkp_\d{4}_\d{2}_\d{2}_\d{4})?$');
 
         if (!dbER.hasMatch(path.toLowerCase())) {
-          // FIXME: Show a message!!!
-          log('This is not a database file!');
+          await _showNotADatabaseFileMessage();
           return;
         }
 
@@ -74,6 +74,15 @@ class _DatabaseRecoverState extends State<DatabaseRecover> {
 
       Logger().e('Error: $err');
     }
+  }
+
+  Future<void> _showNotADatabaseFileMessage() async {
+    if (!mounted) return;
+    await singleMessageAlertDialog(
+      context,
+      title: 'Database Recovery',
+      message: 'This is not a database file!',
+    );
   }
 
   Future<void> _backupFunction(AppLocalizations locale) async {

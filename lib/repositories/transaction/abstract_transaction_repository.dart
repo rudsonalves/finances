@@ -20,7 +20,7 @@ abstract class AbstractTransactionRepository {
   /// Note:
   ///   Utilizing this method supports detailed financial analysis and auditing
   ///   by providing a complete view of transactions for a specific balance.
-  Future<List<TransactionDbModel>> getTransactionForBalanceId(int balanceId);
+  Future<List<TransactionDbModel>> getForBalanceId(int balanceId);
 
   /// Fetches a single transaction by its ID.
   ///
@@ -38,8 +38,11 @@ abstract class AbstractTransactionRepository {
   /// Note:
   ///   This method is essential for operations that require interaction with
   ///   individual transaction records.
-  Future<TransactionDbModel?> getTransactionId(int id);
-  Future<int> insertTransaction(TransactionDbModel transaction);
+  Future<TransactionDbModel?> getId(int id);
+
+  Future<int> insert(TransactionDbModel transaction);
+
+  Future<List<TransactionDbModel>> queryFromOfxId(int ofxId);
 
   /// Deletes a transaction from the database and adjusts subsequent balance
   /// records.
@@ -59,7 +62,7 @@ abstract class AbstractTransactionRepository {
   /// Note:
   ///   This method also triggers adjustments to subsequent balances to maintain
   ///   accurate financial records.
-  Future<int> deleteTransactionById(int transId);
+  Future<int> deleteById(int transId);
   // Future<int> deleteTransaction(TransactionDbModel transaction);
 
   /// Calculates the income and expense balances for a given card within a specified month.
@@ -117,7 +120,7 @@ abstract class AbstractTransactionRepository {
   ///   This method is particularly useful for generating reports or summaries
   ///   of recent transactions for a specific account up to a certain date,
   ///   facilitating financial analysis and record-keeping for individual accounts.
-  Future<List<TransactionDbModel>> getNTransactionsFromDate({
+  Future<List<TransactionDbModel>> getNFromDate({
     required ExtendedDate startDate,
     required int accountId,
     required int maxTransactions,
@@ -159,7 +162,7 @@ abstract class AbstractTransactionRepository {
   ///
   /// This method is useful for toggling the active/inactive status of transactions,
   /// allowing for enhanced control over transaction records.
-  Future<int> updateTransactionStatus({
+  Future<int> updateStatus({
     required int transId,
     required TransStatus status,
   });

@@ -83,6 +83,27 @@ abstract class AbstractOfxAccountRepository {
     ExtendedDate date,
   );
 
+  /// Queries a list of all OFX accounts from the database, optionally limited
+  /// by a specified count.
+  ///
+  /// This method retrieves a list of OFX accounts ordered by the start date,
+  /// allowing an optional limit to specify the maximum number of records to
+  /// return. If no limit is provided, a default of 50 records is used. This
+  /// method is useful for obtaining a quick snapshot of OFX accounts without
+  /// needing to retrieve the entire dataset, which could be large.
+  ///
+  /// Parameters:
+  /// - `limit`: An optional integer specifying the maximum number of records to
+  ///   return. If null, defaults to 50.
+  ///
+  /// Returns:
+  /// - A list of OfxAccountModel, each representing an OFX account's data.
+  ///
+  /// Throws:
+  /// - An exception if the query fails due to an error in accessing the
+  ///   database.
+  Future<List<OfxAccountModel>> queryAll(int? limit);
+
   /// Deletes an OFX account by its ID.
   ///
   /// This method removes an OFX account from the `ofxTransactionsTable` based

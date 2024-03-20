@@ -1,4 +1,4 @@
-import '../../common/models/ofx_transaction_model.dart';
+import '../../common/models/ofx_trans_template_model.dart';
 
 /// Manages the storage of OFX transactions in a SQLite database.
 ///
@@ -6,7 +6,7 @@ import '../../common/models/ofx_transaction_model.dart';
 /// and delete OFX transactions from the `ofxTransactionsTable`. These
 /// transactions represent financial activities fetched from an OFX (Open
 /// Financial Exchange) file or service.
-abstract class AbstractOfxTransactionRepository {
+abstract class AbstractOfxTransTemplateRepository {
   /// Inserts a new OFX transaction into the database.
   ///
   /// This method takes a map of OFX transaction data and inserts it into
@@ -28,8 +28,7 @@ abstract class AbstractOfxTransactionRepository {
   /// Use this method to store new OFX transactions into the database. Ensure
   /// that the map contains all required fields and that it conforms to the
   /// schema of `ofxTransactionsTable`.
-  Future<OfxTransactionModel?> insertOfxTransaction(
-      OfxTransactionModel ofxTransaction);
+  Future<OfxTransTemplateModel?> insert(OfxTransTemplateModel ofxTransaction);
 
   /// Updates an existing OFX transaction in the database.
   ///
@@ -54,7 +53,7 @@ abstract class AbstractOfxTransactionRepository {
   /// Ensure that the map contains the transaction ID and all fields that
   /// need to be updated. This method does not support partial updates; all
   /// fields must be provided in the map.
-  Future<int> updateOfxTransaction(OfxTransactionModel ofxTransaction);
+  Future<int> update(OfxTransTemplateModel ofxTransaction);
 
   /// Queries an OFX transaction by its memo and account ID.
   ///
@@ -78,7 +77,7 @@ abstract class AbstractOfxTransactionRepository {
   /// Use this method to find an OFX transaction by its memo and the associated
   /// account ID. This can be useful for retrieving specific transactions based
   /// on their descriptions or notes.
-  Future<OfxTransactionModel?> queryOfxTransMemo(String memo, int accountId);
+  Future<OfxTransTemplateModel?> queryMemo(String memo, int accountId);
 
   /// Deletes an OFX transaction from the database by its ID.
   ///
@@ -100,5 +99,5 @@ abstract class AbstractOfxTransactionRepository {
   /// Use this method to delete an OFX transaction from the database based on
   /// its ID. This is useful when you need to remove outdated or incorrect
   /// transaction data.
-  Future<int> deleteOfxTransactionId(int id);
+  Future<int> deleteId(int id);
 }

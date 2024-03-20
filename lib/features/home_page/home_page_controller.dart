@@ -130,7 +130,7 @@ class HomePageController extends ChangeNotifier {
       final accountId = _currentAccount.accountId!;
 
       // get the next maxTransactions transactions before _lastdate
-      final newTrans = await _transactionsRepository.getNTransactionsFromDate(
+      final newTrans = await _transactionsRepository.getNFromDate(
         startDate: _lastDate,
         accountId: accountId,
         maxTransactions: maxTransactions,

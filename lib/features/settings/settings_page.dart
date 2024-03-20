@@ -1,4 +1,5 @@
 import 'package:finances/common/constants/app_info.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:restart_app/restart_app.dart';
@@ -77,7 +78,9 @@ class _SettingsPageState extends State<SettingsPage> {
             actions: [
               ElevatedButton(
                 onPressed: () async {
-                  await Restart.restartApp(webOrigin: AppRoute.onboard.name);
+                  if (!kDebugMode) {
+                    await Restart.restartApp(webOrigin: AppRoute.onboard.name);
+                  }
                 },
                 child: Text(
                   locale.genericYes,
@@ -295,12 +298,16 @@ class _SettingsPageState extends State<SettingsPage> {
   Future<void> _resetAccount() async {
     await locator<AbstractDatabaseRepository>().deleteDatabase();
     await locator<AuthService>().removeAccount();
-    await Restart.restartApp(webOrigin: AppRoute.onboard.name);
+    if (!kDebugMode) {
+      await Restart.restartApp(webOrigin: AppRoute.onboard.name);
+    }
   }
 
   Future<void> _resetData() async {
     await locator<AbstractDatabaseRepository>().deleteDatabase();
-    await Restart.restartApp(webOrigin: AppRoute.onboard.name);
+    if (!kDebugMode) {
+      await Restart.restartApp(webOrigin: AppRoute.onboard.name);
+    }
   }
 
   @override

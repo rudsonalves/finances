@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../common/constants/app_constants.dart';
 import '../../common/constants/themes/colors/custom_color.g.dart';
 import '../../common/models/category_db_model.dart';
 import 'widget/destiny_account_dropdown_form.dart';
@@ -64,7 +65,7 @@ class _TransactionPageState extends State<TransactionPage> {
     if (widget.transaction != null) {
       _controller.setIncome(widget.transaction!.transValue >= 0);
 
-      if (widget.transaction!.transCategoryId == 1) {
+      if (widget.transaction!.transCategoryId == TRANSFER_CATEGORY_ID) {
         _lockCategory = true;
       } else {
         _removeTransfer = true;
@@ -270,7 +271,7 @@ class _TransactionPageState extends State<TransactionPage> {
                               ),
                               // Category
                               CategoryDropdownFormField(
-                                lockCategory: _lockCategory,
+                                readOnly: _lockCategory,
                                 removeTransfer: _removeTransfer,
                                 hintText: locale.transPageCategoryHint,
                                 labelText: locale.transPageCategory,

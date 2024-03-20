@@ -96,13 +96,13 @@ const ofxRelBankAccountId = 'bankAccountId';
 const ofxRelBankName = 'bankName';
 const ofxRelAccountId = 'accountId';
 
-const ofxTransactionsTable = 'ofxTransactionsTable';
+const ofxTransTemplateTable = 'ofxTransTemplateTable';
 const ofxTransMemoIndex = 'idxOfxTransMemo';
 const ofxTransAccountIndex = 'idxOfxTransAccount';
 const ofxTransId = 'id';
 const ofxTransMemo = 'memo';
 const ofxTransAccountId = 'accountId';
-const ofxTransCategoryId = 'cadegoryId';
+const ofxTransCategoryId = 'categoryId';
 const ofxTransDescription = 'description';
 const ofxTransTransferAccountId = 'transferAccountId';
 
@@ -279,7 +279,7 @@ const createOfxRelationshipIndexSQL =
     ' ON $ofxRelationshipTable ($ofxRelBankAccountId)';
 
 const createOfxTransactionsSQL =
-    'CREATE TABLE IF NOT EXISTS $ofxTransactionsTable ('
+    'CREATE TABLE IF NOT EXISTS $ofxTransTemplateTable ('
     ' $ofxTransId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
     ' $ofxTransMemo TEXT NOT NULL,'
     ' $ofxTransAccountId INTEGER NOT NULL,'
@@ -296,11 +296,11 @@ const createOfxTransactionsSQL =
 
 const createOfxTransMemoIndexSQL =
     'CREATE INDEX IF NOT EXISTS $ofxTransMemoIndex'
-    ' ON $ofxTransactionsTable ($ofxTransMemo)';
+    ' ON $ofxTransTemplateTable ($ofxTransMemo)';
 
 const createOfxTransAccountIndexSQL =
     'CREATE INDEX IF NOT EXISTS $ofxTransAccountIndex'
-    ' ON $ofxTransactionsTable ($ofxTransAccountId)';
+    ' ON $ofxTransTemplateTable ($ofxTransAccountId)';
 
 const createTriggerAfterInsertTransaction =
     'CREATE TRIGGER IF NOT EXISTS $triggerAfterInsertTransaction'

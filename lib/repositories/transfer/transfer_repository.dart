@@ -20,7 +20,7 @@ class TransferRepository implements AbstractTransferRepository {
   }
 
   @override
-  Future<int> deleteTransfer(int transferId) async {
+  Future<int> deleteId(int transferId) async {
     final result = await _store.deleteTransferId(transferId);
 
     if (result != 1) {
@@ -31,7 +31,7 @@ class TransferRepository implements AbstractTransferRepository {
   }
 
   @override
-  Future<TransferDbModel?> getTransferById(int id) async {
+  Future<TransferDbModel?> getId(int id) async {
     final map = await _store.queryTranferId(id);
     if (map == null) {
       log('Transfer from id $id not found!');
@@ -48,7 +48,7 @@ class TransferRepository implements AbstractTransferRepository {
   }
 
   @override
-  Future<int> setNullTransferId(int transferId) async {
+  Future<int> setNullId(int transferId) async {
     try {
       final result = await _store.setNullTransferId(transferId);
       return result;

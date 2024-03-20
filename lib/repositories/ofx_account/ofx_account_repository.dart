@@ -36,6 +36,21 @@ class OfxAccountRepository implements AbstractOfxAccountRepository {
   }
 
   @override
+  Future<List<OfxAccountModel>> queryAll(int? limit) async {
+    final ofxMapList = await _store.queryAll(limit);
+
+    List<OfxAccountModel> ofxAccounts = [];
+    for (final map in ofxMapList) {
+      if (map != null) {
+        final ofxAccount = OfxAccountModel.fromMap(map);
+        ofxAccounts.add(ofxAccount);
+      }
+    }
+
+    return ofxAccounts;
+  }
+
+  @override
   Future<int> update(OfxAccountModel ofxAccount) async {
     final result = await _store.update(ofxAccount.toMap());
     if (result != 1) {

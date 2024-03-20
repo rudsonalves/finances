@@ -38,6 +38,6 @@ class CurrentBalance extends BalanceDbModel {
 
   // update currentBalance
   Future<void> update() async {
-    await balanceRepository.updateBalance(this);
+    await balanceRepository.update(this);
   }
 }

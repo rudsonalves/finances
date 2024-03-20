@@ -30,7 +30,7 @@ abstract class TransactionStorer {
   ///
   /// Throws:
   /// - An Exception with a descriptive error message if the insertion fails.
-  Future<int> insertTransaction(Map<String, dynamic> transactionMap);
+  Future<int> insert(Map<String, dynamic> transactionMap);
 
   /// Updates an existing transaction in the database.
   ///
@@ -71,7 +71,7 @@ abstract class TransactionStorer {
   ///
   /// Throws:
   /// - An Exception if the update operation fails.
-  Future<int> updateTransactionStatus({
+  Future<int> updateStatus({
     required int id,
     required int newStatus,
   });
@@ -92,7 +92,7 @@ abstract class TransactionStorer {
   ///
   /// Throws:
   /// - An Exception if the delete operation encounters an error.
-  Future<int> deleteTransactionId(int id);
+  Future<int> deleteId(int id);
 
   /// Queries the database for a transaction by its unique identifier.
   ///
@@ -109,7 +109,7 @@ abstract class TransactionStorer {
   ///
   /// Throws:
   /// - An Exception with a descriptive error message if the query fails.
-  Future<Map<String, Object?>?> queryTransactionAtId(int id);
+  Future<Map<String, Object?>?> queryId(int id);
 
   /// Retrieves transactions associated with a specific balance ID.
   ///
@@ -126,7 +126,7 @@ abstract class TransactionStorer {
   ///
   /// Throws:
   /// - An Exception with a descriptive error message if the query operation fails.
-  Future<List<Map<String, dynamic>>> queryTransactionForBalanceId(int id);
+  Future<List<Map<String, dynamic>>> queryForBalanceId(int id);
 
   /// Calculates the total income for an account within a specified date range.
   ///
@@ -195,18 +195,20 @@ abstract class TransactionStorer {
   ///
   /// Throws:
   /// - An Exception with a descriptive error message if the query operation fails.
-  Future<List<Map<String, dynamic>>> queryNTransactionsFromDate({
+  Future<List<Map<String, dynamic>>> queryNFromDate({
     required final ExtendedDate startDate,
     required final int accountId,
     required final int maxTransactions,
   });
+
+  Future<List<Map<String, dynamic>?>> queryFromOfxId(int ofxId);
 }
 
 class TransactionStore implements TransactionStorer {
   final _databaseManager = locator<DatabaseManager>();
 
   @override
-  Future<int> insertTransaction(Map<String, dynamic> transactionMap) async {
+  Future<int> insert(Map<String, dynamic> transactionMap) async {
     final database = await _databaseManager.database;
 
     try {
@@ -244,7 +246,7 @@ class TransactionStore implements TransactionStorer {
   }
 
   @override
-  Future<int> updateTransactionStatus({
+  Future<int> updateStatus({
     required int id,
     required int newStatus,
   }) async {
@@ -266,7 +268,7 @@ class TransactionStore implements TransactionStorer {
   }
 
   @override
-  Future<int> deleteTransactionId(int id) async {
+  Future<int> deleteId(int id) async {
     final database = await _databaseManager.database;
 
     try {
@@ -284,7 +286,7 @@ class TransactionStore implements TransactionStorer {
   }
 
   @override
-  Future<Map<String, Object?>?> queryTransactionAtId(int id) async {
+  Future<Map<String, Object?>?> queryId(int id) async {
     final database = await _databaseManager.database;
 
     try {
@@ -305,8 +307,7 @@ class TransactionStore implements TransactionStorer {
   }
 
   @override
-  Future<List<Map<String, dynamic>>> queryTransactionForBalanceId(
-      int balanceId) async {
+  Future<List<Map<String, dynamic>>> queryForBalanceId(int balanceId) async {
     final database = await _databaseManager.database;
 
     try {
@@ -326,7 +327,7 @@ class TransactionStore implements TransactionStorer {
   }
 
   @override
-  Future<List<Map<String, dynamic>>> queryNTransactionsFromDate({
+  Future<List<Map<String, dynamic>>> queryNFromDate({
     required final ExtendedDate startDate,
     required final int accountId,
     required final int maxTransactions,
@@ -345,6 +346,25 @@ class TransactionStore implements TransactionStorer {
       return result;
     } catch (err) {
       final message = 'TransactionStore.queryNTransactionsFromDate: $err';
+      log(message);
+      throw Exception(message);
+    }
+  }
+
+  @override
+  Future<List<Map<String, dynamic>?>> queryFromOfxId(int ofxId) async {
+    final database = await _databaseManager.database;
+
+    try {
+      final map = await database.query(
+        transactionsTable,
+        where: '$transOfxId = ?',
+        whereArgs: [ofxId],
+      );
+      if (map.isEmpty) return [];
+      return map;
+    } catch (err) {
+      final message = 'TransactionStore.queryTransactionsFromOfxId: $err';
       log(message);
       throw Exception(message);
     }

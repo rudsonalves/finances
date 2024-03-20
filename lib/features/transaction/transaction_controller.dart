@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
+import '../../common/constants/app_constants.dart';
 import '../../common/current_models/current_account.dart';
 import '../../common/extensions/money_masked_text_controller.dart';
 import '../../common/models/account_db_model.dart';
@@ -81,8 +82,8 @@ class TransactionController extends ChangeNotifier {
 
   int get originAccountId => _originAccountId;
   int? get destinyAccountId => _destinyAccountId;
-  int? get cadegoryId => _categoryId;
-  bool get isTransfer => _categoryId == 1;
+  int? get categoryId => _categoryId;
+  bool get isTransfer => _categoryId == TRANSFER_CATEGORY_ID;
 
   bool get income => _income;
   bool get repeat => _repeat;
@@ -138,7 +139,7 @@ class TransactionController extends ChangeNotifier {
       if (transaction.transTransferId != null) {
         // Get transfer
         final transfer =
-            await TransferManager.getTransferById(transaction.transTransferId!);
+            await TransferManager.getId(transaction.transTransferId!);
         // Get destiny account
         _destinyAccountId = transfer!.transferTransId0 == transaction.transId
             ? transfer.transferAccount1
@@ -463,7 +464,6 @@ class TransactionController extends ChangeNotifier {
     }
 
     // Create transaction
-    // FIXME: if possible, prepare the _transaction before arriving here.
     final TransactionDbModel transaction = TransactionDbModel(
       transId: _transaction?.transId,
       transAccountId: _originAccountId,
@@ -496,20 +496,20 @@ class TransactionController extends ChangeNotifier {
             }
             newTrans.transDescription = '${newTrans.transDescription} $label';
             newTrans.transDate = date;
-            await TransferManager.addTranfer(
+            await TransferManager.add(
               transOrigin: newTrans,
               accountDestinyId: destinyAccount.accountId!,
             );
           }
         } else {
-          await TransferManager.addTranfer(
+          await TransferManager.add(
             transOrigin: transaction,
             accountDestinyId: destinyAccount.accountId!,
           );
         }
         navigator.pop(true);
       } else {
-        await TransferManager.updateTransfer(
+        await TransferManager.update(
           newTransaction: transaction,
           accountDestinyId: destinyAccount.accountId!,
         );
@@ -528,10 +528,10 @@ class TransactionController extends ChangeNotifier {
             }
             newTrans.transDescription = '${newTrans.transDescription} $label';
             newTrans.transDate = date;
-            await TransactionManager.addNewTransaction(newTrans);
+            await TransactionManager.addNew(newTrans);
           }
         } else {
-          await TransactionManager.addNewTransaction(transaction);
+          await TransactionManager.addNew(transaction);
         }
         navigator.pop(true);
       } else {

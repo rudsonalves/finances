@@ -76,10 +76,10 @@ class DatabaseManager {
       TablesCreators.createCategoryTable(batch);
       TablesCreators.createTransactionsTable(batch);
       TablesCreators.createTransfersTable(batch);
-      TablesCreators.createTriggers(batch);
       TablesCreators.createOfxAccuntTable(batch);
       TablesCreators.createOfxRelationshipTable(batch);
       TablesCreators.createOfxTransactionsTable(batch);
+      TablesCreators.createTriggers(batch);
       await batch.commit();
     } catch (err) {
       log('Error: $err');

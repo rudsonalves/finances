@@ -34,7 +34,7 @@ abstract class AbstractTransferRepository {
   ///
   /// This method logs the result of the deletion operation for debugging
   /// purposes.
-  Future<int> deleteTransfer(int transferId);
+  Future<int> deleteId(int transferId);
 
   /// Retrieves a transfer record by its ID.
   ///
@@ -46,7 +46,7 @@ abstract class AbstractTransferRepository {
   ///   if found, or `null` if no transfer with the given ID exists.
   ///
   /// This method logs a message if the transfer record is not found.
-  Future<TransferDbModel?> getTransferById(int id);
+  Future<TransferDbModel?> getId(int id);
 
   /// Updates an existing transfer in the database.
   ///
@@ -92,5 +92,5 @@ abstract class AbstractTransferRepository {
   ///     an error message detailing the cause of the failure. This ensures that
   ///     any failure in the process of disassociating the transfer is clearly
   ///     communicated to the caller.
-  Future<int> setNullTransferId(int id);
+  Future<int> setNullId(int id);
 }

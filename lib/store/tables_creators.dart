@@ -7,7 +7,9 @@ import 'constants.dart';
 /// This class encapsulates the SQL commands for creating tables and indices
 /// necessary for the application's database schema. It also includes
 /// the creation of triggers for maintaining data integrity.
-class TablesCreators {
+sealed class TablesCreators {
+  TablesCreators._();
+
   /// Creates the AppControl table using predefined SQL commands.
   ///
   /// The AppControl table stores key application settings and version

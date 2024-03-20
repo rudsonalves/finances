@@ -1,4 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+Future<void> singleMessageAlertDialog(
+  BuildContext context, {
+  required String title,
+  required String message,
+}) async {
+  await showDialog(
+    context: context,
+    builder: (context) => WidgetAlertDialog(
+      title: title,
+      content: [
+        Text(message),
+      ],
+    ),
+  );
+}
 
 class WidgetAlertDialog extends StatelessWidget {
   final String title;
@@ -14,7 +31,9 @@ class WidgetAlertDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context)!;
     final primary = Theme.of(context).colorScheme.primary;
+
     return AlertDialog(
       title: Text(
         title,
@@ -27,7 +46,13 @@ class WidgetAlertDialog extends StatelessWidget {
           ...content,
         ],
       ),
-      actions: actions,
+      actions: actions ??
+          [
+            FilledButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(locale.genericClose),
+            ),
+          ],
     );
   }
 }

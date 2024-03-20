@@ -177,7 +177,7 @@ class _TransactionDismissibleTileState
     int? accountDestinyId;
     if (transaction.transTransferId != null) {
       final transfer =
-          await TransferManager.getTransferById(transaction.transTransferId!);
+          await TransferManager.getId(transaction.transTransferId!);
       accountDestinyId = transfer!.transferTransId0 == transaction.transId
           ? transfer.transferAccount1
           : transfer.transferAccount0;
@@ -210,9 +210,9 @@ class _TransactionDismissibleTileState
     if (action ?? false) {
       try {
         if (transaction.transTransferId == null) {
-          await TransactionManager.removeTransaction(transaction);
+          await TransactionManager.remove(transaction);
         } else {
-          await TransferManager.removeTransfer(transaction);
+          await TransferManager.remove(transaction);
         }
         locator<StatisticsController>().recalculate();
         _homePageController.getTransactions();

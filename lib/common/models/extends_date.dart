@@ -1,33 +1,44 @@
 import 'package:intl/intl.dart';
 
 /// ExtendedDate extends the functionality of Dart's DateTime class, providing
-/// convenient methods for common date manipulations and calculations. It includes
-/// features such as getting the start and end of a month in milliseconds, checking
-/// for leap years, and easily moving to the next or previous day, month, or year.
+/// convenient methods for common date manipulations and calculations. It
+/// includes features such as getting the start and end of a month in
+/// milliseconds, checking for leap years, and easily moving to the next or
+/// previous day, month, or year.
 ///
 /// Constructors:
-///   - `ExtendedDate(year, [month, day, hour, minute, second, millisecond, microsecond])`:
-///     Initializes a new ExtendedDate object with the specified date and time.
-///   - `ExtendedDate.nowDate()`: Creates an ExtendedDate for the current date with time set to midnight.
-///   - `ExtendedDate.now()`: Creates an ExtendedDate for the current date and time.
-///   - `ExtendedDate.fromMillisecondsSinceEpoch(millisecondsSinceEpoch)`: Creates an ExtendedDate from milliseconds since the Unix epoch.
-///   - `ExtendedDate.parse(formattedString)`: Parses a string and returns an ExtendedDate.
+///   - `ExtendedDate(year, [month, day, hour, minute, second, millisecond,
+///     microsecond])`: Initializes a new ExtendedDate object with the specified
+///     date and time.
+///   - `ExtendedDate.nowDate()`: Creates an ExtendedDate for the current date
+///     with time set to midnight.
+///   - `ExtendedDate.now()`: Creates an ExtendedDate for the current date and
+///     time.
+///   - `ExtendedDate.fromMillisecondsSinceEpoch(millisecondsSinceEpoch)`:
+///     Creates an ExtendedDate from milliseconds since the Unix epoch.
+///   - `ExtendedDate.parse(formattedString)`: Parses a string and returns an
+///     ExtendedDate.
 ///
 /// Methods:
 ///   - `onlyDate`: Returns a new ExtendedDate with time set to midnight.
-///   - `getMillisecondsIntervalOfMonth(date)`: Calculates the start and end milliseconds of the month for the given date.
-///   - `nextDay`, `previusDay`: Returns an ExtendedDate moved by one day forward or backward.
+///   - `getMillisecondsIntervalOfMonth(date)`: Calculates the start and end
+///     milliseconds of the month for the given date.
+///   - `nextDay`, `previusDay`: Returns an ExtendedDate moved by one day
+///     forward or backward.
 ///   - `nextWeek`: Returns an ExtendedDate moved by a week forward.
-///   - `nextYear`, `nextMonth`, `previousMonth`: Moves the ExtendedDate to the next or previous year or month.
-///   - `add`, `subtract`: Overrides DateTime's add and subtract methods to return an ExtendedDate.
+///   - `nextYear`, `nextMonth`, `previousMonth`: Moves the ExtendedDate to the
+///     next or previous year or month.
+///   - `add`, `subtract`: Overrides DateTime's add and subtract methods to
+///     return an ExtendedDate.
 ///
 /// Operators:
-///   - Overloads comparison operators (`>`, `>=`, `<`, `<=`) for comparing ExtendedDate objects.
+///   - Overloads comparison operators (`>`, `>=`, `<`, `<=`) for comparing
+///     ExtendedDate objects.
 ///
 /// Note:
-///   This class is particularly useful for applications that require detailed date
-///   manipulation beyond the capabilities of the standard DateTime class, such as
-///   financial applications, scheduling, and calendar functionalities.
+///   This class is particularly useful for applications that require detailed
+///   date manipulation beyond the capabilities of the standard DateTime class,
+///   such as financial applications, scheduling, and calendar functionalities.
 class ExtendedDate extends DateTime {
   ExtendedDate(
     super.year, [
@@ -71,6 +82,10 @@ class ExtendedDate extends DateTime {
       date.minute,
       date.second,
     );
+  }
+
+  String formatYMD(dynamic locale) {
+    return DateFormat.yMMMd(locale).format(this);
   }
 
   /// Retrieves an ExtendedDate instance representing only the date part of the current instance,

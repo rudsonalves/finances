@@ -48,7 +48,7 @@ sealed class BalanceManager {
   /// This method is particularly useful for ensuring that financial
   /// applications maintain continuity in balance tracking, automatically
   /// handling missing balance entries for specific dates.
-  static Future<BalanceDbModel> returnBalanceInDate({
+  static Future<BalanceDbModel> getBalanceInDate({
     required ExtendedDate date,
     required int accountId,
   }) async {
@@ -80,7 +80,7 @@ sealed class BalanceManager {
     }
 
     // Write new balance and return it
-    await repository.insertBalance(balance);
+    await repository.insert(balance);
 
     return balance;
   }
@@ -130,7 +130,7 @@ sealed class BalanceManager {
     final onlyDate = date.onlyDate;
 
     // get a balance from accountId in this date
-    var balance = await repository.getBalanceInDate(
+    var balance = await repository.getInDate(
       date: onlyDate,
       accountId: accountId,
     );

@@ -30,8 +30,6 @@ class HomePagePopupMenuButtons extends StatelessWidget {
       );
     } else if (value == 'about') {
       Navigator.pushNamed(context, AppRoute.aboutPage.name);
-    } else if (value == 'ofxImport') {
-      Navigator.pushNamed(context, AppRoute.ofxPage.name);
     }
   }
 
@@ -48,19 +46,6 @@ class HomePagePopupMenuButtons extends StatelessWidget {
         color: colorScheme.onPrimary,
       ),
       itemBuilder: (context) => [
-        PopupMenuItem(
-          value: 'ofxImport',
-          child: Row(
-            children: [
-              Icon(
-                Icons.archive_rounded,
-                color: primary,
-              ),
-              const SizedBox(width: 8),
-              const Text('Import Ofx'),
-            ],
-          ),
-        ),
         PopupMenuItem(
           value: 'settings',
           child: Row(

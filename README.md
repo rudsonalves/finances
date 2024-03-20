@@ -288,6 +288,53 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
+## 2024/03/20 - version 1.1.00+80:
+
+This update introduces a wide range of enhancements aimed at refining the OFX file integration, user interface improvements, and overall system adjustments for the Finances app. The changes span across new image additions, icon updates, model and widget enhancements, as well as significant refactorings to improve the app's functionality and user experience.
+
+**New Additions and UI Enhancements:**
+
+- **OFX File Not Found Image:** Introduced an SVG image for instances where an OFX file is not found, enhancing user feedback.
+- **Icon Updates:** Updated Fontello icons with new OFX-specific icons and reorganized some trademark icons for better clarity and consistency.
+- **User Interface Components:**
+  - Developed `AccountRow` widget to display an account icon alongside its name in a row format.
+  - Made the `TextEditingController` optional in `BasicTextFormField` and added `onEditingComplete` and `readOnly` attributes for enhanced flexibility.
+  - OFX menu has been integrated into the app's bottom navigation bar for improved accessibility.
+  - Added 50% transparency to the app's floating action button for a more subtle appearance.
+  - Refactored `DateTimePickerForm` and introduced an `enable` attribute to allow disabling the picker.
+  - Implemented `singleMessageAlertDialog` for direct dialog invocation, with internationalization support and a default close button.
+
+**Model Adjustments and Refactorings:**
+
+- Renamed `OfxTransactionModel` to `OfxTransTemplateModel` for clarity, correcting attribute names and introducing several new methods for enhanced functionality, including factory constructors and equality comparison.
+- Added a factory method in `TransactionDbModel` to create transactions from OFX templates, incorporating the new `ofxId` attribute linking to the generating OFX account.
+- Adjusted documentation and added a new method in `ExtendedDate` for pre-formatted date generation.
+
+**OFX Page and Transaction Handling:**
+
+- Performed significant refactorings on the OFX page and controller to enhance functionality, including the update of registered OFX accounts and blocking of unvalidated transactions. Further improvements are planned, particularly regarding automation options.
+- Enhanced OFX transaction handling with validation checks and transformed the page into a dialog for simplified app integration. Added `DismissibleOfxAccount` for easy removal of OFX accounts.
+
+**System and Debugging Adjustments:**
+
+- Updated `settings.gradle` for Android to support the new method of inserting Gradle plugins.
+- Included a debug mode check in the settings page to suppress app restart during development for smoother debugging experience.
+
+**Management and Repository Enhancements:**
+
+- Introduced new methods in `OfxAccountManager` for fetching and deleting OFX accounts, reflecting a more comprehensive management approach.
+- Created `OfxTransTemplateManager` as a sealed class with methods for handling OFX transaction templates, including retrieval, addition, and updating functionalities.
+- Added query functionality in `OfxAccountRepository` for fetching a list of OFX accounts with optional limit parameters.
+
+**Database and Migration Updates:**
+
+- Adjustments in database constants and migration scripts to accommodate new tables and columns for handling OFX data and transactions, ensuring smooth transitions and data integrity.
+
+**Implications:**
+
+These updates significantly enhance the Finances app's integration with OFX files, enriching the user interface and streamlining the overall user experience. Through meticulous model updates, UI component enhancements, and systemic adjustments, the app now offers a more robust platform for financial management and OFX file handling, setting the stage for future expansions and optimizations.
+
+
 ## 2024/03/14 - version 1.1.00+78:
 
 **Enhancements and Adjustments for OFX Integration and System Upgrades**

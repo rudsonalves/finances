@@ -1,15 +1,19 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:finances/packages/ofx/lib/ofx.dart';
 import 'package:flutter/material.dart';
 
+import '../../common/models/ofx_account_model.dart';
+import '../../common/models/ofx_relationship_model.dart';
+import '../../manager/ofx_account_manager.dart';
+import '../../manager/ofx_relationship_manager.dart';
 import 'ofx_page_state.dart';
 
 class OfxPageController extends ChangeNotifier {
   OfxPageState _state = OfxPageStateInitial();
 
-  late Ofx? _ofx;
-  final List<OfxTransaction> _ofxTransactions = [];
+  final List<OfxAccountModel> _ofxAccounts = [];
 
   void _changeState(OfxPageState newState) {
     _state = newState;
@@ -17,19 +21,50 @@ class OfxPageController extends ChangeNotifier {
   }
 
   OfxPageState get state => _state;
-  Ofx? get ofx => _ofx;
-  List<OfxTransaction> get ofxTransactions => _ofx?.transactions ?? [];
+  List<OfxAccountModel> get ofxAccounts => _ofxAccounts;
 
-  Future<void> loadOfxs(File ofxFile) async {
+  Future<void> init() async {
+    loadOfxAccounts();
+  }
+
+  Future<void> loadOfxAccounts() async {
     try {
       _changeState(OfxPageStateLoading());
-      final ofxString = await ofxFile.readAsString();
-      _ofx = _parserOfxSXml(ofxString);
+
+      await OfxAccountManager.getAll(_ofxAccounts);
+
       _changeState(OfxPageStateSuccess());
     } catch (err) {
-      _ofx = null;
-      _ofxTransactions.clear();
+      log('OfxPageController.loadOfxAccounts: $err');
       _changeState(OfxPageStateError());
+    }
+  }
+
+  Future<bool> addOfxAccount({
+    required OfxAccountModel ofxAccount,
+    required OfxRelationshipModel ofxRelation,
+  }) async {
+    try {
+      if (ofxRelation.id == null) {
+        // Save a new ofx file relationship between accountID
+        // bankAccountId and accountId
+        ofxRelation.bankName = ofxAccount.bankName;
+        await OfxRelationshipManager.add(ofxRelation);
+      } else if (ofxAccount.bankName != ofxRelation.bankName) {
+        // update ofxRelationship
+        await OfxRelationshipManager.update(ofxRelation);
+      }
+      // Register ofxAccount file
+      ofxAccount.accountId = ofxRelation.accountId;
+      final ok = await OfxAccountManager.add(ofxAccount);
+
+      // await OfxAccountManager.getAll(_ofxAccounts);
+
+      return ok;
+    } catch (err) {
+      log('OfxPageController.addOfxAccount: $err');
+      _changeState(OfxPageStateError());
+      return false;
     }
   }
 
@@ -101,22 +136,6 @@ class OfxPageController extends ChangeNotifier {
         newXml += '$line\n';
       }
     }
-
-    // RegExp xmlLine = RegExp(r'^<([a-zA-Z\d]+)>([^<>]+)$');
-
-    // for (final line in lines) {
-    //   final trimLine = line.trim();
-    //   // remove empty lines
-    //   if (trimLine.isEmpty) continue;
-    //   final match = xmlLine.firstMatch(trimLine);
-    //   if (match != null) {
-    //     // Fix the line if it finds a match
-    //     newXml += '$line</${match.group(1)}>\n';
-    //   } else {
-    //     // Keeps the line as is if no match is found
-    //     newXml += '$line\n';
-    //   }
-    // }
 
     return newXml;
   }

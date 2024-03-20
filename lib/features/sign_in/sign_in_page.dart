@@ -115,52 +115,50 @@ class _SignInPageState extends State<SignInPage> {
     bool sucess = await _controller.recoverPassword(_emailController.text);
 
     if (sucess) {
-      if (context.mounted) {
-        String message =
-            locale.signInPageResetPasswordMessage(_emailController.text);
+      String message =
+          locale.signInPageResetPasswordMessage(_emailController.text);
 
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text(locale.signInPageResetPassword),
-            icon: Icon(
-              Icons.lock_reset,
-              color: customColors.sourceLightyellow,
-              size: 64,
-            ),
-            content: Text(message),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text(locale.genericClose),
-              ),
-            ],
+      if (!mounted) return;
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(locale.signInPageResetPassword),
+          icon: Icon(
+            Icons.lock_reset,
+            color: customColors.sourceLightyellow,
+            size: 64,
           ),
-        );
-      }
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(locale.genericClose),
+            ),
+          ],
+        ),
+      );
     } else {
-      if (context.mounted) {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text(locale.signInPageResetPassword),
-            icon: Icon(
-              Icons.error,
-              color: customColors.sourceMinusred,
-              size: 64,
-            ),
-            content: Text(
-              locale.signInPageProblemRequest,
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text(locale.genericClose),
-              ),
-            ],
+      if (!mounted) return;
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(locale.signInPageResetPassword),
+          icon: Icon(
+            Icons.error,
+            color: customColors.sourceMinusred,
+            size: 64,
           ),
-        );
-      }
+          content: Text(
+            locale.signInPageProblemRequest,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(locale.genericClose),
+            ),
+          ],
+        ),
+      );
     }
   }
 
