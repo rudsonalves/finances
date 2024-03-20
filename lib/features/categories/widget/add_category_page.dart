@@ -81,7 +81,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
     if (_categoryId != null) {
       await controller.updateCategory(newCategory);
       _homePageController.setRedraw();
-      if (!context.mounted) return;
+      if (!mounted) return;
       Navigator.pop(context);
     } else {
       List<String> categoriesNames = controller.categoryNames;
@@ -89,7 +89,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
       if (!categoriesNames.contains(newCategory.categoryName)) {
         await controller.addCategory(newCategory);
         _homePageController.setRedraw();
-        if (!context.mounted) return;
+        if (!mounted) return;
         Navigator.pop(context, newCategory);
       } else {
         final customColors = Theme.of(context).extension<CustomColors>()!;

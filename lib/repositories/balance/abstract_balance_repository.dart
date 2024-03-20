@@ -33,7 +33,7 @@ abstract class AbstractBalanceRepository {
   ///
   /// Note: Ensure that the database and the `_store` instance are properly
   /// initialized before calling this method.
-  Future<int> insertBalance(BalanceDbModel balance);
+  Future<int> insert(BalanceDbModel balance);
 
   /// Retrieves a balance record by its ID from the database.
   ///
@@ -61,7 +61,7 @@ abstract class AbstractBalanceRepository {
   /// Note: It's important to ensure that the database and the `_store` instance are properly
   /// initialized and that the `id` passed to the method corresponds to an existing balance
   /// record in the database.
-  Future<BalanceDbModel> getBalanceId(int id);
+  Future<BalanceDbModel> getId(int id);
 
   /// Retrieves a balance record for a specific date or the closest previous date.
   ///
@@ -104,7 +104,7 @@ abstract class AbstractBalanceRepository {
   /// This method is particularly useful for financial applications that need to
   /// calculate the balance as of a certain date, taking into account all transactions
   /// up to and including that date.
-  Future<BalanceDbModel?> getBalanceInDate({
+  Future<BalanceDbModel?> getInDate({
     required ExtendedDate date,
     int? accountId,
   });
@@ -144,7 +144,7 @@ abstract class AbstractBalanceRepository {
   /// This method enables financial applications to easily retrieve and display a history
   /// of balance changes, facilitating user insights into their financial trends and aiding
   /// in forecasting future balances based on past patterns.
-  Future<List<BalanceDbModel>> getAllBalanceAfterDate({
+  Future<List<BalanceDbModel>> getAllAfterDate({
     required ExtendedDate date,
     required int accountId,
   });
@@ -176,7 +176,7 @@ abstract class AbstractBalanceRepository {
   /// This method is a critical part of managing financial records within an application,
   /// allowing for the correction of mistakes and ensuring that the database reflects the
   /// current and accurate state of user finances.
-  Future<void> updateBalance(BalanceDbModel balance);
+  Future<void> update(BalanceDbModel balance);
 
   /// Updates a balance record in the database.
   ///
@@ -209,7 +209,7 @@ abstract class AbstractBalanceRepository {
   /// This method ensures that financial records can be kept up-to-date, reflecting the
   /// most current information and maintaining the integrity of the financial data within
   /// the application.
-  Future<void> deleteBalance(int id);
+  Future<void> deleteId(int id);
 
   /// Deletes a balance record if it has no associated transactions.
   ///

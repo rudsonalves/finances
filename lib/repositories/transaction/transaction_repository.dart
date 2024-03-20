@@ -13,9 +13,9 @@ class TransactionRepository implements AbstractTransactionRepository {
   final _currentUser = locator<CurrentAccount>();
 
   @override
-  Future<int> insertTransaction(TransactionDbModel transaction) async {
+  Future<int> insert(TransactionDbModel transaction) async {
     try {
-      int id = await _store.insertTransaction(transaction.toMap());
+      int id = await _store.insert(transaction.toMap());
       // This exception is a program logical error
       if (id <= 0) {
         final message = 'return id $id!!!';
@@ -32,10 +32,9 @@ class TransactionRepository implements AbstractTransactionRepository {
   }
 
   @override
-  Future<List<TransactionDbModel>> getTransactionForBalanceId(
-      int balanceId) async {
+  Future<List<TransactionDbModel>> getForBalanceId(int balanceId) async {
     try {
-      var maps = await _store.queryTransactionForBalanceId(balanceId);
+      var maps = await _store.queryForBalanceId(balanceId);
 
       return maps
           .map((transMap) => TransactionDbModel.fromMap(transMap))
@@ -48,9 +47,9 @@ class TransactionRepository implements AbstractTransactionRepository {
   }
 
   @override
-  Future<TransactionDbModel?> getTransactionId(int id) async {
+  Future<TransactionDbModel?> getId(int id) async {
     try {
-      Map<String, Object?>? transMap = await _store.queryTransactionAtId(id);
+      Map<String, Object?>? transMap = await _store.queryId(id);
 
       if (transMap == null) return null;
       return TransactionDbModel.fromMap(transMap);
@@ -62,9 +61,9 @@ class TransactionRepository implements AbstractTransactionRepository {
   }
 
   @override
-  Future<int> deleteTransactionById(int transId) async {
+  Future<int> deleteById(int transId) async {
     try {
-      final result = await _store.deleteTransactionId(transId);
+      final result = await _store.deleteId(transId);
       if (result != 1) {
         throw Exception('_store.deleteTransactionId return $result');
       }
@@ -114,13 +113,13 @@ class TransactionRepository implements AbstractTransactionRepository {
   }
 
   @override
-  Future<List<TransactionDbModel>> getNTransactionsFromDate({
+  Future<List<TransactionDbModel>> getNFromDate({
     required ExtendedDate startDate,
     required int accountId,
     required int maxTransactions,
   }) async {
     try {
-      final result = await _store.queryNTransactionsFromDate(
+      final result = await _store.queryNFromDate(
         startDate: startDate,
         accountId: accountId,
         maxTransactions: maxTransactions,
@@ -141,12 +140,12 @@ class TransactionRepository implements AbstractTransactionRepository {
   }
 
   @override
-  Future<int> updateTransactionStatus({
+  Future<int> updateStatus({
     required int transId,
     required TransStatus status,
   }) async {
     try {
-      final result = await _store.updateTransactionStatus(
+      final result = await _store.updateStatus(
         id: transId,
         newStatus: status.index,
       );
@@ -154,6 +153,23 @@ class TransactionRepository implements AbstractTransactionRepository {
       return result;
     } catch (err) {
       final message = 'TransactionRepository.updateTransStatus: $err';
+      log(message);
+      throw Exception(message);
+    }
+  }
+
+  @override
+  Future<List<TransactionDbModel>> queryFromOfxId(int ofxId) async {
+    try {
+      final listOfMaps = await _store.queryFromOfxId(ofxId);
+
+      List<TransactionDbModel> transactions = [];
+      for (final map in listOfMaps) {
+        transactions.add(TransactionDbModel.fromMap(map!));
+      }
+      return transactions;
+    } catch (err) {
+      final message = 'TransactionRepository.queryTransactionsFromOfxId: $err';
       log(message);
       throw Exception(message);
     }

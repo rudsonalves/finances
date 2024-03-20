@@ -52,7 +52,7 @@ abstract class BalanceStorer {
   /// This method simplifies the process of adding balance records to the
   /// database, ensuring that data integrity is maintained through the use
   /// of conflict handling strategies.
-  Future<int> insertBalance(Map<String, dynamic> balanceMap);
+  Future<int> insert(Map<String, dynamic> balanceMap);
 
   /// Queries the database for a specific balance record by its ID.
   ///
@@ -87,7 +87,7 @@ abstract class BalanceStorer {
   /// This method is essential for retrieving balance details based on their ID,
   /// providing a straightforward way to access specific financial records
   /// within the application.
-  Future<Map<String, dynamic>?> queryBalanceId(int id);
+  Future<Map<String, dynamic>?> queryId(int id);
 
   /// Retrieves the most recent balance record for a given account up to a
   /// specified date.
@@ -127,7 +127,7 @@ abstract class BalanceStorer {
   /// Utilizing this method allows for a targeted retrieval of balance
   /// information, facilitating accurate financial tracking and analysis within
   /// the application.
-  Future<Map<String, dynamic>?> queryBalanceInDate(
+  Future<Map<String, dynamic>?> queryInDate(
       {required int accountId, required int date});
 
   /// Retrieves all balance records for a specified account after a given date.
@@ -168,7 +168,7 @@ abstract class BalanceStorer {
   /// This method is essential for obtaining a sequence of balance changes over
   /// time, facilitating detailed financial analysis and reporting for an
   /// account.
-  Future<List<Map<String, dynamic>>> queryAllBalanceAfterDate(
+  Future<List<Map<String, dynamic>>> queryAllAfterDate(
       {required int accountId, required int date});
 
   /// Updates an existing balance record in the database.
@@ -202,7 +202,7 @@ abstract class BalanceStorer {
   /// This method is crucial for maintaining accurate and up-to-date balance
   /// information within the system, supporting financial tracking and
   /// management capabilities.
-  Future<void> updateBalance(Map<String, dynamic> balanceMap);
+  Future<void> update(Map<String, dynamic> balanceMap);
 
   /// Deletes a balance record from the database by its ID.
   ///
@@ -226,7 +226,7 @@ abstract class BalanceStorer {
   ///
   /// Employing this method ensures that balance records can be removed as
   /// needed, maintaining the accuracy and relevancy of the financial dataset.
-  Future<void> deleteBalance(int id);
+  Future<void> deleteId(int id);
 
   /// Deletes a balance record if it has no associated transactions.
   ///
@@ -278,7 +278,7 @@ class BalanceStore implements BalanceStorer {
   final _databaseManager = locator<DatabaseManager>();
 
   @override
-  Future<int> insertBalance(Map<String, dynamic> balanceMap) async {
+  Future<int> insert(Map<String, dynamic> balanceMap) async {
     final database = await _databaseManager.database;
 
     try {
@@ -296,7 +296,7 @@ class BalanceStore implements BalanceStorer {
   }
 
   @override
-  Future<Map<String, dynamic>?> queryBalanceId(int id) async {
+  Future<Map<String, dynamic>?> queryId(int id) async {
     final database = await _databaseManager.database;
 
     try {
@@ -315,7 +315,7 @@ class BalanceStore implements BalanceStorer {
   }
 
   @override
-  Future<Map<String, dynamic>?> queryBalanceInDate({
+  Future<Map<String, dynamic>?> queryInDate({
     required int accountId,
     required int date,
   }) async {
@@ -339,7 +339,7 @@ class BalanceStore implements BalanceStorer {
   }
 
   @override
-  Future<List<Map<String, dynamic>>> queryAllBalanceAfterDate({
+  Future<List<Map<String, dynamic>>> queryAllAfterDate({
     required int accountId,
     required int date,
   }) async {
@@ -362,7 +362,7 @@ class BalanceStore implements BalanceStorer {
   }
 
   @override
-  Future<void> updateBalance(Map<String, dynamic> balanceMap) async {
+  Future<void> update(Map<String, dynamic> balanceMap) async {
     final database = await _databaseManager.database;
 
     try {
@@ -381,7 +381,7 @@ class BalanceStore implements BalanceStorer {
   }
 
   @override
-  Future<void> deleteBalance(int id) async {
+  Future<void> deleteId(int id) async {
     final database = await _databaseManager.database;
 
     try {

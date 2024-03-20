@@ -9,6 +9,7 @@ import '../categories/widget/add_category_page.dart';
 import '../home_page/balance_card/balance_card_controller.dart';
 import '../home_page/home_page.dart';
 import '../account/account_page.dart';
+import '../ofx_page/ofx_page.dart';
 import '../statistics/statistic_controller.dart';
 import '../statistics/statistics_page.dart';
 import '../home_page/home_page_controller.dart';
@@ -51,16 +52,32 @@ class _HomePageViewState extends State<HomePageView> {
     // 1 AccountPage(),
     // 2 BudgetPage(),
     // 3 StatisticsPage(),
+    // 4 OfxPage()
 
     setState(() {
       _pageIndex = page;
-      _floatAppButton = (page != 3) ? true : false;
-      if (page == 0) {
-        _addFunction = addTransaction;
-      } else if (page == 1) {
-        _addFunction = addAccount;
-      } else if (page == 2) {
-        _addFunction = addCategory;
+      // _floatAppButton = (page != 3) ? true : false;
+      _floatAppButton = true;
+      switch (page) {
+        case 0:
+          _addFunction = addTransaction;
+
+          break;
+        case 1:
+          _addFunction = addAccount;
+
+          break;
+        case 2:
+          _addFunction = addCategory;
+
+          break;
+        case 3:
+          _floatAppButton = false;
+          _addFunction = null;
+          break;
+        case 4:
+          _addFunction = null;
+          _floatAppButton = false;
       }
 
       // Jump to new page
@@ -122,9 +139,11 @@ class _HomePageViewState extends State<HomePageView> {
       onPopInvoked: (_) => changeToMainPage(),
       child: Scaffold(
         floatingActionButton: _floatAppButton
-            ? CustomFloatingActionButton(onPressed: _addFunction)
+            ? CustomFloatingActionButton(
+                onPressed: _addFunction,
+              )
             : null,
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
         bottomNavigationBar: CustomBottomNavigatorBar(
           page: _pageIndex,
           floatAppButton: _floatAppButton,
@@ -138,6 +157,7 @@ class _HomePageViewState extends State<HomePageView> {
             AccountPage(),
             CategoriesPage(),
             StatisticsPage(),
+            OfxPage(),
           ],
         ),
       ),

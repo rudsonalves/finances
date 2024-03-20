@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../common/constants/app_constants.dart';
 import '../../../common/constants/themes/app_button_styles.dart';
 import '../../../common/constants/themes/app_text_styles.dart';
 import '../../../common/constants/themes/colors/custom_color.g.dart';
@@ -34,7 +35,6 @@ class DismissibleCategory extends StatefulWidget {
 
 class _DismissibleCategoryState extends State<DismissibleCategory> {
   Future<bool?> removeCategoryDialog(
-    BuildContext context,
     String categoryName,
   ) async {
     final AppLocalizations locale = AppLocalizations.of(context)!;
@@ -136,7 +136,8 @@ class _DismissibleCategoryState extends State<DismissibleCategory> {
           }
           if (direction == DismissDirection.endToStart) {
             // Delete direction
-            if (category.categoryId == 1) {
+            if (category.categoryId == TRANSFER_CATEGORY_ID) {
+              if (!mounted) return false;
               await showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
@@ -179,10 +180,7 @@ class _DismissibleCategoryState extends State<DismissibleCategory> {
             }
 
             if (!mounted) return false;
-            bool? result = await removeCategoryDialog(
-              context,
-              category.categoryName,
-            );
+            bool? result = await removeCategoryDialog(category.categoryName);
 
             if (result == true) {
               await widget.controller.removeCategory(category);

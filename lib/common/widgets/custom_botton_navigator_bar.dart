@@ -71,7 +71,6 @@ class _CustomBottomNavigatorBarState extends State<CustomBottomNavigatorBar> {
                   color: widget.page == 1 ? selecteColor : unselecteColor,
                   index: 1,
                 ),
-                if (widget.floatAppButton) const SizedBox(width: 40),
                 CustomBottomAppBarItem(
                   tooltip: locale.budgetPageTitle,
                   changePage: widget.changePage,
@@ -90,6 +89,16 @@ class _CustomBottomNavigatorBarState extends State<CustomBottomNavigatorBar> {
                   color: widget.page == 3 ? selecteColor : unselecteColor,
                   index: 3,
                 ),
+                CustomBottomAppBarItem(
+                  tooltip: locale.statisticsPageTitle,
+                  changePage: widget.changePage,
+                  icon: widget.page == 4
+                      ? FontelloIcons.ofx_archive
+                      : FontelloIcons.ofx_archive_off,
+                  color: widget.page == 4 ? selecteColor : unselecteColor,
+                  index: 4,
+                ),
+                if (widget.floatAppButton) const SizedBox(width: 40),
               ],
             ),
           ),

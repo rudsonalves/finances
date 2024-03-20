@@ -91,7 +91,7 @@ class _AddAccountPageState extends State<AddAccountPage> {
       await locator<AbstractAccountRepository>().addAccount(newAccount);
       _homePageController.setRedraw();
     }
-    if (!context.mounted) return;
+    if (!mounted) return;
     Navigator.pop(context);
   }
 

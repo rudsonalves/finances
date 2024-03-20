@@ -12,7 +12,10 @@ import 'balance_manager.dart';
 /// This class provides static methods to handle the creation and deletion of
 /// transactions within the database. It ensures that balance records are
 /// appropriately updated in response to transaction changes.
-class TransactionManager {
+sealed class TransactionManager {
+  static final balanceRepository = locator<AbstractBalanceRepository>();
+  static final transactionRepository = locator<AbstractTransactionRepository>();
+
   /// Private constructor to prevent instantiation.
   TransactionManager._();
 
@@ -30,9 +33,9 @@ class TransactionManager {
   /// The method adjusts the opening and closing balances of all subsequent
   /// balance records after the transaction date to account for the transaction
   /// value.
-  static Future<void> addNewTransaction(TransactionDbModel transaction) async {
+  static Future<void> addNew(TransactionDbModel transaction) async {
     // Get or create a balance in the transaction date
-    final balance = await BalanceManager.returnBalanceInDate(
+    final balance = await BalanceManager.getBalanceInDate(
       date: transaction.transDate,
       accountId: transaction.transAccountId,
     );
@@ -41,8 +44,7 @@ class TransactionManager {
     transaction.transBalanceId = balance.balanceId!;
 
     // insert a new transaction in database
-    await locator<AbstractTransactionRepository>()
-        .insertTransaction(transaction);
+    await transactionRepository.insert(transaction);
 
     // update subsequent balances
     await _addAdjustSubsequentBalances(
@@ -69,10 +71,8 @@ class TransactionManager {
     required double value,
     required int accountId,
   }) async {
-    final balanceRepository = locator<AbstractBalanceRepository>();
-
     // Get all balance before transaction date
-    final balancesAfterDate = await balanceRepository.getAllBalanceAfterDate(
+    final balancesAfterDate = await balanceRepository.getAllAfterDate(
       date: date,
       accountId: accountId,
     );
@@ -83,7 +83,7 @@ class TransactionManager {
       balance.balanceOpen += value;
       balance.balanceClose += value;
 
-      await balanceRepository.updateBalance(balance);
+      await balanceRepository.update(balance);
     }
   }
 
@@ -99,8 +99,8 @@ class TransactionManager {
   /// The method adjusts the opening and closing balances of all subsequent
   /// balance records after the transaction date to account for the removal of
   /// the transaction value.
-  static Future<void> removeTransaction(TransactionDbModel transaction) async {
-    await removeTransactionByValues(
+  static Future<void> remove(TransactionDbModel transaction) async {
+    await removeByValues(
       id: transaction.transId!,
       balanceId: transaction.transBalanceId!,
       accountId: transaction.transAccountId,
@@ -123,7 +123,7 @@ class TransactionManager {
   /// The method adjusts the opening and closing balances of all subsequent
   /// balance records after the transaction date to account for the removal of
   /// the transaction value.
-  static Future<int> removeTransactionByValues({
+  static Future<int> removeByValues({
     required int id,
     required int balanceId,
     required int accountId,
@@ -131,8 +131,7 @@ class TransactionManager {
     required double value,
   }) async {
     // Remove transaction by your id
-    final result = await locator<AbstractTransactionRepository>()
-        .deleteTransactionById(id);
+    final result = await transactionRepository.deleteById(id);
 
     // Update subsequents balances
     await _subtractAdjustSubsequentBalances(
@@ -142,7 +141,7 @@ class TransactionManager {
     );
 
     // Remove balance if there have no more transactions
-    await locator<AbstractBalanceRepository>().deleteEmptyBalance(balanceId);
+    await balanceRepository.deleteEmptyBalance(balanceId);
 
     return result;
   }
@@ -164,10 +163,8 @@ class TransactionManager {
     required double value,
     required int accountId,
   }) async {
-    final balanceRepository = locator<AbstractBalanceRepository>();
-
     // Get all balance before transaction date
-    final balancesAfterDate = await balanceRepository.getAllBalanceAfterDate(
+    final balancesAfterDate = await balanceRepository.getAllAfterDate(
       date: date,
       accountId: accountId,
     );
@@ -178,7 +175,7 @@ class TransactionManager {
       balance.balanceOpen -= value;
       balance.balanceClose -= value;
 
-      await balanceRepository.updateBalance(balance);
+      await balanceRepository.update(balance);
     }
   }
 
@@ -223,8 +220,8 @@ class TransactionManager {
   static Future<int> updateTransaction(TransactionDbModel transaction) async {
     // Obtain original transaction register to avoid editing the transaction
     // value or date.
-    final originTransaction = await locator<AbstractTransactionRepository>()
-        .getTransactionId(transaction.transId!);
+    final originTransaction =
+        await transactionRepository.getId(transaction.transId!);
 
     if (originTransaction == null) {
       final message =
@@ -234,7 +231,7 @@ class TransactionManager {
     }
 
     // Pass the value and date from original transaction
-    await removeTransactionByValues(
+    await removeByValues(
       id: originTransaction.transId!,
       balanceId: originTransaction.transBalanceId!,
       accountId: originTransaction.transAccountId,
@@ -243,7 +240,7 @@ class TransactionManager {
     );
 
     transaction.transId = null;
-    await addNewTransaction(transaction);
+    await addNew(transaction);
 
     return transaction.transId!;
   }

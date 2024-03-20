@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:sqflite/sqflite.dart';
 
 import 'constants.dart';
@@ -15,7 +17,7 @@ class DatabaseMigrations {
   /// This is the database scheme current version. To futures upgrades
   /// in database increment this value and add a new update script in
   /// _migrationScripts Map.
-  static const databaseSchemeVersion = 1008;
+  static const databaseSchemeVersion = 1009;
 
   // Retrieves the database schema version in a readable format (e.g., "1.0.07").
   static String get dbSchemeVersion {
@@ -194,6 +196,110 @@ class DatabaseMigrations {
           ' END',
       'COMMIT',
     ],
+    1009: [
+      'BEGIN TRANSACTION',
+      'CREATE TABLE IF NOT EXISTS $ofxACCTable ('
+          ' $ofxACCId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+          ' $ofxACCAccountId INTEGER NOT NULL,'
+          ' $ofxACCBankAccountId TEXT NOT NULL,'
+          ' $ofxACCBankName TEXT,'
+          ' $ofxACCType TEXT NOT NULL,'
+          ' $ofxACCNTrans INTEGER NOT NULL,'
+          ' $ofxACCStartDate INTEGER NOT NULL,'
+          ' $ofxACCEndDate INTEGER NOT NULL,'
+          ' FOREIGN KEY ($ofxACCAccountId)'
+          '   REFERENCES $accountTable ($accountId),'
+          ' FOREIGN KEY ($ofxACCBankAccountId)'
+          '   REFERENCES $ofxRelationshipTable ($ofxRelBankAccountId)'
+          ')',
+      'CREATE INDEX IF NOT EXISTS $ofxAccountBankIndex'
+          ' ON $ofxACCTable ($ofxACCStartDate)',
+      'CREATE TABLE IF NOT EXISTS $ofxRelationshipTable ('
+          ' $ofxRelId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+          ' $ofxRelBankAccountId TEXT UNIQUE NOT NULL,'
+          ' $ofxRelAccountId INTEGER NOT NULL,'
+          ' $ofxRelBankName TEXT,'
+          ' FOREIGN KEY ($ofxRelAccountId)'
+          '   REFERENCES $accountTable ($accountId)'
+          ')',
+      'CREATE INDEX IF NOT EXISTS $ofxRelaltionshipIndex'
+          ' ON $ofxRelationshipTable ($ofxRelBankAccountId)',
+      'CREATE TABLE IF NOT EXISTS $ofxTransTemplateTable ('
+          ' $ofxTransId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+          ' $ofxTransMemo TEXT NOT NULL,'
+          ' $ofxTransAccountId INTEGER NOT NULL,'
+          ' $ofxTransCategoryId INTEGER NOT NULL,'
+          ' $ofxTransDescription TEXT,'
+          ' $ofxTransTransferAccountId INTEGER,'
+          ' FOREIGN KEY ($ofxTransAccountId)'
+          '   REFERENCES $accountTable ($accountId),'
+          ' FOREIGN KEY ($ofxTransCategoryId)'
+          '   REFERENCES $categoriesTable ($categoryId),'
+          ' FOREIGN KEY ($ofxTransTransferAccountId)'
+          '   REFERENCES $accountTable ($accountId)'
+          ')',
+      'CREATE INDEX IF NOT EXISTS $ofxTransMemoIndex'
+          ' ON $ofxTransTemplateTable ($ofxTransMemo)',
+      'CREATE INDEX IF NOT EXISTS $ofxTransAccountIndex'
+          ' ON $ofxTransTemplateTable ($ofxTransAccountId)',
+      'CREATE TABLE IF NOT EXISTS ${transactionsTable}_new ('
+          ' $transId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+          ' $transBalanceId INTEGER NOT NULL,'
+          ' $transAccountId INTEGER NOT NULL,'
+          ' $transDescription TEXT NOT NULL,'
+          ' $transCategoryId INTEGER NOT NULL,'
+          ' $transValue REAL NOT NULL,'
+          ' $transStatus INTEGER NOT NULL,'
+          ' $transTransferId INTEGER,'
+          ' $transDate INTEGER NOT NULL,'
+          ' $transOfxId INTEGER,'
+          ' FOREIGN KEY ($transCategoryId)'
+          '   REFERENCES $categoriesTable ($categoryId)'
+          '   ON DELETE RESTRICT,'
+          ' FOREIGN KEY ($transBalanceId)'
+          '   REFERENCES $balanceTable ($balanceId)'
+          '   ON DELETE RESTRICT,'
+          ' FOREIGN KEY ($transAccountId)'
+          '   REFERENCES $accountTable ($accountId)'
+          '   ON DELETE RESTRICT,'
+          ' FOREIGN KEY ($transTransferId)'
+          '   REFERENCES $transfersTable ($transferId)'
+          '   ON DELETE RESTRICT,'
+          ' FOREIGN KEY ($transOfxId)'
+          '   REFERENCES $ofxACCTable ($ofxACCId)'
+          ')',
+      'INSERT INTO ${transactionsTable}_new ($transId, $transBalanceId,'
+          ' $transAccountId, $transDescription, $transCategoryId, $transValue, '
+          ' $transStatus, $transTransferId, $transDate) '
+          ' SELECT $transId, $transBalanceId, $transAccountId, $transDescription,'
+          '   $transCategoryId, $transValue, $transStatus, $transTransferId,'
+          '   $transDate FROM $transactionsTable',
+      'DROP TABLE $transactionsTable',
+      'ALTER TABLE ${transactionsTable}_new RENAME TO $transactionsTable',
+      'CREATE INDEX IF NOT EXISTS $transactionsDateIndex'
+          ' ON $transactionsTable ($transDate)',
+      'CREATE INDEX IF NOT EXISTS $transactionsCategoryIndex'
+          ' ON $transactionsTable ($transCategoryId)',
+      'CREATE TRIGGER IF NOT EXISTS $triggerAfterInsertTransaction'
+          ' AFTER INSERT ON $transactionsTable'
+          ' FOR EACH ROW'
+          ' BEGIN'
+          '   UPDATE $balanceTable'
+          '   SET $balanceClose = $balanceClose + NEW.$transValue,'
+          '       $balanceTransCount = IFNULL($balanceTransCount, 0) + 1'
+          '   WHERE $balanceId = NEW.$transBalanceId;'
+          ' END',
+      'CREATE TRIGGER IF NOT EXISTS $triggerAfterDeleteTransaction'
+          ' AFTER DELETE ON $transactionsTable'
+          ' FOR EACH ROW'
+          ' BEGIN'
+          '   UPDATE $balanceTable'
+          '   SET $balanceClose = $balanceClose - OLD.$transValue,'
+          '       $balanceTransCount = IFNULL($balanceTransCount, 0) - 1'
+          '   WHERE $balanceId = OLD.$transBalanceId;'
+          ' END',
+      'COMMIT',
+    ],
   };
 
   /// Applies migration scripts to the database batch.
@@ -213,16 +319,18 @@ class DatabaseMigrations {
     required int targetVersion,
   }) async {
     await db.execute('PRAGMA foreign_keys=off');
-    final batch = db.batch();
     for (var version = currentVersion + 1;
         version <= targetVersion;
         version++) {
+      log('Database migrating to version: $version');
+      final batch = db.batch();
       final scripts = migrationScripts[version];
       if (scripts != null) {
         for (final script in scripts) {
           batch.execute(script);
         }
       }
+      await batch.commit(noResult: true);
 
       if (version == 1008) {
         // Remove empty balances
@@ -233,7 +341,6 @@ class DatabaseMigrations {
         );
       }
     }
-    await batch.commit(noResult: true);
     await db.execute('PRAGMA foreign_keys=on');
   }
 }

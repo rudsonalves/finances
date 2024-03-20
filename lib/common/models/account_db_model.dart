@@ -44,7 +44,7 @@ class AccountDbModel {
     var accountIcon = await locator<AbstractIconRepository>().getIconId(iconId);
 
     return AccountDbModel(
-      accountId: map['accountId'] != null ? map['accountId'] as int : null,
+      accountId: map['accountId'] as int?,
       accountName: map['accountName'] as String,
       accountUserId: map['accountUserId'] as String,
       accountIcon: accountIcon,

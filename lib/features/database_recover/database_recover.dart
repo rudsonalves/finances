@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:path/path.dart' as path;
@@ -10,6 +11,7 @@ import 'package:restart_app/restart_app.dart';
 import '../../common/constants/routes/app_route.dart';
 import '../../common/constants/themes/app_button_styles.dart';
 import '../../common/constants/themes/app_text_styles.dart';
+import '../../common/widgets/widget_alert_dialog.dart';
 import '../../repositories/backup/abstract_backup_repository.dart';
 import '../../repositories/backup/backup_repository.dart';
 
@@ -43,13 +45,27 @@ class _DatabaseRecoverState extends State<DatabaseRecover> {
         PlatformFile selectedFile = result.files.first;
         selectedFileName = selectedFile.name;
 
-        await _backupRepository.restoreBackup(selectedFile.path!);
+        final String path = selectedFile.path!;
+
+        final RegExp dbER =
+            RegExp(r'^.*\/app_database\.db(_bkp_\d{4}_\d{2}_\d{2}_\d{4})?$');
+
+        if (!dbER.hasMatch(path.toLowerCase())) {
+          await _showNotADatabaseFileMessage();
+          return;
+        }
+
+        await _backupRepository.restoreBackup(path);
 
         setState(() {
           _message = locale.databaseRecoverRetrievedSuccessfully;
         });
 
-        await Restart.restartApp(webOrigin: AppRoute.onboard.name);
+        if (!mounted) return;
+        Navigator.pop(context);
+        if (!kDebugMode) {
+          await Restart.restartApp(webOrigin: AppRoute.onboard.name);
+        }
       }
     } catch (err) {
       setState(() {
@@ -58,6 +74,15 @@ class _DatabaseRecoverState extends State<DatabaseRecover> {
 
       Logger().e('Error: $err');
     }
+  }
+
+  Future<void> _showNotADatabaseFileMessage() async {
+    if (!mounted) return;
+    await singleMessageAlertDialog(
+      context,
+      title: 'Database Recovery',
+      message: 'This is not a database file!',
+    );
   }
 
   Future<void> _backupFunction(AppLocalizations locale) async {

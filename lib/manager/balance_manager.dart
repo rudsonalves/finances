@@ -3,7 +3,9 @@ import '../common/models/extends_date.dart';
 import '../locator.dart';
 import '../repositories/balance/abstract_balance_repository.dart';
 
-class BalanceManager {
+sealed class BalanceManager {
+  static final repository = locator<AbstractBalanceRepository>();
+
   BalanceManager._();
 
   /// Adds or retrieves a balance for a specific account on a given date.
@@ -46,7 +48,7 @@ class BalanceManager {
   /// This method is particularly useful for ensuring that financial
   /// applications maintain continuity in balance tracking, automatically
   /// handling missing balance entries for specific dates.
-  static Future<BalanceDbModel> returnBalanceInDate({
+  static Future<BalanceDbModel> getBalanceInDate({
     required ExtendedDate date,
     required int accountId,
   }) async {
@@ -78,7 +80,7 @@ class BalanceManager {
     }
 
     // Write new balance and return it
-    await locator<AbstractBalanceRepository>().insertBalance(balance);
+    await repository.insert(balance);
 
     return balance;
   }
@@ -128,7 +130,7 @@ class BalanceManager {
     final onlyDate = date.onlyDate;
 
     // get a balance from accountId in this date
-    var balance = await locator<AbstractBalanceRepository>().getBalanceInDate(
+    var balance = await repository.getInDate(
       date: onlyDate,
       accountId: accountId,
     );

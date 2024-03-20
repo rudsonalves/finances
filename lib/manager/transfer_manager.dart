@@ -1,14 +1,14 @@
 import 'dart:developer';
 
-import 'package:finances/repositories/transaction/abstract_transaction_repository.dart';
-
 import '../../common/models/transaction_db_model.dart';
 import '../../common/models/transfer_db_model.dart';
 import '../locator.dart';
+import '../repositories/transaction/abstract_transaction_repository.dart';
 import '../repositories/transfer/abstract_transfer_repository.dart';
 import 'transaction_manager.dart';
 
-/// Manages the creation, update, and removal of financial transfers between accounts.
+/// Manages the creation, update, and removal of financial transfers between
+/// accounts.
 ///
 /// This class provides static methods to facilitate the management of transfers
 /// within a financial application. It ensures that transfers are processed
@@ -20,14 +20,15 @@ import 'transaction_manager.dart';
 /// Methods:
 /// - `addTransfer`: Creates a new transfer between two accounts, generating
 ///   corresponding transactions for both the origin and destination accounts.
-/// - `removeTransfer`: Removes an existing transfer and its associated transactions
-///   based on the originating transaction's details.
-/// - `updateTransfer`: Updates a transfer by removing the existing one and creating
-///   a new transfer with updated account details.
+/// - `removeTransfer`: Removes an existing transfer and its associated
+///   transactions based on the originating transaction's details.
+/// - `updateTransfer`: Updates a transfer by removing the existing one and
+///   creating a new transfer with updated account details.
 ///
 /// Usage:
 /// The class is used statically and does not require instantiation. Methods are
-/// accessed directly through the class name, e.g., `TransferManager.addTransfer(...)`.
+/// accessed directly through the class name, e.g.,
+/// `TransferManager.addTransfer(...)`.
 ///
 /// Example:
 /// ```dart
@@ -39,7 +40,9 @@ import 'transaction_manager.dart';
 ///
 /// This approach ensures that transfer-related operations are handled in a
 /// consistent manner, providing a clear and concise API for managing transfers.
-class TransferManager {
+sealed class TransferManager {
+  static final repository = locator<AbstractTransferRepository>();
+
   /// Private constructor to prevent instantiation.
   TransferManager._();
 
@@ -63,9 +66,9 @@ class TransferManager {
   ///    account IDs.
   ///
   /// Exceptions:
-  /// - Logs any encountered errors and throws an exception for critical failures,
-  ///   especially when creating the empty transfer record or during transactions
-  ///   insertion.
+  /// - Logs any encountered errors and throws an exception for critical
+  ///   failures, especially when creating the empty transfer record or during
+  ///   transactions insertion.
   ///
   /// Usage:
   /// ```dart
@@ -75,9 +78,9 @@ class TransferManager {
   /// );
   /// ```
   ///
-  /// Ensures financial transactions are mirrored across accounts with a consistent
-  /// link for traceability and auditing purposes.
-  static Future<void> addTranfer({
+  /// Ensures financial transactions are mirrored across accounts with a
+  /// consistent link for traceability and auditing purposes.
+  static Future<void> add({
     required TransactionDbModel transOrigin,
     required int accountDestinyId,
   }) async {
@@ -100,7 +103,7 @@ class TransferManager {
       transfer.transferTransId1 = transDestiny.transId;
       transfer.transferAccount0 = transOrigin.transAccountId;
       transfer.transferAccount1 = transDestiny.transAccountId;
-      await locator<AbstractTransferRepository>().updateTransfer(transfer);
+      await repository.updateTransfer(transfer);
     } catch (err) {
       log('TransferManager.addTranfer: $err');
     }
@@ -126,8 +129,7 @@ class TransferManager {
     final transfer = TransferDbModel();
 
     // Write the transfer in the store to receive a transverId
-    final id =
-        await locator<AbstractTransferRepository>().insertTransfer(transfer);
+    final id = await repository.insertTransfer(transfer);
 
     // Create a Exception if id <= 0.
     if (id <= 0) {
@@ -143,9 +145,9 @@ class TransferManager {
 
   /// Inserts the origin and destination transactions into the database.
   ///
-  /// This internal method adds both the originating and destination transactions
-  /// of a transfer to the database, ensuring they are linked to the same transfer
-  /// record.
+  /// This internal method adds both the originating and destination
+  /// transactions of a transfer to the database, ensuring they are linked to
+  /// the same transfer record.
   ///
   /// Parameters:
   /// - `transOrigin`: The originating transaction model.
@@ -161,8 +163,8 @@ class TransferManager {
     TransactionDbModel transOrigin,
     TransactionDbModel transDestiny,
   ) async {
-    await TransactionManager.addNewTransaction(transOrigin);
-    await TransactionManager.addNewTransaction(transDestiny);
+    await TransactionManager.addNew(transOrigin);
+    await TransactionManager.addNew(transDestiny);
 
     // FIXME: never happens. Remove after some tests
     if (transOrigin.transId == null || transDestiny.transId == null) {
@@ -206,13 +208,10 @@ class TransferManager {
   ///
   /// Ensures the atomic removal of transfers and their transactions to
   /// maintain database integrity and consistency.
-  static Future<int> removeTransfer(TransactionDbModel transOrigin) async {
+  static Future<int> remove(TransactionDbModel transOrigin) async {
     try {
-      final transferRepository = locator<AbstractTransferRepository>();
-
       // Get transfer by id transOrigin.transTransferId
-      final transfer = await transferRepository
-          .getTransferById(transOrigin.transTransferId!);
+      final transfer = await repository.getId(transOrigin.transTransferId!);
       if (transfer == null) {
         throw Exception(
             'transfer id ${transOrigin.transTransferId!} not found');
@@ -224,17 +223,17 @@ class TransferManager {
           : transfer.transferTransId1;
 
       // Obtain destiny transaction to get your balanceId
-      final transDestiny = await locator<AbstractTransactionRepository>()
-          .getTransactionId(transDestinyId!);
+      final transDestiny =
+          await locator<AbstractTransactionRepository>().getId(transDestinyId!);
       if (transDestiny == null) {
         throw Exception('transaction id $transDestinyId not found');
       }
 
       // Reset transfer references to transOrigin and transDestiny transactions
-      await transferRepository.setNullTransferId(transfer.transferId!);
+      await repository.setNullId(transfer.transferId!);
 
       // Remove transOrigin and transDestiny transactions by id
-      var result = await TransactionManager.removeTransactionByValues(
+      var result = await TransactionManager.removeByValues(
         id: transOrigin.transId!,
         balanceId: transOrigin.transBalanceId!,
         accountId: transOrigin.transAccountId,
@@ -248,7 +247,7 @@ class TransferManager {
       }
 
       // Remove transDestiny and transDestiny transactions by id
-      result = await TransactionManager.removeTransactionByValues(
+      result = await TransactionManager.removeByValues(
         id: transDestiny.transId!,
         balanceId: transDestiny.transBalanceId!,
         accountId: transDestiny.transAccountId,
@@ -262,7 +261,7 @@ class TransferManager {
       }
 
       // remove transfer by your id
-      result = await _removeTransferById(transOrigin.transTransferId!);
+      result = await _removeById(transOrigin.transTransferId!);
       if (result < 0) {
         throw Exception(
             'TransactionManager.removeTransactionByValues return $result');
@@ -295,9 +294,8 @@ class TransferManager {
   ///
   /// Usage is strictly internal within `TransferManager` as part of the
   /// transfer removal process.
-  static Future<int> _removeTransferById(int transferId) async {
-    final result =
-        await locator<AbstractTransferRepository>().deleteTransfer(transferId);
+  static Future<int> _removeById(int transferId) async {
+    final result = await repository.deleteId(transferId);
     if (result != 1) {
       final message = 'TransferRepository._removeTransferById: return $result';
       log(message);
@@ -345,16 +343,15 @@ class TransferManager {
   ///
   /// This method provides a robust mechanism for updating transfers, ensuring
   /// the integrity and consistency of financial data within the system.
-  static Future<void> updateTransfer({
+  static Future<void> update({
     required TransactionDbModel newTransaction,
     required int accountDestinyId,
   }) async {
     try {
-      final transferRepository = locator<AbstractTransferRepository>();
       final transactionRepository = locator<AbstractTransactionRepository>();
 
       // get transfer
-      final transfer = await transferRepository.getTransferById(
+      final transfer = await repository.getId(
         newTransaction.transTransferId!,
       );
       if (transfer == null) {
@@ -362,21 +359,21 @@ class TransferManager {
       }
 
       // get original transaction
-      final transOrigin = await transactionRepository
-          .getTransactionId(transfer.transferTransId0!);
+      final transOrigin =
+          await transactionRepository.getId(transfer.transferTransId0!);
 
       // Reset transfer references to transOrigin and transDestiny transactions
-      await transferRepository.setNullTransferId(transfer.transferId!);
+      await repository.setNullId(transfer.transferId!);
 
       // remove origin transaction by id
-      final result = await removeTransfer(transOrigin!);
+      final result = await remove(transOrigin!);
       if (result < 0) {
         throw Exception('return $result');
       }
 
       // create a new transfer
       newTransaction.transId = null;
-      await addTranfer(
+      await add(
         transOrigin: newTransaction,
         accountDestinyId: accountDestinyId,
       );
@@ -395,9 +392,9 @@ class TransferManager {
   ///   if found, or `null` if no transfer with the given ID exists.
   ///
   /// This method logs a message if the transfer record is not found.
-  static Future<TransferDbModel?> getTransferById(int id) async {
+  static Future<TransferDbModel?> getId(int id) async {
     try {
-      return await locator<AbstractTransferRepository>().getTransferById(id);
+      return await repository.getId(id);
     } catch (err) {
       log('TransferRepository.getTransferById: $err');
       return null;

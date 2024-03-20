@@ -55,7 +55,7 @@ class CategoryDbModel {
         await locator<AbstractIconRepository>().getIconId(iconId);
 
     return CategoryDbModel(
-      categoryId: map['categoryId'] != null ? map['categoryId'] as int : null,
+      categoryId: map['categoryId'] as int?,
       categoryName: map['categoryName'] as String,
       categoryIcon: categoryIcon,
       categoryBudget: map['categoryBudget'] as double,

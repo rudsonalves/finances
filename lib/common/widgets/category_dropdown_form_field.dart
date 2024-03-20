@@ -10,7 +10,7 @@ class CategoryDropdownFormField extends StatelessWidget {
   final void Function(String?)? onChanged;
   final Widget? suffixIcon;
   final TextEditingController? controller;
-  final bool lockCategory;
+  final bool readOnly;
   final bool removeTransfer;
 
   const CategoryDropdownFormField({
@@ -21,7 +21,7 @@ class CategoryDropdownFormField extends StatelessWidget {
     this.onChanged,
     this.suffixIcon,
     required this.controller,
-    this.lockCategory = false,
+    this.readOnly = false,
     this.removeTransfer = false,
   });
 
@@ -74,7 +74,7 @@ class CategoryDropdownFormField extends StatelessWidget {
               ),
             )
             .toList(),
-        onChanged: !lockCategory
+        onChanged: !readOnly
             ? (value) {
                 if (controller != null) controller!.text = value!;
                 if (onChanged != null) onChanged!(value);

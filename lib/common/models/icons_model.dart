@@ -29,7 +29,7 @@ class IconModel {
 
   factory IconModel.fromMap(Map<String, dynamic> map) {
     return IconModel(
-      iconId: map['iconId'] != null ? map['iconId'] as int : null,
+      iconId: map['iconId'] as int?,
       iconName: map['iconName'] as String,
       iconFontFamily: AppIcons.iconsFontFamily(map['iconFontFamily'] as String),
       iconColor: map['iconColor'] as int,

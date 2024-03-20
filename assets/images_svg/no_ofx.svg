@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 275.27344 275.27207"
+   version="1.1"
+   id="svg1547"
+   sodipodi:docname="no_ofx.svg"
+   width="275.27344"
+   height="275.27206"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   inkscape:export-filename="/home/rudson/Downloads/svg/fontelloIcons/ofx_archive.png"
+   inkscape:export-xdpi="124.215"
+   inkscape:export-ydpi="124.215"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1551" />
+  <sodipodi:namedview
+     id="namedview1549"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:zoom="0.98294897"
+     inkscape:cx="108.34744"
+     inkscape:cy="217.71222"
+     inkscape:window-width="1920"
+     inkscape:window-height="1043"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer3" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="Layer 1"
+     style="display:inline;opacity:0.5"
+     transform="translate(64.342931,21.214267)">
+    <g
+       id="g2157"
+       transform="translate(-27.169255,15.958776)"
+       inkscape:export-filename="/home/rudson/Documents/Projects/Flutter/finances/assets/images/no_ofx.png"
+       inkscape:export-xdpi="124.215"
+       inkscape:export-ydpi="124.215">
+      <path
+         d="M 22.325,55.813 V 178.6 H 178.601 V 55.813 Z m 0,145.113 c -6.14,0 -11.395,-2.186 -15.767,-6.558 C 2.186,189.996 0,184.74 0,178.6 V 39.348 c 0,-2.605 0.419,-5.116 1.256,-7.535 0.837,-2.418 2.093,-4.65 3.767,-6.697 L 18.976,8.093 c 2.047,-2.605 4.605,-4.605 7.675,-6 C 29.671259,0.70848081 32.955527,-0.00554992 36.278,0 h 128.37 c 3.348,0 6.557,0.698 9.627,2.093 3.07,1.395 5.628,3.395 7.674,6 l 13.953,17.023 c 1.675,2.046 2.93,4.279 3.768,6.697 0.83812,2.423494 1.26271,4.970682 1.256,7.535 V 178.6 c 0,6.139 -2.186,11.395 -6.558,15.767 -4.372,4.372 -9.628,6.558 -15.767,6.558 z M 26.79,33.488 H 174.136 L 164.647,22.325 H 36.278 Z"
+         id="path1545"
+         sodipodi:nodetypes="ccccccssscccccssccccssccccccc"
+         style="fill:#000000" />
+      <path
+         d="M 49.139999,88.860003 H 68.88 c 5.528,0 9.527,1.264 12.002,3.79 2.527,2.473997 3.79,6.475997 3.79,12.001997 v 25.267 c 0,5.528 -1.263,9.556 -3.79,12.083 -2.475,2.473 -6.474,3.709 -12.002,3.709 H 49.139999 c -5.528,0 -9.556,-1.236 -12.083,-3.71 -2.473,-2.526 -3.71,-6.554 -3.71,-12.082 v -25.267 c 0,-5.526 1.237,-9.528 3.71,-12.001997 2.527,-2.526 6.555,-3.79 12.083,-3.79 z m 57.640001,0 c 3.212,0 6.607,0.106 10.187,0.316 3.58,0.21 6.501,0.37 8.765,0.475 V 100.308 c -2.02779,-0.14293 -4.05451,-0.3006 -6.08,-0.473 -2.527,-0.21 -4.712,-0.316 -6.555,-0.316 -1.841,0 -3.027,0.264 -3.553,0.79 -0.527,0.527 -0.79,1.185 -0.79,1.975 v 3.947 h 13.03 v 10.661 h -13.03 v 28.03 H 94.936 v -28.03 H 89.41 v -10.66 h 5.526 v -5.527 c 0,-3.58 1.08,-6.45 3.24,-8.608997 2.157,-2.157 5.025,-3.236 8.605,-3.236 z M 52.298,99.915 c -3.158001,0 -4.740001,1.579 -4.740001,4.737 v 25.267 c 0,3.158 1.582,4.738 4.740001,4.738 h 13.424 c 3.158,0 4.736,-1.58 4.736,-4.738 v -25.267 c 0,-3.158 -1.578,-4.737 -4.736,-4.737 z m 70.67,3.158 h 15.398 l 6.71,12.633 6.712,-12.633 h 15.397 l -12.634,20.924 13.029,20.925 h -15.397 l -7.107,-12.633 -7.107,12.633 H 122.57 l 13.029,-20.926 z"
+         id="path1812"
+         style="display:inline;opacity:1;fill:#1a5fb4" />
+    </g>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer4"
+     inkscape:label="Layer 2"
+     style="display:inline;opacity:0.5"
+     transform="translate(64.342931,21.214267)">
+    <path
+       d="M 72.505655,-21.214123 C -5.9995561,-21.103748 -64.744235,42.090484 -64.340866,119.05546 -63.937489,196.02046 2.6376364,253.88392 72.505655,254.0574 142.37366,254.23088 211.06879,195.89266 210.93029,119.05546 210.79178,42.218264 151.01084,-21.324499 72.505655,-21.214123 Z m 2.623733,26.7409106 c 24.078943,0.2501294 49.893992,8.6269394 73.661002,29.8725854 48.9453,49.390974 40.69993,112.574867 11.4297,148.909687 L 5.4610617,29.087945 C 22.780672,15.39818 47.839907,5.2433061 75.129388,5.5267876 Z M -13.398732,48.360618 141.36067,203.58175 C 108.75906,229.3507 48.733921,242.59436 -1.9690099,197.27031 -50.914306,147.87933 -42.668958,84.695433 -13.398732,48.360618 Z"
+       style="display:inline;opacity:1;fill:#ff0000;stroke-width:0.710203"
+       id="path854"
+       inkscape:export-filename="/home/rudson/Documents/Projects/Flutter/finances/assets/images/no_ofx.png"
+       inkscape:export-xdpi="124.215"
+       inkscape:export-ydpi="124.215" />
+  </g>
+</svg>

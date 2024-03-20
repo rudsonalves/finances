@@ -12,8 +12,8 @@ class BalanceRepository implements AbstractBalanceRepository {
   final _currentAccount = locator<CurrentAccount>();
 
   @override
-  Future<int> insertBalance(BalanceDbModel balance) async {
-    int id = await _store.insertBalance(balance.toMap());
+  Future<int> insert(BalanceDbModel balance) async {
+    int id = await _store.insert(balance.toMap());
     if (id < 0) {
       final message = 'addBalance: return id $id';
       log(message);
@@ -25,8 +25,8 @@ class BalanceRepository implements AbstractBalanceRepository {
   }
 
   @override
-  Future<BalanceDbModel> getBalanceId(int id) async {
-    final map = await _store.queryBalanceId(id);
+  Future<BalanceDbModel> getId(int id) async {
+    final map = await _store.queryId(id);
     if (map == null) {
       const message =
           'SqfliteBalanceRepository: null value in unexpected balance';
@@ -39,13 +39,13 @@ class BalanceRepository implements AbstractBalanceRepository {
   }
 
   @override
-  Future<BalanceDbModel?> getBalanceInDate({
+  Future<BalanceDbModel?> getInDate({
     required ExtendedDate date,
     int? accountId,
   }) async {
     accountId ??= _currentAccount.accountId!;
 
-    final map = await _store.queryBalanceInDate(
+    final map = await _store.queryInDate(
       accountId: accountId,
       date: date.millisecondsSinceEpoch,
     );
@@ -54,11 +54,11 @@ class BalanceRepository implements AbstractBalanceRepository {
   }
 
   @override
-  Future<List<BalanceDbModel>> getAllBalanceAfterDate({
+  Future<List<BalanceDbModel>> getAllAfterDate({
     required ExtendedDate date,
     required int accountId,
   }) async {
-    final mapsList = await _store.queryAllBalanceAfterDate(
+    final mapsList = await _store.queryAllAfterDate(
       accountId: accountId,
       date: date.millisecondsSinceEpoch,
     );
@@ -70,13 +70,13 @@ class BalanceRepository implements AbstractBalanceRepository {
   }
 
   @override
-  Future<void> deleteBalance(int id) async {
-    await _store.deleteBalance(id);
+  Future<void> deleteId(int id) async {
+    await _store.deleteId(id);
   }
 
   @override
-  Future<void> updateBalance(BalanceDbModel balance) async {
-    await _store.updateBalance(balance.toMap());
+  Future<void> update(BalanceDbModel balance) async {
+    await _store.update(balance.toMap());
   }
 
   @override

@@ -3,6 +3,7 @@ import 'dart:convert';
 import '../../locator.dart';
 import '../../repositories/transaction/abstract_transaction_repository.dart';
 import './extends_date.dart';
+import 'ofx_trans_template_model.dart';
 
 enum TransStatus {
   transactionNotChecked,
@@ -19,6 +20,7 @@ class TransactionDbModel {
   TransStatus transStatus;
   int? transTransferId;
   ExtendedDate transDate;
+  int? transOfxId;
 
   TransactionDbModel({
     this.transId,
@@ -30,6 +32,7 @@ class TransactionDbModel {
     this.transStatus = TransStatus.transactionNotChecked,
     this.transTransferId,
     required this.transDate,
+    this.transOfxId,
   });
 
   bool get ischecked => transStatus == TransStatus.transactionChecked;
@@ -44,7 +47,7 @@ class TransactionDbModel {
     _toggleStatus();
     await locator
         .get<AbstractTransactionRepository>()
-        .updateTransactionStatus(transId: transId!, status: transStatus);
+        .updateStatus(transId: transId!, status: transStatus);
   }
 
   static List<TransactionDbModel> listOfTransactions(
@@ -68,6 +71,7 @@ class TransactionDbModel {
       transStatus: transStatus,
       transTransferId: transTransferId,
       transDate: transDate,
+      transOfxId: transOfxId,
     );
   }
 
@@ -81,6 +85,7 @@ class TransactionDbModel {
       transStatus: transStatus,
       transTransferId: transTransferId,
       transDate: transDate,
+      transOfxId: transOfxId,
     );
   }
 
@@ -96,6 +101,7 @@ class TransactionDbModel {
         ' Status: ${transStatus.name};'
         ' TransferId: $transTransferId;'
         ' Date: $transDate'
+        ' OfxId: $transOfxId'
         ')';
   }
 
@@ -111,23 +117,42 @@ class TransactionDbModel {
       'transStatus': transStatus.index,
       'transTransferId': transTransferId,
       'transDate': transDate.millisecondsSinceEpoch,
+      'transOfxId': transOfxId,
     };
+  }
+
+  factory TransactionDbModel.fromOfxTempate({
+    required OfxTransTemplateModel ofxTemplate,
+    required double transValue,
+    required ExtendedDate transDate,
+    required int ofxId,
+  }) {
+    if (transDate.hour == 0) {
+      transDate = transDate.add(const Duration(hours: 9));
+    }
+    return TransactionDbModel(
+      transAccountId: ofxTemplate.accountId,
+      transDescription: ofxTemplate.description ?? ofxTemplate.memo,
+      transCategoryId: ofxTemplate.categoryId,
+      transValue: transValue,
+      transDate: transDate,
+      transOfxId: ofxId,
+    );
   }
 
   factory TransactionDbModel.fromMap(Map<String, dynamic> map) {
     return TransactionDbModel(
-      transId: map['transId'] != null ? map['transId'] as int : null,
-      transBalanceId:
-          map['transBalanceId'] != null ? map['transBalanceId'] as int : null,
+      transId: map['transId'] as int?,
+      transBalanceId: map['transBalanceId'] as int?,
       transAccountId: map['transAccountId'] as int,
       transDescription: map['transDescription'] as String,
       transCategoryId: map['transCategoryId'] as int,
       transValue: map['transValue'] as double,
       transStatus: TransStatus.values[map['transStatus'] as int],
-      transTransferId:
-          map['transTransferId'] != null ? map['transTransferId'] as int : null,
+      transTransferId: map['transTransferId'] as int?,
       transDate:
           ExtendedDate.fromMillisecondsSinceEpoch(map['transDate'] as int),
+      transOfxId: map['transOfxId'] as int?,
     );
   }
 

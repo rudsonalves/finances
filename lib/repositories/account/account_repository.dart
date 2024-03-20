@@ -60,8 +60,6 @@ class AccountRepository implements AbstractAccountRepository {
   @override
   Future<int> addAccount(AccountDbModel account) async {
     int id = await _addOnly(account);
-    // FIXME: This is necessary???
-    // await _balanceRepository.createTodayBalance(account);
 
     await _getUserAccounts();
     return id;

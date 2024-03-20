@@ -69,6 +69,7 @@ const transValue = 'transValue';
 const transStatus = 'transStatus';
 const transTransferId = 'transTransferId';
 const transDate = 'transDate';
+const transOfxId = 'transOfxId';
 
 const transfersTable = 'transfersTable';
 const transferId = 'transferId';
@@ -76,6 +77,34 @@ const transferTransId0 = 'transferTransId0';
 const transferTransId1 = 'transferTransId1';
 const transferAccount0 = 'transferAccount0';
 const transferAccount1 = 'transferAccount1';
+
+const ofxACCTable = 'ofxAccountTable';
+const ofxAccountBankIndex = 'idxOfxAccountBank';
+const ofxACCId = 'id';
+const ofxACCAccountId = 'accountId';
+const ofxACCBankAccountId = 'bankAccountId';
+const ofxACCBankName = 'bankName';
+const ofxACCType = 'accountType';
+const ofxACCNTrans = 'nTrans';
+const ofxACCStartDate = 'startDate';
+const ofxACCEndDate = 'endDate';
+
+const ofxRelationshipTable = 'ofxRelationshipTable';
+const ofxRelaltionshipIndex = 'idxOfxRelationship';
+const ofxRelId = 'id';
+const ofxRelBankAccountId = 'bankAccountId';
+const ofxRelBankName = 'bankName';
+const ofxRelAccountId = 'accountId';
+
+const ofxTransTemplateTable = 'ofxTransTemplateTable';
+const ofxTransMemoIndex = 'idxOfxTransMemo';
+const ofxTransAccountIndex = 'idxOfxTransAccount';
+const ofxTransId = 'id';
+const ofxTransMemo = 'memo';
+const ofxTransAccountId = 'accountId';
+const ofxTransCategoryId = 'categoryId';
+const ofxTransDescription = 'description';
+const ofxTransTransferAccountId = 'transferAccountId';
 
 const triggerAfterInsertTransaction = 'tr_after_insert_transaction';
 const triggerAfterDeleteTransaction = 'tr_after_delete_transaction';
@@ -173,6 +202,7 @@ const createTransactionsSQL = 'CREATE TABLE IF NOT EXISTS $transactionsTable ('
     ' $transStatus INTEGER NOT NULL,'
     ' $transTransferId INTEGER,'
     ' $transDate INTEGER NOT NULL,'
+    ' $transOfxId INTEGER,'
     ' FOREIGN KEY ($transCategoryId)'
     '   REFERENCES $categoriesTable ($categoryId)'
     '   ON DELETE RESTRICT,'
@@ -184,7 +214,9 @@ const createTransactionsSQL = 'CREATE TABLE IF NOT EXISTS $transactionsTable ('
     '   ON DELETE RESTRICT,'
     ' FOREIGN KEY ($transTransferId)'
     '   REFERENCES $transfersTable ($transferId)'
-    '   ON DELETE RESTRICT'
+    '   ON DELETE RESTRICT,'
+    ' FOREIGN KEY ($transOfxId)'
+    '   REFERENCES $ofxACCTable ($ofxACCId)'
     ')';
 
 const createTransactionsDateIndexSQL =
@@ -212,6 +244,63 @@ const createTransfersSQL = 'CREATE TABLE IF NOT EXISTS $transfersTable ('
     '   REFERENCES $accountTable ($accountId)'
     '   ON DELETE RESTRICT'
     ')';
+
+const createOfxACCSQL = 'CREATE TABLE IF NOT EXISTS $ofxACCTable ('
+    ' $ofxACCId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+    ' $ofxACCAccountId INTEGER NOT NULL,'
+    ' $ofxACCBankAccountId TEXT NOT NULL,'
+    ' $ofxACCBankName TEXT,'
+    ' $ofxACCType TEXT NOT NULL,'
+    ' $ofxACCNTrans INTEGER NOT NULL,'
+    ' $ofxACCStartDate INTEGER NOT NULL,'
+    ' $ofxACCEndDate INTEGER NOT NULL,'
+    ' FOREIGN KEY ($ofxACCAccountId)'
+    '   REFERENCES $accountTable ($accountId),'
+    ' FOREIGN KEY ($ofxACCBankAccountId)'
+    '   REFERENCES $ofxRelationshipTable ($ofxRelBankAccountId)'
+    ')';
+
+const createOfxACCBankIndexSQL =
+    'CREATE INDEX IF NOT EXISTS $ofxAccountBankIndex'
+    ' ON $ofxACCTable ($ofxACCStartDate)';
+
+const createOfxRelationshipTableSQL =
+    'CREATE TABLE IF NOT EXISTS $ofxRelationshipTable ('
+    ' $ofxRelId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+    ' $ofxRelBankAccountId TEXT UNIQUE NOT NULL,'
+    ' $ofxRelAccountId INTEGER NOT NULL,'
+    ' $ofxRelBankName TEXT,'
+    ' FOREIGN KEY ($ofxRelAccountId)'
+    '   REFERENCES $accountTable ($accountId)'
+    ')';
+
+const createOfxRelationshipIndexSQL =
+    'CREATE INDEX IF NOT EXISTS $ofxRelaltionshipIndex'
+    ' ON $ofxRelationshipTable ($ofxRelBankAccountId)';
+
+const createOfxTransactionsSQL =
+    'CREATE TABLE IF NOT EXISTS $ofxTransTemplateTable ('
+    ' $ofxTransId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+    ' $ofxTransMemo TEXT NOT NULL,'
+    ' $ofxTransAccountId INTEGER NOT NULL,'
+    ' $ofxTransCategoryId INTEGER NOT NULL,'
+    ' $ofxTransDescription TEXT,'
+    ' $ofxTransTransferAccountId INTEGER,'
+    ' FOREIGN KEY ($ofxTransAccountId)'
+    '   REFERENCES $accountTable ($accountId),'
+    ' FOREIGN KEY ($ofxTransCategoryId)'
+    '   REFERENCES $categoriesTable ($categoryId),'
+    ' FOREIGN KEY ($ofxTransTransferAccountId)'
+    '   REFERENCES $accountTable ($accountId)'
+    ')';
+
+const createOfxTransMemoIndexSQL =
+    'CREATE INDEX IF NOT EXISTS $ofxTransMemoIndex'
+    ' ON $ofxTransTemplateTable ($ofxTransMemo)';
+
+const createOfxTransAccountIndexSQL =
+    'CREATE INDEX IF NOT EXISTS $ofxTransAccountIndex'
+    ' ON $ofxTransTemplateTable ($ofxTransAccountId)';
 
 const createTriggerAfterInsertTransaction =
     'CREATE TRIGGER IF NOT EXISTS $triggerAfterInsertTransaction'

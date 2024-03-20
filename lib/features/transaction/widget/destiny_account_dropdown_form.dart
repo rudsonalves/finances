@@ -19,7 +19,7 @@ class DestinyAccountDropdownForm extends StatefulWidget {
     super.key,
     required this.globalKey,
     required this.originAccountId,
-    required this.validate,
+    this.validate,
     this.destinyAccountId,
     required this.hintText,
     required this.labelText,

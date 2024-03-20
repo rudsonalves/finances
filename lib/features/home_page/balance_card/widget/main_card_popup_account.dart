@@ -9,30 +9,29 @@ import '../balance_card.dart';
 class MainCardPopupAccount extends StatelessWidget {
   const MainCardPopupAccount({
     super.key,
-    required this.currentAccount,
-    required this.customColors,
+    required this.account,
     required this.widget,
   });
 
-  final CurrentAccount currentAccount;
-  final CustomColors customColors;
+  final CurrentAccount account;
   final BalanceCard widget;
 
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
+    final customColors = Theme.of(context).extension<CustomColors>()!;
 
     return PopupMenuButton<int>(
       tooltip: locale.cardBalanceMenuTip,
       child: Row(
         children: [
-          currentAccount.accountIcon.iconWidget(
+          account.accountIcon.iconWidget(
             size: 20,
             color: customColors.sourceLightyellow,
           ),
           const SizedBox(width: 6),
           Text(
-            currentAccount.accountName,
+            account.accountName,
             maxLines: 1,
             style: AppTextStyles.textStyleSemiBold16.copyWith(
               color: customColors.sourceLightyellow,
