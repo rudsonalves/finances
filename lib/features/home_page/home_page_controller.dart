@@ -20,7 +20,7 @@ class HomePageController extends ChangeNotifier {
   late ExtendedDate _lastDate;
   // true if have more transactions in database
   bool _haveMoreTransactions = true;
-  // FIXME: redraw key. **Adjust the code so that key is no longer needed**
+  // a redraw flag
   bool _redraw = false;
   // list of transactions in display
   final List<TransactionDbModel> _transactions = [];

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-// import '../../../common/current_models/current_balance.dart';
 import '../../../common/current_models/current_balance.dart';
 import '../../../common/models/extends_date.dart';
 import '../../../common/models/account_db_model.dart';
@@ -40,6 +39,20 @@ class BalanceCardController extends ChangeNotifier {
   List<AccountDbModel> get accountsList => accountRepository.accountsList;
 
   Map<int, AccountDbModel> get accountsMap => accountRepository.accountsMap;
+
+  bool _redraw = false;
+  bool get redraw => _redraw;
+
+  void setRedraw() {
+    _redraw = true;
+  }
+
+  void makeRedraw() {
+    if (_redraw) {
+      _redraw = false;
+      getBalance();
+    }
+  }
 
   void requestRedraw() {
     if (!_isRedrawSheduled) {

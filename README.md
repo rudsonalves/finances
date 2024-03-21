@@ -288,6 +288,39 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
+## 2024/03/21 - version: 1.1.00+81
+
+**Refinements in OFX File Integration and UI Updates**
+
+This update brings several enhancements to the Finances app, focusing on the integration of OFX files, user interface improvements, and database management efficiency.
+
+**User Interface and PageView Adjustments:**
+
+- The positions of the OFX file addition page (previously page 4) and the statistics page (previously page 3) have been swapped in the `PageView` for both the `CustomBottomNavigationBar` and `HomePageView`, optimizing the user navigation experience.
+
+**OFX File Handling and Dialog Implementation:**
+
+- The `addOfxFile()` method, responsible for adding OFX files in the `OfxPage`, has been migrated from `OfxPage` to `OfxPageController`. This centralizes the file addition functionality within `HomePageView`, allowing for a more streamlined management.
+- The `FloatingActionButton` in `OfxPage` has been removed, leveraging the `FloatingActionButton` from `HomePageView` instead.
+- `OfxTransactionPage` has been transformed into a dialog, initiated through the `showOfxTransactionDialog` function, simplifying the user interaction for adding transactions from OFX files.
+- An `ofxFileImportDialog` function has been introduced, incorporating `OfxFileDialog` along with a checkbox for the automatic addition of transactions via `OfxTransTemplates`, enhancing user flexibility in handling OFX files.
+
+**Redraw Scheduling and State Management:**
+
+- New scheduling functionality for redraw actions has been implemented in both `HomePageController` and `BalanceCardController`. This ensures the `BalanceCard` and the `HomePage` of transactions are updated accordingly following any changes related to OFX account management.
+
+**Service Locator and Singleton Management:**
+
+- `OfxPageController` has been registered as a lazy Singleton in `locator.dart`, ensuring efficient instantiation and resource management.
+
+**Database Triggers and Schema Version Update:**
+
+- Methods `_addAdjustSubsequentBalances` and `_subtractAdjustSubsequentBalances` in `TransactionManager` have been removed, as balance adjustments are now fully managed by database triggers, eliminating the need for manual balance recalculations in the application logic.
+- The database schema has been updated to version 1.0.10. In this version, the `triggerAfterInsertTransaction` and `triggerAfterDeleteTransaction` triggers have been rewritten to automate the adjustments of balances for both the transaction date and subsequent balances, significantly enhancing the efficiency and integrity of database operations.
+
+These updates significantly improve the OFX file integration process, user experience, and the overall robustness of the application's backend.
+
+
 ## 2024/03/20 - version 1.1.00+80:
 
 This update introduces a wide range of enhancements aimed at refining the OFX file integration, user interface improvements, and overall system adjustments for the Finances app. The changes span across new image additions, icon updates, model and widget enhancements, as well as significant refactorings to improve the app's functionality and user experience.

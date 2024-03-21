@@ -84,8 +84,8 @@ class _CustomBottomNavigatorBarState extends State<CustomBottomNavigatorBar> {
                   tooltip: locale.statisticsPageTitle,
                   changePage: widget.changePage,
                   icon: widget.page == 3
-                      ? Icons.assessment
-                      : Icons.assessment_outlined,
+                      ? FontelloIcons.ofx_archive
+                      : FontelloIcons.ofx_archive_off,
                   color: widget.page == 3 ? selecteColor : unselecteColor,
                   index: 3,
                 ),
@@ -93,8 +93,8 @@ class _CustomBottomNavigatorBarState extends State<CustomBottomNavigatorBar> {
                   tooltip: locale.statisticsPageTitle,
                   changePage: widget.changePage,
                   icon: widget.page == 4
-                      ? FontelloIcons.ofx_archive
-                      : FontelloIcons.ofx_archive_off,
+                      ? Icons.assessment
+                      : Icons.assessment_outlined,
                   color: widget.page == 4 ? selecteColor : unselecteColor,
                   index: 4,
                 ),

@@ -17,7 +17,7 @@ class DatabaseMigrations {
   /// This is the database scheme current version. To futures upgrades
   /// in database increment this value and add a new update script in
   /// _migrationScripts Map.
-  static const databaseSchemeVersion = 1009;
+  static const databaseSchemeVersion = 1010;
 
   // Retrieves the database schema version in a readable format (e.g., "1.0.07").
   static String get dbSchemeVersion {
@@ -297,6 +297,40 @@ class DatabaseMigrations {
           '   SET $balanceClose = $balanceClose - OLD.$transValue,'
           '       $balanceTransCount = IFNULL($balanceTransCount, 0) - 1'
           '   WHERE $balanceId = OLD.$transBalanceId;'
+          ' END',
+      'COMMIT',
+    ],
+    1010: [
+      'BEGIN TRANSACTION',
+      'DROP TRIGGER IF EXISTS $triggerAfterInsertTransaction',
+      'DROP TRIGGER IF EXISTS $triggerAfterDeleteTransaction',
+      'CREATE TRIGGER IF NOT EXISTS $triggerAfterInsertTransaction'
+          ' AFTER INSERT ON $transactionsTable'
+          ' FOR EACH ROW'
+          ' BEGIN'
+          '   UPDATE $balanceTable'
+          '   SET $balanceClose = $balanceClose + NEW.$transValue,'
+          '       $balanceTransCount = IFNULL($balanceTransCount, 0) + 1'
+          '   WHERE $balanceId = NEW.$transBalanceId;'
+          '   UPDATE $balanceTable'
+          '   SET $balanceClose = $balanceClose + NEW.$transValue,'
+          '       $balanceOpen = $balanceOpen + NEW.$transValue'
+          '   WHERE $balanceDate > NEW.$transDate'
+          '     AND $balanceAccountId = NEW.$transAccountId;'
+          ' END',
+      'CREATE TRIGGER IF NOT EXISTS $triggerAfterDeleteTransaction'
+          ' AFTER DELETE ON $transactionsTable'
+          ' FOR EACH ROW'
+          ' BEGIN'
+          '   UPDATE $balanceTable'
+          '   SET $balanceClose = $balanceClose - OLD.$transValue,'
+          '       $balanceTransCount = IFNULL($balanceTransCount, 0) - 1'
+          '   WHERE $balanceId = OLD.$transBalanceId;'
+          '   UPDATE $balanceTable'
+          '   SET $balanceClose = $balanceClose - OLD.$transValue,'
+          '       $balanceOpen = $balanceOpen - OLD.$transValue'
+          '   WHERE $balanceDate > OLD.$transDate'
+          '     AND $balanceAccountId = OLD.$transAccountId;'
           ' END',
       'COMMIT',
     ],

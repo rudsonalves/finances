@@ -1,19 +1,36 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:finances/packages/ofx/lib/ofx.dart';
 import 'package:flutter/material.dart';
 
+import '../../common/constants/app_constants.dart';
+import '../../common/models/extends_date.dart';
 import '../../common/models/ofx_account_model.dart';
 import '../../common/models/ofx_relationship_model.dart';
+import '../../common/models/ofx_trans_template_model.dart';
+import '../../common/models/transaction_db_model.dart';
+import '../../common/widgets/widget_alert_dialog.dart';
+import '../../locator.dart';
 import '../../manager/ofx_account_manager.dart';
 import '../../manager/ofx_relationship_manager.dart';
+import '../../manager/ofx_trans_template_manager.dart';
+import '../../manager/transaction_manager.dart';
+import '../../manager/transfer_manager.dart';
+import '../home_page/balance_card/balance_card_controller.dart';
+import '../home_page/home_page_controller.dart';
 import 'ofx_page_state.dart';
+import 'ofx_transactions/ofx_transaction_page.dart';
+import 'widgets/ofx_file_dialog.dart';
 
 class OfxPageController extends ChangeNotifier {
   OfxPageState _state = OfxPageStateInitial();
 
   final List<OfxAccountModel> _ofxAccounts = [];
+  final _homePageController = locator<HomePageController>();
+  final _balanceCardController = locator<BalanceCardController>();
+  bool _autoTransaction = false;
 
   void _changeState(OfxPageState newState) {
     _state = newState;
@@ -22,6 +39,9 @@ class OfxPageController extends ChangeNotifier {
 
   OfxPageState get state => _state;
   List<OfxAccountModel> get ofxAccounts => _ofxAccounts;
+  bool get autoTransaction => _autoTransaction;
+
+  void setAutoTransaction(bool value) => _autoTransaction = value;
 
   Future<void> init() async {
     loadOfxAccounts();
@@ -38,6 +58,12 @@ class OfxPageController extends ChangeNotifier {
       log('OfxPageController.loadOfxAccounts: $err');
       _changeState(OfxPageStateError());
     }
+  }
+
+  void ofxFileRegister() {
+    loadOfxAccounts();
+    _homePageController.setRedraw();
+    _balanceCardController.setRedraw();
   }
 
   Future<bool> addOfxAccount({
@@ -138,5 +164,213 @@ class OfxPageController extends ChangeNotifier {
     }
 
     return newXml;
+  }
+
+  Future<void> showUnexpectedErrorMessage(BuildContext context) async {
+    await singleMessageAlertDialog(
+      context,
+      title: 'Ofx Error',
+      message: 'Sorry. An unexpected error has occured.',
+    );
+  }
+
+  Future<String?> pickAndValidateOfxFile(BuildContext context) async {
+    final ofxSelect = await FilePicker.platform.pickFiles(
+      dialogTitle: 'Select an ofx file',
+    );
+    final ofxPath = ofxSelect?.files.first.path!;
+    if (ofxPath == null) return null;
+
+    if (!ofxPath.toLowerCase().endsWith('.ofx')) {
+      if (!context.mounted) return null;
+      await showWrongExtensionMessage(context, ofxPath);
+      return null;
+    }
+
+    return ofxPath;
+  }
+
+  Future<void> showWrongExtensionMessage(
+    BuildContext context,
+    String ofxPath,
+  ) async {
+    await singleMessageAlertDialog(
+      context,
+      title: 'Ofx Error',
+      message: 'This "${ofxPath.split('/').last}" isn\'t an ofx file!',
+    );
+  }
+
+  Future<Ofx?> processOfxFile(BuildContext context, String ofxPath) async {
+    final ofxFile = File(ofxPath);
+    final Ofx? ofx = await processOfx(ofxFile);
+    if (ofx == null) {
+      if (!context.mounted) return null;
+      showOfxCorruptMessage(context, ofxPath);
+      return null;
+    }
+    return ofx;
+  }
+
+  Future<void> showOfxCorruptMessage(
+    BuildContext context,
+    String ofxPath,
+  ) async {
+    await singleMessageAlertDialog(
+      context,
+      title: 'Ofx Error',
+      message: 'This "${ofxPath.split('/').last}" is corrupt!\n'
+          'I can\'t restore it.',
+    );
+  }
+
+  Future<void> handleOfxImport(
+    BuildContext context, {
+    required Ofx ofx,
+    required String ofxPath,
+  }) async {
+    // Start a new ofxAccount from loaded ofx
+    final ofxAccount = OfxAccountModel.fromOfx(ofx);
+    // ATTEMPTION: this ofx.accountID is the bankAccountId and not user
+    //             accountId. Ofx is an external package and has its own
+    //             attribute name.
+
+    // Check if exists a ofxRelation to this accountId. Get it if esists.
+    OfxRelationshipModel? ofxRelation =
+        await OfxRelationshipManager.getByBankAccountId(ofx.accountID);
+    // Create a new ofxRelation if not exists
+    ofxRelation ??= OfxRelationshipModel(bankAccountId: ofx.accountID);
+
+    if (ofxRelation.id != null) {
+      // Set ofxAccount.bankName and accountId from ofxRelation
+      ofxAccount.bankName = ofxRelation.bankName;
+      ofxAccount.accountId = ofxRelation.accountId;
+    }
+
+    // Set ofxAccount and ofxRelation
+    if (!context.mounted) return;
+    bool result = await ofxFileImportDialog(
+      context,
+      ofxAccount: ofxAccount,
+      ofxRelation: ofxRelation,
+      autoTransaction: _autoTransaction,
+      callback: setAutoTransaction,
+    );
+
+    if (!result || ofxRelation.accountId == null) return;
+
+    bool ok = await addOfxAccount(
+      ofxAccount: ofxAccount,
+      ofxRelation: ofxRelation,
+    );
+    if (!ok) {
+      if (!context.mounted) return;
+      await showAlreadyReleasedOfxMessage(context, ofxPath);
+      return;
+    }
+
+    // Add transactions
+    if (!context.mounted) return;
+    await ofxCreateTransactions(
+      context,
+      ofxAccount: ofxAccount,
+      ofxRelation: ofxRelation,
+      ofxTransactions: ofx.transactions,
+    );
+  }
+
+  Future<void> showAlreadyReleasedOfxMessage(
+    BuildContext context,
+    String ofxPath,
+  ) async {
+    await singleMessageAlertDialog(
+      context,
+      title: 'Ofx Error',
+      message: 'This "${ofxPath.split('/').last}" has already been released!',
+    );
+  }
+
+  Future<void> ofxCreateTransactions(
+    BuildContext context, {
+    required OfxAccountModel ofxAccount,
+    required OfxRelationshipModel ofxRelation,
+    required List<OfxTransaction> ofxTransactions,
+  }) async {
+    for (final ofxTransaction in ofxTransactions) {
+      // Check if exists a ofxTransaction with memo in ofxTrans.memo
+      OfxTransTemplateModel? ofxTemplate =
+          await OfxTransTemplateManager.getByMemo(
+        memo: ofxTransaction.memo,
+        accountId: ofxRelation.accountId!,
+      );
+
+      // if is necessary, create a new ofxTemplate
+      ofxTemplate ??= OfxTransTemplateModel.fromOfxTransaction(
+        ofxTransaction: ofxTransaction,
+        accountId: ofxAccount.accountId!,
+      );
+
+      // Prepare the new transaction from ofxTemplate
+      final transaction = TransactionDbModel.fromOfxTempate(
+        ofxTemplate: ofxTemplate,
+        transValue: ofxTransaction.amount,
+        transDate: ExtendedDate.fromDateTime(ofxTransaction.posted),
+        ofxId: ofxAccount.id!,
+      );
+
+      // Edit Transaction
+      bool addTransaction = true;
+      final oldTemplate = OfxTransTemplateModel.copyTemplate(ofxTemplate);
+      if (!_autoTransaction || transaction.transCategoryId < 1) {
+        if (!context.mounted) return;
+        addTransaction = await showOfxTransactionDialog(
+          context,
+          transaction: transaction,
+          ofxTemplate: ofxTemplate,
+        );
+        // await showDialog(
+        //   context: context,
+        //   builder: (context) => OfxTransactionPage(
+        //     transaction: transaction,
+        //     ofxTemplate: ofxTemplate!,
+        //   ),
+        // );
+      }
+
+      // Save template and a new transaction/transfer
+      if (!addTransaction) {
+        if (!context.mounted) return;
+        await showRemoveTransactionsMessage(context);
+        await OfxAccountManager.delete(ofxAccount);
+        break;
+      }
+      // Update/add a new template in ofxTransTemplateTable if
+      // necessary
+      if (ofxTemplate.id == null) {
+        await OfxTransTemplateManager.add(ofxTemplate);
+      } else if (ofxTemplate != oldTemplate) {
+        await OfxTransTemplateManager.update(ofxTemplate);
+      }
+
+      // Check if is a transfer between accounts
+      if (transaction.transCategoryId != TRANSFER_CATEGORY_ID) {
+        // add a transfer
+        await TransactionManager.addNew(transaction);
+      } else {
+        // add a transaction
+        await TransferManager.add(
+            transOrigin: transaction,
+            accountDestinyId: ofxTemplate.transferAccountId!);
+      }
+    }
+  }
+
+  Future<void> showRemoveTransactionsMessage(BuildContext context) async {
+    if (!context.mounted) return;
+    singleMessageAlertDialog(
+      context,
+      title: 'Ofx Import Cancel',
+      message: 'All transactions are being removed!',
+    );
   }
 }

@@ -165,7 +165,7 @@ class _DismissibleCategoryState extends State<DismissibleCategory> {
                 .countTransactionForCategoryId(category);
 
             if (categoryCount > 0) {
-              if (!mounted) return false;
+              if (!context.mounted) return false;
               await functionAlertDialog(
                 context,
                 title: locale.genericAttention,
