@@ -9,6 +9,9 @@ import '../../../common/models/account_db_model.dart';
 import '../../../common/models/ofx_account_model.dart';
 import '../../../common/widgets/account_row.dart';
 import '../../../common/widgets/markdown_rich_text.dart';
+import '../../../locator.dart';
+import '../../home_page/balance_card/balance_card_controller.dart';
+import '../../home_page/home_page_controller.dart';
 
 class DismissibleOfxAccount extends StatelessWidget {
   const DismissibleOfxAccount({
@@ -25,6 +28,8 @@ class DismissibleOfxAccount extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final locale = AppLocalizations.of(context)!;
     final customColors = Theme.of(context).extension<CustomColors>()!;
+    final homePageController = locator<HomePageController>();
+    final balanceCardController = locator<BalanceCardController>();
 
     return Dismissible(
       key: UniqueKey(),
@@ -89,6 +94,8 @@ class DismissibleOfxAccount extends StatelessWidget {
       confirmDismiss: (direction) async {
         if (direction == DismissDirection.endToStart) {
           await OfxAccountManager.delete(ofxAccount);
+          homePageController.setRedraw();
+          balanceCardController.setRedraw();
           return true;
         }
         return false;

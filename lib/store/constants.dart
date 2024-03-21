@@ -311,6 +311,11 @@ const createTriggerAfterInsertTransaction =
     '   SET $balanceClose = $balanceClose + NEW.$transValue,'
     '       $balanceTransCount = IFNULL($balanceTransCount, 0) + 1'
     '   WHERE $balanceId = NEW.$transBalanceId;'
+    '   UPDATE $balanceTable'
+    '   SET $balanceClose = $balanceClose + NEW.$transValue,'
+    '       $balanceOpen = $balanceOpen + NEW.$transValue'
+    '   WHERE $balanceDate > NEW.$transDate'
+    '     AND $balanceAccountId = NEW.$transAccountId;'
     ' END';
 
 const createTriggerAfterDeleteTransaction =
@@ -322,6 +327,11 @@ const createTriggerAfterDeleteTransaction =
     '   SET $balanceClose = $balanceClose - OLD.$transValue,'
     '       $balanceTransCount = IFNULL($balanceTransCount, 0) - 1'
     '   WHERE $balanceId = OLD.$transBalanceId;'
+    '   UPDATE $balanceTable'
+    '   SET $balanceClose = $balanceClose - OLD.$transValue,'
+    '       $balanceOpen = $balanceOpen - OLD.$transValue'
+    '   WHERE $balanceDate > OLD.$transDate'
+    '     AND $balanceAccountId = OLD.$transAccountId;'
     ' END';
 
 const getIncomeBetweenDatesSQL = 'SELECT SUM($transValue) AS totalIncomes'

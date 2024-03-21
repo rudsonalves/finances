@@ -45,46 +45,6 @@ sealed class TransactionManager {
 
     // insert a new transaction in database
     await transactionRepository.insert(transaction);
-
-    // update subsequent balances
-    await _addAdjustSubsequentBalances(
-      date: transaction.transDate,
-      value: transaction.transValue,
-      accountId: transaction.transAccountId,
-    );
-  }
-
-  /// Internally adjusts subsequent balances after adding a new transaction.
-  ///
-  /// This helper method updates the opening and closing balances of all balance
-  /// records after the specified date to include the value of the added
-  /// transaction.
-  ///
-  /// Parameters:
-  /// - `date`: The `ExtendedDate` object representing the date of the
-  ///   transaction.
-  /// - `value`: The double value of the transaction to adjust the balances by.
-  ///
-  /// Note: This method is called internally by `addNewTransaction`.
-  static Future<void> _addAdjustSubsequentBalances({
-    required ExtendedDate date,
-    required double value,
-    required int accountId,
-  }) async {
-    // Get all balance before transaction date
-    final balancesAfterDate = await balanceRepository.getAllAfterDate(
-      date: date,
-      accountId: accountId,
-    );
-
-    // Update all ballances after date
-    // IMPORTANT: The current balance is updated by SQL trigger
-    for (final balance in balancesAfterDate) {
-      balance.balanceOpen += value;
-      balance.balanceClose += value;
-
-      await balanceRepository.update(balance);
-    }
   }
 
   /// Removes a transaction from the database and adjusts balances accordingly.
@@ -133,50 +93,10 @@ sealed class TransactionManager {
     // Remove transaction by your id
     final result = await transactionRepository.deleteById(id);
 
-    // Update subsequents balances
-    await _subtractAdjustSubsequentBalances(
-      date: date,
-      value: value,
-      accountId: accountId,
-    );
-
     // Remove balance if there have no more transactions
     await balanceRepository.deleteEmptyBalance(balanceId);
 
     return result;
-  }
-
-  /// Internally adjusts subsequent balances after removing a transaction.
-  ///
-  /// This helper method updates the opening and closing balances of all balance
-  /// records after the specified date to exclude the value of the removed
-  /// transaction.
-  ///
-  /// Parameters:
-  /// - `date`: The `ExtendedDate` object representing the date of the
-  ///   transaction.
-  /// - `value`: The double value of the transaction to adjust the balances by.
-  ///
-  /// Note: This method is called internally by `removeTransaction`.
-  static Future<void> _subtractAdjustSubsequentBalances({
-    required ExtendedDate date,
-    required double value,
-    required int accountId,
-  }) async {
-    // Get all balance before transaction date
-    final balancesAfterDate = await balanceRepository.getAllAfterDate(
-      date: date,
-      accountId: accountId,
-    );
-
-    // Update all ballances after date
-    // IMPORTANT: The current balance is updated by SQL trigger
-    for (final balance in balancesAfterDate) {
-      balance.balanceOpen -= value;
-      balance.balanceClose -= value;
-
-      await balanceRepository.update(balance);
-    }
   }
 
   /// Updates an existing transaction in the database.

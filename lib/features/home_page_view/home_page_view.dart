@@ -10,6 +10,7 @@ import '../home_page/balance_card/balance_card_controller.dart';
 import '../home_page/home_page.dart';
 import '../account/account_page.dart';
 import '../ofx_page/ofx_page.dart';
+import '../ofx_page/ofx_page_controller.dart';
 import '../statistics/statistic_controller.dart';
 import '../statistics/statistics_page.dart';
 import '../home_page/home_page_controller.dart';
@@ -27,7 +28,9 @@ class HomePageView extends StatefulWidget {
 class _HomePageViewState extends State<HomePageView> {
   final _pageController = PageController();
   final _homePageController = locator<HomePageController>();
+  final _balanceCardController = locator<BalanceCardController>();
   final _statisticsController = locator<StatisticsController>();
+  final _ofxPageController = locator<OfxPageController>();
 
   bool _floatAppButton = true;
   int _pageIndex = 0;
@@ -51,33 +54,30 @@ class _HomePageViewState extends State<HomePageView> {
     // 0 HomePage(),
     // 1 AccountPage(),
     // 2 BudgetPage(),
-    // 3 StatisticsPage(),
-    // 4 OfxPage()
+    // 3 OfxPage()
+    // 4 StatisticsPage(),
 
     setState(() {
       _pageIndex = page;
-      // _floatAppButton = (page != 3) ? true : false;
       _floatAppButton = true;
       switch (page) {
         case 0:
           _addFunction = addTransaction;
-
           break;
         case 1:
           _addFunction = addAccount;
-
           break;
         case 2:
           _addFunction = addCategory;
-
           break;
         case 3:
+          _addFunction = addOfxFile;
+          _floatAppButton = true;
+          break;
+        case 4:
           _floatAppButton = false;
           _addFunction = null;
           break;
-        case 4:
-          _addFunction = null;
-          _floatAppButton = false;
       }
 
       // Jump to new page
@@ -85,6 +85,7 @@ class _HomePageViewState extends State<HomePageView> {
       // check for remake page
       if (page == 0 && _homePageController.redraw) {
         _homePageController.makeRedraw();
+        _balanceCardController.makeRedraw();
       } else if (page == 3) {
         _statisticsController.makeRecalculated();
       }
@@ -98,6 +99,30 @@ class _HomePageViewState extends State<HomePageView> {
       _floatAppButton = true;
       _pageController.jumpToPage(0);
     });
+  }
+
+  // Add OfxFile
+  Future<void> addOfxFile() async {
+    try {
+      final ofxPath = await _ofxPageController.pickAndValidateOfxFile(context);
+      if (ofxPath == null) return;
+
+      if (!mounted) return;
+      final ofx = await _ofxPageController.processOfxFile(context, ofxPath);
+      if (ofx == null) return;
+
+      if (!mounted) return;
+      await _ofxPageController.handleOfxImport(
+        context,
+        ofx: ofx,
+        ofxPath: ofxPath,
+      );
+
+      _ofxPageController.ofxFileRegister();
+    } catch (err) {
+      if (!mounted) return;
+      await _ofxPageController.showUnexpectedErrorMessage(context);
+    }
   }
 
   Future<void> addTransaction() async {
@@ -156,8 +181,8 @@ class _HomePageViewState extends State<HomePageView> {
             HomePage(),
             AccountPage(),
             CategoriesPage(),
-            StatisticsPage(),
             OfxPage(),
+            StatisticsPage(),
           ],
         ),
       ),

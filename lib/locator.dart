@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 
 import './common/extensions/app_scale.dart';
 import './common/models/categories_icons.dart';
+import 'features/ofx_page/ofx_page_controller.dart';
 import 'repositories/database/abstract_database_repository.dart';
 import 'repositories/database/database_repository.dart';
 import 'repositories/user/abstract_user_repository.dart';
@@ -156,9 +157,9 @@ void setupDependencies() {
       () => AccountController(),
     );
 
-    // locator.registerLazySingleton<OfxPageController>(
-    //   () => OfxPageController(),
-    // );
+    locator.registerLazySingleton<OfxPageController>(
+      () => OfxPageController(),
+    );
 
     locator.registerLazySingleton<StatisticsController>(
       () => StatisticsController(),

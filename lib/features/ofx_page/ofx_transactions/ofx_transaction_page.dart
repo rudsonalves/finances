@@ -16,6 +16,20 @@ import '../../categories/widget/add_category_page.dart';
 import '../../transaction/widget/destiny_account_dropdown_form.dart';
 import 'ofx_transaction_controller.dart';
 
+Future<bool> showOfxTransactionDialog(
+  BuildContext context, {
+  required TransactionDbModel transaction,
+  required OfxTransTemplateModel ofxTemplate,
+}) async {
+  return await showDialog(
+    context: context,
+    builder: (context) => OfxTransactionPage(
+      transaction: transaction,
+      ofxTemplate: ofxTemplate,
+    ),
+  );
+}
+
 class OfxTransactionPage extends StatefulWidget {
   final TransactionDbModel transaction;
   final OfxTransTemplateModel ofxTemplate;
@@ -94,101 +108,106 @@ class _OfxTransactionPageState extends State<OfxTransactionPage> {
           ),
           child: Padding(
             padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Account Name
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+            child: ListenableBuilder(
+              listenable: _controller.categoryId$,
+              builder: (context, _) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    AccountRow(
-                      account: account,
-                      size: 24,
+                    // Account Name
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        AccountRow(
+                          account: account,
+                          size: 24,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                // Amount Value
-                BasicTextFormField(
-                  initialValue: _controller.amount.text,
-                  readOnly: true,
-                  labelText: locale.transPageAmount,
-                  style: AppTextStyles.textStyleBold18.copyWith(
-                    color: widget.transaction.transValue < 0
-                        ? customColors.minusred
-                        : customColors.lowgreen,
-                  ),
-                  suffixIcon: ExcludeSemantics(
-                    child: widget.transaction.transValue >= 0
-                        ? const Icon(Icons.thumb_up)
-                        : const Icon(Icons.thumb_down),
-                  ),
-                ),
-                // Description
-                BasicTextFormField(
-                  controller: _controller.descriptionController,
-                  readOnly: false,
-                  labelText: locale.transPageDescription,
-                  onchanged: descriptionChange,
-                ),
-                // Category
-                CategoryDropdownFormField(
-                  readOnly: false,
-                  removeTransfer: false,
-                  hintText: locale.transPageCategoryHint,
-                  labelText: locale.transPageCategory,
-                  controller: _controller.categoryController,
-                  suffixIcon: InkWell(
-                    onTap: addCategoryAction,
-                    child: Ink(
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
+                    // Amount Value
+                    BasicTextFormField(
+                      initialValue: _controller.amount.text,
+                      readOnly: true,
+                      labelText: locale.transPageAmount,
+                      style: AppTextStyles.textStyleBold18.copyWith(
+                        color: widget.transaction.transValue < 0
+                            ? customColors.minusred
+                            : customColors.lowgreen,
                       ),
-                      child: const Icon(Icons.add),
+                      suffixIcon: ExcludeSemantics(
+                        child: widget.transaction.transValue >= 0
+                            ? const Icon(Icons.thumb_up)
+                            : const Icon(Icons.thumb_down),
+                      ),
                     ),
-                  ),
-                  onChanged: _controller.setCategoryByName,
-                ),
-                // TransferAccount
-                if (_controller.isTransfer)
-                  DestinyAccountDropdownForm(
-                    globalKey: _destinyKey,
-                    originAccountId: _controller.originAccountId,
-                    destinyAccountId: _controller.destinyAccountId,
-                    hintText: locale.transPageSelectAccTransfer,
-                    labelText: locale.transPageAccTransfer,
-                    accountIdSelected: _controller.setDestinyAccountId,
-                  ),
-                // Date x Time
-                Semantics(
-                  label: locale.transPageNewSelectDate,
-                  child: DateTimePickerForm(
-                    controller: _controller.dateController,
-                    labelText: locale.transPageDate,
-                    enable: false,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                ButtonBar(
-                  children: [
-                    ListenableBuilder(
-                      listenable: _controller.categoryId$,
-                      builder: (context, _) => FilledButton(
-                        onPressed: _controller.categoryId != null
-                            ? () => Navigator.pop(context, true)
-                            : null,
-                        child: Text(
-                          locale.genericAdd,
+                    // Description
+                    BasicTextFormField(
+                      controller: _controller.descriptionController,
+                      readOnly: false,
+                      labelText: locale.transPageDescription,
+                      onchanged: descriptionChange,
+                    ),
+                    // Category
+                    CategoryDropdownFormField(
+                      readOnly: false,
+                      removeTransfer: false,
+                      hintText: locale.transPageCategoryHint,
+                      labelText: locale.transPageCategory,
+                      controller: _controller.categoryController,
+                      suffixIcon: InkWell(
+                        onTap: addCategoryAction,
+                        child: Ink(
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(Icons.add),
                         ),
                       ),
+                      onChanged: _controller.setCategoryByName,
                     ),
-                    FilledButton(
-                      onPressed: () => Navigator.pop(context, false),
-                      child: Text(locale.genericCancel),
+                    // TransferAccount
+                    if (_controller.isTransfer)
+                      DestinyAccountDropdownForm(
+                        globalKey: _destinyKey,
+                        originAccountId: _controller.originAccountId,
+                        destinyAccountId: _controller.destinyAccountId,
+                        hintText: locale.transPageSelectAccTransfer,
+                        labelText: locale.transPageAccTransfer,
+                        accountIdSelected: _controller.setDestinyAccountId,
+                      ),
+                    // Date x Time
+                    Semantics(
+                      label: locale.transPageNewSelectDate,
+                      child: DateTimePickerForm(
+                        controller: _controller.dateController,
+                        labelText: locale.transPageDate,
+                        enable: false,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    ButtonBar(
+                      children: [
+                        ListenableBuilder(
+                          listenable: _controller.categoryId$,
+                          builder: (context, _) => FilledButton(
+                            onPressed: _controller.categoryId != null
+                                ? () => Navigator.pop(context, true)
+                                : null,
+                            child: Text(
+                              locale.genericAdd,
+                            ),
+                          ),
+                        ),
+                        FilledButton(
+                          onPressed: () => Navigator.pop(context, false),
+                          child: Text(locale.genericCancel),
+                        ),
+                      ],
                     ),
                   ],
-                ),
-              ],
+                );
+              },
             ),
           ),
         ),
