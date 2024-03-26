@@ -23,30 +23,30 @@ Future<bool> showOfxTransactionDialog(
 }) async {
   return await showDialog(
     context: context,
-    builder: (context) => OfxTransactionPage(
+    builder: (context) => OfxTransactionDialog(
       transaction: transaction,
       ofxTemplate: ofxTemplate,
     ),
   );
 }
 
-class OfxTransactionPage extends StatefulWidget {
+class OfxTransactionDialog extends StatefulWidget {
   final TransactionDbModel transaction;
   final OfxTransTemplateModel ofxTemplate;
 
   static const routeName = '/ofx_page/ofx_transaction';
 
-  const OfxTransactionPage({
+  const OfxTransactionDialog({
     super.key,
     required this.transaction,
     required this.ofxTemplate,
   });
 
   @override
-  State<OfxTransactionPage> createState() => _OfxTransactionPageState();
+  State<OfxTransactionDialog> createState() => _OfxTransactionDialogState();
 }
 
-class _OfxTransactionPageState extends State<OfxTransactionPage> {
+class _OfxTransactionDialogState extends State<OfxTransactionDialog> {
   final _controller = OfxTransactionController();
   final _destinyKey = GlobalKey<FormFieldState<int>>();
 

@@ -76,7 +76,7 @@ class _BalanceCardState extends State<BalanceCard> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Expanded(
-                          flex: 3,
+                          flex: 8,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [

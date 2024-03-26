@@ -31,7 +31,9 @@ class MainCardPopupAccount extends StatelessWidget {
           ),
           const SizedBox(width: 6),
           Text(
-            account.accountName,
+            account.accountName.length > 18
+                ? account.accountName.substring(0, 18)
+                : account.accountName,
             maxLines: 1,
             style: AppTextStyles.textStyleSemiBold16.copyWith(
               color: customColors.sourceLightyellow,
