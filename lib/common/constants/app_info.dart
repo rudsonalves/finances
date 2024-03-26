@@ -8,7 +8,7 @@ class AppInfo {
 
   static const name = 'finances';
   static const description = 'financial control app';
-  static const version = '1.1.00+81';
+  static const version = '1.1.00+82';
 
   static get pageUrl => 'https://rralves.dev.br/en/$name/';
   static const email = 'alvesdev67@gmail.com';

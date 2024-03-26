@@ -288,6 +288,45 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
+## 2024/03/26 - version: 1.1.00+82
+
+**Incremental Updates for Enhanced OFX File Handling and UI Improvements**
+
+This series of changes introduces several enhancements to the app's OFX file handling capabilities, UI adjustments for better user experience, and general code cleanup. The version has been bumped to `1.1.00+82` to reflect these updates.
+
+**App Information and Versioning:**
+
+- Updated the app version in `app_info.dart` to `1.1.00+82`, indicating new improvements and fixes.
+
+**UI Enhancements for Balance Card and Account Display:**
+
+- Adjusted the flex ratio in the balance card to allocate more space for certain UI elements, improving readability and layout (`balance_card.dart`).
+- Modified the account name display logic in the popup account widget to truncate long account names to 18 characters, enhancing UI consistency and preventing layout overflow issues (`main_card_popup_account.dart`).
+
+**Refactoring and Clean-up in OFX Page:**
+
+- Removed redundant and commented-out code in `ofx_page.dart` that was previously used for adding OFX files. This clean-up reduces clutter and focuses on the current implementation strategy.
+- Adjusted the progress indicator color in `ofx_page.dart` to use `colorScheme.onPrimary` for better visibility and consistency with the app's color scheme.
+- Fixed a return statement oversight in `ofx_page.dart` to ensure the `noImportedOfxMessage` function's widget is properly returned, correcting a potential UI issue where the message might not display.
+
+**OFX Page Controller Enhancements:**
+
+- Introduced a new method `deleteOfxAccount` in `ofx_page_controller.dart` to handle the deletion of OFX accounts through the UI, improving data management and user interaction within the OFX page.
+
+**Dialog Transformation and Redraw Mechanisms:**
+
+- Renamed `ofx_transaction_page.dart` to `ofx_transaction_dialog.dart` and changed its class names accordingly, transforming it into a dialog for a more intuitive user experience when editing OFX transactions.
+- Enhanced the dismissible OFX account widget to utilize `OfxPageController` for OFX account deletion, streamlining the component's interaction with the app's data layer and ensuring consistency in page redraws (`dismissible_ofx_account.dart`).
+
+**Dependency Updates:**
+
+- Updated `file_picker` dependency to `^8.0.0+1` in `pubspec.yaml`, keeping the project up-to-date with the latest version for improved functionality and compatibility.
+
+**Implications:**
+
+These updates are part of ongoing efforts to refine the app's functionality, especially concerning the handling of OFX files, and to enhance the user interface for a better overall user experience. The adjustments in UI components and the cleanup of redundant code contribute to a cleaner, more maintainable codebase. Further, the update to the `file_picker` dependency ensures compatibility with the latest standards and features offered by the library.
+
+
 ## 2024/03/21 - version: 1.1.00+81
 
 **Refinements in OFX File Integration and UI Updates**

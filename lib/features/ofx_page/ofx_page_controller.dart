@@ -21,7 +21,7 @@ import '../../manager/transfer_manager.dart';
 import '../home_page/balance_card/balance_card_controller.dart';
 import '../home_page/home_page_controller.dart';
 import 'ofx_page_state.dart';
-import 'ofx_transactions/ofx_transaction_page.dart';
+import 'ofx_transactions/ofx_transaction_dialog.dart';
 import 'widgets/ofx_file_dialog.dart';
 
 class OfxPageController extends ChangeNotifier {
@@ -89,6 +89,22 @@ class OfxPageController extends ChangeNotifier {
       return ok;
     } catch (err) {
       log('OfxPageController.addOfxAccount: $err');
+      _changeState(OfxPageStateError());
+      return false;
+    }
+  }
+
+  Future<bool> deleteOfxAccount(OfxAccountModel ofxAccount) async {
+    try {
+      _changeState(OfxPageStateLoading());
+      await OfxAccountManager.delete(ofxAccount);
+      _homePageController.setRedraw();
+      _balanceCardController.setRedraw();
+      await loadOfxAccounts();
+      _changeState(OfxPageStateSuccess());
+      return true;
+    } catch (err) {
+      log('OfxPageController.deleteOfxAccount: $err');
       _changeState(OfxPageStateError());
       return false;
     }
