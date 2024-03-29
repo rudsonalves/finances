@@ -125,10 +125,6 @@ void setupDependencies() {
       () => BalanceRepository(),
     );
 
-    // locator.registerLazySingleton<AbstractTransDayRepository>(
-    //   () => TransDayRepository(),
-    // );
-
     locator.registerFactory<SignInController>(
       () => SignInController(
         locator<AuthService>(),

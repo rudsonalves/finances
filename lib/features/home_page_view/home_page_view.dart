@@ -14,9 +14,9 @@ import '../ofx_page/ofx_page_controller.dart';
 import '../statistics/statistic_controller.dart';
 import '../statistics/statistics_page.dart';
 import '../home_page/home_page_controller.dart';
-import '../../common/constants/routes/app_route.dart';
 import '../../common/widgets/custom_floating_action_button.dart';
 import '../../common/widgets/custom_botton_navigator_bar.dart';
+import '../transaction/transaction_dialog.dart';
 
 class HomePageView extends StatefulWidget {
   const HomePageView({super.key});
@@ -126,8 +126,8 @@ class _HomePageViewState extends State<HomePageView> {
   }
 
   Future<void> addTransaction() async {
-    final added = await Navigator.pushNamed(context, AppRoute.transaction.name);
-    if (added != null && added == true) {
+    final added = await TransactionDialog.showTransactionDialog(context);
+    if (added) {
       locator<HomePageController>().getTransactions().then(
             (value) => locator<BalanceCardController>().getBalance(),
           );

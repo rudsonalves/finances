@@ -137,6 +137,7 @@ class TransactionDbModel {
       transValue: transValue,
       transDate: transDate,
       transOfxId: ofxId,
+      transStatus: TransStatus.transactionChecked,
     );
   }
 

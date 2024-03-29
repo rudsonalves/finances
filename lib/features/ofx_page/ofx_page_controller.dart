@@ -4,8 +4,10 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:finances/packages/ofx/lib/ofx.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../common/constants/app_constants.dart';
+import '../../common/current_models/current_user.dart';
 import '../../common/models/extends_date.dart';
 import '../../common/models/ofx_account_model.dart';
 import '../../common/models/ofx_relationship_model.dart';
@@ -21,6 +23,7 @@ import '../../manager/transfer_manager.dart';
 import '../home_page/balance_card/balance_card_controller.dart';
 import '../home_page/home_page_controller.dart';
 import 'ofx_page_state.dart';
+import 'ofx_transactions/ofx_transaction_controller.dart';
 import 'ofx_transactions/ofx_transaction_dialog.dart';
 import 'widgets/ofx_file_dialog.dart';
 
@@ -183,10 +186,12 @@ class OfxPageController extends ChangeNotifier {
   }
 
   Future<void> showUnexpectedErrorMessage(BuildContext context) async {
+    final locale = AppLocalizations.of(context)!;
+
     await singleMessageAlertDialog(
       context,
-      title: 'Ofx Error',
-      message: 'Sorry. An unexpected error has occured.',
+      title: locale.ofxDialogUnexpectedErrorTitle,
+      message: locale.ofxDialogUnexpectedErrorMsg,
     );
   }
 
@@ -210,10 +215,11 @@ class OfxPageController extends ChangeNotifier {
     BuildContext context,
     String ofxPath,
   ) async {
+    final locale = AppLocalizations.of(context)!;
     await singleMessageAlertDialog(
       context,
-      title: 'Ofx Error',
-      message: 'This "${ofxPath.split('/').last}" isn\'t an ofx file!',
+      title: locale.ofxDialogWrongExtensionTitle,
+      message: locale.ofxDialogWrongExtensionMsg(ofxPath.split('/').last),
     );
   }
 
@@ -232,11 +238,11 @@ class OfxPageController extends ChangeNotifier {
     BuildContext context,
     String ofxPath,
   ) async {
+    final locale = AppLocalizations.of(context)!;
     await singleMessageAlertDialog(
       context,
-      title: 'Ofx Error',
-      message: 'This "${ofxPath.split('/').last}" is corrupt!\n'
-          'I can\'t restore it.',
+      title: locale.ofxDialogOfxCorruptTitle,
+      message: locale.ofxDialogOfxCorruptMsg(ofxPath.split('/').last),
     );
   }
 
@@ -265,7 +271,7 @@ class OfxPageController extends ChangeNotifier {
 
     // Set ofxAccount and ofxRelation
     if (!context.mounted) return;
-    bool result = await ofxFileImportDialog(
+    bool result = await OfxFileDialog.ofxFileImportDialog(
       context,
       ofxAccount: ofxAccount,
       ofxRelation: ofxRelation,
@@ -299,10 +305,11 @@ class OfxPageController extends ChangeNotifier {
     BuildContext context,
     String ofxPath,
   ) async {
+    final locale = AppLocalizations.of(context)!;
     await singleMessageAlertDialog(
       context,
-      title: 'Ofx Error',
-      message: 'This "${ofxPath.split('/').last}" has already been released!',
+      title: locale.ofxDialogAlreadyReleasedOfxTitle,
+      message: locale.ofxDialogAlreadyReleasedOfxMsg(ofxPath.split('/').last),
     );
   }
 
@@ -335,31 +342,50 @@ class OfxPageController extends ChangeNotifier {
       );
 
       // Edit Transaction
-      bool addTransaction = true;
+      ButtonPress addTransaction = ButtonPress.ok;
       final oldTemplate = OfxTransTemplateModel.copyTemplate(ofxTemplate);
-      if (!_autoTransaction || transaction.transCategoryId < 1) {
+      if (_autoTransaction) {
+        final userOfxStopCategories =
+            locator<CurrentUser>().userOfxStopCategories;
+        if (transaction.transCategoryId < 1 ||
+            userOfxStopCategories.contains(transaction.transCategoryId)) {
+          if (!context.mounted) return;
+          addTransaction = await OfxTransactionDialog.showOfxTransactionDialog(
+            context,
+            transaction: transaction,
+            ofxTemplate: ofxTemplate,
+          );
+        }
+      } else {
         if (!context.mounted) return;
-        addTransaction = await showOfxTransactionDialog(
+        addTransaction = await OfxTransactionDialog.showOfxTransactionDialog(
           context,
           transaction: transaction,
           ofxTemplate: ofxTemplate,
         );
-        // await showDialog(
-        //   context: context,
-        //   builder: (context) => OfxTransactionPage(
-        //     transaction: transaction,
-        //     ofxTemplate: ofxTemplate!,
-        //   ),
-        // );
       }
 
-      // Save template and a new transaction/transfer
-      if (!addTransaction) {
+      if (addTransaction == ButtonPress.skip) {
+        continue;
+      } else if (addTransaction == ButtonPress.cancel) {
+        // Remove transactions and OfxAccount
         if (!context.mounted) return;
         await showRemoveTransactionsMessage(context);
         await OfxAccountManager.delete(ofxAccount);
         break;
       }
+
+      // FIXME: Remove this lines!
+      // Update ofxTemplate categoryId and description
+      if (ofxTemplate.categoryId < 1) {
+        log('ATTENTION: ofxTemplate.categoryId < 1');
+        ofxTemplate.categoryId = transaction.transCategoryId;
+      }
+      if (transaction.transDescription != ofxTemplate.description) {
+        log('ATTENTION: transaction.transDescription != ofxTemplate.description');
+        ofxTemplate.description = transaction.transDescription;
+      }
+
       // Update/add a new template in ofxTransTemplateTable if
       // necessary
       if (ofxTemplate.id == null) {
@@ -382,11 +408,11 @@ class OfxPageController extends ChangeNotifier {
   }
 
   Future<void> showRemoveTransactionsMessage(BuildContext context) async {
-    if (!context.mounted) return;
+    final locale = AppLocalizations.of(context)!;
     singleMessageAlertDialog(
       context,
-      title: 'Ofx Import Cancel',
-      message: 'All transactions are being removed!',
+      title: locale.ofxDialogRmTransTitle,
+      message: locale.ofxDialogRmTransMsg,
     );
   }
 }

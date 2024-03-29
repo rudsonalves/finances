@@ -12,7 +12,6 @@ import '../../../features/sign_in/sign_in_page.dart';
 import '../../../features/sign_up/sign_up_page.dart';
 import '../../../features/splash/splash_page.dart';
 import '../../../features/statistics/statistics_page.dart';
-import '../../../features/transaction/transaction_page.dart';
 
 class Route {
   final String name;
@@ -46,10 +45,6 @@ class AppRoute {
   static const Route splash = Route(
     name: '/splash',
     page: SplashPage(),
-  );
-  static const Route transaction = Route(
-    name: '/transaction',
-    page: TransactionPage(),
   );
   static const Route settings = Route(
     name: '/settings',

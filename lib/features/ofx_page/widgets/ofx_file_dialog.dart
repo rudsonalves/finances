@@ -1,38 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../common/constants/themes/app_text_styles.dart';
+import '../../../common/current_models/current_user.dart';
 import '../../../common/models/ofx_account_model.dart';
 import '../../../common/models/ofx_relationship_model.dart';
+import '../../../locator.dart';
 import 'account_popup_menu.dart';
 import 'ofx_info_button.dart';
 import 'ofx_information.dart';
+import 'ofx_stop_categories.dart';
 import 'simple_edit_dialog.dart';
-
-Future<bool> ofxFileImportDialog(
-  BuildContext context, {
-  required OfxAccountModel ofxAccount,
-  required OfxRelationshipModel ofxRelation,
-  required bool autoTransaction,
-  required void Function(bool) callback,
-}) async {
-  return await showDialog<bool>(
-        context: context,
-        builder: (context) {
-          return Center(
-            child: SingleChildScrollView(
-              child: OfxFileDialog(
-                ofxAccount: ofxAccount,
-                ofxRelation: ofxRelation,
-                autoTransaction: autoTransaction,
-                callback: callback,
-              ),
-            ),
-          );
-        },
-      ) ??
-      false;
-}
 
 class OfxFileDialog extends StatefulWidget {
   final OfxAccountModel ofxAccount;
@@ -47,6 +26,31 @@ class OfxFileDialog extends StatefulWidget {
     required this.autoTransaction,
     required this.callback,
   }) : super(key: key);
+
+  static Future<bool> ofxFileImportDialog(
+    BuildContext context, {
+    required OfxAccountModel ofxAccount,
+    required OfxRelationshipModel ofxRelation,
+    required bool autoTransaction,
+    required void Function(bool) callback,
+  }) async {
+    return await showDialog<bool>(
+          context: context,
+          builder: (context) {
+            return Center(
+              child: SingleChildScrollView(
+                child: OfxFileDialog(
+                  ofxAccount: ofxAccount,
+                  ofxRelation: ofxRelation,
+                  autoTransaction: autoTransaction,
+                  callback: callback,
+                ),
+              ),
+            );
+          },
+        ) ??
+        false;
+  }
 
   @override
   State<OfxFileDialog> createState() => _OfxFileDialogState();
@@ -67,58 +71,67 @@ class _OfxFileDialogState extends State<OfxFileDialog> {
     widget.callback(_autoTransactions.value);
   }
 
+  Future<void> _selectCategories() async {
+    final currentUser = locator<CurrentUser>();
+    final userOfxStopCategories =
+        await OfxStopCategories.showOfxStopCategoriesDialog(context);
+    currentUser.userOfxStopCategories = userOfxStopCategories;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context)!;
+    final primary = Theme.of(context).colorScheme.primary;
+
     return AlertDialog(
       contentPadding: const EdgeInsets.all(12),
-      title: const Text(
-        'Ofx file Import',
+      title: Text(
+        locale.ofxFileDlgTitle,
         textAlign: TextAlign.center,
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           OfxInformation(
-            title: 'Bank Account',
+            title: locale.ofxFileDlgBankAccount,
             value: widget.ofxAccount.bankAccountId,
           ),
           OfxInformation(
-            title: 'Transactions',
+            title: locale.ofxFileDlgTransactions,
             value: widget.ofxAccount.nTrans.toString(),
           ),
           OfxInformation(
-            title: 'Start date',
+            title: locale.ofxFileDlgStartDate,
             value: DateFormat.yMd().format(widget.ofxAccount.startDate),
           ),
           OfxInformation(
-            title: 'End date',
+            title: locale.ofxFileDlgEndDate,
             value: DateFormat.yMd().format(widget.ofxAccount.endDate),
           ),
           OfxInfoButton(
-              title: 'Bank',
-              value: widget.ofxAccount.bankName ?? '***',
-              callBack: () async {
-                String value = await simpleEditDialog(
-                  context,
-                  title: 'Bank Name',
-                  labelText: widget.ofxAccount.bankName ?? '***',
-                  actionButtonText: 'Apply',
-                  cancelButtonText: 'Cancel',
-                );
-                if (value != widget.ofxAccount.bankName) {
-                  setState(() {
+            title: locale.ofxFileDlgBank,
+            value: widget.ofxAccount.bankName ?? '***',
+            callBack: () async {
+              String value = await simpleEditDialog(
+                context,
+                title: locale.ofxFileDlgBankName,
+                labelText: widget.ofxAccount.bankName ?? '***',
+                actionButtonText: locale.ofxFileDlgApply,
+                cancelButtonText: locale.genericCancel,
+              );
+              if (value != widget.ofxAccount.bankName) {
+                setState(
+                  () {
                     widget.ofxAccount.bankName = value;
                     widget.ofxRelation.bankName = value;
-                  });
-                }
-              }),
-          OfxInformation(
-            title: 'Bank id',
-            value: widget.ofxAccount.bankAccountId,
+                  },
+                );
+              }
+            },
           ),
           const Divider(),
-          const Text(
-            'Associated Account',
+          Text(
+            locale.ofxFileDlgAssociatedAccount,
             style: AppTextStyles.textStyleBold14,
           ),
           Row(
@@ -136,12 +149,36 @@ class _OfxFileDialogState extends State<OfxFileDialog> {
           const Divider(),
           ListenableBuilder(
             listenable: _autoTransactions,
-            builder: (context, _) => CheckboxListTile(
-              checkboxSemanticLabel:
-                  'Automatically create transactions from templates',
-              value: _autoTransactions.value,
-              onChanged: toogleAutoTransaction,
-              title: const Text('Auto-transactions'),
+            builder: (context, _) => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CheckboxListTile(
+                  checkboxSemanticLabel: locale.ofxFileDlgAutomatically,
+                  value: _autoTransactions.value,
+                  onChanged: toogleAutoTransaction,
+                  title: Text(locale.ofxFileDlgAutoTransactions),
+                ),
+                if (_autoTransactions.value)
+                  Center(
+                    child: Card(
+                      elevation: 2,
+                      child: InkWell(
+                        onTap: _selectCategories,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 8,
+                            horizontal: 24,
+                          ),
+                          child: Text(
+                            locale.ofxStopCategoryButton,
+                            style: AppTextStyles.textStyleSemiBold16
+                                .copyWith(color: primary),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
             ),
           ),
         ],
@@ -151,14 +188,14 @@ class _OfxFileDialogState extends State<OfxFileDialog> {
           children: [
             FilledButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('Add'),
+              child: Text(locale.genericAdd),
             ),
             FilledButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Close'),
+              child: Text(locale.genericCancel),
             ),
           ],
-        )
+        ),
       ],
     );
   }

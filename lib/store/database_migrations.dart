@@ -17,7 +17,7 @@ class DatabaseMigrations {
   /// This is the database scheme current version. To futures upgrades
   /// in database increment this value and add a new update script in
   /// _migrationScripts Map.
-  static const databaseSchemeVersion = 1010;
+  static const databaseSchemeVersion = 1011;
 
   // Retrieves the database schema version in a readable format (e.g., "1.0.07").
   static String get dbSchemeVersion {
@@ -333,6 +333,10 @@ class DatabaseMigrations {
           '     AND $balanceAccountId = OLD.$transAccountId;'
           ' END',
       'COMMIT',
+    ],
+    1011: [
+      'ALTER TABLE $usersTable'
+          ' ADD COLUMN $userOfxStopCategories TEXT DEFAULT "[1]"',
     ],
   };
 

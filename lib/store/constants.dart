@@ -21,6 +21,7 @@ const userGrpAreaChart = 'userGrpAreaChart';
 const userBudgetRef = 'userBudgetRef';
 const userCategoryList = 'userCategoryList';
 const userMaxTransactions = 'userMaxTransactions';
+const userOfxStopCategories = 'userOfxStopCategories';
 
 const iconsTable = 'iconsTable';
 const iconsNameIndex = 'idxIconsName';
@@ -129,6 +130,7 @@ const createUsersSQL = 'CREATE TABLE IF NOT EXISTS $usersTable ('
     ' $userBudgetRef INTEGER DEFAULT 2,'
     ' $userCategoryList TEXT DEFAULT "[]",'
     ' $userMaxTransactions INTEGER DEFAULT 35,'
+    ' $userOfxStopCategories TEXT DEFAULT "[1]",'
     ' FOREIGN KEY ($userMainAccountId)'
     '  REFERENCES $accountTable ($accountId)'
     '  ON DELETE CASCADE'

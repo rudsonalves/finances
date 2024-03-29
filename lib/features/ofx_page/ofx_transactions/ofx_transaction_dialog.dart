@@ -7,28 +7,16 @@ import '../../../common/models/category_db_model.dart';
 import '../../../common/models/ofx_trans_template_model.dart';
 import '../../../common/models/transaction_db_model.dart';
 import '../../../common/widgets/account_row.dart';
+import '../../../common/widgets/autocomplete_text_form_field.dart';
 import '../../../common/widgets/basic_text_form_field.dart';
 import '../../../common/widgets/category_dropdown_form_field.dart';
 import '../../../common/widgets/date_time_picker_form.dart';
 import '../../../locator.dart';
 import '../../categories/categories_controller.dart';
 import '../../categories/widget/add_category_page.dart';
+import '../../home_page/home_page_controller.dart';
 import '../../transaction/widget/destiny_account_dropdown_form.dart';
 import 'ofx_transaction_controller.dart';
-
-Future<bool> showOfxTransactionDialog(
-  BuildContext context, {
-  required TransactionDbModel transaction,
-  required OfxTransTemplateModel ofxTemplate,
-}) async {
-  return await showDialog(
-    context: context,
-    builder: (context) => OfxTransactionDialog(
-      transaction: transaction,
-      ofxTemplate: ofxTemplate,
-    ),
-  );
-}
 
 class OfxTransactionDialog extends StatefulWidget {
   final TransactionDbModel transaction;
@@ -42,12 +30,27 @@ class OfxTransactionDialog extends StatefulWidget {
     required this.ofxTemplate,
   });
 
+  static Future<ButtonPress> showOfxTransactionDialog(
+    BuildContext context, {
+    required TransactionDbModel transaction,
+    required OfxTransTemplateModel ofxTemplate,
+  }) async {
+    return await showDialog(
+      context: context,
+      builder: (context) => OfxTransactionDialog(
+        transaction: transaction,
+        ofxTemplate: ofxTemplate,
+      ),
+    );
+  }
+
   @override
   State<OfxTransactionDialog> createState() => _OfxTransactionDialogState();
 }
 
 class _OfxTransactionDialogState extends State<OfxTransactionDialog> {
   final _controller = OfxTransactionController();
+  final _homePageController = locator<HomePageController>();
   final _destinyKey = GlobalKey<FormFieldState<int>>();
 
   @override
@@ -82,8 +85,11 @@ class _OfxTransactionDialogState extends State<OfxTransactionDialog> {
     setState(() {});
   }
 
-  void descriptionChange(String? value) {
-    _controller.setTransactionDescription();
+  void _navigatorPopOk() {
+    widget.transaction.transDescription =
+        _controller.descriptionController.text;
+    widget.ofxTemplate.description = _controller.descriptionController.text;
+    Navigator.pop(context, ButtonPress.ok);
   }
 
   @override
@@ -142,11 +148,13 @@ class _OfxTransactionDialogState extends State<OfxTransactionDialog> {
                       ),
                     ),
                     // Description
-                    BasicTextFormField(
-                      controller: _controller.descriptionController,
-                      readOnly: false,
+                    AutocompleteTextFormField(
+                      capitalization: TextCapitalization.sentences,
                       labelText: locale.transPageDescription,
-                      onchanged: descriptionChange,
+                      controller: _controller.descriptionController,
+                      suggestions:
+                          _homePageController.cacheDescriptions.keys.toList(),
+                      onEditingComplete: _controller.setCategoryByDescription,
                     ),
                     // Category
                     CategoryDropdownFormField(
@@ -192,7 +200,7 @@ class _OfxTransactionDialogState extends State<OfxTransactionDialog> {
                           listenable: _controller.categoryId$,
                           builder: (context, _) => FilledButton(
                             onPressed: _controller.categoryId != null
-                                ? () => Navigator.pop(context, true)
+                                ? _navigatorPopOk
                                 : null,
                             child: Text(
                               locale.genericAdd,
@@ -200,7 +208,13 @@ class _OfxTransactionDialogState extends State<OfxTransactionDialog> {
                           ),
                         ),
                         FilledButton(
-                          onPressed: () => Navigator.pop(context, false),
+                          onPressed: () =>
+                              Navigator.pop(context, ButtonPress.skip),
+                          child: Text(locale.genericSkip),
+                        ),
+                        FilledButton(
+                          onPressed: () =>
+                              Navigator.pop(context, ButtonPress.cancel),
                           child: Text(locale.genericCancel),
                         ),
                       ],

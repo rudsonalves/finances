@@ -23,6 +23,7 @@ class UserDbModel {
   StatisticMedium userBudgetRef;
   List<String> userCategoryList;
   int userMaxTransactions;
+  List<int> userOfxStopCategories;
 
   UserDbModel({
     this.userId,
@@ -39,7 +40,9 @@ class UserDbModel {
     this.userBudgetRef = StatisticMedium.mediumMonth,
     List<String>? userCategoryList,
     this.userMaxTransactions = 35,
-  }) : userCategoryList = userCategoryList ?? [];
+    List<int>? userOfxStopCategories,
+  })  : userCategoryList = userCategoryList ?? [],
+        userOfxStopCategories = userOfxStopCategories ?? [1];
 
   final userRepository = locator<AbstractUserRepository>();
 
@@ -75,6 +78,11 @@ class UserDbModel {
     userMaxTransactions = userMap['userMaxTransactions'] != null
         ? userMap['userMaxTransactions'] as int
         : 35;
+    userOfxStopCategories = List<int>.from(
+      jsonDecode(
+        userMap['userOfxStopCategories'] ?? "[1]",
+      ),
+    );
   }
 
   void copyFromUser(UserDbModel user) {
@@ -92,6 +100,7 @@ class UserDbModel {
     userBudgetRef = user.userBudgetRef;
     userCategoryList = user.userCategoryList;
     userMaxTransactions = user.userMaxTransactions;
+    userOfxStopCategories = user.userOfxStopCategories;
   }
 
   @override
@@ -111,6 +120,7 @@ class UserDbModel {
         ' BudgetRef: $userBudgetRef\n'
         ' CategoryList: $userCategoryList\n'
         ' MaxTransactions: $userMaxTransactions\n'
+        ' OfxStopCategories: $userOfxStopCategories\n'
         ')';
   }
 
@@ -131,6 +141,7 @@ class UserDbModel {
         'userBudgetRef': userBudgetRef.index,
         'userCategoryList': jsonEncode(userCategoryList),
         'userMaxTransactions': userMaxTransactions,
+        'userOfxStopCategories': jsonEncode(userOfxStopCategories),
       };
     } else {
       return <String, dynamic>{
@@ -147,6 +158,7 @@ class UserDbModel {
         'userBudgetRef': userBudgetRef.index,
         'userCategoryList': jsonEncode(userCategoryList),
         'userMaxTransactions': userMaxTransactions,
+        'userOfxStopCategories': jsonEncode(userOfxStopCategories),
       };
     }
   }
@@ -177,6 +189,11 @@ class UserDbModel {
       userMaxTransactions: map['userMaxTransactions'] != null
           ? map['userMaxTransactions'] as int
           : 35,
+      userOfxStopCategories: List<int>.from(
+        jsonDecode(
+          map['userOfxStopCategories'] ?? "[1]",
+        ),
+      ),
     );
   }
 

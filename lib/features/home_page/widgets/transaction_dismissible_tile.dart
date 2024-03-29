@@ -8,10 +8,10 @@ import '../../../locator.dart';
 import '../../../manager/transaction_manager.dart';
 import '../../../manager/transfer_manager.dart';
 import '../../statistics/statistic_controller.dart';
+import '../../transaction/transaction_dialog.dart';
 import '../home_page_controller.dart';
 import '../balance_card/balance_card_controller.dart';
 import '../../../common/models/category_db_model.dart';
-import '../../../common/constants/routes/app_route.dart';
 import '../../../common/models/transaction_db_model.dart';
 import '../../../common/extensions/money_masked_text.dart';
 import '../../../common/functions/function_alert_dialog.dart';
@@ -166,38 +166,35 @@ class _TransactionDismissibleTileState
     return false;
   }
 
-  // FIXME: remove dis code to a separeted package.
   Future<bool> editDismiss(
     BuildContext context, {
     required TransactionDbModel transaction,
     required BalanceCardController controller,
   }) async {
-    final navigator = Navigator.of(context);
-
     int? accountDestinyId;
     if (transaction.transTransferId != null) {
       final transfer =
           await TransferManager.getId(transaction.transTransferId!);
-      accountDestinyId = transfer!.transferTransId0 == transaction.transId
-          ? transfer.transferAccount1
-          : transfer.transferAccount0;
+      accountDestinyId =
+          transfer!.transferAccount0 == transaction.transAccountId
+              ? transfer.transferAccount1
+              : transfer.transferAccount0;
     }
 
-    await navigator.pushNamed(
-      AppRoute.transaction.name,
-      arguments: {
-        'addTransaction': false,
-        'transaction': transaction,
-        'accountDestinyId': accountDestinyId,
-      },
+    if (!context.mounted) return false;
+    await TransactionDialog.showTransactionDialog(
+      context,
+      addTransaction: false,
+      transaction: transaction,
+      accountDestinyId: accountDestinyId,
     );
+
     locator<StatisticsController>().recalculate();
     _homePageController.getTransactions();
     controller.getBalance();
     return false;
   }
 
-  // FIXME: remove dis code to a separeted package.
   Future<bool> deleteDismiss(
     BuildContext context, {
     required TransactionDbModel transaction,

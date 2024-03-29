@@ -3,11 +3,19 @@ import 'package:flutter/material.dart';
 import '../../../common/constants/app_constants.dart';
 import '../../../common/extensions/money_masked_text_controller.dart';
 import '../../../common/models/account_db_model.dart';
+import '../../../common/models/category_db_model.dart';
 import '../../../common/models/ofx_trans_template_model.dart';
 import '../../../common/models/transaction_db_model.dart';
 import '../../../locator.dart';
 import '../../../repositories/account/abstract_account_repository.dart';
 import '../../../repositories/category/abstract_category_repository.dart';
+import '../../home_page/home_page_controller.dart';
+
+enum ButtonPress {
+  ok,
+  skip,
+  cancel,
+}
 
 class OfxTransactionController extends ChangeNotifier {
   OfxTransactionController();
@@ -18,17 +26,19 @@ class OfxTransactionController extends ChangeNotifier {
   final _descriptionController = TextEditingController();
   final _dateController = TextEditingController();
   final _amount = getMoneyMaskedTextController(0.0);
+  final ValueNotifier<int?> categoryId$ = ValueNotifier(null);
   late TransactionDbModel _transaction;
   late OfxTransTemplateModel _ofxTransTemplate;
-  final ValueNotifier<int?> categoryId$ = ValueNotifier(null);
 
   TextEditingController get categoryController => _categoryController;
   TextEditingController get descriptionController => _descriptionController;
   TextEditingController get dateController => _dateController;
   MoneyMaskedTextController get amount => _amount;
+
   int? get categoryId => categoryId$.value;
   TransactionDbModel get transaction => _transaction;
   OfxTransTemplateModel get ofxTransTemplate => _ofxTransTemplate;
+
   bool get isTransfer => _transaction.transCategoryId == TRANSFER_CATEGORY_ID;
   int get originAccountId => _transaction.transAccountId;
   int? get destinyAccountId => _ofxTransTemplate.transferAccountId;
@@ -36,7 +46,10 @@ class OfxTransactionController extends ChangeNotifier {
   @override
   void dispose() {
     _categoryController.dispose();
+    _descriptionController.dispose();
+    _dateController.dispose();
     _amount.dispose();
+    categoryId$.dispose();
     super.dispose();
   }
 
@@ -85,5 +98,22 @@ class OfxTransactionController extends ChangeNotifier {
 
   void setDestinyAccountId(int destinyAccountId) {
     _ofxTransTemplate.transferAccountId = destinyAccountId;
+  }
+
+  void setCategoryByDescription(String description) {
+    setTransactionDescription();
+    int? categoryId =
+        locator<HomePageController>().cacheDescriptions[description];
+    if (categoryId != null) {
+      final category = _categoryRepository.getCategoryId(categoryId);
+      _setCategory(category);
+    }
+  }
+
+  void _setCategory(CategoryDbModel category) {
+    categoryId$.value = category.categoryId;
+    _categoryController.text = category.categoryName;
+    _transaction.transCategoryId = category.categoryId!;
+    _ofxTransTemplate.categoryId = category.categoryId!;
   }
 }
