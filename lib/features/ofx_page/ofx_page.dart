@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../common/constants/themes/app_text_styles.dart';
 import '../../common/widgets/app_top_border.dart';
@@ -30,6 +31,8 @@ class _OfxPageState extends State<OfxPage> {
   }
 
   Center noImportedOfxMessage(ColorScheme colorScheme) {
+    final locale = AppLocalizations.of(context)!;
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -40,7 +43,7 @@ class _OfxPageState extends State<OfxPage> {
           ),
           const SizedBox(height: 20),
           Text(
-            'No imported Ofx files!',
+            locale.ofxPageErroMsg,
             style: AppTextStyles.textStyleSemiBold18.copyWith(
               color: colorScheme.primary,
             ),
@@ -53,10 +56,11 @@ class _OfxPageState extends State<OfxPage> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final locale = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: const CustomAppBar(
-        title: Text('Imported Ofx'),
+      appBar: CustomAppBar(
+        title: Text(locale.ofxPageTitle),
         centerTitle: true,
       ),
       body: Stack(

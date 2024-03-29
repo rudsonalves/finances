@@ -4,6 +4,7 @@ import '../../common/models/category_db_model.dart';
 
 abstract class AbstractCategoryRepository {
   Map<String, CategoryDbModel> get categoriesMap;
+  Map<int, CategoryDbModel> get categoriesIdMap;
   List<CategoryDbModel> get categories;
   Future<void> init();
   Future<void> restart();

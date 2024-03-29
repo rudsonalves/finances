@@ -58,23 +58,25 @@ class DismissibleOfxAccount extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               MarkdownRichText.richText(
-                '**Bank Id:** ${ofxAccount.bankAccountId}',
+                locale.ofxDismissibleBankId(ofxAccount.bankAccountId),
                 color: Colors.black,
               ),
               MarkdownRichText.richText(
-                '**Date:** ${ofxAccount.startDate.formatYMD(locale.localeName)}'
-                ' - ${ofxAccount.endDate.formatYMD(locale.localeName)}',
+                locale.ofxDismissibleDate(
+                  ofxAccount.endDate.formatYMD(locale.localeName),
+                  ofxAccount.startDate.formatYMD(locale.localeName),
+                ),
                 color: Colors.black,
               ),
               MarkdownRichText.richText(
-                '**# of transactions:** ${ofxAccount.nTrans}',
+                locale.ofxDismissibleNTransactions(ofxAccount.nTrans),
                 color: Colors.black,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Associated to:',
+                  Text(
+                    locale.ofxDismissibleAssociatedTo,
                     style: AppTextStyles.textStyleBold14,
                   ),
                   const SizedBox(width: 8),

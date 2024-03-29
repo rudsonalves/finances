@@ -157,7 +157,12 @@ class _AccountPageState extends State<AccountPage> {
                 bottom: 0,
               ),
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.only(
+                  left: 8,
+                  right: 8,
+                  top: 8,
+                  bottom: 0,
+                ),
                 child: AnimatedBuilder(
                   animation: _controller,
                   builder: (context, _) {

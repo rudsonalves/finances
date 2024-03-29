@@ -7,7 +7,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import './locator.dart';
 import './common/constants/routes/app_route.dart';
 import './common/current_models/current_theme.dart';
-import './features/transaction/transaction_page.dart';
 import './common/current_models/current_language.dart';
 import './common/constants/themes/colors/custom_color.g.dart';
 import './common/constants/themes/colors/color_schemes.g.dart';
@@ -71,21 +70,6 @@ class AppFinances extends StatelessWidget {
                 AppRoute.signUp.name: (context) => AppRoute.signUp.page,
                 AppRoute.splash.name: (context) => AppRoute.splash.page,
                 AppRoute.settings.name: (context) => AppRoute.settings.page,
-                AppRoute.transaction.name: (context) {
-                  final args = ModalRoute.of(context)!.settings.arguments
-                      as Map<String, dynamic>?;
-
-                  if (args == null) {
-                    return AppRoute.transaction.page;
-                  } else {
-                    final addTransaction = args['addTransaction'] ?? true;
-                    final transaction = args['transaction'];
-                    return TransactionPage(
-                      addTransaction: addTransaction,
-                      transaction: transaction,
-                    );
-                  }
-                },
                 AppRoute.homePage.name: (context) => AppRoute.homePage.page,
                 AppRoute.statisticsPage.name: (context) =>
                     AppRoute.statisticsPage.page,

@@ -288,6 +288,47 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
+## 2024/03/29 - version: 1.1.01+85
+
+**Version Update to 1.1.01+85: Enhancements and Internationalization**
+
+This update brings several improvements to the project's build environment, architectural adjustments for dialog utilization, and internationalization of OFX import functionalities. Key enhancements include updates to Java and Kotlin versions, changes to gradle configurations, and the introduction of a new attribute for user preferences in OFX importation. 
+
+**Build Configuration and Compatibility Improvements:**
+
+- Updated `android/app/build.gradle` to include `compileOptions` with `sourceCompatibility` and `targetCompatibility` set to `JavaVersion.VERSION_1_8` for enhanced compatibility.
+- Changed `ext.kotlin_version` to `1.8.20` in `android/build.gradle` for using the latest Kotlin features and improvements.
+- Upgraded `gradle-wrapper.properties` to use Gradle version `8.7-all.zip`, ensuring compatibility with the latest build tools and performance enhancements.
+
+**Architectural Adjustments and Feature Enhancements:**
+
+- Removed routing to `TransactionPage` from `app_route.dart` and `app_finances.dart` as it has been transformed into a dialog, streamlining the transaction management process.
+- Modified `TransactionDbModel.fromOfxTemplate` factory method to initiate transactions with `transStatus` set to `TransStatus.transactionChecked`, assuming transactions imported via OFX to be verified by default.
+- Introduced `List<int> userOfxStopCategories` to `UserDbModel` for managing categories that require verification during automatic OFX transaction imports.
+
+**UI and Internationalization Updates:**
+
+- Removed bottom margin from the scroll area in accounts and categories pages for a cleaner UI presentation.
+- Replaced the call to `TransactionPage` with `TransactionDialog.showTransactionDialog` in various modules, incorporating the transaction dialog for a consistent user interface.
+- Implemented internationalization for OFX import dialogs and pages, enhancing user experience for non-English speakers.
+- Updated the logic in OFX page and controller to accommodate the replacement of `BasicTextFormField` with `AutocompleteTextFormField` for transaction description and category selection.
+- Introduced methods `setCategoryByDescription` and `_setCategory` in `ofx_transaction_controller.dart` to facilitate category selection based on transaction description using `AutocompleteTextFormField`.
+- Internationalized interfaces in `ofx_page` widgets and added static methods for dialog creation and category selection for mandatory editing during OFX importation.
+- Implemented `ofx_stop_categories.dart` dialog for selecting categories requiring mandatory editing upon OFX importation.
+- Renamed `transaction_page.dart` to `transaction_dialog.dart` to reflect its transformation into a dialog.
+- Expanded internationalization support in `app_??.arb` files to include dialogs and pages related to OFX file import.
+- Added `Map<int, CategoryDbModel> get categoriesIdMap` getter in category repository to facilitate category management by ID.
+
+**Database Schema Migration and Updates:**
+
+- Introduced `userOfxStopCategories` column in `usersTable` within `constants.dart` to store user preferences for OFX transaction importation.
+- Added migration script for database schema version `1011` in `database_migrations.dart`, incorporating the new `userOfxStopCategories` column in `usersTable`.
+
+**Implications:**
+
+These updates enhance the project's build environment, streamline transaction management through dialog utilization, and broaden the app's international reach. Additionally, the new user preference attribute for OFX importation allows for more personalized transaction management.
+
+
 ## 2024/03/26 - version: 1.1.00+82
 
 **Incremental Updates for Enhanced OFX File Handling and UI Improvements**

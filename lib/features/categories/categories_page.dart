@@ -203,7 +203,12 @@ class _CategoriesPageState extends State<CategoriesPage>
                   topRight: Radius.circular(20),
                 ),
               ),
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.only(
+                left: 8,
+                right: 8,
+                top: 8,
+                bottom: 0,
+              ),
               child: AnimatedBuilder(
                 animation: _controller,
                 builder: (context, child) {

@@ -17,6 +17,14 @@ class CategoryRepository implements AbstractCategoryRepository {
   Map<String, CategoryDbModel> get categoriesMap => _categories;
 
   @override
+  // ignore: prefer_for_elements_to_map_fromiterable
+  Map<int, CategoryDbModel> get categoriesIdMap => Map.fromIterable(
+        _categories.values,
+        key: (category) => category.categoryId!,
+        value: (category) => category,
+      );
+
+  @override
   List<CategoryDbModel> get categories => _categories.values.toList();
 
   @override
