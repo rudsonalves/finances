@@ -3,7 +3,7 @@ description: "financial control app"
 
 publish_to: 'none' 
 
-version: 1.1.01+85
+version: 1.1.01+88
 
 environment:
   sdk: '>=3.1.5 <4.0.0' 

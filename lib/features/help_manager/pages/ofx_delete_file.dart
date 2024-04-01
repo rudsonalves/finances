@@ -3,17 +3,16 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../model/page_model.dart';
 
-class BackupRestoreHelp implements PageModel {
+class OfxDeleteFileHelp implements PageModel {
   final String _title;
   final List<Object> _messages;
 
-  BackupRestoreHelp(this._title, this._messages);
+  OfxDeleteFileHelp(this._title, this._messages);
 
-  static BackupRestoreHelp create(AppLocalizations locale, Color color) {
-    String title = locale.helpBackupRestoreTitle;
+  static OfxDeleteFileHelp create(AppLocalizations locale, Color color) {
+    String title = locale.helpOfxRemoveTitle;
     final List<Object> messages = [
-      locale.helpBackupRestore0,
-      locale.helpBackupRestore1,
+      locale.helpOfxRemoveMsg1,
       [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -21,16 +20,16 @@ class BackupRestoreHelp implements PageModel {
             SizedBox(
               width: 150,
               child: Image.asset(
-                'assets/images/transaction_menu_help.png',
-                fit: BoxFit.fitWidth,
+                'assets/images/ofx_06.png',
+                fit: BoxFit.contain,
               ),
             ),
           ],
         ),
       ],
+      locale.helpOfxRemoveMsg2,
     ];
-
-    return BackupRestoreHelp(title, messages);
+    return OfxDeleteFileHelp(title, messages);
   }
 
   @override

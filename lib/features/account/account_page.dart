@@ -127,7 +127,7 @@ class _AccountPageState extends State<AccountPage> {
         ),
         actions: [
           IconButton(
-            onPressed: () => managerTutorial(context, accountsHelp),
+            onPressed: () => managerTutorial(context, HelpTopics.accountsHelp),
             icon: const Icon(
               Icons.question_mark,
               size: 20,

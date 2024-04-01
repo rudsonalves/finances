@@ -11,7 +11,7 @@ import '../../common/models/user_name_notifier.dart';
 import '../../common/widgets/basic_text_form_field.dart';
 import '../../common/widgets/markdown_rich_text.dart';
 import '../../common/widgets/simple_spin_box_field.dart';
-import '../../common/widgets/widget_alert_dialog.dart';
+import '../../common/widgets/generic_dialog.dart';
 import '../../locator.dart';
 import '../../common/widgets/app_top_border.dart';
 import '../../common/widgets/custom_app_bar.dart';
@@ -200,7 +200,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
     int? value = await showDialog(
       context: context,
-      builder: (context) => WidgetAlertDialog(
+      builder: (context) => GenericDialog(
         title: locale.maxTrasctionsTitle,
         content: [
           MarkdownRichText.richText(
@@ -249,7 +249,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
     await showDialog(
       context: context,
-      builder: (context) => WidgetAlertDialog(
+      builder: (context) => GenericDialog(
         title: locale.resetDialogTitle,
         content: [
           Text(

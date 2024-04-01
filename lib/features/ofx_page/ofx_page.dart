@@ -6,6 +6,7 @@ import '../../common/widgets/app_top_border.dart';
 import '../../common/widgets/custom_app_bar.dart';
 import '../../locator.dart';
 import '../../repositories/account/abstract_account_repository.dart';
+import '../help_manager/main_manager.dart';
 import 'ofx_page_controller.dart';
 import 'ofx_page_state.dart';
 import 'widgets/dismissible_ofx_account.dart';
@@ -62,6 +63,19 @@ class _OfxPageState extends State<OfxPage> {
       appBar: CustomAppBar(
         title: Text(locale.ofxPageTitle),
         centerTitle: true,
+        actions: [
+          // Manager Tutorial call
+          IconButton(
+            icon: const Icon(
+              Icons.question_mark,
+              size: 20,
+            ),
+            onPressed: () => managerTutorial(
+              context,
+              HelpTopics.ofxMainHelp,
+            ),
+          ),
+        ],
       ),
       body: Stack(
         children: [

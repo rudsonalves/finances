@@ -11,7 +11,7 @@ import 'package:restart_app/restart_app.dart';
 import '../../common/constants/routes/app_route.dart';
 import '../../common/constants/themes/app_button_styles.dart';
 import '../../common/constants/themes/app_text_styles.dart';
-import '../../common/widgets/widget_alert_dialog.dart';
+import '../../common/widgets/generic_dialog.dart';
 import '../../repositories/backup/abstract_backup_repository.dart';
 import '../../repositories/backup/backup_repository.dart';
 
@@ -78,7 +78,7 @@ class _DatabaseRecoverState extends State<DatabaseRecover> {
 
   Future<void> _showNotADatabaseFileMessage() async {
     if (!mounted) return;
-    await singleMessageAlertDialog(
+    await GenericDialog.callDialog(
       context,
       title: 'Database Recovery',
       message: 'This is not a database file!',

@@ -3,17 +3,16 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../model/page_model.dart';
 
-class BackupRestoreHelp implements PageModel {
+class BackupCreateHelp implements PageModel {
   final String _title;
   final List<Object> _messages;
 
-  BackupRestoreHelp(this._title, this._messages);
+  BackupCreateHelp(this._title, this._messages);
 
-  static BackupRestoreHelp create(AppLocalizations locale, Color color) {
-    String title = locale.helpBackupRestoreTitle;
+  static BackupCreateHelp create(AppLocalizations locale, Color color) {
+    String title = locale.helpBackupRestore2;
     final List<Object> messages = [
-      locale.helpBackupRestore0,
-      locale.helpBackupRestore1,
+      locale.helpBackupRestore3,
       [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -21,16 +20,18 @@ class BackupRestoreHelp implements PageModel {
             SizedBox(
               width: 150,
               child: Image.asset(
-                'assets/images/transaction_menu_help.png',
-                fit: BoxFit.fitWidth,
+                'assets/images/transaction_backup_help.png',
+                fit: BoxFit.contain,
               ),
             ),
           ],
         ),
       ],
+      locale.helpBackupRestore4,
+      locale.helpBackupRestore5,
     ];
 
-    return BackupRestoreHelp(title, messages);
+    return BackupCreateHelp(title, messages);
   }
 
   @override

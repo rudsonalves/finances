@@ -3,34 +3,33 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../model/page_model.dart';
 
-class BackupRestoreHelp implements PageModel {
+class OfxMainHelp implements PageModel {
   final String _title;
   final List<Object> _messages;
 
-  BackupRestoreHelp(this._title, this._messages);
+  OfxMainHelp(this._title, this._messages);
 
-  static BackupRestoreHelp create(AppLocalizations locale, Color color) {
-    String title = locale.helpBackupRestoreTitle;
+  static OfxMainHelp create(AppLocalizations locale, Color color) {
+    String title = locale.helpOfxTitle;
     final List<Object> messages = [
-      locale.helpBackupRestore0,
-      locale.helpBackupRestore1,
+      locale.helpOfxMsg1,
+      locale.helpOfxMsg2,
       [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
-              width: 150,
+              width: 250,
               child: Image.asset(
-                'assets/images/transaction_menu_help.png',
-                fit: BoxFit.fitWidth,
+                'assets/images/ofx_file.png',
+                fit: BoxFit.contain,
               ),
             ),
           ],
         ),
       ],
     ];
-
-    return BackupRestoreHelp(title, messages);
+    return OfxMainHelp(title, messages);
   }
 
   @override
