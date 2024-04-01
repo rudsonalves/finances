@@ -290,25 +290,18 @@ Some bugs were noticed and need to be fixed:
 
 ## 2024-04-01 - version: 1.1.01+88
 
-### Improvements and Fixes:
-- Updated dependencies and compatibility with newer versions of Kotlin and Gradle for better support and performance.
-- Enhanced importation and management of OFX files, including the introduction of internationalization features and optimizations in import logic.
-- Refinements in the user interface, simplifying the transaction addition process and improving the overall experience of importing OFX files.
-- Implemented more intuitive and informative help dialogs, facilitating user access to useful information about using the app and financial management.
-- Added specific help messages for the OFX support module, including detailed instructions on importing, managing, and removing OFX transactions.
+### Enhancements and Refinements:
+- **lib/common/widgets/widget_alert_dialog.dart**: Enhanced the generalization of `singleMessageAlertDialog` by adding 4 modes of operation: `enum DialogActions {yesNo, addCancel, close, none}`; transformed `singleMessageAlertDialog` into a static method of the `WidgetAlertDialog` class; renamed the class to `GenericDialog` and the static class method `singleMessageAlertDialog` to `callGenericDialog`.
+- **Help Dialogs Improvements**: Simplified the deployment of new help pages by automatically numbering the pages through an `enum HelpTopics`, with an element for each help page; introduced new help pages including `OfxMainHelp`, `OfxImportHelp`, `OfxImportFileHelp`, `OfxAddTransHelp`, `OfxAutoTransHelp`, and `OfxDeleteFileHelp`; divided the `BackupRestoreHelp` page into three distinct pages by adding `BackupCreateHelp` and `BackupRestoreOnlyHelp`; streamlined the help index page to display only the main indices of help.
+- **OFX Module Support**: Added an icon in `lib/features/ofx_page/ofx_page.dart` to call the help page; introduced a message dialog for removing OFX files in `lib/features/ofx_page/widgets/dismissible_ofx_account.dart`; added help messages for the OFX support module in `lib/l10n/app_??.arb`.
 
-### Detailed Technical Changes:
-- **android/app/build.gradle** & **android/build.gradle**: Updates to support `JavaVersion.VERSION_1_8` and `kotlin_version '1.8.20'`.
-- **android/gradle/wrapper/gradle-wrapper.properties**: Updated to `gradle-8.7-all.zip`.
-- **lib/common/constants/routes/app_route.dart** & **lib/app_finances.dart**: Removed routing for `TransactionPage`, now transformed into a dialog.
-- **lib/common/models/**: Several improvements in models, including adjustments for OFX importation and the addition of attributes to support specific categories.
-- **lib/features/**: Various pages and components were adjusted to enhance usability and add functionalities related to OFX.
-- **lib/l10n/app_??.arb**: Added internationalization to support multiple languages for the new functionalities and help dialogs.
-- **lib/store/**: Database schema updates to support new functionalities related to OFX transactions.
+### Specific Changes:
+- **Account and Categories Pages**: Adjusted `lib/features/account/account_page.dart` and `lib/features/categories/categories_page.dart` for improved user experience.
+- **Database Recovery**: Updated `lib/features/database_recover/database_recover.dart` with enhanced functionality.
+- **Internationalization**: Expanded support in `lib/l10n/app_??.arb` to include help messages for the OFX module, making the app more accessible to a wider audience.
 
 ### Release Notes:
-This version introduces significant improvements in OFX file support, optimizations in the user interface, and enhancements in the app's help structure. Users can now manage their financial transactions more efficiently, with improved support for automatic importation and management of transactions via OFX. We thank our users for their continuous feedback, which helps us to constantly improve Finances.
-
+This version introduces significant improvements in dialog generalization, streamlines help message deployment, and enhances the app's support for OFX files. The new generic dialog functionality offers more flexibility in user interactions, while the expanded help section provides users with detailed guidance on managing their finances with the OFX module. We continue to refine the app based on user feedback, aiming to deliver a more intuitive and comprehensive financial management tool.
 
 ## 2024/03/29 - version: 1.1.01+85
 
