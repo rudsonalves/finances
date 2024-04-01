@@ -12,49 +12,38 @@ class IndexHelp extends StatelessWidget {
     final navigator = Navigator.of(context);
     final primary = Theme.of(context).colorScheme.primary;
 
-    final titles = <String>[
-      locale.helpIntroductionTitle,
-      locale.helpPresentationTitle,
-      locale.helpTransactionsTitle,
-      locale.helpTransactionsCardTitle,
-      locale.helpTransactionsEditTitle,
-      locale.helpTransactionsAddTitle,
-      locale.helpTransactionsLockTitle,
-      locale.helpTransactionsFutureTitle,
-      locale.helpTransactionsFilterTitle,
-      locale.helpBackupRestoreTitle,
-      locale.helpAccountsTitle,
-      locale.helpAccountsEditTitle,
-      locale.helpAccountsDeleteTitle,
-      locale.helpIconsSelectionsTitle,
-      locale.helpIconsColorTitle,
-      locale.helpCategoriesTitle,
-      locale.helpCategoriesEditTitle,
-      locale.helpCategoriesBudgetTitle,
-      locale.helpBudgetSetTitle,
-      locale.helpStatisticsTitle,
-      locale.helpStatisticsMoveTitle,
-      locale.helpStatisticsCardTitle,
-      locale.helpStatisticsMenuTitle,
-      locale.helpSettingsTitle,
-    ];
+    final helpIndex = <String, HelpTopics>{
+      locale.helpIntroductionTitle: HelpTopics.introductionHelp,
+      locale.helpPresentationTitle: HelpTopics.presentationHelp,
+      locale.helpTransactionsTitle: HelpTopics.transactionsHelp,
+      locale.helpOfxTitle: HelpTopics.ofxMainHelp,
+      locale.helpBackupRestoreTitle: HelpTopics.backupRestoreHelp,
+      locale.helpAccountsTitle: HelpTopics.accountsHelp,
+      locale.helpIconsSelectionsTitle: HelpTopics.iconsSelectionsHelp,
+      locale.helpCategoriesTitle: HelpTopics.categoriesHelp,
+      locale.helpBudgetSetTitle: HelpTopics.budgetSetHelp,
+      locale.helpStatisticsTitle: HelpTopics.statisticsHelp,
+      locale.helpSettingsTitle: HelpTopics.settingsHelp,
+    };
 
     final List<Widget> widgets = [];
 
-    for (int index = 0; index < titles.length; index++) {
+    int index = 1;
+    for (final helpTitle in helpIndex.keys) {
       widgets.add(
         InkWell(
           onTap: () {
-            navigator.pop(index);
+            navigator.pop(helpIndex[helpTitle]);
           },
           child: Text(
-            '${(index + 1).toString().padLeft(2, '0')}. ${titles[index]}',
+            '${index.toString().padLeft(2, '0')}. $helpTitle',
             style: TextStyle(
               color: primary,
             ),
           ),
         ),
       );
+      index++;
     }
 
     return SimpleDialog(

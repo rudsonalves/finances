@@ -139,7 +139,7 @@ class _CategoriesPageState extends State<CategoriesPage>
               customBorder: const CircleBorder(),
               onTap: () => managerTutorial(
                 context,
-                categoriesHelp,
+                HelpTopics.categoriesHelp,
               ),
               child: const Icon(
                 Icons.question_mark,

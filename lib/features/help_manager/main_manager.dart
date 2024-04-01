@@ -6,7 +6,9 @@ import 'index_help.dart';
 import 'pages/accounts_delete_help.dart';
 import 'pages/accounts_edit_help.dart';
 import 'pages/accounts_help.dart';
+import 'pages/backup_create_help.dart';
 import 'pages/backup_restore_help.dart';
+import 'pages/backup_restore_only_help.dart';
 import 'pages/budget_set_help.dart';
 import 'pages/categories_budget_help.dart';
 import 'pages/categories_edit_help.dart';
@@ -15,6 +17,12 @@ import 'pages/icons_color_help.dart';
 import 'pages/icons_selection_help.dart';
 import 'model/page_model.dart';
 import 'pages/introduction_help.dart';
+import 'pages/ofx_add_trans_help.dart';
+import 'pages/ofx_auto_trans_help.dart';
+import 'pages/ofx_delete_file.dart';
+import 'pages/ofx_import_file_help.dart';
+import 'pages/ofx_import_help.dart';
+import 'pages/ofx_main_help.dart';
 import 'pages/presentation_help.dart';
 import 'pages/settings_help.dart';
 import 'pages/statistics_card.dart';
@@ -49,93 +57,132 @@ class StatusButtons {
   bool get next => _next;
 }
 
-const introductionHelp = 0;
-const presentationHelp = 1;
-const transactionsHelp = 2;
-const transactionsCardHelp = 3;
-const transactionsEditHelp = 4;
-const transactionsAddHelp = 5;
-const transactionsLockHelp = 6;
-const transactionsFutureHelp = 7;
-const transactionsFilterHelp = 8;
-const backupRestoreHelp = 9;
-const accountsHelp = 10;
-const accountsEditHelp = 11;
-const accountsDeleteHelp = 12;
-const iconsSelectionsHelp = 13;
-const iconsColorHelp = 14;
-const categoriesHelp = 15;
-const categoriesEditHelp = 16;
-const categoriesBudgetHelp = 17;
-const budgetSetHelp = 18;
-const statisticsHelp = 19;
-const statisticsMoveHelp = 20;
-const statisticsCardHelp = 21;
-const statisticsMenuHelp = 22;
-const settingsHelp = 23;
-const lastPage = settingsHelp;
+enum HelpTopics {
+  introductionHelp,
+  presentationHelp,
+  transactionsHelp,
+  transactionsCardHelp,
+  transactionsEditHelp,
+  transactionsAddHelp,
+  transactionsLockHelp,
+  transactionsFutureHelp,
+  transactionsFilterHelp,
+  ofxMainHelp,
+  ofxImportHelp,
+  ofxImportFileHelp,
+  ofxAddTransHelp,
+  ofxAutoTransHelp,
+  ofxDeleteFileHelp,
+  backupRestoreHelp,
+  backupCreateHelp,
+  backupRestoreOnlyHelp,
+  accountsHelp,
+  accountsEditHelp,
+  accountsDeleteHelp,
+  iconsSelectionsHelp,
+  iconsColorHelp,
+  categoriesHelp,
+  categoriesEditHelp,
+  categoriesBudgetHelp,
+  budgetSetHelp,
+  statisticsHelp,
+  statisticsMoveHelp,
+  statisticsCardHelp,
+  statisticsMenuHelp,
+  settingsHelp,
+}
 
 PageModel createPage(int index, AppLocalizations locale, Color color) {
-  switch (index) {
-    case introductionHelp:
+  final help = HelpTopics.values[index];
+  switch (help) {
+    case HelpTopics.introductionHelp:
       return IntroductionHelp.create(locale, color);
-    case presentationHelp:
+    case HelpTopics.presentationHelp:
       return PresentationHelp.create(locale, color);
-    case transactionsHelp:
+    case HelpTopics.transactionsHelp:
       return TransactionsHelp.create(locale, color);
-    case transactionsCardHelp:
+    case HelpTopics.transactionsCardHelp:
       return TransactionsCardHelp.create(locale, color);
-    case transactionsEditHelp:
+    case HelpTopics.transactionsEditHelp:
       return TransactionsEditHelp.create(locale, color);
-    case transactionsAddHelp:
+    case HelpTopics.transactionsAddHelp:
       return TransactionsAddHelp.create(locale, color);
-    case transactionsLockHelp:
+    case HelpTopics.transactionsLockHelp:
       return TransactionsLockHelp.create(locale, color);
-    case transactionsFutureHelp:
+    case HelpTopics.transactionsFutureHelp:
       return TransactionsFutureHelp.create(locale, color);
-    case transactionsFilterHelp:
+    case HelpTopics.transactionsFilterHelp:
       return TransactionsFilterHelp.create(locale, color);
-    case backupRestoreHelp:
+
+    case HelpTopics.ofxMainHelp:
+      return OfxMainHelp.create(locale, color);
+    case HelpTopics.ofxImportHelp:
+      return OfxImportHelp.create(locale, color);
+    case HelpTopics.ofxImportFileHelp:
+      return OfxImportFileHelp.create(locale, color);
+    case HelpTopics.ofxAddTransHelp:
+      return OfxAddTransHelp.create(locale, color);
+    case HelpTopics.ofxAutoTransHelp:
+      return OfxAutoTransHelp.create(locale, color);
+    case HelpTopics.ofxDeleteFileHelp:
+      return OfxDeleteFileHelp.create(locale, color);
+
+    case HelpTopics.backupRestoreHelp:
       return BackupRestoreHelp.create(locale, color);
-    case accountsHelp:
+    case HelpTopics.backupCreateHelp:
+      return BackupCreateHelp.create(locale, color);
+    case HelpTopics.backupRestoreOnlyHelp:
+      return BackupRestoreOnlyHelp.create(locale, color);
+
+    case HelpTopics.accountsHelp:
       return AccountsHelp.create(locale, color);
-    case accountsEditHelp:
+    case HelpTopics.accountsEditHelp:
       return AccountsEditHelp.create(locale, color);
-    case accountsDeleteHelp:
+    case HelpTopics.accountsDeleteHelp:
       return AccountsDeleteHelp.create(locale, color);
-    case iconsSelectionsHelp:
+
+    case HelpTopics.iconsSelectionsHelp:
       return IconsSelectionsHelp.create(locale, color);
-    case iconsColorHelp:
+    case HelpTopics.iconsColorHelp:
       return IconsColorHelp.create(locale, color);
-    case categoriesHelp:
+
+    case HelpTopics.categoriesHelp:
       return CategoriesHelp.create(locale, color);
-    case categoriesEditHelp:
+    case HelpTopics.categoriesEditHelp:
       return CategoriesEditHelp.create(locale, color);
-    case categoriesBudgetHelp:
+    case HelpTopics.categoriesBudgetHelp:
       return CategoriesBudgetHelp.create(locale, color);
-    case budgetSetHelp:
+    case HelpTopics.budgetSetHelp:
       return BudgetSetHelp.create(locale, color);
-    case statisticsHelp:
+
+    case HelpTopics.statisticsHelp:
       return StatisticsHelp.create(locale, color);
-    case statisticsMoveHelp:
+    case HelpTopics.statisticsMoveHelp:
       return StatisticsMoveHelp.create(locale, color);
-    case statisticsCardHelp:
+    case HelpTopics.statisticsCardHelp:
       return StatisticsCardHelp.create(locale, color);
-    case statisticsMenuHelp:
+    case HelpTopics.statisticsMenuHelp:
       return StatisticsMenuHelp.create(locale, color);
-    case settingsHelp:
+
+    case HelpTopics.settingsHelp:
       return SettingsHelp.create(locale, color);
     default:
       return SettingsHelp.create(locale, color);
   }
 }
 
-Future<void> managerTutorial(BuildContext context, [int index = 0]) async {
+Future<void> managerTutorial(
+  BuildContext context, [
+  HelpTopics topic = HelpTopics.introductionHelp,
+]) async {
   StatusButtons buttons = StatusButtons(false, true, true);
   final Color primary = Theme.of(context).colorScheme.primary;
   final locale = AppLocalizations.of(context)!;
 
   HelpCommand? command = HelpCommand.next;
+
+  int lastPage = HelpTopics.values.length - 1;
+  int index = topic.index;
 
   while (command != HelpCommand.close) {
     if (index == 0) {
@@ -154,6 +201,9 @@ Future<void> managerTutorial(BuildContext context, [int index = 0]) async {
       );
       if (result is HelpCommand) {
         command = result;
+      } else if (result is HelpTopics) {
+        index = result.index;
+        command = HelpCommand.none;
       } else {
         index = result as int;
         command = HelpCommand.none;

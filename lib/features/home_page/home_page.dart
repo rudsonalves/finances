@@ -179,7 +179,7 @@ class _HomePageState extends State<HomePage>
               customBorder: const CircleBorder(),
               onTap: () => managerTutorial(
                 context,
-                transactionsHelp,
+                HelpTopics.transactionsHelp,
               ),
               child: const Icon(
                 Icons.question_mark,
@@ -267,8 +267,8 @@ class _HomePageState extends State<HomePage>
                           if (_controller.transactions.isEmpty) {
                             if (_showTutorial) {
                               WidgetsBinding.instance.addPostFrameCallback(
-                                (_) =>
-                                    managerTutorial(context, introductionHelp),
+                                (_) => managerTutorial(
+                                    context, HelpTopics.introductionHelp),
                               );
                               _showTutorial = false;
                             }

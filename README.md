@@ -288,6 +288,28 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
+## 2024-04-01 - version: 1.1.01+88
+
+### Improvements and Fixes:
+- Updated dependencies and compatibility with newer versions of Kotlin and Gradle for better support and performance.
+- Enhanced importation and management of OFX files, including the introduction of internationalization features and optimizations in import logic.
+- Refinements in the user interface, simplifying the transaction addition process and improving the overall experience of importing OFX files.
+- Implemented more intuitive and informative help dialogs, facilitating user access to useful information about using the app and financial management.
+- Added specific help messages for the OFX support module, including detailed instructions on importing, managing, and removing OFX transactions.
+
+### Detailed Technical Changes:
+- **android/app/build.gradle** & **android/build.gradle**: Updates to support `JavaVersion.VERSION_1_8` and `kotlin_version '1.8.20'`.
+- **android/gradle/wrapper/gradle-wrapper.properties**: Updated to `gradle-8.7-all.zip`.
+- **lib/common/constants/routes/app_route.dart** & **lib/app_finances.dart**: Removed routing for `TransactionPage`, now transformed into a dialog.
+- **lib/common/models/**: Several improvements in models, including adjustments for OFX importation and the addition of attributes to support specific categories.
+- **lib/features/**: Various pages and components were adjusted to enhance usability and add functionalities related to OFX.
+- **lib/l10n/app_??.arb**: Added internationalization to support multiple languages for the new functionalities and help dialogs.
+- **lib/store/**: Database schema updates to support new functionalities related to OFX transactions.
+
+### Release Notes:
+This version introduces significant improvements in OFX file support, optimizations in the user interface, and enhancements in the app's help structure. Users can now manage their financial transactions more efficiently, with improved support for automatic importation and management of transactions via OFX. We thank our users for their continuous feedback, which helps us to constantly improve Finances.
+
+
 ## 2024/03/29 - version: 1.1.01+85
 
 **Version Update to 1.1.01+85: Enhancements and Internationalization**

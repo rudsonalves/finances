@@ -63,7 +63,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 customBorder: const CircleBorder(),
                 onTap: () => managerTutorial(
                   context,
-                  statisticsHelp,
+                  HelpTopics.statisticsHelp,
                 ),
                 child: const Icon(
                   Icons.question_mark,

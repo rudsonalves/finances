@@ -92,22 +92,27 @@ class _OfxFileDialogState extends State<OfxFileDialog> {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          // Bank Account
           OfxInformation(
             title: locale.ofxFileDlgBankAccount,
             value: widget.ofxAccount.bankAccountId,
           ),
+          // # of transactions
           OfxInformation(
             title: locale.ofxFileDlgTransactions,
             value: widget.ofxAccount.nTrans.toString(),
           ),
+          // Start Date
           OfxInformation(
             title: locale.ofxFileDlgStartDate,
             value: DateFormat.yMd().format(widget.ofxAccount.startDate),
           ),
+          // End Date
           OfxInformation(
             title: locale.ofxFileDlgEndDate,
             value: DateFormat.yMd().format(widget.ofxAccount.endDate),
           ),
+          // Bank Name
           OfxInfoButton(
             title: locale.ofxFileDlgBank,
             value: widget.ofxAccount.bankName ?? '***',
@@ -130,6 +135,7 @@ class _OfxFileDialogState extends State<OfxFileDialog> {
             },
           ),
           const Divider(),
+          // Associated Account
           Text(
             locale.ofxFileDlgAssociatedAccount,
             style: AppTextStyles.textStyleBold14,
@@ -140,8 +146,10 @@ class _OfxFileDialogState extends State<OfxFileDialog> {
               AccountPopupMenu(
                 accountId: widget.ofxRelation.accountId,
                 callBack: (accountId) {
-                  widget.ofxRelation.accountId = accountId;
-                  widget.ofxAccount.accountId = accountId;
+                  setState(() {
+                    widget.ofxRelation.accountId = accountId;
+                    widget.ofxAccount.accountId = accountId;
+                  });
                 },
               ),
             ],
@@ -187,7 +195,9 @@ class _OfxFileDialogState extends State<OfxFileDialog> {
         ButtonBar(
           children: [
             FilledButton(
-              onPressed: () => Navigator.pop(context, true),
+              onPressed: widget.ofxRelation.accountId != null
+                  ? () => Navigator.pop(context, true)
+                  : null,
               child: Text(locale.genericAdd),
             ),
             FilledButton(

@@ -13,7 +13,7 @@ import '../../common/models/ofx_account_model.dart';
 import '../../common/models/ofx_relationship_model.dart';
 import '../../common/models/ofx_trans_template_model.dart';
 import '../../common/models/transaction_db_model.dart';
-import '../../common/widgets/widget_alert_dialog.dart';
+import '../../common/widgets/generic_dialog.dart';
 import '../../locator.dart';
 import '../../manager/ofx_account_manager.dart';
 import '../../manager/ofx_relationship_manager.dart';
@@ -188,7 +188,7 @@ class OfxPageController extends ChangeNotifier {
   Future<void> showUnexpectedErrorMessage(BuildContext context) async {
     final locale = AppLocalizations.of(context)!;
 
-    await singleMessageAlertDialog(
+    await GenericDialog.callDialog(
       context,
       title: locale.ofxDialogUnexpectedErrorTitle,
       message: locale.ofxDialogUnexpectedErrorMsg,
@@ -216,7 +216,7 @@ class OfxPageController extends ChangeNotifier {
     String ofxPath,
   ) async {
     final locale = AppLocalizations.of(context)!;
-    await singleMessageAlertDialog(
+    await GenericDialog.callDialog(
       context,
       title: locale.ofxDialogWrongExtensionTitle,
       message: locale.ofxDialogWrongExtensionMsg(ofxPath.split('/').last),
@@ -239,7 +239,7 @@ class OfxPageController extends ChangeNotifier {
     String ofxPath,
   ) async {
     final locale = AppLocalizations.of(context)!;
-    await singleMessageAlertDialog(
+    await GenericDialog.callDialog(
       context,
       title: locale.ofxDialogOfxCorruptTitle,
       message: locale.ofxDialogOfxCorruptMsg(ofxPath.split('/').last),
@@ -306,7 +306,7 @@ class OfxPageController extends ChangeNotifier {
     String ofxPath,
   ) async {
     final locale = AppLocalizations.of(context)!;
-    await singleMessageAlertDialog(
+    await GenericDialog.callDialog(
       context,
       title: locale.ofxDialogAlreadyReleasedOfxTitle,
       message: locale.ofxDialogAlreadyReleasedOfxMsg(ofxPath.split('/').last),
@@ -409,7 +409,7 @@ class OfxPageController extends ChangeNotifier {
 
   Future<void> showRemoveTransactionsMessage(BuildContext context) async {
     final locale = AppLocalizations.of(context)!;
-    singleMessageAlertDialog(
+    GenericDialog.callDialog(
       context,
       title: locale.ofxDialogRmTransTitle,
       message: locale.ofxDialogRmTransMsg,

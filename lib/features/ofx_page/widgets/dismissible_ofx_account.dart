@@ -8,6 +8,7 @@ import '../../../common/models/account_db_model.dart';
 import '../../../common/models/ofx_account_model.dart';
 import '../../../common/widgets/account_row.dart';
 import '../../../common/widgets/markdown_rich_text.dart';
+import '../../../common/widgets/generic_dialog.dart';
 import '../../../locator.dart';
 import '../ofx_page_controller.dart';
 
@@ -21,12 +22,33 @@ class DismissibleOfxAccount extends StatelessWidget {
   final OfxAccountModel ofxAccount;
   final AccountDbModel? account;
 
+  Future<bool?> removeAccount(
+    BuildContext context,
+    DismissDirection direction,
+  ) async {
+    if (direction == DismissDirection.endToStart) {
+      final ofxPageController = locator<OfxPageController>();
+      final locale = AppLocalizations.of(context)!;
+
+      bool result = await GenericDialog.callDialog(
+        context,
+        title: locale.dismissibleOfxAccountRmTitle,
+        message: locale.dismissibleOfxAccountRmMsg,
+        actions: DialogActions.yesNo,
+      );
+
+      if (result) {
+        return await ofxPageController.deleteOfxAccount(ofxAccount);
+      }
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final locale = AppLocalizations.of(context)!;
     final customColors = Theme.of(context).extension<CustomColors>()!;
-    final ofxPageController = locator<OfxPageController>();
 
     return Dismissible(
       key: UniqueKey(),
@@ -46,6 +68,7 @@ class DismissibleOfxAccount extends StatelessWidget {
         label: locale.transactionListTileDelete,
         enable: true,
       ),
+      confirmDismiss: (direction) => removeAccount(context, direction),
       child: Card(
         child: ListTile(
           title: Text(
@@ -90,12 +113,6 @@ class DismissibleOfxAccount extends StatelessWidget {
           ),
         ),
       ),
-      confirmDismiss: (direction) async {
-        if (direction == DismissDirection.endToStart) {
-          return await ofxPageController.deleteOfxAccount(ofxAccount);
-        }
-        return false;
-      },
     );
   }
 }
