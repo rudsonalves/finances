@@ -1,4 +1,4 @@
-import '../../store/icon_store.dart';
+import '../../store/stores/icon_store.dart';
 import 'abstract_icons_repository.dart';
 import '../../common/models/icons_model.dart';
 

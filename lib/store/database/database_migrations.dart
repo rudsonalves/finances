@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:sqflite/sqflite.dart';
 
-import 'constants.dart';
+import '../constants/constants.dart';
 
 /// Manages database schema migrations for the application.
 ///

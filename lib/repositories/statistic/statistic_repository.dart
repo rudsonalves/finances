@@ -1,4 +1,4 @@
-import '../../store/statistic_store.dart';
+import '../../store/stores/statistic_store.dart';
 import 'abstract_statistic_repository.dart';
 
 class StatisticRepository implements AbstractStatisticRepository {

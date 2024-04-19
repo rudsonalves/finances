@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import '../../common/models/transfer_db_model.dart';
-import '../../store/transfer_store.dart';
+import '../../store/stores/transfer_store.dart';
 import 'abstract_transfer_repository.dart';
 
 class TransferRepository implements AbstractTransferRepository {

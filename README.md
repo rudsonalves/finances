@@ -288,6 +288,29 @@ Some bugs were noticed and need to be fixed:
 
 # Commits:
 
+## 2024/04/19 - version 1.1.01+89
+
+This release introduces significant enhancements and restructuring across the Finances app, aimed at improving functionality and user experience.
+
+- **Core Updates**:
+  - Updated the app version from `1.1.01+88` to `1.1.01+89` in `app_info.dart` to reflect the latest iteration.
+  - Revamped localization files (`app_de.arb`, `app_en.arb`, `app_en_US.arb`, `app_es.arb`, `app_fr.arb`, `app_it.arb`, `app_pt.arb`, `app_pt_BR.arb`) with a new update message that highlights major changes including OFX file integration, extensive code refactoring, and UI improvements.
+
+- **Localization and Messaging Enhancements**:
+  - Enhanced localization support for multiple languages, improving the app's international usability and accessibility.
+  - Updated user-facing messages to better communicate recent changes and features, ensuring users are well-informed about the app's capabilities and new functionalities.
+
+- **Repository and Store Refactoring**:
+  - Migrated various store classes (`DatabaseManager`, `StatisticStore`, `TransactionStore`, `TransferStore`, etc.) into a new `stores` directory to maintain cleaner codebase organization.
+  - Updated repository and store imports across the app to align with the new directory structure, improving maintainability and scalability.
+
+- **Database and Infrastructure Overhaul**:
+  - Refined the database infrastructure, moving key components such as `DatabaseManager`, `DatabaseBackup`, and related scripts into a dedicated `database` directory, supporting better separation of concerns and clearer module management.
+  - Implemented new constants and updated paths in `constants.dart` and other related files to ensure consistent configuration management across the app.
+
+This update lays a robust foundation for future developments and ensures that Finances remains a powerful tool for managing personal finances effectively, with a focus on user experience and technological robustness.
+
+
 ## 2024-04-01 - version: 1.1.01+88
 
 ### Enhancements and Refinements:

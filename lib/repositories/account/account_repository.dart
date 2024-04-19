@@ -1,7 +1,7 @@
 import '../../locator.dart';
 import '../../common/models/account_db_model.dart';
 import '../../common/current_models/current_user.dart';
-import '../../store/account_store.dart';
+import '../../store/stores/account_store.dart';
 import '../icons/abstract_icons_repository.dart';
 import 'abstract_account_repository.dart';
 

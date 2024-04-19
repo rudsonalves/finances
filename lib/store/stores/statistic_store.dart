@@ -1,8 +1,8 @@
 import 'dart:developer';
 
-import '../locator.dart';
-import 'constants.dart';
-import 'database_manager.dart';
+import '../../locator.dart';
+import '../constants/constants.dart';
+import '../database/database_manager.dart';
 
 abstract class StatisticStorer {
   Future<List<Map<String, dynamic>>?> getTransactionSumsByCategory(

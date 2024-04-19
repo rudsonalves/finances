@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 
-import 'constants.dart';
+import 'constants/constants.dart';
 
 /// Provides methods to create database tables and associated indices.
 ///

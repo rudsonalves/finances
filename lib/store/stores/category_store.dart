@@ -2,9 +2,9 @@ import 'dart:developer';
 
 import 'package:sqflite/sqflite.dart';
 
-import '../locator.dart';
-import 'constants.dart';
-import 'database_manager.dart';
+import '../../locator.dart';
+import '../constants/constants.dart';
+import '../database/database_manager.dart';
 
 /// Manages database operations for category-related data.
 ///

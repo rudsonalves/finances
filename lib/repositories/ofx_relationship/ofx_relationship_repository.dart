@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import '../../common/models/ofx_relationship_model.dart';
-import '../../store/ofx_relationship_store.dart';
+import '../../store/stores/ofx_relationship_store.dart';
 import 'abstract_ofx_relationship_repository.dart';
 
 class OfxRelationshipRepository implements AbtractOfxRelationshipRepository {

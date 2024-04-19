@@ -400,7 +400,7 @@
   "resetDialogResetButton": "Apagar ou Limpar Conta",
   "genericCancel": "Cancelar",
   "genericSkip": "Pular",
-  "updateMessage": "Com o objetivo de oferecer maior controlo sobre os seus dados pessoais, adicionámos na **Página de Configurações** um novo botão que invoca um diálogo permitindo-lhe a limpeza e exclusão completa de todos os seus dados e registos na aplicação.\n\nÉ importante salientar que ao utilizar este recurso todos os seus dados na aplicação serão removidos de forma irreversível. Neste diálogo também é possível remover, irreversivelmente, o registo da sua conta no servidor de autenticação da aplicação.\n\nPor favor, certifique-se de compreender completamente as implicações deste recurso antes de utilizá-lo.",
+  "updateMessage": "Finances acaba de receber uma grande atualização, preparando o aplicativo para melhorias contínuas e estabelecendo uma base sólida para sua longevidade, além de abrir caminho para novas funcionalidades. Destaques:\n\n - **Integração com Arquivos OFX:** Nesta versão, agora é possível importar transações diretamente de arquivos OFX fornecidos por instituições bancárias. Isso facilita a entrada de transações em lotes, tornando o uso do aplicativo mais eficiente.\n - **Refatoração de Código e Reestruturação do Banco de Dados:** Realizamos uma refatoração extensiva do código e reestruturação do banco de dados.\n - **Melhorias na Interface do Usuário:** Aproveitamos a oportunidade para padronizar certos aspectos da interface do usuário, tornando a navegação mais intuitiva e a experiência do usuário mais agradável.",
   "updatePoliceButton": "Política de Privacidade",
   "aboutPageTitle": "Sobre",
   "aboutPageVersion": "Versão",

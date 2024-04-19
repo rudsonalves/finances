@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../common/models/icons_model.dart';
 import '../../common/constants/themes/app_icons.dart';
 import '../../locator.dart';
-import '../../store/category_store.dart';
+import '../../store/stores/category_store.dart';
 import '../icons/abstract_icons_repository.dart';
 import 'abstract_category_repository.dart';
 import '../../common/models/category_db_model.dart';

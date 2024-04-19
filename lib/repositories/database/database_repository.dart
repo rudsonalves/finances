@@ -1,4 +1,4 @@
-import '../../store/database_provider.dart';
+import '../../store/database/database_provider.dart';
 import 'abstract_database_repository.dart';
 
 class DatabaseRepository implements AbstractDatabaseRepository {

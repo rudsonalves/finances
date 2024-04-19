@@ -5,9 +5,9 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'constants.dart';
+import '../constants/constants.dart';
 import 'database_migrations.dart';
-import 'tables_creators.dart';
+import '../tables_creators.dart';
 
 /// Manages all database operations for the application.
 ///

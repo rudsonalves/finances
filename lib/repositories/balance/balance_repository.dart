@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import '../../locator.dart';
-import '../../store/balance_store.dart';
+import '../../store/stores/balance_store.dart';
 import 'abstract_balance_repository.dart';
 import '../../common/models/extends_date.dart';
 import '../../common/current_models/current_account.dart';

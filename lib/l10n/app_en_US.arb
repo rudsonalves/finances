@@ -400,7 +400,7 @@
   "resetDialogResetButton": "Delete or Clear Account",
   "genericCancel": "Cancel",
   "genericSkip": "Skip",
-  "updateMessage": "With the goal of offering more control over your personal data, we've added a new button in the **Settings Page** that invokes a dialog allowing the cleanup and complete deletion of all your data and records in the app.\n\nIt's important to note that using this feature will irreversibly remove all your data in the app. This dialog also enables the irreversible removal of your account's registration on the app's authentication server.\n\nPlease ensure you fully understand the implications of this feature before using it.",
+  "updateMessage": "Finances just received a major update, preparing the app for ongoing enhancements and laying a solid foundation for its longevity while paving the way for new features. Standing out:\n\n - **OFX File Integration:** In this version, it is now possible to import transactions directly from OFX files provided by banking institutions. This facilitates batch transaction entries, leading to a more efficient utilization of the app.\n - **Code Refactoring and Database Structure Overhaul:** We have conducted extensive code refactoring and database restructuring.\n - **User Interface Improvements:** We've taken the opportunity to standardize certain aspects of the user interface, making navigation more intuitive and the user experience more pleasant.",
   "updatePoliceButton": "Privacy Policy",
   "aboutPageTitle": "About",
   "aboutPageVersion": "Version",

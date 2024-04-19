@@ -1,10 +1,10 @@
 import 'dart:developer';
 
-import 'package:finances/store/constants.dart';
+import 'package:finances/store/constants/constants.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../locator.dart';
-import 'database_manager.dart';
+import '../../locator.dart';
+import '../database/database_manager.dart';
 
 /// Abstract class defining the interface for storing and managing OFX
 /// relationship data in a database.

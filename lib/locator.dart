@@ -43,7 +43,7 @@ import 'repositories/icons/abstract_icons_repository.dart';
 import 'repositories/icons/icons_repository.dart';
 import 'repositories/transfer/transfer_repository.dart';
 import 'repositories/transfer/abstract_transfer_repository.dart';
-import 'store/database_manager.dart';
+import 'store/database/database_manager.dart';
 
 final locator = GetIt.instance;
 

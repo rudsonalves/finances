@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:finances/common/models/extends_date.dart';
 
 import '../../common/models/ofx_account_model.dart';
-import '../../store/ofx_account_store.dart';
+import '../../store/stores/ofx_account_store.dart';
 import 'abstract_ofx_account_repository.dart';
 
 class OfxAccountRepository implements AbstractOfxAccountRepository {

@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import '../../common/models/ofx_trans_template_model.dart';
-import '../../store/ofx_trans_template.dart';
+import '../../store/stores/ofx_trans_template_store.dart';
 import 'abstract_ofx_trans_template_repository.dart';
 
 class OfxTransTemplateRepository implements AbstractOfxTransTemplateRepository {
