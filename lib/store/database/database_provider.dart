@@ -1,3 +1,20 @@
+// Copyright (C) 2024 rudson
+//
+// This file is part of finances.
+//
+// finances is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// finances is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with finances. If not, see <https://www.gnu.org/licenses/>.
+
 import 'dart:developer';
 import 'dart:io';
 
@@ -80,7 +97,6 @@ class DatabaseProvide implements DatabaseProvider {
         await DatabaseBackup().restoreDatabase(backupDatabase);
       }
       log('DatabaseProvider.init: $err');
-      await database.execute('PRAGMA foreign_keys=ON');
     }
   }
 
@@ -106,8 +122,9 @@ class DatabaseProvide implements DatabaseProvider {
 
   /// Retrieves the current schema version of the database.
   ///
-  /// This method queries the appControl table to find the current version of the database schema.
-  /// If no version is recorded, it assumes the database is at the latest version and records it.
+  /// This method queries the appControl table to find the current version of
+  /// the database schema. If no version is recorded, it assumes the database
+  /// is at the latest version and records it.
   ///
   /// Returns the current schema version as an integer.
   Future<int> _getCurrentDatabaseSchemeVersion() async {

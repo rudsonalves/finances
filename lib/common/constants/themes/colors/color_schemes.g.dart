@@ -1,3 +1,20 @@
+// Copyright (C) 2024 rudson
+//
+// This file is part of finances.
+//
+// finances is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// finances is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with finances. If not, see <https://www.gnu.org/licenses/>.
+
 import 'package:flutter/material.dart';
 
 const lightColorScheme = ColorScheme(
@@ -18,11 +35,11 @@ const lightColorScheme = ColorScheme(
   errorContainer: Color(0xFFFFDAD6),
   onError: Color(0xFFFFFFFF),
   onErrorContainer: Color(0xFF410002),
-  background: Color(0xFFFFFBFF),
-  onBackground: Color(0xFF1B0261),
+  // background: Color(0xFFFFFBFF),
+  // onBackground: Color(0xFF1B0261),
   surface: Color(0xFFFFFBFF),
   onSurface: Color(0xFF1B0261),
-  surfaceVariant: Color(0xFFE3E1EC),
+  // surfaceVariant: Color(0xFFE3E1EC),
   onSurfaceVariant: Color(0xFF46464F),
   outline: Color(0xFF777680),
   onInverseSurface: Color(0xFFF4EEFF),
@@ -52,11 +69,11 @@ const darkColorScheme = ColorScheme(
   errorContainer: Color(0xFF93000A),
   onError: Color(0xFF690005),
   onErrorContainer: Color(0xFFFFDAD6),
-  background: Color(0xFF1B0261),
-  onBackground: Color(0xFFE5DEFF),
+  // background: Color(0xFF1B0261),
+  // onBackground: Color(0xFFE5DEFF),
   surface: Color(0xFF1B0261),
   onSurface: Color(0xFFE5DEFF),
-  surfaceVariant: Color(0xFF46464F),
+  // surfaceVariant: Color(0xFF46464F),
   onSurfaceVariant: Color(0xFFC7C5D0),
   outline: Color(0xFF91909A),
   onInverseSurface: Color(0xFF1B0261),

@@ -4,6 +4,10 @@ By *rudsonalves67@gmail.com*
 
 The intention of this project is to develop an application to assist in user budget control, allowing the creation and management of accounts. The project was inspired by the diagram published on Figma, [Financy-App](https://www.figma.com/file/vQzApZhqZFDFp1td5K4asQ/Financy-App?type=design&mode=design&t=EFvH3bvOxfe8hSap-0), and was initially developed based on videos from the YouTube channel [@devkaio](https://www.youtube.com/@devkaio), to which I am very grateful for the good practices and interesting ideas that helped implement the project.
 
+## License
+
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
+
 ## Code Development
 
 This project aims to enhance my knowledge in the Flutter SDK and the entire ecosystem involved in application development.
@@ -287,6 +291,46 @@ Some bugs were noticed and need to be fixed:
 
 
 # Commits:
+
+## 2024_07_08 - version: 1.1.02+90
+
+Added GPLv3 license, recommended VSCode extension, and updated dependencies.
+
+**Details:**
+- **File `.vscode/extensions.json`:**
+  - Created a new file to recommend the "ymotongpoo.licenser" extension for VSCode users.
+
+- **File `LICENSE`:**
+  - Added the GNU General Public License v3.0 text.
+
+- **File `README.md`:**
+  - Added a section to indicate that the project is licensed under the GPLv3.
+
+- **File `android/app/build.gradle`:**
+  - Updated `minSdkVersion` from 21 to 23.
+
+- **File `AndroidManifest.xml`:**
+  - Enabled `OnBackInvokedCallback` by setting `android:enableOnBackInvokedCallback="true"` in the application tag.
+
+- **Various Dart files:**
+  - Added GPLv3 license headers to multiple source files.
+  - Corrected `MaterialStateProperty` to `WidgetStateProperty` in several widget styles.
+
+- **File `pubspec.yaml`:**
+  - Updated project description to mention GPLv3 licensing.
+  - Updated several dependencies to their latest versions:
+    - `firebase_auth` to `5.1.1`
+    - `firebase_core` to `3.1.1`
+    - `intl` to `0.19.0`
+    - `package_info_plus` to `8.0.0`
+    - `fl_chart` to `0.68.0`
+    - `flutter_lints` to `4.0.0`
+
+- **File `pubspec.lock`:**
+  - Updated lock file to reflect the new versions of dependencies.
+
+This commit integrates the GNU General Public License v3.0 into the project, recommends a VSCode extension for license management, and updates various dependencies to their latest versions, ensuring compliance and improving the project's maintainability.
+
 
 ## 2024/04/19 - version 1.1.01+89
 
