@@ -3,7 +3,7 @@ description: "financial control app licensed under the GPLv3"
 
 publish_to: 'none' 
 
-version: 1.1.02+90
+version: 1.1.03+91
 
 environment:
   sdk: '>=3.1.5 <4.0.0' 
