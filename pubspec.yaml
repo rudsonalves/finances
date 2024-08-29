@@ -1,0 +1,81 @@
+name: finances
+description: "financial control app licensed under the GPLv3."
+publish_to: 'none' 
+
+version: 1.1.05+100
+
+environment:
+  sdk: ^3.5.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  get_it: ^7.6.4
+  firebase_auth: ^5.1.1 # 4.8.0
+  firebase_core: ^3.1.1 # 2.12.0
+  sqflite: ^2.3.0
+  path_provider: ^2.1.1
+  path: ^1.8.3
+  intl: ^0.19.0
+  dynamic_color: ^1.6.8
+  flutter_localization: ^0.2.0
+  image_picker: ^1.0.4
+  flutter_colorpicker: ^1.0.3
+  file_picker: ^8.0.0+1
+  package_info_plus: ^8.0.0
+  fl_chart: ^0.68.0
+  flutter_launcher_icons: ^0.13.1
+  restart_app: ^1.2.1
+  flutter_swiper_view: ^1.1.8
+  logger: ^2.0.2+1
+  url_launcher: ^6.2.2
+  xml2json: ^6.2.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^4.0.0
+  mocktail: ^1.0.0
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icons/finances_icon2.png"
+  min_sdk_android: 23
+
+flutter:
+  uses-material-design: true
+
+  generate: true
+
+  assets:
+    - assets/images/
+    - assets/icons/finances_icon2.png
+
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/Inter-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/Inter-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Inter-Regular.ttf
+        - asset: assets/fonts/Inter-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Inter-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Inter-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Inter-ExtraBold.ttf
+          weight: 800
+    - family: TrademarkIcons
+      fonts:
+        - asset: assets/fonts/TrademarkIcons.ttf
+    - family: FontelloIcons
+      fonts:
+        - asset: assets/fonts/FontelloIcons.ttf
