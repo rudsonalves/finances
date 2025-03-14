@@ -183,8 +183,6 @@ PageModel createPage(int index, AppLocalizations locale, Color color) {
 
     case HelpTopics.settingsHelp:
       return SettingsHelp.create(locale, color);
-    default:
-      return SettingsHelp.create(locale, color);
   }
 }
 

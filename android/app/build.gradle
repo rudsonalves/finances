@@ -31,7 +31,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace = "br.com.jrblog.finances"
-    compileSdk = 34 // flutter.compileSdkVersion
+    compileSdk = 35 // flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
