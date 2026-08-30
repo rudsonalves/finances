@@ -2,7 +2,7 @@ name: finances
 description: "financial control app licensed under the GPLv3."
 publish_to: 'none' 
 
-version: 1.1.07+102
+version: 1.2.00+106
 
 environment:
   sdk: ^3.5.1
@@ -12,20 +12,20 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.8
-  get_it: ^8.0.3 #^7.6.4
-  firebase_auth: ^5.1.1 # 4.8.0
-  firebase_core: ^3.1.1 # 2.12.0
+  get_it: ^9.2.1 #^7.6.4
+  firebase_auth: ^6.6.1 # 4.8.0
+  firebase_core: ^4.14.0 # 2.12.0
   sqflite: ^2.3.0
   path_provider: ^2.1.1
   path: ^1.8.3
-  intl: ^0.19.0
-  dynamic_color: ^1.6.8
-  flutter_localization: ^0.3.1 #^0.2.0
+  intl: ^0.20.3
+  dynamic_color: ^1.7.0
+  flutter_localization: ^0.4.1 #^0.2.0
   image_picker: ^1.0.4
   flutter_colorpicker: ^1.0.3
-  file_picker: ^9.1.0 #^8.0.0+1
-  package_info_plus: ^8.0.0
-  fl_chart: ^0.70.2 #^0.68.0
+  file_picker: ^12.1.2 #^8.0.0+1
+  package_info_plus: ^10.2.1
+  fl_chart: ^1.2.0 #^0.68.0
   flutter_launcher_icons: ^0.14.3 #^0.13.1
   restart_app: ^1.2.1
   flutter_swiper_view: ^1.1.8
@@ -37,7 +37,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^5.0.0 #^4.0.0
+  flutter_lints: ^6.0.0 #^4.0.0
   mocktail: ^1.0.0
 
 flutter_launcher_icons:

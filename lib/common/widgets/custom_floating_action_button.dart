@@ -31,7 +31,7 @@ class CustomFloatingActionButton extends StatelessWidget {
     Color onPrimary = Theme.of(context).colorScheme.onPrimary;
 
     return FloatingActionButton(
-      backgroundColor: primary.withOpacity(0.5),
+      backgroundColor: primary.withValues(alpha: 0.5),
       foregroundColor: onPrimary,
       onPressed: onPressed,
       child: const Icon(Icons.add),

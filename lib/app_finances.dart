@@ -19,7 +19,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:dynamic_color/dynamic_color.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finances/l10n/app_localizations.dart';
 
 import './locator.dart';
 import './common/constants/routes/app_route.dart';

@@ -18,7 +18,7 @@
 import 'package:finances/common/constants/app_info.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finances/l10n/app_localizations.dart';
 import 'package:restart_app/restart_app.dart';
 
 import '../../common/constants/laguage_constants.dart';

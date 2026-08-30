@@ -21,7 +21,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:finances/packages/ofx/lib/ofx.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finances/l10n/app_localizations.dart';
 
 import '../../common/constants/app_constants.dart';
 import '../../common/current_models/current_user.dart';
@@ -213,10 +213,10 @@ class OfxPageController extends ChangeNotifier {
   }
 
   Future<String?> pickAndValidateOfxFile(BuildContext context) async {
-    final ofxSelect = await FilePicker.platform.pickFiles(
+    final ofxSelect = await FilePicker.pickFile(
       dialogTitle: 'Select an ofx file',
     );
-    final ofxPath = ofxSelect?.files.first.path!;
+    final ofxPath = ofxSelect?.path;
     if (ofxPath == null) return null;
 
     if (!ofxPath.toLowerCase().endsWith('.ofx')) {

@@ -214,7 +214,7 @@ class LineGraphic extends StatelessWidget {
             ),
             belowBarData: BarAreaData(
               show: areaChart,
-              color: data[index].color.withOpacity(0.3),
+              color: data[index].color.withValues(alpha: 0.3),
             ),
           ),
         ),

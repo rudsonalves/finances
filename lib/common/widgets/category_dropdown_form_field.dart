@@ -63,7 +63,7 @@ class CategoryDropdownFormField extends StatelessWidget {
       padding: const EdgeInsets.only(top: 5, bottom: 10),
       child: DropdownButtonFormField<String>(
         validator: validator,
-        value: controller!.text.isNotEmpty ? controller!.text : null,
+        initialValue: controller!.text.isNotEmpty ? controller!.text : null,
         decoration: InputDecoration(
           suffixIcon: suffixIcon,
           floatingLabelBehavior: FloatingLabelBehavior.always,

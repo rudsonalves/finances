@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with finances. If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finances/l10n/app_localizations.dart';
 
 import '../../common/models/category_db_model.dart';
 

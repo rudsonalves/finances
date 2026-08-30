@@ -16,7 +16,7 @@
 // along with finances.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finances/l10n/app_localizations.dart';
 
 import '../../common/models/user_model.dart';
 import '../../common/widgets/primary_button.dart';

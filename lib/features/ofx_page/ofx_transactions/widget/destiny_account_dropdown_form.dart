@@ -16,7 +16,7 @@
 // along with finances.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finances/l10n/app_localizations.dart';
 
 import '../../../../locator.dart';
 import '../../../../repositories/account/abstract_account_repository.dart';
@@ -84,7 +84,7 @@ class _DestinyAccountDropdownFormState
       padding: const EdgeInsets.only(top: 5, bottom: 10),
       child: DropdownButtonFormField<int>(
         key: widget.globalKey,
-        value: _selectedAccountId,
+        initialValue: _selectedAccountId,
         validator: widget.validate,
         decoration: InputDecoration(
           suffixIcon: widget.suffixIcon,

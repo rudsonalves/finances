@@ -8,12 +8,13 @@ class AppInfo {
 
   static const name = 'finances';
   static const description = 'financial control app licensed under the GPLv3.';
-  static const version = '1.1.05+100';
+  static const version = '1.2.00+105';
 
-  static get pageUrl => 'https://rralves.dev.br/en/$name/';
+  static String get pageUrl => 'https://rralves.dev.br/en/$name/';
   static const email = 'alvesdev67@gmail.com';
-  static const privacyPolicyUrl = 'https://rralves.dev.br/en/privacy-policy-en/';
-  
+  static const privacyPolicyUrl =
+      'https://rralves.dev.br/en/privacy-policy-en/';
+
   static Future<void> launchUrl(String url) async {
     final uri = Uri.parse(url);
 

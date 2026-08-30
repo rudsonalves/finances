@@ -17,7 +17,7 @@
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finances/l10n/app_localizations.dart';
 
 import '../../../common/constants/themes/app_text_styles.dart';
 import '../../../common/constants/themes/colors/app_colors.dart';

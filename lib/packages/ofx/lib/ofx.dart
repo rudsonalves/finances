@@ -15,8 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with finances. If not, see <https://www.gnu.org/licenses/>.
 
-library ofx;
-
 export 'src/dto/ofx.dart';
 
 export 'src/models/ofx_transaction.dart' show OfxTransaction;

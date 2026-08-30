@@ -22,7 +22,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:path/path.dart' as path;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finances/l10n/app_localizations.dart';
 import 'package:restart_app/restart_app.dart';
 
 import '../../common/constants/routes/app_route.dart';
@@ -56,10 +56,9 @@ class _DatabaseRecoverState extends State<DatabaseRecover> {
   Future<void> _restoreFunction(AppLocalizations locale) async {
     String selectedFileName = '';
     try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles();
+      final selectedFile = await FilePicker.pickFile();
 
-      if (result != null && result.files.isNotEmpty) {
-        PlatformFile selectedFile = result.files.first;
+      if (selectedFile != null) {
         selectedFileName = selectedFile.name;
 
         final String path = selectedFile.path!;
@@ -104,7 +103,7 @@ class _DatabaseRecoverState extends State<DatabaseRecover> {
 
   Future<void> _backupFunction(AppLocalizations locale) async {
     try {
-      String? destinyPath = await FilePicker.platform.getDirectoryPath();
+      String? destinyPath = await FilePicker.getDirectoryPath();
 
       if (destinyPath != null) {
         final String? backupPath =

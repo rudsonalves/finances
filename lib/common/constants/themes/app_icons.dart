@@ -17,9 +17,9 @@
 
 import 'package:flutter/material.dart';
 
+import 'icons/fontello_icons_codes.dart';
 import 'icons/material_icons_codes.dart';
 import 'icons/trademarks_icons_codes.dart';
-import 'icons/fontello_icons_codes.dart';
 
 enum IconsFontFamily {
   // ignore: constant_identifier_names
@@ -42,12 +42,6 @@ class AppIcons {
     return IconsFontFamily.MaterialIcons;
   }
 
-  // ignore: flutter_tree_shake_icons
-  static _materialIcons(int codePoint, String fontFamilyName) => IconData(
-        codePoint,
-        fontFamily: fontFamilyName,
-      );
-
   static List<String> iconNames(IconsFontFamily fontFamily) {
     switch (fontFamily) {
       case IconsFontFamily.TrademarkIcons:
@@ -63,8 +57,7 @@ class AppIcons {
     String iconName, [
     IconsFontFamily fontFamily = IconsFontFamily.MaterialIcons,
   ]) {
-    Map<String, int> icons;
-    String fontFamilyName = fontFamily.name;
+    Map<String, IconData> icons;
     switch (fontFamily) {
       case IconsFontFamily.TrademarkIcons:
         icons = trademarksIconsCodes;
@@ -76,11 +69,7 @@ class AppIcons {
         icons = materialIconsCodes;
     }
     if (icons.containsKey(iconName)) {
-      // log('${icons[iconName]!}, $fontFamilyName');
-      return _materialIcons(
-        icons[iconName]!,
-        fontFamilyName,
-      );
+      return icons[iconName];
     }
     return null;
   }

@@ -87,7 +87,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '828903492310',
     projectId: 'finances-148e6',
     storageBucket: 'finances-148e6.appspot.com',
-    iosClientId: '828903492310-jp6eaq9mrq6heg1mj94hb4oscq34ougd.apps.googleusercontent.com',
+    iosClientId:
+        '828903492310-jp6eaq9mrq6heg1mj94hb4oscq34ougd.apps.googleusercontent.com',
     iosBundleId: 'br.com.jrblog.finances.finances',
   );
 }

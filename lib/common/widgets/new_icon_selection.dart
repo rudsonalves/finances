@@ -17,7 +17,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finances/l10n/app_localizations.dart';
 import 'package:flutter_swiper_view/flutter_swiper_view.dart';
 
 import '../constants/themes/app_icons.dart';
@@ -113,7 +113,7 @@ class _NewIconSelectionState extends State<NewIconSelection> {
     );
 
     if (result != null && result == true) {
-      _iconColor.value = pickerColor.value;
+      _iconColor.value = pickerColor.toARGB32();
     }
   }
 
@@ -316,7 +316,7 @@ class _NewIconSelectionState extends State<NewIconSelection> {
                 for (final color in paintColors)
                   InkWell(
                     onTap: () {
-                      _iconColor.value = color.value;
+                      _iconColor.value = color.toARGB32();
                     },
                     child: Icon(
                       Icons.fiber_manual_record,
