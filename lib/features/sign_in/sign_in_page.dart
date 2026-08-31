@@ -1,38 +1,21 @@
-// Copyright (C) 2024 rudson
-//
-// This file is part of finances.
-//
-// finances is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// finances is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with finances.  If not, see <https://www.gnu.org/licenses/>.
-
-import 'package:flutter/material.dart';
 import 'package:finances/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
 
+import '../../common/constants/routes/app_route.dart';
 import '../../common/constants/themes/colors/custom_color.g.dart';
+import '../../common/models/user_model.dart';
+import '../../common/validate/sign_validator.dart';
+import '../../common/widgets/basic_text_form_field.dart';
+import '../../common/widgets/custom_circular_progress_indicator.dart';
+import '../../common/widgets/custom_modal_bottom_sheet.dart';
+import '../../common/widgets/custom_text_button.dart';
+import '../../common/widgets/large_bold_text.dart';
+import '../../common/widgets/password_text_form_field.dart';
+import '../../common/widgets/primary_button.dart';
 import '../../common/widgets/secondary_button.dart';
 import '../../locator.dart';
-import './sign_in_state.dart';
 import './sign_in_controller.dart';
-import '../../common/widgets/primary_button.dart';
-import '../../common/widgets/large_bold_text.dart';
-import '../../common/validate/sign_validator.dart';
-import '../../common/widgets/custom_text_button.dart';
-import '../../common/constants/routes/app_route.dart';
-import '../../common/models/user_model.dart';
-import '../../common/widgets/basic_text_form_field.dart';
-import '../../common/widgets/password_text_form_field.dart';
-import '../../common/widgets/custom_modal_bottom_sheet.dart';
-import '../../common/widgets/custom_circular_progress_indicator.dart';
+import './sign_in_state.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -51,11 +34,12 @@ class _SignInPageState extends State<SignInPage> {
   @override
   void initState() {
     super.initState();
-    //
 
     _controller.addListener(
       () {
-        // SignIn State Loading
+        if (_controller.state is SignInStatePasswordRecoveryFinished) {
+          Navigator.pop(context);
+        }
         if (_controller.state is SignInStateLoading) {
           showDialog(
             context: context,
@@ -65,14 +49,12 @@ class _SignInPageState extends State<SignInPage> {
           );
         }
 
-        // SignIn State Success
         if (_controller.state is SignInStateSuccess) {
           Navigator.pop(context);
           Navigator.of(context)
               .pushNamedAndRemoveUntil(AppRoute.home.name, (route) => false);
         }
 
-        // SignIn State Error
         if (_controller.state is SignInStateError) {
           final locale = AppLocalizations.of(context)!;
           final SignInStateError error = _controller.state as SignInStateError;
@@ -123,7 +105,6 @@ class _SignInPageState extends State<SignInPage> {
     super.dispose();
     _emailController.dispose();
     _pwdController.dispose();
-    // _controller.dispose();
   }
 
   Future<void> recoverPassword() async {

@@ -19,7 +19,7 @@ Os Controllers (baseados em `ChangeNotifier`) gerenciam os estados de tela, inte
 
 ## Tarefas
 
-- [ ] **5.1. Testes do `TransactionController`**
+- [x] **5.1. Testes do `TransactionController`**
   - **Arquivo**: `test/unit/features/transaction/transaction_controller_test.dart`
   - Casos de teste:
     - Inicialização e carregamento de categorias e contas disponíveis.
@@ -28,14 +28,14 @@ Os Controllers (baseados em `ChangeNotifier`) gerenciam os estados de tela, inte
     - Salvar transação com erro (captura de erro, estado limpo, feedback ao usuário).
     - Edição e exclusão de transação existente.
 
-- [ ] **5.2. Testes do `AccountController`**
+- [x] **5.2. Testes do `AccountController`**
   - **Arquivo**: `test/unit/features/account/account_controller_test.dart`
   - Casos de teste:
     - Carregar os saldos das contas conhecidas pelo repositório.
     - Calcular o total e transitar entre os estados inicial, loading, sucesso e erro.
     - Cobrir criação, edição e exclusão no componente que realmente expõe essas operações, ou mover as operações para o controller antes de testá-las nele.
 
-- [ ] **5.3. Testes de Autenticação (`SignInController` e `SignUpController`)**
+- [x] **5.3. Testes de Autenticação (`SignInController` e `SignUpController`)**
   - **Arquivos**:
     - `test/unit/features/sign_in/sign_in_controller_test.dart`
     - `test/unit/features/sign_up/sign_up_controller_test.dart`
@@ -45,7 +45,7 @@ Os Controllers (baseados em `ChangeNotifier`) gerenciam os estados de tela, inte
     - Cadastro de novo usuário e recuperação de senha.
     - Tratamento de exceções (`FirebaseAuthException`, erros de rede).
 
-- [ ] **5.4. Testes do `HomePageController` e `BalanceCardController`**
+- [x] **5.4. Testes do `HomePageController` e `BalanceCardController`**
   - **Arquivos**:
     - `test/unit/features/home_page/home_page_controller_test.dart`
     - `test/unit/features/home_page/balance_card_controller_test.dart`
@@ -57,3 +57,12 @@ Os Controllers (baseados em `ChangeNotifier`) gerenciam os estados de tela, inte
 ## Critérios de Aceite
 - Notificações de `notifyListeners()` validadas nos momentos corretos.
 - Isolamento total de banco de dados e Firebase através de mocks.
+
+## Resultado
+
+- Os controllers passaram a aguardar as operações assíncronas que iniciam, evitando estados de sucesso prematuros.
+- A recuperação de senha passou a capturar falhas e ganhou um estado de conclusão que não é confundido com login bem-sucedido.
+- A troca de conta, filtros, paginação, troca de período e recálculo do cartão foram cobertos com repositórios e serviços simulados.
+- Criação, edição e exclusão de contas e transações permanecem testadas nos componentes que realmente expõem essas operações; elas não foram artificialmente movidas para os controllers.
+- `flutter analyze`: nenhuma ocorrência.
+- `flutter test`: 329 testes aprovados.

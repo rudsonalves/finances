@@ -109,9 +109,9 @@ class BalanceCardController extends ChangeNotifier {
     }
   }
 
-  void setBalanceDate(ExtendedDate date) {
+  Future<void> setBalanceDate(ExtendedDate date) async {
     _balanceDate = date;
-    getBalance();
+    await getBalance();
   }
 
   Future<void> toggleTransStatusCheck() async {
@@ -126,20 +126,20 @@ class BalanceCardController extends ChangeNotifier {
     _futureTransactions = newFutureTrans;
     await Future.delayed(const Duration(milliseconds: 50));
     changeState(BalanceCardStateSuccess());
-    locator<HomePageController>().getTransactions();
+    await locator<HomePageController>().getTransactions();
   }
 
   bool isFutureTrans(FutureTrans futureTrans) {
     return _futureTransactions == futureTrans;
   }
 
-  void previousMonth() {
+  Future<void> previousMonth() async {
     final newDate = _balanceDate.previousMonth();
-    setBalanceDate(newDate);
+    await setBalanceDate(newDate);
   }
 
-  void nextMonth() {
+  Future<void> nextMonth() async {
     final newDate = _balanceDate.nextMonth();
-    setBalanceDate(newDate);
+    await setBalanceDate(newDate);
   }
 }

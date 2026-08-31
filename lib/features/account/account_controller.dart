@@ -20,11 +20,11 @@ import 'dart:developer';
 import 'package:finances/common/models/extends_date.dart';
 import 'package:flutter/foundation.dart';
 
+import '../../common/models/account_db_model.dart';
 import '../../locator.dart';
 import '../../manager/balance_manager.dart';
-import 'account_state.dart';
-import '../../common/models/account_db_model.dart';
 import '../../repositories/account/abstract_account_repository.dart';
+import 'account_state.dart';
 
 class AccountController extends ChangeNotifier {
   final _accountRepository = locator<AbstractAccountRepository>();
@@ -45,21 +45,27 @@ class AccountController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> init() async {
-    getAllBalances();
+  Future<void> init() {
+    return getAllBalances();
   }
 
   Future<void> getAllBalances() async {
     _changeState(AccountStateLoading());
     try {
-      _balances.clear();
+      final List<double> loadedBalances = [];
+
       for (AccountDbModel account in _accountRepository.accountsList) {
         final balance = await BalanceManager.getClosedBalanceToDate(
           date: ExtendedDate.nowDate(),
           accountId: account.accountId!,
         );
-        _balances.add(balance?.balanceClose ?? 0.0);
+        loadedBalances.add(balance?.balanceClose ?? 0.0);
       }
+
+      _balances
+        ..clear()
+        ..addAll(loadedBalances);
+
       await Future.delayed(const Duration(microseconds: 50));
       _changeState(AccountStateSuccess());
       return;

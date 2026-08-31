@@ -1,5 +1,43 @@
 # Changelog
 
+## 2026/08/31 - revision/task-05
+
+1. **Account controller**
+   - Made initialization await balance loading so callers receive the final state only after completion.
+   - Builds balances atomically, preventing partial or previously valid data from being overwritten when a refresh fails.
+
+2. **Home and balance card controllers**
+   - Made initialization, account changes, filtering, period navigation, balance recalculation, and future-transaction updates await their dependent asynchronous operations.
+   - Ensures success states and UI updates occur only after transactions and balances finish reloading.
+
+3. **Authentication and password recovery**
+   - Added loading, completion, and error handling to password recovery.
+   - Introduced a dedicated password-recovery completion state so recovery is not mistaken for successful login.
+   - Updated the sign-in page to close the recovery dialog when the operation completes.
+
+4. **Transaction controller**
+   - Hardened initialization by validating existing origin accounts and linked transfers, restoring transaction category and account data, and reporting failures through the error state.
+   - Made transaction persistence awaitable with explicit loading, success, and error transitions.
+   - Keeps the transaction screen open after failed saves and closes it only after successful persistence.
+   - Validates recurring installment counts and supports awaited creation or updates of transactions and transfers, including monthly repetitions.
+   - Simplified obsolete comments and normalized imports.
+
+5. **Controller test coverage**
+   - Added unit tests for account balance loading, totals, notifications, awaited initialization, refresh failures, and preservation of valid balances.
+   - Added home and balance card tests covering initialization, repository errors, account switching, filters, pagination, month changes, display toggles, future periods, and recalculation.
+   - Added sign-in and sign-up tests covering success paths, local-data initialization, missing identifiers, Firebase failures, password recovery, and state notifications.
+   - Added comprehensive transaction tests for initialization, account and category selection, transfers, recurring entries, creation, editing, validation, navigation, and failure handling using mocked repositories and services.
+
+6. **Backlog documentation**
+   - Marked all controller-testing tasks as complete and moved the backlog document into `docs/backlogs/closed`.
+   - Recorded the implemented asynchronous-state improvements, test scope, and reported validation results of 329 passing tests with no analyzer findings.
+
+### Conclusion
+
+Controller workflows now expose reliable asynchronous completion and clearer success and failure states.
+
+The new isolated test suites verify state notifications and the main account, authentication, home, balance, and transaction behaviors.
+
 ## 2026/08/31 - revision/task-04
 
 ### Validation

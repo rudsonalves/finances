@@ -102,7 +102,7 @@ class HomePageController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void init() {
+  Future<void> init() async {
     // set state as HomePageStateSuccess
     _state = HomePageStateSuccess();
 
@@ -114,7 +114,7 @@ class HomePageController extends ChangeNotifier {
     _lastDate = _initialLastDate();
 
     // get transactions
-    getTransactions();
+    await getTransactions();
   }
 
   ExtendedDate _initialLastDate() {
@@ -171,8 +171,8 @@ class HomePageController extends ChangeNotifier {
 
   Future<void> changeCurrentAccount(AccountDbModel account) async {
     locator<CurrentAccount>().changeCurrenteAccount(account);
-    locator<BalanceCardController>().getBalance();
-    getTransactions();
+    await locator<BalanceCardController>().getBalance();
+    await getTransactions();
   }
 
   Future<void> setFilterValues({
@@ -185,7 +185,7 @@ class HomePageController extends ChangeNotifier {
         ? locator.get<AbstractCategoryRepository>().getIdByName(_filterText)
         : 0;
     isFiltred$.value = true;
-    getTransactions();
+    await getTransactions();
   }
 
   Future<void> cleanFilterValues() async {
@@ -193,7 +193,7 @@ class HomePageController extends ChangeNotifier {
     _filterIsDescription = false;
     _filterCategoryId = 0;
     isFiltred$.value = false;
-    getTransactions();
+    await getTransactions();
   }
 
   List<TransactionDbModel> filterTransactions() {
