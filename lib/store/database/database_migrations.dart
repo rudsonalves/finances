@@ -1,42 +1,14 @@
-// Copyright (C) 2024 rudson
-//
-// This file is part of finances.
-//
-// finances is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// finances is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with finances. If not, see <https://www.gnu.org/licenses/>.
-
 import 'dart:developer';
 
 import 'package:sqflite/sqflite.dart';
 
 import '../constants/constants.dart';
 
-/// Manages database schema migrations for the application.
-///
-/// This class provides mechanisms to apply schema migrations to the SQLite database,
-/// ensuring the database schema is up-to-date with the current version of the application.
-/// It maintains a map of migration scripts organized by database version numbers.
 class DatabaseMigrations {
   DatabaseMigrations._();
 
-  /// Database Scheme Version declarations
-  ///
-  /// This is the database scheme current version. To futures upgrades
-  /// in database increment this value and add a new update script in
-  /// _migrationScripts Map.
   static const databaseSchemeVersion = 1012;
 
-  // Retrieves the database schema version in a readable format (e.g., "1.0.07").
   static String get dbSchemeVersion {
     String version = databaseSchemeVersion.toString();
     int length = version.length;
@@ -45,8 +17,6 @@ class DatabaseMigrations {
         '${version.substring(length - 2)}';
   }
 
-  /// This Map contains the database migration scripts. The last index of this
-  /// Map must be equal to the current version of the database.
   static const Map<int, List<String>> migrationScripts = {
     1000: [],
     1001: [
@@ -74,7 +44,6 @@ class DatabaseMigrations {
       'ALTER TABLE $appControlTable ADD COLUMN $appControlApp TEXT DEFAULT ""',
     ],
     1008: [
-      'BEGIN TRANSACTION',
       'DROP TRIGGER IF EXISTS $checkBalanceNextId',
       'DROP TRIGGER IF EXISTS $checkBalancePreviousId',
       'ALTER TABLE transactonsTable ADD COLUMN $transBalanceId INTEGER',
@@ -211,10 +180,8 @@ class DatabaseMigrations {
           '       $balanceTransCount = IFNULL($balanceTransCount, 0) - 1'
           '   WHERE $balanceId = OLD.$transBalanceId;'
           ' END',
-      'COMMIT',
     ],
     1009: [
-      'BEGIN TRANSACTION',
       'CREATE TABLE IF NOT EXISTS $ofxACCTable ('
           ' $ofxACCId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
           ' $ofxACCAccountId INTEGER NOT NULL,'
@@ -315,10 +282,8 @@ class DatabaseMigrations {
           '       $balanceTransCount = IFNULL($balanceTransCount, 0) - 1'
           '   WHERE $balanceId = OLD.$transBalanceId;'
           ' END',
-      'COMMIT',
     ],
     1010: [
-      'BEGIN TRANSACTION',
       'DROP TRIGGER IF EXISTS $triggerAfterInsertTransaction',
       'DROP TRIGGER IF EXISTS $triggerAfterDeleteTransaction',
       'CREATE TRIGGER IF NOT EXISTS $triggerAfterInsertTransaction'
@@ -349,7 +314,6 @@ class DatabaseMigrations {
           '   WHERE $balanceDate > OLD.$transDate'
           '     AND $balanceAccountId = OLD.$transAccountId;'
           ' END',
-      'COMMIT',
     ],
     1011: [
       'ALTER TABLE $usersTable'
@@ -361,45 +325,45 @@ class DatabaseMigrations {
     ],
   };
 
-  /// Applies migration scripts to the database batch.
-  ///
-  /// This method iterates through the migration scripts from the current
-  /// database version up to the target version, executing each script in
-  /// sequence to update the database schema.
-  ///
-  /// - Parameters:
-  ///   - batch: The database batch on which to execute the migration scripts.
-  ///   - currentVersion: The current version of the database schema.
-  ///   - targetVersion: The target version to which the database should
-  ///     be migrated.
   static Future<void> applyMigrations({
     required Database db,
     required int currentVersion,
     required int targetVersion,
   }) async {
-    await db.execute('PRAGMA foreign_keys=off');
-    for (var version = currentVersion + 1;
-        version <= targetVersion;
-        version++) {
-      log('Database migrating to version: $version');
-      final batch = db.batch();
-      final scripts = migrationScripts[version];
-      if (scripts != null) {
+    await db.execute('PRAGMA foreign_keys = OFF');
+
+    try {
+      for (var version = currentVersion + 1;
+          version <= targetVersion;
+          version++) {
+        log('Database migrating to version: $version');
+
+        final scripts = migrationScripts[version];
+
+        if (scripts == null) {
+          throw StateError(
+            'Migration script not found for version $version.',
+          );
+        }
+
+        final batch = db.batch();
+
         for (final script in scripts) {
           batch.execute(script);
         }
-      }
-      await batch.commit(noResult: true);
 
-      if (version == 1008) {
-        // Remove empty balances
-        await db.delete(
-          balanceTable,
-          where: '$balanceTransCount = ?',
-          whereArgs: [0],
-        );
+        await batch.commit(noResult: true);
+
+        if (version == 1008) {
+          await db.delete(
+            balanceTable,
+            where: '$balanceTransCount = ?',
+            whereArgs: <Object?>[0],
+          );
+        }
       }
+    } finally {
+      await db.execute('PRAGMA foreign_keys = ON');
     }
-    await db.execute('PRAGMA foreign_keys=on');
   }
 }

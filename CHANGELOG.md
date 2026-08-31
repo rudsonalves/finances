@@ -1,5 +1,39 @@
 # Changelog
 
+## 2026/08/31 - revision/task-06a
+
+1. `lib/store/database/database_manager.dart`
+   - Refactored database initialization to accept injectable factories and path providers, enabling isolated in-memory testing.
+   - Replaced the global database connection with an instance-managed connection that is reused while open and recreated after closing.
+   - Opened databases through configurable `OpenDatabaseOptions`.
+   - Simplified schema creation and allowed creation failures to propagate instead of being silently logged.
+   - Optimized schema batch creation by committing without returning individual results.
+
+2. `lib/store/database/database_migrations.dart`
+   - Removed explicit transaction statements from migration scripts so each version is handled atomically by its batch.
+   - Added validation that every requested schema version has a migration script, raising a clear error when one is missing.
+   - Ensured foreign-key enforcement is always restored after migration success or failure.
+   - Preserved the version-specific cleanup of empty balances after migration 1008.
+
+3. `test/integration/database/database_manager_test.dart`
+   - Added integration coverage for complete schema creation, foreign-key activation, connection reuse, and reopening after closure.
+
+4. `test/integration/database/database_migrations_test.dart`
+   - Added coverage for continuous migration history and alignment with the current schema version.
+   - Verified data preservation, schema evolution, OFX structures, indexes, and balance triggers across migrations 1000 through 1010.
+   - Confirmed failed migrations roll back the affected version and restore foreign-key enforcement.
+
+5. `test/integration/database/tables_creators_test.dart`
+   - Added comprehensive validation of current tables, indexes, columns, defaults, primary keys, and required fields.
+   - Verified compound uniqueness for imported OFX transactions and enforcement of foreign-key relationships.
+   - Covered constraint failures and balance propagation when transactions are inserted or removed.
+
+### Conclusion
+
+Database creation and migration handling are now injectable, atomic, and safer during failures.
+
+New integration tests validate schema integrity, migration compatibility, connection lifecycle, constraints, and financial balance triggers.
+
 ## 2026/08/31 - revision/task-05
 
 1. **Account controller**
