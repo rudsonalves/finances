@@ -18,18 +18,21 @@
 import 'dart:developer';
 
 import '../common/models/ofx_trans_template_model.dart';
+import '../repositories/ofx_trans_template/abstract_ofx_trans_template_repository.dart';
 import '../repositories/ofx_trans_template/ofx_trans_template_repository.dart';
 
 sealed class OfxTransTemplateManager {
-  static final repository = OfxTransTemplateRepository();
   OfxTransTemplateManager._();
 
   static Future<OfxTransTemplateModel?> getByMemo({
     required String memo,
     required int accountId,
+    AbstractOfxTransTemplateRepository? repository,
   }) async {
+    final templateRepository = repository ?? OfxTransTemplateRepository();
     try {
-      final ofxTransaction = await repository.queryMemo(memo, accountId);
+      final ofxTransaction =
+          await templateRepository.queryMemo(memo, accountId);
       return ofxTransaction;
     } catch (err) {
       log('OfxTransactionManager.getByMemo: $err');
@@ -37,19 +40,30 @@ sealed class OfxTransTemplateManager {
     }
   }
 
-  static Future<void> add(OfxTransTemplateModel ofxTransTemplate) async {
+  static Future<void> add(
+    OfxTransTemplateModel ofxTransTemplate, {
+    AbstractOfxTransTemplateRepository? repository,
+  }) async {
+    final templateRepository = repository ?? OfxTransTemplateRepository();
     try {
-      final result = await repository.insert(ofxTransTemplate);
-      ofxTransTemplate.id = result!.id;
+      final result = await templateRepository.insert(ofxTransTemplate);
+      if (result == null || result.id == null) {
+        throw StateError('repository.insert did not return an id');
+      }
+      ofxTransTemplate.id = result.id;
     } catch (err) {
       log('OfxTransactionManager.add: $err');
       return;
     }
   }
 
-  static Future<void> update(OfxTransTemplateModel ofxTransTemplate) async {
+  static Future<void> update(
+    OfxTransTemplateModel ofxTransTemplate, {
+    AbstractOfxTransTemplateRepository? repository,
+  }) async {
+    final templateRepository = repository ?? OfxTransTemplateRepository();
     try {
-      final result = await repository.update(ofxTransTemplate);
+      final result = await templateRepository.update(ofxTransTemplate);
       if (result != 1) {
         throw Exception('repository.update return $result');
       }

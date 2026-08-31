@@ -16,7 +16,7 @@ O recurso de importação OFX permite ao usuário carregar extratos bancários d
 
 ## Tarefas
 
-- [ ] **3.1. Criação de Fixtures OFX de Teste**
+- [x] **3.1. Criação de Fixtures OFX de Teste**
   - **Diretório**: `test/helpers/fixtures/ofx/`
   - Preferir arquivos sintéticos; qualquer arquivo real deve passar por uma lista de anonimização de nomes, documentos, contas, agências e identificadores:
     - OFX padrão v1.02 (SGML/Header antigo).
@@ -25,7 +25,7 @@ O recurso de importação OFX permite ao usuário carregar extratos bancários d
     - OFX com caracteres especiais, acentuação e diferentes encodings (ISO-8859-1 / UTF-8).
     - OFX corrompido / truncado / sem tags obrigatórias.
 
-- [ ] **3.2. Testes Unitários do Parser OFX (`packages/ofx`)**
+- [x] **3.2. Testes Unitários do Parser OFX (`packages/ofx`)**
   - **Arquivo**: `test/unit/packages/ofx/ofx_parser_test.dart`
   - Casos de teste:
     - Extração correta de dados da conta (Bank ID, Account ID, Account Type).
@@ -33,7 +33,7 @@ O recurso de importação OFX permite ao usuário carregar extratos bancários d
     - Validação de sinal monetário (débitos negativos, créditos positivos).
     - Resiliência a tags ausentes e extratos sem transações.
 
-- [ ] **3.3. Testes dos Managers OFX**
+- [x] **3.3. Testes dos Managers OFX**
   - **Arquivos**:
     - `test/unit/manager/ofx_account_manager_test.dart`
     - `test/unit/manager/ofx_relationship_manager_test.dart`
@@ -47,3 +47,18 @@ O recurso de importação OFX permite ao usuário carregar extratos bancários d
 ## Critérios de Aceite
 - O parser suporta os principais formatos OFX emitidos pelos bancos brasileiros sem lançar exceções não tratadas.
 - Transações importadas resultam em objetos válidos prontos para inclusão via `TransactionManager`.
+
+## Resultado
+
+- Parser coberto para XML 2.x, SGML 1.02, conta bancária, cartão de crédito,
+  uma ou várias transações e extratos vazios.
+- Leitura de arquivos UTF-8 e ISO-8859-1, datas com fuso, campos opcionais e
+  documentos inválidos cobertos por testes.
+- Managers de conta, relacionamento e templates desacoplados dos repositórios
+  concretos e cobertos por testes unitários.
+- Duplicidade protegida por chave persistente composta por instituição, conta
+  bancária e `FITID`, com índice único no SQLite e testes de reimportação,
+  sobreposição e concorrência.
+- A migração 1012 cria a tabela de controle das transações importadas. Registros
+  importados antes dessa migração não podem ser retroativamente identificados
+  por `FITID`, pois as versões anteriores não armazenavam esse campo.

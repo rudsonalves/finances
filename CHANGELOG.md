@@ -1,5 +1,47 @@
 # Changelog
 
+## 2026/08/31 - revision/task-03b
+
+1. **OFX parser**
+   - Added support for legacy OFX 1.02 SGML by normalizing unclosed tags, compact or indented markup, empty optional fields, and special characters into valid XML.
+   - Added byte-based parsing with UTF-8 decoding and ISO-8859-1 fallback.
+   - Improved validation to report malformed documents or missing OFX roots with `FormatException`.
+   - Added credit-card statement support when `BANKID` and `ACCTTYPE` are absent.
+   - Removed the obsolete duplicate `OfxTransaction` model.
+
+2. **OFX import workflow**
+   - Updated file processing to parse raw bytes through the centralized OFX parser.
+   - Added duplicate prevention using the composite institution, bank account, and `FITID` identity.
+   - Added atomic import claims before transaction creation, including conflict-safe concurrent imports and claim release when persistence fails.
+   - Preserved template updates and routing between regular transactions and transfers.
+
+3. **Managers and repositories**
+   - Added `OfxImportManager` and repository abstractions for checking, claiming, and releasing imported transaction identities.
+   - Made account, relationship, and transaction-template managers accept injectable repositories for isolated testing.
+   - Added validation that newly persisted templates return an identifier.
+
+4. **Database**
+   - Upgraded the schema to version `1012`.
+   - Added an imported-transaction tracking table linked to OFX accounts with cascading deletion.
+   - Added a unique composite index over institution, bank account, and `FITID`.
+   - Included the new table and index in fresh database creation and migration paths.
+
+5. **Tests and fixtures**
+   - Added synthetic fixtures for SGML 1.02, credit-card XML, truncated XML, and documents without an OFX root.
+   - Expanded parser tests for SGML normalization, encodings, timezone-aware dates, optional fields, credit cards, and invalid documents.
+   - Added manager unit tests using repository mocks.
+   - Added repository integration tests covering reimports, overlapping identifiers, concurrent claims, and retry after release.
+
+6. **Documentation**
+   - Marked OFX fixture, parser, and manager testing tasks as complete.
+   - Documented supported formats, encoding coverage, repository decoupling, duplicate protection, and the migration limitation for imports created before `FITID` tracking.
+
+### Conclusion
+
+OFX imports now support modern XML and legacy SGML statements with broader encoding and account-type compatibility.
+
+Persistent composite-key claims prevent duplicate and concurrent transaction imports while allowing safe retries after failures. Test coverage and backlog documentation were updated accordingly.
+
 ## 2026/08/31 - revision/task-03a
 
 1. `DateTimeAdapter`

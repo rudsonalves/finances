@@ -124,6 +124,14 @@ const ofxTransCategoryId = 'categoryId';
 const ofxTransDescription = 'description';
 const ofxTransTransferAccountId = 'transferAccountId';
 
+const ofxImportedTransactionsTable = 'ofxImportedTransactionsTable';
+const ofxImportedTransactionId = 'id';
+const ofxImportedTransactionOfxAccountId = 'ofxAccountId';
+const ofxImportedTransactionInstitutionId = 'institutionId';
+const ofxImportedTransactionBankAccountId = 'bankAccountId';
+const ofxImportedTransactionFitId = 'fitId';
+const ofxImportedTransactionUniqueIndex = 'idxOfxImportedTransactionUnique';
+
 const triggerAfterInsertTransaction = 'tr_after_insert_transaction';
 const triggerAfterDeleteTransaction = 'tr_after_delete_transaction';
 
@@ -321,6 +329,26 @@ const createOfxTransMemoIndexSQL =
 const createOfxTransAccountIndexSQL =
     'CREATE INDEX IF NOT EXISTS $ofxTransAccountIndex'
     ' ON $ofxTransTemplateTable ($ofxTransAccountId)';
+
+const createOfxImportedTransactionsSQL =
+    'CREATE TABLE IF NOT EXISTS $ofxImportedTransactionsTable ('
+    ' $ofxImportedTransactionId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+    ' $ofxImportedTransactionOfxAccountId INTEGER NOT NULL,'
+    ' $ofxImportedTransactionInstitutionId TEXT NOT NULL,'
+    ' $ofxImportedTransactionBankAccountId TEXT NOT NULL,'
+    ' $ofxImportedTransactionFitId TEXT NOT NULL,'
+    ' FOREIGN KEY ($ofxImportedTransactionOfxAccountId)'
+    '   REFERENCES $ofxACCTable ($ofxACCId)'
+    '   ON DELETE CASCADE'
+    ')';
+
+const createOfxImportedTransactionUniqueIndexSQL =
+    'CREATE UNIQUE INDEX IF NOT EXISTS $ofxImportedTransactionUniqueIndex'
+    ' ON $ofxImportedTransactionsTable ('
+    ' $ofxImportedTransactionInstitutionId,'
+    ' $ofxImportedTransactionBankAccountId,'
+    ' $ofxImportedTransactionFitId'
+    ' )';
 
 const createTriggerAfterInsertTransaction =
     'CREATE TRIGGER IF NOT EXISTS $triggerAfterInsertTransaction'

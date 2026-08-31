@@ -19,17 +19,20 @@ import 'dart:developer';
 
 import '../common/models/ofx_account_model.dart';
 import '../locator.dart';
+import '../repositories/ofx_account/abstract_ofx_account_repository.dart';
 import '../repositories/ofx_account/ofx_account_repository.dart';
 import '../repositories/transaction/abstract_transaction_repository.dart';
 import 'transaction_manager.dart';
 import 'transfer_manager.dart';
 
 sealed class OfxAccountManager {
-  static final ofxAccountRepository = OfxAccountRepository();
-
   OfxAccountManager._();
 
-  static Future<bool> add(OfxAccountModel ofxAccount) async {
+  static Future<bool> add(
+    OfxAccountModel ofxAccount, {
+    AbstractOfxAccountRepository? repository,
+  }) async {
+    final ofxAccountRepository = repository ?? OfxAccountRepository();
     try {
       // Check if this ofx is registred
       final ofxCheck = await ofxAccountRepository.queryBankAccountIdStartDate(
@@ -56,9 +59,11 @@ sealed class OfxAccountManager {
   }
 
   static Future<void> getAll(
-    List<OfxAccountModel> ofxAccounts, [
+    List<OfxAccountModel> ofxAccounts, {
     int? limit,
-  ]) async {
+    AbstractOfxAccountRepository? repository,
+  }) async {
+    final ofxAccountRepository = repository ?? OfxAccountRepository();
     try {
       ofxAccounts.clear();
       for (final ofxAccount in await ofxAccountRepository.queryAll(limit)) {
@@ -69,7 +74,11 @@ sealed class OfxAccountManager {
     }
   }
 
-  static Future<void> delete(OfxAccountModel ofxAccount) async {
+  static Future<void> delete(
+    OfxAccountModel ofxAccount, {
+    AbstractOfxAccountRepository? repository,
+  }) async {
+    final ofxAccountRepository = repository ?? OfxAccountRepository();
     try {
       // Remove all transactions from
       final transRepository = locator<AbstractTransactionRepository>();

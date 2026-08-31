@@ -2,6 +2,9 @@ import 'package:finances/repositories/account/abstract_account_repository.dart';
 import 'package:finances/repositories/balance/abstract_balance_repository.dart';
 import 'package:finances/repositories/category/abstract_category_repository.dart';
 import 'package:finances/repositories/financial_operation/abstract_financial_operation_repository.dart';
+import 'package:finances/repositories/ofx_account/abstract_ofx_account_repository.dart';
+import 'package:finances/repositories/ofx_relationship/abstract_ofx_relationship_repository.dart';
+import 'package:finances/repositories/ofx_trans_template/abstract_ofx_trans_template_repository.dart';
 import 'package:finances/repositories/transaction/abstract_transaction_repository.dart';
 import 'package:finances/repositories/transfer/abstract_transfer_repository.dart';
 import 'package:finances/repositories/user/abstract_user_repository.dart';
@@ -30,6 +33,15 @@ class MockAbstractUserRepository extends Mock
 
 class MockAbstractFinancialOperationRepository extends Mock
     implements AbstractFinancialOperationRepository {}
+
+class MockAbstractOfxAccountRepository extends Mock
+    implements AbstractOfxAccountRepository {}
+
+class MockAbstractOfxRelationshipRepository extends Mock
+    implements AbtractOfxRelationshipRepository {}
+
+class MockAbstractOfxTransTemplateRepository extends Mock
+    implements AbstractOfxTransTemplateRepository {}
 
 class MockAuthService extends Mock implements AuthService {}
 

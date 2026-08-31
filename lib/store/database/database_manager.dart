@@ -96,6 +96,7 @@ class DatabaseManager {
       TablesCreators.createOfxAccuntTable(batch);
       TablesCreators.createOfxRelationshipTable(batch);
       TablesCreators.createOfxTransactionsTable(batch);
+      TablesCreators.createOfxImportedTransactionsTable(batch);
       TablesCreators.createTriggers(batch);
       await batch.commit();
     } catch (err) {

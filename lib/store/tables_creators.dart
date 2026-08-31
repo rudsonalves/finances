@@ -142,6 +142,11 @@ sealed class TablesCreators {
     batch.execute(createOfxTransAccountIndexSQL);
   }
 
+  static void createOfxImportedTransactionsTable(Batch batch) {
+    batch.execute(createOfxImportedTransactionsSQL);
+    batch.execute(createOfxImportedTransactionUniqueIndexSQL);
+  }
+
   /// Creates the Transfers table using predefined SQL commands.
   ///
   /// The Transfers table stores information about transfers between accounts.

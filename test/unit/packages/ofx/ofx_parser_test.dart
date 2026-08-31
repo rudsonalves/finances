@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:finances/packages/ofx/lib/ofx.dart';
@@ -350,6 +351,230 @@ void main() {
             'message',
             'Valor inválido em DTPOSTED: '
                 '20261301103000[-3:GMT].',
+          ),
+        ),
+      );
+    });
+  });
+
+  group('Ofx.fromString - OFX SGML 1.02', () {
+    test('extrai a conta e as transações do formato antigo', () {
+      const fixturePath = 'test/helpers/fixtures/ofx/valid_bank_sgml_v102.ofx';
+
+      final source = File(fixturePath).readAsStringSync();
+      final ofx = Ofx.fromString(source);
+
+      expect(ofx.financialInstitution.organization, 'BANCO SGML TESTE');
+      expect(
+        ofx.financialInstitution.financialInstitutionID,
+        '998',
+      );
+      expect(ofx.bankID, '998');
+      expect(ofx.accountID, '765432-1');
+      expect(ofx.accountType, 'SAVINGS');
+      expect(ofx.currency, 'BRL');
+      expect(ofx.transactions, hasLength(1));
+
+      final transaction = ofx.transactions.single;
+
+      expect(transaction.type, 'CREDIT');
+      expect(transaction.amount, 850.75);
+      expect(
+        transaction.financialInstitutionID,
+        'sgml-transaction-001',
+      );
+      expect(transaction.referenceNumber, 'sgml-reference-001');
+      expect(transaction.memo, 'Recebimento SGML');
+      expect(
+        transaction.posted,
+        DateTime.utc(2026, 9, 15, 14, 30),
+      );
+      expect(
+        transaction.postedLocal,
+        DateTime.utc(2026, 9, 15, 17, 30).toLocal(),
+      );
+    });
+
+    test('aceita tags SGML indentadas', () {
+      const fixturePath = 'test/helpers/fixtures/ofx/valid_bank_sgml_v102.ofx';
+
+      final source = File(fixturePath).readAsStringSync();
+
+      final indentedSource = source
+          .split('\n')
+          .map(
+            (line) => line.startsWith('<') ? '    $line' : line,
+          )
+          .join('\n');
+
+      final ofx = Ofx.fromString(indentedSource);
+
+      expect(ofx.bankID, '998');
+      expect(ofx.accountID, '765432-1');
+      expect(ofx.transactions, hasLength(1));
+      expect(
+        ofx.transactions.single.financialInstitutionID,
+        'sgml-transaction-001',
+      );
+    });
+
+    test('preserva caracteres especiais nos valores SGML', () {
+      const fixturePath = 'test/helpers/fixtures/ofx/valid_bank_sgml_v102.ofx';
+
+      final source = File(fixturePath).readAsStringSync().replaceFirst(
+            '<MEMO>Recebimento SGML',
+            '<MEMO>PIX & transferência recebida',
+          );
+
+      final ofx = Ofx.fromString(source);
+
+      expect(ofx.transactions, hasLength(1));
+      expect(
+        ofx.transactions.single.memo,
+        'PIX & transferência recebida',
+      );
+    });
+
+    test('aceita várias tags SGML na mesma linha', () {
+      const fixturePath = 'test/helpers/fixtures/ofx/valid_bank_sgml_v102.ofx';
+
+      final source = File(fixturePath).readAsStringSync();
+      final ofxStart = source.indexOf('<OFX>');
+
+      expect(ofxStart, isNonNegative);
+
+      final header = source.substring(0, ofxStart);
+      final compactBody = source.substring(ofxStart).replaceAll('\n', '');
+
+      final compactSource = '$header$compactBody';
+      final ofx = Ofx.fromString(compactSource);
+
+      expect(ofx.bankID, '998');
+      expect(ofx.accountID, '765432-1');
+      expect(ofx.transactions, hasLength(1));
+      expect(ofx.transactions.single.amount, 850.75);
+      expect(
+        ofx.transactions.single.financialInstitutionID,
+        'sgml-transaction-001',
+      );
+      expect(
+        ofx.transactions.single.memo,
+        'Recebimento SGML',
+      );
+    });
+
+    test('não duplica o fechamento de uma tag SGML já fechada', () {
+      const fixturePath = 'test/helpers/fixtures/ofx/valid_bank_sgml_v102.ofx';
+
+      final source = File(fixturePath).readAsStringSync().replaceFirst(
+            '<MEMO>Recebimento SGML',
+            '<MEMO>Recebimento SGML</MEMO>',
+          );
+
+      final ofx = Ofx.fromString(source);
+
+      expect(ofx.transactions, hasLength(1));
+      expect(
+        ofx.transactions.single.memo,
+        'Recebimento SGML',
+      );
+    });
+
+    test('aceita uma tag opcional SGML vazia', () {
+      const fixturePath = 'test/helpers/fixtures/ofx/valid_bank_sgml_v102.ofx';
+
+      final source = File(fixturePath).readAsStringSync().replaceFirst(
+            '<REFNUM>sgml-reference-001',
+            '<REFNUM>',
+          );
+
+      final ofx = Ofx.fromString(source);
+
+      expect(ofx.transactions, hasLength(1));
+
+      final transaction = ofx.transactions.single;
+
+      expect(transaction.referenceNumber, isEmpty);
+      expect(transaction.memo, 'Recebimento SGML');
+      expect(
+        transaction.financialInstitutionID,
+        'sgml-transaction-001',
+      );
+    });
+  });
+
+  group('Ofx.fromBytes - encoding', () {
+    test('decodifica arquivo ISO-8859-1 quando UTF-8 não é válido', () {
+      const fixturePath = 'test/helpers/fixtures/ofx/valid_bank_sgml_v102.ofx';
+      final source = File(fixturePath)
+          .readAsStringSync()
+          .replaceFirst('Recebimento SGML', 'Transferência recebida');
+
+      final ofx = Ofx.fromBytes(latin1.encode(source));
+
+      expect(ofx.transactions.single.memo, 'Transferência recebida');
+    });
+
+    test('mantém conteúdo UTF-8', () {
+      const fixturePath = 'test/helpers/fixtures/ofx/valid_bank_xml_v2.ofx';
+      final source = File(fixturePath).readAsStringSync();
+
+      final ofx = Ofx.fromBytes(utf8.encode(source));
+
+      expect(ofx.transactions.first.memo, 'Compra no supermercado');
+    });
+  });
+
+  group('Ofx.fromString - cartão de crédito', () {
+    test('aceita CCSTMTTRNRS sem BANKID e ACCTTYPE', () {
+      const fixturePath =
+          'test/helpers/fixtures/ofx/valid_credit_card_xml_v2.ofx';
+      final source = File(fixturePath).readAsStringSync();
+
+      final ofx = Ofx.fromString(source);
+
+      expect(ofx.financialInstitution.organization, 'CARTAO TESTE');
+      expect(ofx.bankID, isEmpty);
+      expect(ofx.accountID, '**** 4321');
+      expect(ofx.accountType, 'CREDITLINE');
+      expect(ofx.transactions, hasLength(1));
+      expect(ofx.transactions.single.amount, -79.90);
+      expect(ofx.transactions.single.memo, 'ASSINATURA TESTE');
+    });
+  });
+
+  group('Ofx.fromString - documento corrompido', () {
+    test('rejeita XML truncado com FormatException', () {
+      const fixturePath =
+          'test/helpers/fixtures/ofx/invalid_bank_xml_truncated.ofx';
+
+      final source = File(fixturePath).readAsStringSync();
+
+      expect(
+        () => Ofx.fromString(source),
+        throwsA(
+          isA<FormatException>().having(
+            (error) => error.message,
+            'message',
+            'Documento OFX inválido.',
+          ),
+        ),
+      );
+    });
+
+    test('rejeita XML sem a raiz OFX', () {
+      const fixturePath = 'test/helpers/fixtures/ofx/'
+          'invalid_xml_without_ofx_root.ofx';
+
+      final source = File(fixturePath).readAsStringSync();
+
+      expect(
+        () => Ofx.fromString(source),
+        throwsA(
+          isA<FormatException>().having(
+            (error) => error.message,
+            'message',
+            'Documento OFX inválido.',
           ),
         ),
       );

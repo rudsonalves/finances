@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:finances/packages/ofx/lib/src/adapter/date_time_adapter.dart';
+import 'package:finances/packages/ofx/lib/src/adapter/sgml_to_xml_adapter.dart';
 import 'package:finances/packages/ofx/lib/src/adapter/xml_to_json_adapter.dart';
 import 'package:finances/packages/ofx/lib/src/models/ofx_financial_institution.dart';
 import 'package:finances/packages/ofx/lib/src/models/ofx_status.dart';
@@ -103,8 +104,28 @@ class Ofx {
   }
 
   factory Ofx.fromString(String xml) {
-    final map = XmlToJsonAdapter.adapter(xml);
-    final Map<String, dynamic> ofx = map['OFX'];
+    final normalized = SgmlToXmlAdapter.normalizeIfNeeded(xml);
+
+    late final Map<String, dynamic> map;
+
+    try {
+      map = XmlToJsonAdapter.adapter(normalized);
+    } catch (error) {
+      throw FormatException(
+        'Documento OFX inválido.',
+        error,
+      );
+    }
+
+    final ofxData = map['OFX'];
+
+    if (ofxData is! Map<String, dynamic>) {
+      throw const FormatException(
+        'Documento OFX inválido.',
+      );
+    }
+
+    final ofx = ofxData;
 
     if (ofx.containsKey('BANKMSGSRSV1')) {
       return _processBankAccountOfx(ofx);
@@ -113,6 +134,18 @@ class Ofx {
     } else {
       throw Exception('Tipo de OFX não suportado.');
     }
+  }
+
+  factory Ofx.fromBytes(List<int> bytes) {
+    late final String source;
+
+    try {
+      source = utf8.decode(bytes);
+    } on FormatException {
+      source = latin1.decode(bytes);
+    }
+
+    return Ofx.fromString(source);
   }
 
   static List<OfxTransaction> _parseTransactions(dynamic source) {
@@ -170,7 +203,7 @@ class Ofx {
         statement['STATUS'] as Map<String, dynamic>,
       ),
       currency: statementTransaction['CURDEF'].toString(),
-      bankID: bank['BANKID'].toString(),
+      bankID: bank['BANKID']?.toString() ?? '',
       accountID: bank['ACCTID'].toString(),
       accountType:
           bank['ACCTTYPE'] != null ? bank['ACCTTYPE'].toString() : 'CREDITLINE',
