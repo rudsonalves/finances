@@ -15,30 +15,30 @@
 // You should have received a copy of the GNU General Public License
 // along with finances. If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:flutter/material.dart';
 import 'package:finances/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
 
 import '../../common/constants/app_constants.dart';
+import '../../common/constants/themes/app_text_styles.dart';
 import '../../common/constants/themes/colors/custom_color.g.dart';
 import '../../common/models/category_db_model.dart';
-import 'widget/destiny_account_dropdown_form.dart';
+import '../../common/models/transaction_db_model.dart';
+import '../../common/validate/transaction_validator.dart';
+import '../../common/widgets/add_cancel_buttons.dart';
+import '../../common/widgets/autocomplete_text_form_field.dart';
+import '../../common/widgets/basic_text_form_field.dart';
+import '../../common/widgets/category_dropdown_form_field.dart';
+import '../../common/widgets/custom_circular_progress_indicator.dart';
+import '../../common/widgets/date_time_picker_form.dart';
+import '../../common/widgets/row_of_two_bottons.dart';
 import '../../common/widgets/simple_spin_box_field.dart';
+import '../../features/home_page/home_page_controller.dart';
+import '../../features/transaction/transaction_state.dart';
 import '../../locator.dart';
 import '../categories/categories_controller.dart';
 import '../categories/widget/add_category_page.dart';
 import './transaction_controller.dart';
-import '../../common/widgets/row_of_two_bottons.dart';
-import '../../common/widgets/add_cancel_buttons.dart';
-import '../../common/models/transaction_db_model.dart';
-import '../../common/widgets/date_time_picker_form.dart';
-import '../../common/widgets/basic_text_form_field.dart';
-import '../../common/validate/transaction_validator.dart';
-import '../../features/transaction/transaction_state.dart';
-import '../../features/home_page/home_page_controller.dart';
-import '../../common/constants/themes/app_text_styles.dart';
-import '../../common/widgets/category_dropdown_form_field.dart';
-import '../../common/widgets/autocomplete_text_form_field.dart';
-import '../../common/widgets/custom_circular_progress_indicator.dart';
+import 'widget/destiny_account_dropdown_form.dart';
 
 class TransactionDialog extends StatefulWidget {
   final bool addTransaction;
@@ -310,6 +310,7 @@ class _TransactionDialogState extends State<TransactionDialog> {
                         child: DateTimePickerForm(
                           controller: _controller.date,
                           labelText: locale.transPageDate,
+                          validator: transValidator.dateValidator,
                         ),
                       ),
                       // Installments - Repeat Monthly

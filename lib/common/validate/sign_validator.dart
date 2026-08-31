@@ -23,9 +23,9 @@ class SignValidator {
   SignValidator(this.locale);
 
   String? nameValidator(String? value) {
-    final RegExp nameRE = RegExp(r"^([A-À-ÿ][a-z\-. ']+[ ])*");
-    final String name = value ?? '';
-
+    final RegExp nameRE =
+        RegExp(r"^[A-Za-zÀ-ÖØ-öø-ÿ]+(?:[ .'-][A-Za-zÀ-ÖØ-öø-ÿ]+)*$");
+    final String name = value?.trim() ?? '';
     if (name.isEmpty) {
       return locale.signValidatorNameEmpty;
     } else if (name.length < 3) {
@@ -39,7 +39,7 @@ class SignValidator {
 
   String? emailValidator(String? value) {
     final RegExp emailRE = RegExp(r'^[\w\.-]+@[\w\.-]+\.[a-zA-Z]{2,}$');
-    final String email = value ?? '';
+    final String email = value?.trim() ?? '';
 
     if (email.isEmpty) {
       return locale.signValidatorEmailEmpty;
@@ -51,7 +51,7 @@ class SignValidator {
   }
 
   String? passwordValidator(String? value) {
-    final RegExp pwdRE = RegExp(r'^(?=.*\d)(?=.*[a-z]).{6,}');
+    final RegExp pwdRE = RegExp(r'^(?=.*\d)(?=.*[A-Z])\S{8,}$');
     final String pwd = value ?? '';
 
     if (pwd.isEmpty) {

@@ -68,34 +68,37 @@ class MoneyMaskedText {
     );
   }
 
-  String _getOnlyNumbers(String text) => text.replaceAll(RegExp(r'[^\d]'), '');
-
   String text(double value) {
-    bool negative = value.isNegative;
+    final bool negative = value.isNegative;
+    final String fixedValue = value.abs().toStringAsFixed(precision);
+    final List<String> parts = fixedValue.split('.');
 
-    String text = value.toStringAsFixed(2);
+    String integerPart = parts.first;
+    final List<String> integerGroups = [];
 
-    List<String> onlyNumbers = _getOnlyNumbers(text).split('');
-
-    int index = onlyNumbers.length - 2;
-
-    onlyNumbers.insert(index, decimalSeparator);
-
-    while (index > 3) {
-      index -= 3;
-      onlyNumbers.insert(index, thousandSeparator);
+    while (integerPart.length > 3) {
+      integerGroups.insert(
+        0,
+        integerPart.substring(integerPart.length - 3),
+      );
+      integerPart = integerPart.substring(0, integerPart.length - 3);
     }
 
-    String preffix = '';
-    if (!nosignal) {
-      if (negative) {
-        if (preffixSignal) {
-          preffix = '-';
-        } else {
-          onlyNumbers.insert(0, '-');
-        }
+    integerGroups.insert(0, integerPart);
+
+    final String formattedInteger = integerGroups.join(thousandSeparator);
+    final String formattedDecimal =
+        precision > 0 ? '$decimalSeparator${parts.last}' : '';
+    final String formattedValue = '$formattedInteger$formattedDecimal';
+
+    if (!nosignal && negative) {
+      if (preffixSignal) {
+        return '-$leftSymbol$formattedValue$rightSymbol';
       }
+
+      return '$leftSymbol-$formattedValue$rightSymbol';
     }
-    return '$preffix$leftSymbol${onlyNumbers.join()}$rightSymbol';
+
+    return '$leftSymbol$formattedValue$rightSymbol';
   }
 }

@@ -17,7 +17,7 @@ Modelos com falhas de serialização (`toMap`/`fromMap`) e validadores incorreto
 
 ## Tarefas
 
-- [ ] **4.1. Testes de Validadores de Formulário**
+- [x] **4.1. Testes de Validadores de Formulário**
   - **Diretório**: `test/unit/common/validate/`
   - `SignValidator`:
     - Validação de e-mail (válido, inválido, vazio, espaços extras).
@@ -30,7 +30,7 @@ Modelos com falhas de serialização (`toMap`/`fromMap`) e validadores incorreto
   - `AccountValidator`:
     - Validação de nome da conta, saldo inicial e tipo de conta.
 
-- [ ] **4.2. Testes de Extensões e Utilitários**
+- [x] **4.2. Testes de Extensões e Utilitários**
   - **Diretório**: `test/unit/common/extensions/`
   - `ExtendedDate`:
     - Formatações de data para exibição e persistência.
@@ -41,7 +41,7 @@ Modelos com falhas de serialização (`toMap`/`fromMap`) e validadores incorreto
     - Separadores, símbolos e precisão nas localidades suportadas, incluindo arredondamento nos limites de centavo.
     - Edição de texto e máscara em tempo real.
 
-- [ ] **4.3. Testes de Serialização de Modelos (`toMap` / `fromMap` / `copyWith`)**
+- [x] **4.3. Testes de Serialização de Modelos (`toMap` / `fromMap` / `copyWith`)**
   - **Diretório**: `test/unit/common/models/`
   - Testar ida e volta (`Model -> toMap -> fromMap -> Model`):
     - `TransactionDbModel`
@@ -55,3 +55,13 @@ Modelos com falhas de serialização (`toMap`/`fromMap`) e validadores incorreto
 ## Critérios de Aceite
 - Todos os limites, entradas inválidas e regras financeiras possuem testes comportamentais; a cobertura não pode ser atingida com testes triviais.
 - Testes de integridade bidirecional para todos os modelos de banco de dados.
+
+## Resultado
+
+- Validadores passaram a normalizar espaços e rejeitar entradas monetárias, datas e identificadores inválidos.
+- Datas preservam instantes UTC, precisão recebida e limites mensais corretos.
+- Formatação monetária respeita precisão, sinais e todas as localidades suportadas.
+- Modelos aceitam valores `int` ou `double` provenientes de SQLite/JSON e preservam campos opcionais.
+- Cópias de usuário não compartilham listas mutáveis.
+- Escalas de interface respondem a mudanças nas dimensões da tela.
+- Suíte completa de testes aprovada.

@@ -1,5 +1,58 @@
 # Changelog
 
+## 2026/08/31 - revision/task-04
+
+### Validation
+
+1. `SignValidator` now trims names and emails, validates complete accented names, and requires passwords with at least eight non-whitespace characters, one uppercase letter, and one digit.
+2. `AccountValidator` and `TransactionValidator` now ignore surrounding whitespace when checking required fields and minimum lengths.
+3. Transaction amount validation now rejects negative, zero, and nonnumeric values while accepting masked currency input.
+4. Transaction dates now require the form’s timestamp format and reject invalid calendar values.
+5. Transfer account validation now requires a positive identifier and uses the localized error message.
+6. `TransactionDialog` now applies date validation to the date-time field.
+
+### Currency and localization
+
+1. Currency separators were corrected for Portuguese, Spanish, Italian, German, and French locales, including locale-appropriate nonbreaking spaces.
+2. `MoneyMaskedText` now formats absolute values directly, supports configurable precision, rounds correctly, groups thousands, and consistently positions or suppresses negative signs.
+3. `MoneyMaskedTextController` now supports zero precision, normalizes negative input, rejects non-finite or oversized initial values, and preserves the last valid value when later updates exceed the 12-digit limit.
+
+### Dates and responsive sizing
+
+1. `ExtendedDate` now preserves UTC state and full subsecond precision when copying, parsing, adding, or subtracting dates.
+2. Month and year navigation now clamps invalid days, handles leap years, preserves time precision, and returns the final millisecond of a month.
+3. Date equality and hashing now consistently use the represented instant.
+4. Monthly intervals now begin at midnight and end at `23:59:59.999`.
+5. `AppScale` now refreshes whenever the media width changes.
+6. `Sizes` now accepts and retains a custom design size and recalculates dimensions from the current media context.
+
+### Model serialization
+
+1. Account and category serialization now reports explicit state errors when their icons lack identifiers.
+2. Balance serialization now requires an account and date, while balance, category, and transaction deserialization accept both integer and floating-point numeric values.
+3. Category mapping now uses one shared payload and includes its identifier only when available.
+4. Transfer deserialization now preserves nullable transaction and account relationships.
+5. User copying now creates independent category and OFX exclusion lists instead of sharing mutable references.
+
+### Tests
+
+1. Added unit coverage for responsive scale and sizing behavior, including screen changes and custom design dimensions.
+2. Added currency formatter and controller tests covering supported locales, signs, precision, rounding, editing, limits, and configuration errors.
+3. Added model tests for account, balance, category, icon, transaction, transfer, and user serialization, JSON round trips, nullable data, copy behavior, and invalid state handling.
+4. Added comprehensive `ExtendedDate` tests for UTC preservation, precision, month boundaries, leap years, navigation, comparisons, and hashing.
+5. Added validator tests for names, emails, passwords, account fields, transaction amounts, descriptions, categories, dates, and destination accounts.
+
+### Documentation
+
+1. Marked validator, extension, utility, and model serialization testing tasks as complete in backlog 04.
+2. Moved completed backlog documents 01, 02, and 03 into `docs/backlogs/closed/`.
+
+### Conclusion
+
+This revision strengthens validation, localized currency handling, date calculations, responsive sizing, and model serialization.
+
+The new unit suites document these behaviors and protect their boundary cases, while completed backlog work is archived accordingly.
+
 ## 2026/08/31 - revision/task-03b
 
 1. **OFX parser**
