@@ -335,5 +335,24 @@ void main() {
         ),
       );
     });
+
+    test('rejeita um DTPOSTED com mês inválido', () {
+      const fixturePath = 'test/helpers/fixtures/ofx/'
+          'invalid_bank_xml_transaction_with_invalid_month.ofx';
+
+      final source = File(fixturePath).readAsStringSync();
+
+      expect(
+        () => Ofx.fromString(source),
+        throwsA(
+          isA<FormatException>().having(
+            (error) => error.message,
+            'message',
+            'Valor inválido em DTPOSTED: '
+                '20261301103000[-3:GMT].',
+          ),
+        ),
+      );
+    });
   });
 }

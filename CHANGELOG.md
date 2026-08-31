@@ -1,5 +1,33 @@
 # Changelog
 
+## 2026/08/31 - revision/task-03a
+
+1. `DateTimeAdapter`
+   - Added strict validation of parsed OFX date components, rejecting normalized invalid dates with a `FormatException`.
+   - Simplified timezone conversion by deriving the UTC instant from the embedded offset and converting it to local time.
+   - Expanded timezone parsing to accept explicit positive or negative offsets and identifiers beyond `GMT`, while defaulting to UTC when no valid offset exists.
+   - Removed outdated inline documentation and comments.
+
+2. `Ofx` DTO
+   - Restored local `DateTime` values when deserializing `serverLocal`, `startLocal`, and `endLocal` timestamps instead of incorrectly marking them as UTC.
+
+3. `OfxTransaction`
+   - Added contextual validation for `DTPOSTED`, reporting the invalid source value when date parsing fails.
+   - Restored local `DateTime` semantics when deserializing `postedLocal`.
+
+4. OFX test fixtures
+   - Added a bank statement fixture containing a transaction with an invalid month in `DTPOSTED`.
+
+5. OFX tests
+   - Added unit coverage for UTC date parsing, invalid date rejection, local timezone conversion, signed offsets, `BRT` identifiers, and missing timezone information.
+   - Added parser coverage verifying that invalid `DTPOSTED` values produce the expected contextual `FormatException`.
+
+### Conclusion
+
+OFX date handling now validates malformed calendar values, interprets timezone offsets more broadly, and preserves local timestamp semantics during deserialization.
+
+The added tests and fixture protect valid timezone conversions and invalid transaction-date reporting.
+
 ## 2026/08/31 - revision/task-03
 
 ### OFX parsing

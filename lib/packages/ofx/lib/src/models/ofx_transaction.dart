@@ -104,9 +104,19 @@ class OfxTransaction {
       );
     }
 
+    late final DateTime posted;
+
+    try {
+      posted = DateTimeAdapter.stringToDateTime(postedText);
+    } on FormatException {
+      throw FormatException(
+        'Valor inválido em DTPOSTED: $postedText.',
+      );
+    }
+
     final trans = OfxTransaction(
       type: map['TRNTYPE'].toString(),
-      posted: DateTimeAdapter.stringToDateTime(postedText),
+      posted: posted,
       postedLocal: DateTimeAdapter.stringDateTimeInTimeZoneLocal(
         postedText,
       ),
@@ -127,7 +137,6 @@ class OfxTransaction {
       ),
       postedLocal: DateTime.fromMillisecondsSinceEpoch(
         map['posted_local'] as int,
-        isUtc: true,
       ),
       amount: map['amount'] ?? 0.0,
       financialInstitutionID: map['financial_institution_id'].toString(),

@@ -240,7 +240,6 @@ class Ofx {
       ),
       serverLocal: DateTime.fromMillisecondsSinceEpoch(
         map['server_local'] as int,
-        isUtc: true,
       ),
       language: map['language'] as String,
       financialInstitution: OfxFinancialInstitution.fromMap(
@@ -260,7 +259,6 @@ class Ofx {
       ),
       startLocal: DateTime.fromMillisecondsSinceEpoch(
         map['start_local'] as int,
-        isUtc: true,
       ),
       end: DateTime.fromMillisecondsSinceEpoch(
         map['end'] as int,
@@ -268,7 +266,6 @@ class Ofx {
       ),
       endLocal: DateTime.fromMillisecondsSinceEpoch(
         map['end_local'] as int,
-        isUtc: true,
       ),
       transactions: List<OfxTransaction>.from(
         (map['transactions'] as List<dynamic>).map<OfxTransaction>(
