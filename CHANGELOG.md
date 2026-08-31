@@ -1,5 +1,41 @@
 # Changelog
 
+## 2026/08/31 - revision/task-03
+
+### OFX parsing
+
+1. `lib/packages/ofx/lib/src/dto/ofx.dart`
+   - Added shared transaction normalization for bank and credit-card statements, supporting a transaction list, a single transaction object, and statements without transactions.
+   - Added a format error for unsupported `STMTTRN` structures.
+   - Corrected internal map reconstruction to use the appropriate model deserializers and consistently restore timestamps as UTC.
+   - Removed obsolete API and license comments without changing the public interface.
+
+2. `lib/packages/ofx/lib/src/models/ofx_transaction.dart`
+   - Added validation for required transaction identifiers, amounts, and posting dates, with explicit format errors for missing or invalid values.
+   - Preserved valid positive and negative amounts while rejecting non-numeric or non-finite values.
+   - Made `REFNUM` optional, falling back to an empty string.
+   - Added transaction-description fallback from `MEMO` to `NAME`, then to an empty string.
+   - Restored serialized transaction timestamps as UTC.
+
+### Test coverage
+
+3. `test/unit/packages/ofx/ofx_parser_test.dart`
+   - Added OFX 2.x parser coverage for institution, account, statement-period, debit, and credit data.
+   - Verified parsing of multiple transactions, a single `STMTTRN` object, and empty statements.
+   - Added round-trip coverage for `Ofx.toMap` and `Ofx.fromMap`.
+   - Covered optional descriptions and reference numbers, including fallback behavior.
+   - Verified failures for missing `FITID`, missing or invalid `TRNAMT`, and missing or truncated `DTPOSTED`.
+
+4. `test/helpers/fixtures/ofx/`
+   - Added valid fixtures for multi-transaction, single-transaction, empty, and optional-field statements.
+   - Added invalid fixtures for missing identifiers, amounts, posting dates, malformed amounts, and truncated dates.
+
+### Conclusion
+
+OFX imports now handle common transaction-shape variations and optional metadata more reliably while rejecting malformed required fields with clear errors.
+
+Serialization round trips also preserve UTC timestamps and reconstruct nested models correctly.
+
 ## 2026/08/31 - revision/task-02
 
 ### Financial Operations
