@@ -15,13 +15,11 @@
 // You should have received a copy of the GNU General Public License
 // along with finances. If not, see <https://www.gnu.org/licenses/>.
 
-import 'dart:developer';
-
-import '../common/models/extends_date.dart';
 import '../common/models/transaction_db_model.dart';
 import '../locator.dart';
 import '../repositories/balance/abstract_balance_repository.dart';
 import '../repositories/transaction/abstract_transaction_repository.dart';
+import '../repositories/financial_operation/abstract_financial_operation_repository.dart';
 import 'balance_manager.dart';
 
 /// Manages transaction operations, including adding and removing transactions.
@@ -30,8 +28,12 @@ import 'balance_manager.dart';
 /// transactions within the database. It ensures that balance records are
 /// appropriately updated in response to transaction changes.
 sealed class TransactionManager {
-  static final balanceRepository = locator<AbstractBalanceRepository>();
-  static final transactionRepository = locator<AbstractTransactionRepository>();
+  static AbstractBalanceRepository get balanceRepository =>
+      locator<AbstractBalanceRepository>();
+  static AbstractTransactionRepository get transactionRepository =>
+      locator<AbstractTransactionRepository>();
+  static AbstractFinancialOperationRepository get operationRepository =>
+      locator<AbstractFinancialOperationRepository>();
 
   /// Private constructor to prevent instantiation.
   TransactionManager._();
@@ -80,9 +82,6 @@ sealed class TransactionManager {
     await removeByValues(
       id: transaction.transId!,
       balanceId: transaction.transBalanceId!,
-      accountId: transaction.transAccountId,
-      date: transaction.transDate,
-      value: transaction.transValue,
     );
   }
 
@@ -103,9 +102,6 @@ sealed class TransactionManager {
   static Future<int> removeByValues({
     required int id,
     required int balanceId,
-    required int accountId,
-    required ExtendedDate date,
-    required double value,
   }) async {
     // Remove transaction by your id
     final result = await transactionRepository.deleteById(id);
@@ -155,30 +151,6 @@ sealed class TransactionManager {
   /// This method provides a way to handle transaction updates that require
   /// recalculating and adjusting balances and transaction counts in the system.
   static Future<int> updateTransaction(TransactionDbModel transaction) async {
-    // Obtain original transaction register to avoid editing the transaction
-    // value or date.
-    final originTransaction =
-        await transactionRepository.getId(transaction.transId!);
-
-    if (originTransaction == null) {
-      final message =
-          'TransactionManager.updateTransaction: transaction id ${transaction.transId!} not found';
-      log(message);
-      return -1;
-    }
-
-    // Pass the value and date from original transaction
-    await removeByValues(
-      id: originTransaction.transId!,
-      balanceId: originTransaction.transBalanceId!,
-      accountId: originTransaction.transAccountId,
-      value: originTransaction.transValue,
-      date: originTransaction.transDate,
-    );
-
-    transaction.transId = null;
-    await addNew(transaction);
-
-    return transaction.transId!;
+    return operationRepository.updateTransaction(transaction);
   }
 }

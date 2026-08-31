@@ -7,27 +7,27 @@ Em aplicações financeiras, falhas em cálculos de saldo, integridade de transa
 
 ```mermaid
 flowchart TD
-    subgraph Fase1[Fase 1: Núcleo Crítico - Alta Criticidade]
-        F1_1[Managers: Balance, Transaction, Transfer]
-        F1_2[Parser OFX: packages/ofx]
-        F1_3[Validators & Extensions: Data, Moeda]
-        F1_4[Models: toMap / fromMap / Cópias]
+    subgraph Fase1["Fase 1: Núcleo Crítico - Alta Criticidade"]
+        F1_1["Managers: Balance, Transaction, Transfer"]
+        F1_2["Parser OFX: packages/ofx"]
+        F1_3["Validators & Extensions: Data, Moeda"]
+        F1_4["Models: toMap / fromMap / Cópias"]
     end
 
-    subgraph Fase3[Fase 3: Gerenciamento de Estado]
-        F2_1[Controllers de Transação e Contas]
-        F2_2[Controllers de Autenticação e Home]
+    subgraph Fase2["Fase 2: Persistência Crítica"]
+        F3_1["Migrations & Tables Creators"]
+        F3_2["Database Backup & Restore"]
+        F3_3["Repositories com SQLite FFI"]
     end
 
-    subgraph Fase2[Fase 2: Persistência Crítica]
-        F3_1[Migrations & Tables Creators]
-        F3_2[Database Backup & Restore]
-        F3_3[Repositories com SQLite FFI]
+    subgraph Fase3["Fase 3: Gerenciamento de Estado"]
+        F2_1["Controllers de Transação e Contas"]
+        F2_2["Controllers de Autenticação e Home"]
     end
 
-    subgraph Fase4[Fase 4: Widgets e Integração]
-        F4_1[Widgets de Formulários e Cards]
-        F4_2[Fluxos E2E: Criar Transação, Importar OFX]
+    subgraph Fase4["Fase 4: Widgets e Integração"]
+        F4_1["Widgets de Formulários e Cards"]
+        F4_2["Fluxos E2E: Criar Transação, Importar OFX"]
     end
 
     Fase1 --> Fase2 --> Fase3 --> Fase4
@@ -37,16 +37,16 @@ flowchart TD
 
 ## 1. Matriz de Priorização de Testes
 
-| Camada / Componente                                                             |   Criticidade    | Risco se Falhar                                                               | Tipo de Teste           |
-| :------------------------------------------------------------------------------ | :--------------: | :---------------------------------------------------------------------------- | :---------------------- |
-| **`lib/manager/`** (`BalanceManager`, `TransactionManager`, `TransferManager`)  | **P0 (Crítica)** | Saldo calculado errado, transações órfãs, inconsistência histórica de balanço | Unitário + integração |
-| **`lib/packages/ofx/`** & **OFX Managers**                                      | **P0 (Crítica)** | Importação duplicada ou valores corrompidos de extratos bancários             | Unitário                |
-| **`lib/common/validate/`** & **Extensions** (`MoneyMaskedText`, `ExtendedDate`) |  **P1 (Alta)**   | Validação incorreta de campos, formatação e arredondamento errados            | Unitário                |
-| **`lib/common/models/`**                                                        |  **P1 (Alta)**   | Perda de dados em serialização SQLite (`toMap`/`fromMap`)                     | Unitário                |
-| **`lib/features/**/**_controller.dart`**                                        |  **P1 (Alta)**   | Falhas de transição de estado, feedback ao usuário quebrado                   | Unitário / State        |
-| **`lib/store/database/`** (`Migrations`, `Backup`)                              | **P0/P1 (Crítica)** | Perda ou corrupção de dados em atualizações e restaurações                 | Integração (SQLite FFI + Android) |
-| **`lib/repositories/`**                                                         |  **P2 (Média)**  | Queries SQL quebradas, constraints violadas                                   | Integração / Unitário   |
-| **`lib/features/**/widgets/`** (UI/Forms)                                       |  **P2 (Média)**  | Fluxos de gravação, validação ou navegação quebrados                            | Widget / `integration_test` |
+| Camada / Componente                                                             |     Criticidade     | Risco se Falhar                                                               | Tipo de Teste                     |
+| :------------------------------------------------------------------------------ | :-----------------: | :---------------------------------------------------------------------------- | :-------------------------------- |
+| **`lib/manager/`** (`BalanceManager`, `TransactionManager`, `TransferManager`)  |  **P0 (Crítica)**   | Saldo calculado errado, transações órfãs, inconsistência histórica de balanço | Unitário + integração             |
+| **`lib/packages/ofx/`** & **OFX Managers**                                      |  **P0 (Crítica)**   | Importação duplicada ou valores corrompidos de extratos bancários             | Unitário                          |
+| **`lib/common/validate/`** & **Extensions** (`MoneyMaskedText`, `ExtendedDate`) |    **P1 (Alta)**    | Validação incorreta de campos, formatação e arredondamento errados            | Unitário                          |
+| **`lib/common/models/`**                                                        |    **P1 (Alta)**    | Perda de dados em serialização SQLite (`toMap`/`fromMap`)                     | Unitário                          |
+| **`lib/features/**/**_controller.dart`**                                        |    **P1 (Alta)**    | Falhas de transição de estado, feedback ao usuário quebrado                   | Unitário / State                  |
+| **`lib/store/database/`** (`Migrations`, `Backup`)                              | **P0/P1 (Crítica)** | Perda ou corrupção de dados em atualizações e restaurações                    | Integração (SQLite FFI + Android) |
+| **`lib/repositories/`**                                                         |   **P2 (Média)**    | Queries SQL quebradas, constraints violadas                                   | Integração / Unitário             |
+| **`lib/features/**/widgets/`** (UI/Forms)                                       |   **P2 (Média)**    | Fluxos de gravação, validação ou navegação quebrados                          | Widget / `integration_test`       |
 
 ---
 

@@ -16,28 +16,28 @@ O **Finances** adota uma arquitetura em camadas com *service locator*, combinand
 
 ```mermaid
 flowchart TD
-    subgraph UI[Camada de Apresentação]
-        W[Widgets / Pages]
-        C[Controllers - ChangeNotifier]
+    subgraph UI["Camada de Apresentação"]
+        W["Widgets / Pages"]
+        C["Controllers - ChangeNotifier"]
     end
 
-    subgraph State[Estado Global]
-        CM[CurrentModels - CurrentUser, CurrentAccount, CurrentBalance, etc.]
+    subgraph State["Estado Global"]
+        CM["CurrentModels - CurrentUser, CurrentAccount, etc."]
     end
 
-    subgraph Domain[Regras de Negócio - Domain]
-        M[Managers - BalanceManager, TransactionManager, TransferManager, OFX Managers]
+    subgraph Domain["Regras de Negócio - Domain"]
+        M["Managers - Balance, Transaction, Transfer, OFX"]
     end
 
-    subgraph Data[Acesso a Dados - Data Layer]
-        R[Repositories - Abstract + Impl]
-        S[Stores - TransactionStore, AccountStore, etc.]
+    subgraph Data["Acesso a Dados - Data Layer"]
+        R["Repositories - Abstract + Impl e operações financeiras atômicas"]
+        S["Stores - TransactionStore, AccountStore, etc."]
     end
 
-    subgraph Infrastructure[Infraestrutura e Persistência]
-        DB[(DatabaseManager - SQLite)]
-        FB[Firebase Auth Service]
-        OFX[OFX Parser - packages/ofx]
+    subgraph Infrastructure["Infraestrutura e Persistência"]
+        DB[("DatabaseManager - SQLite")]
+        FB["Firebase Auth Service"]
+        OFX["OFX Parser - packages/ofx"]
     end
 
     W -->|Dispara ações| C
@@ -129,7 +129,7 @@ Os `Managers` são classes *sealed* responsáveis por garantir consistência con
 | :---------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **`BalanceManager`**          | Garante existência de saldo diário (`getBalanceInDate`), herda fechamento anterior como abertura e propaga ajustes retroativos para datas posteriores. |
 | **`TransactionManager`**      | Adiciona (`addNew`), atualiza e remove transações, recalculando saldos do dia e atualizando balanços futuros.                                          |
-| **`TransferManager`**         | Orquestra débito, crédito e registro da transferência. A atomicidade SQLite ainda é uma melhoria prioritária do backlog.                        |
+| **`TransferManager`**         | Valida e delega débito, crédito e registro da transferência ao repositório de operações financeiras, dentro de uma transação SQLite.                  |
 | **`OfxAccountManager`**       | Faz o vínculo entre contas informadas no arquivo OFX e contas cadastradas no aplicativo.                                                               |
 | **`OfxRelationshipManager`**  | Mapeia transações bancárias externas com categorias e contas internas.                                                                                 |
 | **`OfxTransTemplateManager`** | Regras e modelos para pré-categorização de transações importadas.                                                                                      |

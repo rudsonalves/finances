@@ -488,7 +488,7 @@ class TransactionController extends ChangeNotifier {
       transCategoryId: _categoryRepository.getIdByName(_category.text),
       transValue: value,
       transStatus: TransStatus.transactionNotChecked,
-      transTransferId: null,
+      transTransferId: _transaction?.transTransferId,
       transDate: ExtendedDate.parse(_date.text),
     );
 

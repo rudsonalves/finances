@@ -60,6 +60,8 @@ import 'repositories/icons/abstract_icons_repository.dart';
 import 'repositories/icons/icons_repository.dart';
 import 'repositories/transfer/transfer_repository.dart';
 import 'repositories/transfer/abstract_transfer_repository.dart';
+import 'repositories/financial_operation/abstract_financial_operation_repository.dart';
+import 'repositories/financial_operation/financial_operation_repository.dart';
 import 'store/database/database_manager.dart';
 
 final locator = GetIt.instance;
@@ -140,6 +142,10 @@ void setupDependencies() {
 
     locator.registerLazySingleton<AbstractBalanceRepository>(
       () => BalanceRepository(),
+    );
+
+    locator.registerLazySingleton<AbstractFinancialOperationRepository>(
+      () => FinancialOperationRepository(),
     );
 
     locator.registerFactory<SignInController>(

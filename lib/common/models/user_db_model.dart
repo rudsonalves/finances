@@ -61,7 +61,8 @@ class UserDbModel {
   })  : userCategoryList = userCategoryList ?? [],
         userOfxStopCategories = userOfxStopCategories ?? [1];
 
-  final userRepository = locator<AbstractUserRepository>();
+  AbstractUserRepository get userRepository =>
+      locator<AbstractUserRepository>();
 
   void setFromUserModel(UserModel user) {
     userId = user.id;
