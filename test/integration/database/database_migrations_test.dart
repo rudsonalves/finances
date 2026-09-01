@@ -174,98 +174,97 @@ void main() {
       expect(control[appControlApp], '');
     });
 
-    test('migrações 1008 a 1010 preservam dados e atualizam os triggers',
-        () async {
+    test('migrações 1008 a 1012 preservam dados e restrições', () async {
       await database.execute(
         '''
-  CREATE TABLE $usersTable (
-    $userId TEXT PRIMARY KEY NOT NULL,
-    $userName TEXT NOT NULL,
-    $userEmail TEXT UNIQUE NOT NULL,
-    $userLogged INTEGER NOT NULL,
-    $userMainAccountId INTEGER,
-    $userTheme TEXT NOT NULL,
-    $userLanguage TEXT NOT NULL,
-    $userGrpShowGrid INTEGER DEFAULT 1,
-    $userGrpIsCurved INTEGER DEFAULT 0,
-    $userGrpShowDots INTEGER DEFAULT 0,
-    $userGrpAreaChart INTEGER DEFAULT 0,
-    $userBudgetRef INTEGER DEFAULT 2,
-    $userCategoryList TEXT DEFAULT "[]",
-    $userMaxTransactions INTEGER DEFAULT 35
-  )
-  ''',
+        CREATE TABLE $usersTable (
+          $userId TEXT PRIMARY KEY NOT NULL,
+          $userName TEXT NOT NULL,
+          $userEmail TEXT UNIQUE NOT NULL,
+          $userLogged INTEGER NOT NULL,
+          $userMainAccountId INTEGER,
+          $userTheme TEXT NOT NULL,
+          $userLanguage TEXT NOT NULL,
+          $userGrpShowGrid INTEGER DEFAULT 1,
+          $userGrpIsCurved INTEGER DEFAULT 0,
+          $userGrpShowDots INTEGER DEFAULT 0,
+          $userGrpAreaChart INTEGER DEFAULT 0,
+          $userBudgetRef INTEGER DEFAULT 2,
+          $userCategoryList TEXT DEFAULT "[]",
+          $userMaxTransactions INTEGER DEFAULT 35
+        )
+        ''',
       );
 
       await database.execute(
         '''
-  CREATE TABLE $categoriesTable (
-    $categoryId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    $categoryName TEXT UNIQUE NOT NULL,
-    $categoryIcon INTEGER NOT NULL,
-    $categoryBudget REAL DEFAULT 0,
-    $categoryIsIncome INTEGER DEFAULT 0
-  )
-  ''',
+        CREATE TABLE $categoriesTable (
+          $categoryId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+          $categoryName TEXT UNIQUE NOT NULL,
+          $categoryIcon INTEGER NOT NULL,
+          $categoryBudget REAL DEFAULT 0,
+          $categoryIsIncome INTEGER DEFAULT 0
+        )
+        ''',
       );
       await database.execute(
         '''
-    CREATE TABLE $accountTable (
-      $accountId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-      $accountName TEXT NOT NULL,
-      $accountDescription TEXT,
-      $accountUserId TEXT NOT NULL,
-      $accountIcon INTEGER
-    )
-    ''',
-      );
-
-      await database.execute(
-        '''
-    CREATE TABLE $balanceTable (
-      $balanceId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-      $balanceAccountId INTEGER NOT NULL,
-      $balanceDate INTEGER NOT NULL,
-      $balanceTransCount INTEGER,
-      $balanceOpen REAL NOT NULL,
-      $balanceClose REAL NOT NULL
-    )
-    ''',
+        CREATE TABLE $accountTable (
+          $accountId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+          $accountName TEXT NOT NULL,
+          $accountDescription TEXT,
+          $accountUserId TEXT NOT NULL,
+          $accountIcon INTEGER
+        )
+        ''',
       );
 
       await database.execute(
         '''
-    CREATE TABLE $transfersTable (
-      $transferId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-      $transferTransId0 INTEGER,
-      $transferTransId1 INTEGER,
-      $transferAccount0 INTEGER,
-      $transferAccount1 INTEGER
-    )
-    ''',
+        CREATE TABLE $balanceTable (
+          $balanceId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+          $balanceAccountId INTEGER NOT NULL,
+          $balanceDate INTEGER NOT NULL,
+          $balanceTransCount INTEGER,
+          $balanceOpen REAL NOT NULL,
+          $balanceClose REAL NOT NULL
+        )
+        ''',
       );
 
       await database.execute(
         '''
-    CREATE TABLE transactonsTable (
-      $transId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-      $transDescription TEXT NOT NULL,
-      $transCategoryId INTEGER NOT NULL,
-      $transValue REAL NOT NULL,
-      $transStatus INTEGER NOT NULL,
-      $transTransferId INTEGER,
-      $transDate INTEGER NOT NULL
-    )
-    ''',
+        CREATE TABLE $transfersTable (
+          $transferId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+          $transferTransId0 INTEGER,
+          $transferTransId1 INTEGER,
+          $transferAccount0 INTEGER,
+          $transferAccount1 INTEGER
+        )
+        ''',
       );
 
       await database.execute(
         '''
-    CREATE TABLE transDayTable (
-      transDayTransId INTEGER NOT NULL,
-      transDayBalanceId INTEGER NOT NULL
-    )
-    ''',
+        CREATE TABLE transactonsTable (
+          $transId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+          $transDescription TEXT NOT NULL,
+          $transCategoryId INTEGER NOT NULL,
+          $transValue REAL NOT NULL,
+          $transStatus INTEGER NOT NULL,
+          $transTransferId INTEGER,
+          $transDate INTEGER NOT NULL
+        )
+        ''',
+      );
+
+      await database.execute(
+        '''
+        CREATE TABLE transDayTable (
+          transDayTransId INTEGER NOT NULL,
+          transDayBalanceId INTEGER NOT NULL
+        )
+        ''',
       );
 
       final transactionDate = DateTime(2026, 8, 10).millisecondsSinceEpoch;
@@ -366,20 +365,20 @@ void main() {
 
       final legacyTransactionTable = await database.rawQuery(
         '''
-    SELECT name
-    FROM sqlite_master
-    WHERE type = 'table'
-      AND name = 'transactonsTable'
-    ''',
+        SELECT name
+        FROM sqlite_master
+        WHERE type = 'table'
+          AND name = 'transactonsTable'
+        ''',
       );
 
       final legacyRelationshipTable = await database.rawQuery(
         '''
-    SELECT name
-    FROM sqlite_master
-    WHERE type = 'table'
-      AND name = 'transDayTable'
-    ''',
+        SELECT name
+        FROM sqlite_master
+        WHERE type = 'table'
+          AND name = 'transDayTable'
+        ''',
       );
 
       expect(legacyTransactionTable, isEmpty);
@@ -393,10 +392,10 @@ void main() {
 
       final tablesAfter1009 = await database.rawQuery(
         '''
-  SELECT name
-  FROM sqlite_master
-  WHERE type = 'table'
-  ''',
+      SELECT name
+      FROM sqlite_master
+      WHERE type = 'table'
+      ''',
       );
 
       final tableNamesAfter1009 =
@@ -434,11 +433,11 @@ void main() {
 
       final indexesAfter1009 = await database.rawQuery(
         '''
-  SELECT name
-  FROM sqlite_master
-  WHERE type = 'index'
-    AND name NOT LIKE 'sqlite_autoindex_%'
-  ''',
+      SELECT name
+      FROM sqlite_master
+      WHERE type = 'index'
+        AND name NOT LIKE 'sqlite_autoindex_%'
+      ''',
       );
 
       final indexNamesAfter1009 =
@@ -532,23 +531,131 @@ void main() {
       expect(secondBalanceAfterTrigger[balanceOpen], 75.0);
       expect(secondBalanceAfterTrigger[balanceClose], 75.0);
       expect(secondBalanceAfterTrigger[balanceTransCount], 0);
+
+      await DatabaseMigrations.applyMigrations(
+        db: database,
+        currentVersion: 1010,
+        targetVersion: 1011,
+      );
+
+      final userColumnsAfter1011 = await database.rawQuery(
+        'PRAGMA table_info($usersTable)',
+      );
+
+      final stopCategoriesColumn = userColumnsAfter1011.singleWhere(
+        (column) => column['name'] == userOfxStopCategories,
+      );
+
+      expect(stopCategoriesColumn['dflt_value'], '"[1]"');
+
+      final userAfter1011 = (await database.query(
+        usersTable,
+        where: '$userId = ?',
+        whereArgs: <Object?>['user-1'],
+      ))
+          .single;
+
+      expect(userAfter1011[userId], 'user-1');
+      expect(userAfter1011[userName], 'Test User');
+      expect(userAfter1011[userEmail], 'user@example.com');
+      expect(userAfter1011[userOfxStopCategories], '[1]');
+
+      await DatabaseMigrations.applyMigrations(
+        db: database,
+        currentVersion: 1011,
+        targetVersion: 1012,
+      );
+
+      final importedTable = await database.rawQuery(
+        '''
+  SELECT name
+  FROM sqlite_master
+  WHERE type = 'table'
+    AND name = ?
+  ''',
+        <Object?>[ofxImportedTransactionsTable],
+      );
+
+      expect(importedTable, hasLength(1));
+
+      final importedIndexes = await database.rawQuery(
+        'PRAGMA index_list($ofxImportedTransactionsTable)',
+      );
+
+      final uniqueImportedIndex = importedIndexes.singleWhere(
+        (index) => index['name'] == ofxImportedTransactionUniqueIndex,
+      );
+
+      expect(uniqueImportedIndex['unique'], 1);
+
+      await database.insert(
+        ofxRelationshipTable,
+        <String, Object?>{
+          ofxRelBankAccountId: 'bank-account-1',
+          ofxRelBankName: 'Banco de teste',
+          ofxRelAccountId: 1,
+        },
+      );
+
+      final ofxAccountKey = await database.insert(
+        ofxACCTable,
+        <String, Object?>{
+          ofxACCAccountId: 1,
+          ofxACCBankAccountId: 'bank-account-1',
+          ofxACCBankName: 'Banco de teste',
+          ofxACCType: 'CHECKING',
+          ofxACCNTrans: 1,
+          ofxACCStartDate: transactionDate,
+          ofxACCEndDate: transactionDate,
+        },
+      );
+
+      final importedTransaction = <String, Object?>{
+        ofxImportedTransactionOfxAccountId: ofxAccountKey,
+        ofxImportedTransactionInstitutionId: 'institution-1',
+        ofxImportedTransactionBankAccountId: 'bank-account-1',
+        ofxImportedTransactionFitId: 'fit-id-1',
+      };
+
+      await database.insert(
+        ofxImportedTransactionsTable,
+        importedTransaction,
+      );
+
+      expect(
+        () => database.insert(
+          ofxImportedTransactionsTable,
+          importedTransaction,
+        ),
+        throwsA(isA<DatabaseException>()),
+      );
+
+      final importedRows = await database.query(
+        ofxImportedTransactionsTable,
+      );
+
+      expect(importedRows, hasLength(1));
+      expect(
+        importedRows.single[ofxImportedTransactionFitId],
+        'fit-id-1',
+      );
     });
 
     test('reverte toda a versão quando uma instrução intermediária falha',
         () async {
       await database.execute(
         '''
-    CREATE TABLE $usersTable (
-      $userId TEXT PRIMARY KEY NOT NULL,
-      $userName TEXT NOT NULL,
-      $userEmail TEXT UNIQUE NOT NULL,
-      $userLogged INTEGER NOT NULL,
-      $userMainAccountId INTEGER,
-      $userTheme TEXT NOT NULL,
-      $userLanguage TEXT NOT NULL,
-      $userGrpIsCurved INTEGER DEFAULT 0
-    )
-    ''',
+        CREATE TABLE $usersTable (
+          $userId TEXT PRIMARY KEY NOT NULL,
+          $userName TEXT NOT NULL,
+          $userEmail TEXT UNIQUE NOT NULL,
+          $userLogged INTEGER NOT NULL,
+          $userMainAccountId INTEGER,
+          $userTheme TEXT NOT NULL,
+          $userLanguage TEXT NOT NULL,
+          $userGrpIsCurved INTEGER DEFAULT 0
+        )
+        ''',
       );
 
       await database.insert(
@@ -601,6 +708,46 @@ void main() {
       );
 
       expect(foreignKeys.single['foreign_keys'], 1);
+    });
+
+    test('migração 1013 cria o índice composto de conta e data', () async {
+      await database.execute(
+        '''
+    CREATE TABLE $transactionsTable (
+      $transId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+      $transAccountId INTEGER NOT NULL,
+      $transDate INTEGER NOT NULL
+    )
+    ''',
+      );
+
+      await DatabaseMigrations.applyMigrations(
+        db: database,
+        currentVersion: 1012,
+        targetVersion: 1013,
+      );
+
+      final indexes = await database.rawQuery(
+        'PRAGMA index_list($transactionsTable)',
+      );
+
+      final accountDateIndex = indexes.singleWhere(
+        (index) => index['name'] == transactionsAccountDateIndex,
+      );
+
+      expect(accountDateIndex['unique'], 0);
+
+      final columns = await database.rawQuery(
+        'PRAGMA index_info($transactionsAccountDateIndex)',
+      );
+
+      expect(
+        columns.map((column) => column['name']).toList(),
+        <String>[
+          transAccountId,
+          transDate,
+        ],
+      );
     });
   });
 }

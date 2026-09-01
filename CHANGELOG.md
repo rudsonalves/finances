@@ -1,5 +1,38 @@
 # Changelog
 
+## 2026/09/01 - revision/task-06b
+
+1. **Database backup and restoration**
+   - Added injectable database, factory, path, and clock dependencies for isolated testing.
+   - Validated backup integrity, application schema, and supported versions before restoration.
+   - Preserved existing backups during failed exports and restored the current database after replacement failures.
+   - Migrated restored databases before restarting user repositories and propagated failures without continuing from partial state.
+
+2. **Schema and migrations**
+   - Advanced the schema version to `1013`.
+   - Added a composite transaction index on account and date for account-scoped pagination.
+   - Included the new index in fresh database creation and migration paths.
+
+3. **Statistics**
+   - Scoped category totals to the current account, preventing transactions from other accounts from affecting results.
+
+4. **Tests**
+   - Added SQLite integration coverage for backup export, restoration, corrupted or incompatible files, future schema versions, legacy backups, and backup preservation.
+   - Added migration-provider tests for safety backup requirements, restoration after migration failures, and avoiding unnecessary backups.
+   - Extended migration tests through version `1013`, including data preservation, constraints, OFX uniqueness, rollback behavior, and the composite index.
+   - Added real repository integration tests for transaction pagination, monthly totals, balances, and account-scoped statistics.
+   - Added unit tests for backup repository restoration sequencing and failure handling.
+
+5. **Documentation**
+   - Marked persistence, migration, backup, and repository integration tasks as completed.
+   - Documented the delivered behavior and verification results, including 370 passing tests and clean analysis and diff checks.
+
+### Conclusion
+
+Database persistence is now more resilient through validated backups, safe migration recovery, and explicit failure propagation.
+
+Account-specific queries are correctly isolated and supported by an optimized composite index, with comprehensive SQLite integration coverage.
+
 ## 2026/08/31 - revision/task-06a
 
 1. `lib/store/database/database_manager.dart`

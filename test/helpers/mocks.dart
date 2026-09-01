@@ -9,7 +9,9 @@ import 'package:finances/repositories/transaction/abstract_transaction_repositor
 import 'package:finances/repositories/transfer/abstract_transfer_repository.dart';
 import 'package:finances/repositories/user/abstract_user_repository.dart';
 import 'package:finances/services/authentication/auth_service.dart';
+import 'package:finances/store/database/database_backup.dart';
 import 'package:finances/store/database/database_manager.dart';
+import 'package:finances/store/database/database_provider.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -48,3 +50,7 @@ class MockAuthService extends Mock implements AuthService {}
 class MockDatabase extends Mock implements Database {}
 
 class MockDatabaseManager extends Mock implements DatabaseManager {}
+
+class MockDatabaseBackuper extends Mock implements DatabaseBackuper {}
+
+class MockDatabaseProvider extends Mock implements DatabaseProvider {}

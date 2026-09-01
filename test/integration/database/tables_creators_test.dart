@@ -113,6 +113,7 @@ void main() {
           categoriesNameIndex,
           transactionsDateIndex,
           transactionsCategoryIndex,
+          transactionsAccountDateIndex,
           ofxAccountBankIndex,
           ofxRelaltionshipIndex,
           ofxTransMemoIndex,
@@ -121,7 +122,7 @@ void main() {
         }),
       );
 
-      expect(indexes, hasLength(11));
+      expect(indexes, hasLength(12));
 
       expect(
         indexes[accountUserIndex]!['tbl_name'],
@@ -137,6 +138,10 @@ void main() {
       );
       expect(
         indexes[transactionsDateIndex]!['tbl_name'],
+        transactionsTable,
+      );
+      expect(
+        indexes[transactionsAccountDateIndex]!['tbl_name'],
         transactionsTable,
       );
       expect(
@@ -504,6 +509,40 @@ void main() {
       expect(secondBalance[balanceOpen], 100.0);
       expect(secondBalance[balanceClose], 100.0);
       expect(secondBalance[balanceTransCount], 0);
+    });
+
+    test('possui índice composto para paginação por conta e data', () async {
+      final indexRows = await database.rawQuery(
+        'PRAGMA index_list($transactionsTable)',
+      );
+
+      final indexedColumnLists = <List<String>>[];
+
+      for (final indexRow in indexRows) {
+        final indexName = indexRow['name'] as String;
+
+        final columns = await database.rawQuery(
+          'PRAGMA index_info($indexName)',
+        );
+
+        indexedColumnLists.add(
+          columns.map((column) => column['name'] as String).toList(),
+        );
+      }
+
+      final hasAccountDateIndex = indexedColumnLists.any(
+        (columns) =>
+            columns.length == 2 &&
+            columns[0] == transAccountId &&
+            columns[1] == transDate,
+      );
+
+      expect(
+        hasAccountDateIndex,
+        isTrue,
+        reason:
+            'A paginação filtra por conta e data e precisa de um índice composto.',
+      );
     });
   });
 }

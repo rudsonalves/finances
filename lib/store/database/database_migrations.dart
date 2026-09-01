@@ -7,7 +7,7 @@ import '../constants/constants.dart';
 class DatabaseMigrations {
   DatabaseMigrations._();
 
-  static const databaseSchemeVersion = 1012;
+  static const databaseSchemeVersion = 1013;
 
   static String get dbSchemeVersion {
     String version = databaseSchemeVersion.toString();
@@ -322,6 +322,9 @@ class DatabaseMigrations {
     1012: [
       createOfxImportedTransactionsSQL,
       createOfxImportedTransactionUniqueIndexSQL,
+    ],
+    1013: [
+      createTransactionsAccountDateIndexSQL,
     ],
   };
 
