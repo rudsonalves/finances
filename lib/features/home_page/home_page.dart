@@ -1,40 +1,24 @@
-// Copyright (C) 2024 rudson
-//
-// This file is part of finances.
-//
-// finances is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// finances is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with finances.  If not, see <https://www.gnu.org/licenses/>.
-
-import 'package:flutter/material.dart';
 import 'package:finances/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
 
-import '../../common/models/user_name_notifier.dart';
-import '../../locator.dart';
-import '../help_manager/main_manager.dart';
-import './home_page_state.dart';
-import './home_page_controller.dart';
-import './balance_card/balance_card.dart';
-import 'widgets/filter_dialog.dart';
-import 'widgets/transaction_dismissible_tile.dart';
+import '../../common/constants/themes/app_text_styles.dart';
+import '../../common/current_models/current_user.dart';
 import '../../common/extensions/app_scale.dart';
 import '../../common/models/extends_date.dart';
-import '../../common/widgets/custom_app_bar.dart';
+import '../../common/models/user_name_notifier.dart';
 import '../../common/widgets/app_top_border.dart';
-import '../../common/current_models/current_user.dart';
-import '../../common/constants/themes/app_text_styles.dart';
+import '../../common/widgets/custom_app_bar.dart';
 import '../../common/widgets/custom_circular_progress_indicator.dart';
 import '../../features/home_page/balance_card/balance_card_controller.dart';
+import '../../locator.dart';
+import '../help_manager/main_manager.dart';
+import './balance_card/balance_card.dart';
+import './home_page_controller.dart';
+import './home_page_state.dart';
+import 'widgets/empty_transactions.dart';
+import 'widgets/filter_dialog.dart';
 import 'widgets/home_popup_menu_buttons.dart';
+import 'widgets/transaction_dismissible_tile.dart';
 import 'widgets/update_message.dart';
 
 class HomePage extends StatefulWidget {
@@ -102,29 +86,6 @@ class _HomePageState extends State<HomePage>
         _listViewController.jumpTo(listViewPosition);
       }
     });
-  }
-
-  Widget noTransactions(AppLocalizations locale, Color primary) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(
-            'assets/images/no_trasactions.png',
-            width: 100,
-            height: 100,
-            fit: BoxFit.fitHeight,
-          ),
-          const SizedBox(height: 12),
-          Text(
-            locale.homePageNoTransactions,
-            style: AppTextStyles.textStyleMedium14.copyWith(
-              color: primary,
-            ),
-          ),
-        ],
-      ),
-    );
   }
 
   // Open filter dialog and set _filterText and _filterIsDescription
@@ -289,7 +250,7 @@ class _HomePageState extends State<HomePage>
                               );
                               _showTutorial = false;
                             }
-                            return noTransactions(locale, primary);
+                            return EmptyTransactions(color: primary);
                           }
                           _showTutorial = false;
 
@@ -338,7 +299,7 @@ class _HomePageState extends State<HomePage>
                         }
 
                         // State Error...
-                        return noTransactions(locale, primary);
+                        return EmptyTransactions(color: primary);
                       },
                     ),
                   ),

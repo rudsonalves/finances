@@ -1,9 +1,4 @@
 import 'dart:developer';
-import 'dart:io';
-
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:sqflite/sqflite.dart';
 
 import '../../locator.dart';
 import '../constants/constants.dart';
@@ -118,15 +113,7 @@ class DatabaseProvide implements DatabaseProvider {
 
   @override
   Future<void> deleteDatabase() async {
-    final Directory directory = await getApplicationDocumentsDirectory();
-    final String path = join(directory.path, dbName);
-    final database = await _databaseManager.database;
-
-    if (database.isOpen) {
-      await database.close();
-    }
-
-    await databaseFactory.deleteDatabase(path);
+    await _databaseManager.deleteDatabase();
   }
 
   @override

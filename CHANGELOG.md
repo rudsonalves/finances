@@ -1,5 +1,52 @@
 # Changelog
 
+## 2026/09/01 - revision/task-07a
+
+1. **Home balance card**
+   - Added a visibility control that masks and restores the current balance while preserving positive and negative color behavior.
+   - Enabled injection of currency formatting, current balance, and current account dependencies to improve isolation and testability.
+   - Updated income and expense rendering to receive its currency formatter explicitly.
+
+2. **Home page**
+   - Extracted the empty-transactions presentation into the reusable `EmptyTransactions` widget.
+   - Reused the component for both empty and error states.
+
+3. **Home page navigation**
+   - Added optional controller and page injection to `HomePageView`, allowing navigation flows to run with controlled dependencies and custom page content.
+
+4. **Transaction dialog**
+   - Added injectable transaction, home-page, and category controllers.
+   - Ensured externally supplied transaction controllers are not disposed by the dialog.
+   - Reused the injected category controller for initialization and category refresh operations.
+
+5. **Dependency configuration**
+   - Extended `setupDependencies` to accept optional authentication and database manager implementations while retaining production defaults.
+
+6. **Database lifecycle**
+   - Added database path access and centralized close-and-delete behavior in `DatabaseManager`.
+   - Updated the database provider to delegate deletion to the configured manager, supporting custom database locations.
+
+7. **End-to-end runtime**
+   - Added a dedicated E2E entry point that requires the Firebase Authentication emulator and prevents accidental production authentication use.
+   - Configured an isolated E2E database file, initialized application dependencies, and prepared the database before startup.
+
+8. **Tests**
+   - Added widget coverage for balance colors, balance visibility toggling, and the empty-transactions state.
+   - Added transaction-dialog tests for validation, category selection, and switching between expense and income modes.
+   - Added flow tests covering transaction creation and OFX file selection, confirmation, import, and displayed result updates.
+
+9. **Dependencies**
+   - Added Flutter’s `integration_test` development dependency and its required transitive driver packages.
+
+10. **Documentation**
+    - Moved the persistence, migrations, and backup backlog document into the closed backlog directory to record its completion.
+
+### Conclusion
+
+This revision improves privacy controls on the balance card and extracts reusable empty-state UI.
+
+It also introduces dependency injection points and an isolated E2E runtime, enabling broader widget and workflow test coverage without coupling tests to production services.
+
 ## 2026/09/01 - revision/task-06b
 
 1. **Database backup and restoration**

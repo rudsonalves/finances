@@ -38,6 +38,15 @@ class DatabaseManager {
 
   String get dbSchemeVersion => DatabaseMigrations.dbSchemeVersion;
 
+  Future<String> get databasePath => _databasePathProvider();
+
+  Future<void> deleteDatabase() async {
+    await databaseClose();
+
+    final path = await databasePath;
+    await _databaseFactory.deleteDatabase(path);
+  }
+
   Future<Database> _initDatabase() async {
     final path = await _databasePathProvider();
 

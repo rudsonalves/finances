@@ -1,42 +1,38 @@
-// Copyright (C) 2024 rudson
-//
-// This file is part of finances.
-//
-// finances is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// finances is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with finances.  If not, see <https://www.gnu.org/licenses/>.
-
 import 'package:flutter/material.dart';
 
+import '../../common/widgets/custom_botton_navigator_bar.dart';
+import '../../common/widgets/custom_floating_action_button.dart';
 import '../../locator.dart';
 import '../account/account_controller.dart';
+import '../account/account_page.dart';
 import '../account/widgets/add_account_page.dart';
 import '../categories/categories_controller.dart';
 import '../categories/categories_page.dart';
 import '../categories/widget/add_category_page.dart';
 import '../home_page/balance_card/balance_card_controller.dart';
 import '../home_page/home_page.dart';
-import '../account/account_page.dart';
+import '../home_page/home_page_controller.dart';
 import '../ofx_page/ofx_page.dart';
 import '../ofx_page/ofx_page_controller.dart';
 import '../statistics/statistic_controller.dart';
 import '../statistics/statistics_page.dart';
-import '../home_page/home_page_controller.dart';
-import '../../common/widgets/custom_floating_action_button.dart';
-import '../../common/widgets/custom_botton_navigator_bar.dart';
 import '../transaction/transaction_dialog.dart';
 
 class HomePageView extends StatefulWidget {
-  const HomePageView({super.key});
+  final HomePageController? homePageController;
+  final BalanceCardController? balanceCardController;
+  final StatisticsController? statisticsController;
+  final OfxPageController? ofxPageController;
+  final List<Widget>? pages;
+
+  const HomePageView({
+    super.key,
+    this.homePageController,
+    this.balanceCardController,
+    this.statisticsController,
+    this.ofxPageController,
+    this.pages,
+  });
 
   @override
   State<HomePageView> createState() => _HomePageViewState();
@@ -44,10 +40,10 @@ class HomePageView extends StatefulWidget {
 
 class _HomePageViewState extends State<HomePageView> {
   final _pageController = PageController();
-  final _homePageController = locator<HomePageController>();
-  final _balanceCardController = locator<BalanceCardController>();
-  final _statisticsController = locator<StatisticsController>();
-  final _ofxPageController = locator<OfxPageController>();
+  late final HomePageController _homePageController;
+  late final BalanceCardController _balanceCardController;
+  late final StatisticsController _statisticsController;
+  late final OfxPageController _ofxPageController;
 
   bool _floatAppButton = true;
   int _pageIndex = 0;
@@ -62,6 +58,16 @@ class _HomePageViewState extends State<HomePageView> {
   @override
   void initState() {
     super.initState();
+
+    _homePageController =
+        widget.homePageController ?? locator<HomePageController>();
+    _balanceCardController =
+        widget.balanceCardController ?? locator<BalanceCardController>();
+    _statisticsController =
+        widget.statisticsController ?? locator<StatisticsController>();
+    _ofxPageController =
+        widget.ofxPageController ?? locator<OfxPageController>();
+
     _pageIndex = 0;
     _addFunction = addTransaction;
     _floatAppButton = true;
@@ -194,13 +200,14 @@ class _HomePageViewState extends State<HomePageView> {
         body: PageView(
           physics: const NeverScrollableScrollPhysics(),
           controller: _pageController,
-          children: const [
-            HomePage(),
-            AccountPage(),
-            CategoriesPage(),
-            OfxPage(),
-            StatisticsPage(),
-          ],
+          children: widget.pages ??
+              const [
+                HomePage(),
+                AccountPage(),
+                CategoriesPage(),
+                OfxPage(),
+                StatisticsPage(),
+              ],
         ),
       ),
     );

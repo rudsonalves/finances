@@ -1,78 +1,66 @@
-// Copyright (C) 2024 rudson
-//
-// This file is part of finances.
-//
-// finances is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// finances is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with finances. If not, see <https://www.gnu.org/licenses/>.
-
 import 'dart:developer';
 
 import 'package:get_it/get_it.dart';
 
-import './common/extensions/app_scale.dart';
-import './common/models/categories_icons.dart';
-import 'features/ofx_page/ofx_page_controller.dart';
-import 'repositories/database/abstract_database_repository.dart';
-import 'repositories/database/database_repository.dart';
-import 'repositories/user/abstract_user_repository.dart';
-import './features/splash/splash_controller.dart';
+import './common/current_models/current_balance.dart';
+import './common/current_models/current_language.dart';
+import './common/current_models/current_theme.dart';
 import './common/current_models/current_user.dart';
+import './common/extensions/app_scale.dart';
 import './common/extensions/money_masked_text.dart';
+import './common/models/categories_icons.dart';
+import './features/home_page/balance_card/balance_card_controller.dart';
+import './features/home_page/home_page_controller.dart';
 import './features/sign_in/sign_in_controller.dart';
 import './features/sign_up/sign_up_controller.dart';
-import './common/current_models/current_theme.dart';
-import 'common/current_models/current_account.dart';
+import './features/splash/splash_controller.dart';
+import './features/transaction/transaction_controller.dart';
 import './services/authentication/auth_service.dart';
-import './common/current_models/current_balance.dart';
+import './services/authentication/firebase_auth_service.dart';
+import 'common/constants/themes/app_icons.dart';
+import 'common/current_models/current_account.dart';
 import 'common/models/app_locale.dart';
+import 'common/models/icons_model.dart';
 import 'common/models/user_name_notifier.dart';
 import 'features/account/account_controller.dart';
 import 'features/categories/categories_controller.dart';
+import 'features/ofx_page/ofx_page_controller.dart';
 import 'features/statistics/statistic_card/statistic_card_controller.dart';
 import 'features/statistics/statistic_controller.dart';
 import 'repositories/account/abstract_account_repository.dart';
-import './common/current_models/current_language.dart';
-import './features/home_page/home_page_controller.dart';
-import 'repositories/balance/abstract_balance_repository.dart';
-import 'repositories/category/abstract_category_repository.dart';
-import 'repositories/user/user_repository.dart';
-import './features/transaction/transaction_controller.dart';
-import './services/authentication/firebase_auth_service.dart';
 import 'repositories/account/account_repository.dart';
+import 'repositories/balance/abstract_balance_repository.dart';
 import 'repositories/balance/balance_repository.dart';
-import 'repositories/transaction/abstract_transaction_repository.dart';
+import 'repositories/category/abstract_category_repository.dart';
 import 'repositories/category/category_repository.dart';
-import './features/home_page/balance_card/balance_card_controller.dart';
-import 'repositories/transaction/transaction_repository.dart';
-import 'common/constants/themes/app_icons.dart';
-import 'common/models/icons_model.dart';
-import 'repositories/icons/abstract_icons_repository.dart';
-import 'repositories/icons/icons_repository.dart';
-import 'repositories/transfer/transfer_repository.dart';
-import 'repositories/transfer/abstract_transfer_repository.dart';
+import 'repositories/database/abstract_database_repository.dart';
+import 'repositories/database/database_repository.dart';
 import 'repositories/financial_operation/abstract_financial_operation_repository.dart';
 import 'repositories/financial_operation/financial_operation_repository.dart';
+import 'repositories/icons/abstract_icons_repository.dart';
+import 'repositories/icons/icons_repository.dart';
+import 'repositories/transaction/abstract_transaction_repository.dart';
+import 'repositories/transaction/transaction_repository.dart';
+import 'repositories/transfer/abstract_transfer_repository.dart';
+import 'repositories/transfer/transfer_repository.dart';
+import 'repositories/user/abstract_user_repository.dart';
+import 'repositories/user/user_repository.dart';
 import 'store/database/database_manager.dart';
 
 final locator = GetIt.instance;
 
-void setupDependencies() {
+void setupDependencies({
+  AuthService? authService,
+  DatabaseManager? databaseManager,
+}) {
   try {
     locator.registerSingleton<AuthService>(
-      FirebaseAuthService(),
+      authService ?? FirebaseAuthService(),
     );
 
-    locator.registerSingleton<DatabaseManager>(DatabaseManager());
+    locator.registerSingleton<DatabaseManager>(
+      databaseManager ?? DatabaseManager(),
+    );
 
     locator.registerSingleton<AbstractDatabaseRepository>(
       DatabaseRepository(),
