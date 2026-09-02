@@ -1,32 +1,15 @@
-// Copyright (C) 2024 rudson
-//
-// This file is part of finances.
-//
-// finances is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// finances is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with finances. If not, see <https://www.gnu.org/licenses/>.
-
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:finances/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
 
-import './locator.dart';
 import './common/constants/routes/app_route.dart';
-import './common/current_models/current_theme.dart';
-import './common/current_models/current_language.dart';
-import './common/constants/themes/colors/custom_color.g.dart';
 import './common/constants/themes/colors/color_schemes.g.dart';
+import './common/constants/themes/colors/custom_color.g.dart';
+import './common/current_models/current_language.dart';
+import './common/current_models/current_theme.dart';
+import './locator.dart';
 
 class AppFinances extends StatelessWidget {
   const AppFinances({super.key});
@@ -45,11 +28,9 @@ class AppFinances extends StatelessWidget {
           lightScheme = lightDynamic.harmonized();
           lightCustomColors = lightCustomColors.harmonized(lightScheme);
 
-          // Repeat for the dark color scheme.
           darkScheme = darkDynamic.harmonized();
           darkCustomColors = darkCustomColors.harmonized(darkScheme);
         } else {
-          // Otherwise, use fallback schemes.
           lightScheme = lightColorScheme;
           darkScheme = darkColorScheme;
         }

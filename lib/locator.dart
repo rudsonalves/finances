@@ -205,23 +205,5 @@ void disposeDependencies() {
   locator<SplashController>().dispose();
   locator<SignUpController>().dispose();
   locator<SignInController>().dispose();
-  // locator<TransDayRepository>().dispose();
-  // locator<BalanceRepository>().dispose();
-  // locator<TransferRepository>().dispose();
-  // locator<TransactionRepository>().dispose();
-  // locator<CategoryRepository>().dispose();
-  // locator<AccountRepository>().dispose();
-  // locator<IconRepository>().dispose();
-  // locator<UserRepository>().dispose();
-  // locator<AppScale>().dispose();
-  // locator<MoneyMaskedText>().dispose();
-  // locator<CategoriesIcons>().dispose();
-  // locator<CurrentLanguage>().dispose();
-  // locator<CurrentTheme>().dispose();
-  // locator<CurrentBalance>().dispose();
-  // locator<CurrentAccount>().dispose();
-  // locator<CurrentUser>().dispose();
-  // locator<DatabaseHelper>().dispose();
-  // locator<AuthService>().dispose();
   locator<AbstractDatabaseRepository>().dispose();
 }

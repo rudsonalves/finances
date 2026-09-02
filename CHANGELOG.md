@@ -1,5 +1,22 @@
 # Changelog
 
+## 2026/09/02 - revision/ajustes-01
+
+1. **Application entry points and configuration (`lib/app_finances.dart`, `lib/main.dart`, `lib/firebase_options.dart`)**
+   - Removed copyright, license, generated-file, and usage comments to reduce source-file boilerplate.
+   - Reorganized imports for consistent grouping and ordering.
+   - Removed redundant comments from dynamic color selection while preserving harmonized system colors and fallback theme behavior.
+   - Simplified Firebase options documentation without changing platform-specific configuration behavior.
+
+2. **Dependency lifecycle (`lib/locator.dart`)**
+   - Removed obsolete commented-out disposal calls, leaving only the active controller and database repository cleanup operations.
+
+### Conclusion
+
+This revision streamlines application bootstrap, Firebase configuration, theme setup, and dependency disposal sources by removing outdated comments and organizing imports.
+
+No functional behavior was changed.
+
 ## 2026/09/02 - revision/task-08
 
 1. **Project testing guidelines**
