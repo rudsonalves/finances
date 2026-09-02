@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026/09/02 - revision/ajustes-02
+
+1. **Database recovery**
+   - Check the backup repository result before reporting a successful restoration.
+   - Display the localized retrieval error with the selected filename when restoration fails.
+   - Prevent application restart and success messaging after an unsuccessful restore attempt.
+
+### Conclusion
+
+Database recovery now accurately communicates failed restore operations and continues only after a confirmed successful restoration.
+
 ## 2026/09/02 - revision/ajustes-01
 
 1. **Application entry points and configuration (`lib/app_finances.dart`, `lib/main.dart`, `lib/firebase_options.dart`)**

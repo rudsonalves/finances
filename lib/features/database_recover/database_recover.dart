@@ -18,11 +18,11 @@
 import 'dart:developer';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:finances/l10n/app_localizations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:path/path.dart' as path;
-import 'package:finances/l10n/app_localizations.dart';
 import 'package:restart_app/restart_app.dart';
 
 import '../../common/constants/routes/app_route.dart';
@@ -71,7 +71,14 @@ class _DatabaseRecoverState extends State<DatabaseRecover> {
           return;
         }
 
-        await _backupRepository.restoreBackup(path);
+        final restored = await _backupRepository.restoreBackup(path);
+
+        if (!restored) {
+          setState(() {
+            _message = locale.databaseRecoverSorryRetrieving(selectedFileName);
+          });
+          return;
+        }
 
         setState(() {
           _message = locale.databaseRecoverRetrievedSuccessfully;
