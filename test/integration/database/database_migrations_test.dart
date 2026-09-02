@@ -1,3 +1,4 @@
+import 'package:finances/common/models/extends_date.dart';
 import 'package:finances/store/constants/constants.dart';
 import 'package:finances/store/database/database_migrations.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -749,5 +750,147 @@ void main() {
         ],
       );
     });
+
+    test(
+      'migração 1014 preserva dados e instala triggers sem deriva monetária',
+      () async {
+        await database.execute(
+          '''
+      CREATE TABLE $balanceTable (
+        $balanceId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        $balanceAccountId INTEGER NOT NULL,
+        $balanceDate INTEGER NOT NULL,
+        $balanceTransCount INTEGER DEFAULT 0,
+        $balanceOpen REAL NOT NULL,
+        $balanceClose REAL NOT NULL
+      )
+      ''',
+        );
+
+        await database.execute(
+          '''
+      CREATE TABLE $transactionsTable (
+        $transId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        $transBalanceId INTEGER NOT NULL,
+        $transAccountId INTEGER NOT NULL,
+        $transValue REAL NOT NULL,
+        $transDate INTEGER NOT NULL
+      )
+      ''',
+        );
+
+        await database.execute(
+          '''
+      CREATE TRIGGER $triggerAfterInsertTransaction
+      AFTER INSERT ON $transactionsTable
+      FOR EACH ROW
+      BEGIN
+        UPDATE $balanceTable
+        SET $balanceClose = $balanceClose + NEW.$transValue,
+            $balanceTransCount = IFNULL($balanceTransCount, 0) + 1
+        WHERE $balanceId = NEW.$transBalanceId;
+      END
+      ''',
+        );
+
+        final date = ExtendedDate(2026, 9, 2).millisecondsSinceEpoch;
+
+        final balanceIdValue = await database.insert(
+          balanceTable,
+          {
+            balanceAccountId: 1,
+            balanceDate: date,
+            balanceTransCount: 0,
+            balanceOpen: 0.0,
+            balanceClose: 0.0,
+          },
+        );
+
+        final existingTransactionId = await database.insert(
+          transactionsTable,
+          {
+            transBalanceId: balanceIdValue,
+            transAccountId: 1,
+            transValue: -5.0,
+            transDate: date,
+          },
+        );
+
+        await DatabaseMigrations.applyMigrations(
+          db: database,
+          currentVersion: 1013,
+          targetVersion: 1014,
+        );
+
+        final preservedTransactions = await database.query(
+          transactionsTable,
+          where: '$transId = ?',
+          whereArgs: [existingTransactionId],
+        );
+
+        expect(preservedTransactions, hasLength(1));
+
+        final installedTriggers = await database.rawQuery(
+          '''
+      SELECT name, sql
+      FROM sqlite_master
+      WHERE type = 'trigger'
+        AND name IN (?, ?)
+      ORDER BY name
+      ''',
+          [
+            triggerAfterDeleteTransaction,
+            triggerAfterInsertTransaction,
+          ],
+        );
+
+        expect(installedTriggers, hasLength(2));
+
+        for (final trigger in installedTriggers) {
+          expect(
+            (trigger['sql'] as String).toUpperCase(),
+            contains('ROUND('),
+          );
+        }
+
+        for (var index = 0; index < 100; index++) {
+          await database.insert(
+            transactionsTable,
+            {
+              transBalanceId: balanceIdValue,
+              transAccountId: 1,
+              transValue: -0.01,
+              transDate: date,
+            },
+          );
+        }
+
+        var balance = (await database.query(
+          balanceTable,
+          where: '$balanceId = ?',
+          whereArgs: [balanceIdValue],
+        ))
+            .single;
+
+        expect(balance[balanceClose], -6.0);
+        expect(balance[balanceTransCount], 101);
+
+        await database.delete(
+          transactionsTable,
+          where: '$transId != ?',
+          whereArgs: [existingTransactionId],
+        );
+
+        balance = (await database.query(
+          balanceTable,
+          where: '$balanceId = ?',
+          whereArgs: [balanceIdValue],
+        ))
+            .single;
+
+        expect(balance[balanceClose], -5.0);
+        expect(balance[balanceTransCount], 1);
+      },
+    );
   });
 }

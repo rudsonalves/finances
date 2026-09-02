@@ -76,6 +76,46 @@ void main() {
     expect(_toCents(balances[1][balanceClose] as num), 2550);
   });
 
+  test('não acumula deriva ao somar várias operações de um centavo', () async {
+    final date = ExtendedDate(2026, 9, 2);
+
+    for (var index = 0; index < 100; index++) {
+      final origin = createFakeTransaction(
+        id: null,
+        balanceId: null,
+        accountId: 1,
+        value: -0.01,
+        date: date,
+      );
+
+      await repository.addTransfer(
+        origin: origin,
+        destinationAccountId: 2,
+      );
+    }
+
+    final balances = await database.query(
+      balanceTable,
+      orderBy: balanceAccountId,
+    );
+
+    expect(balances, hasLength(2));
+
+    final originBalance = (balances[0][balanceClose] as num).toDouble();
+    final destinationBalance = (balances[1][balanceClose] as num).toDouble();
+
+    expect(
+      originBalance,
+      -1.0,
+      reason: 'Cem débitos de um centavo devem totalizar exatamente -1.00.',
+    );
+    expect(
+      destinationBalance,
+      1.0,
+      reason: 'Cem créditos de um centavo devem totalizar exatamente 1.00.',
+    );
+  });
+
   test('faz rollback quando a segunda transação não pode ser inserida',
       () async {
     await database.execute('''

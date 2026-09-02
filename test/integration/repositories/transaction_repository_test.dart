@@ -534,5 +534,98 @@ void main() {
         );
       });
     });
+
+    test('calcula totais mensais sem expor deriva monetária', () async {
+      final date = ExtendedDate(2026, 8, 15);
+
+      for (var index = 0; index < 100; index++) {
+        await database.insert(
+          transactionsTable,
+          <String, Object?>{
+            transBalanceId: 1,
+            transAccountId: 1,
+            transDescription: 'Receita de um centavo $index',
+            transCategoryId: 1,
+            transValue: 0.01,
+            transStatus: 1,
+            transDate: date.millisecondsSinceEpoch,
+          },
+        );
+
+        await database.insert(
+          transactionsTable,
+          <String, Object?>{
+            transBalanceId: 1,
+            transAccountId: 1,
+            transDescription: 'Despesa de um centavo $index',
+            transCategoryId: 1,
+            transValue: -0.01,
+            transStatus: 1,
+            transDate: date.millisecondsSinceEpoch,
+          },
+        );
+      }
+
+      final cardBalance = CardBalanceModel();
+
+      await repository.getCardBalance(
+        cardBalance: cardBalance,
+        date: date,
+      );
+
+      expect(
+        cardBalance.incomes,
+        1.0,
+        reason: 'Cem receitas de um centavo devem totalizar exatamente 1.00.',
+      );
+      expect(
+        cardBalance.expanses,
+        -1.0,
+        reason: 'Cem despesas de um centavo devem totalizar exatamente -1.00.',
+      );
+    });
+
+    test('agrupa valores por categoria sem expor deriva monetária', () async {
+      final date = ExtendedDate(2026, 8, 15);
+
+      for (var index = 0; index < 100; index++) {
+        await database.insert(
+          transactionsTable,
+          <String, Object?>{
+            transBalanceId: 1,
+            transAccountId: 1,
+            transDescription: 'Despesa de um centavo $index',
+            transCategoryId: 1,
+            transValue: -0.01,
+            transStatus: 1,
+            transDate: date.millisecondsSinceEpoch,
+          },
+        );
+      }
+
+      final startDate = ExtendedDate(2026, 8, 1).millisecondsSinceEpoch;
+      final endDate = ExtendedDate(
+        2026,
+        8,
+        31,
+        23,
+        59,
+        59,
+        999,
+      ).millisecondsSinceEpoch;
+
+      final result = await statisticRepository.getTransactionSumsByCategory(
+        startDate: startDate,
+        endDate: endDate,
+      );
+
+      expect(result, isNotNull);
+      expect(result, hasLength(1));
+      expect(
+        result!.single['totalSum'],
+        -1.0,
+        reason: 'Cem despesas de um centavo devem totalizar exatamente -1.00.',
+      );
+    });
   });
 }

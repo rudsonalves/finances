@@ -7,7 +7,7 @@ import '../constants/constants.dart';
 class DatabaseMigrations {
   DatabaseMigrations._();
 
-  static const databaseSchemeVersion = 1013;
+  static const databaseSchemeVersion = 1014;
 
   static String get dbSchemeVersion {
     String version = databaseSchemeVersion.toString();
@@ -325,6 +325,12 @@ class DatabaseMigrations {
     ],
     1013: [
       createTransactionsAccountDateIndexSQL,
+    ],
+    1014: [
+      'DROP TRIGGER IF EXISTS $triggerAfterInsertTransaction',
+      'DROP TRIGGER IF EXISTS $triggerAfterDeleteTransaction',
+      createTriggerAfterInsertTransaction,
+      createTriggerAfterDeleteTransaction,
     ],
   };
 

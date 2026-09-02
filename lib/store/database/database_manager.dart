@@ -6,15 +6,23 @@ import '../constants/constants.dart';
 import '../tables_creators.dart';
 import 'database_migrations.dart';
 
+typedef DatabaseSchemaCreator = Future<void> Function(
+  Database database,
+  int version,
+);
+
 class DatabaseManager {
   DatabaseManager({
     DatabaseFactory? factory,
     Future<String> Function()? databasePathProvider,
+    DatabaseSchemaCreator? schemaCreator,
   })  : _databaseFactory = factory ?? databaseFactory,
-        _databasePathProvider = databasePathProvider ?? _defaultDatabasePath;
+        _databasePathProvider = databasePathProvider ?? _defaultDatabasePath,
+        _schemaCreator = schemaCreator;
 
   final DatabaseFactory _databaseFactory;
   final Future<String> Function() _databasePathProvider;
+  final DatabaseSchemaCreator? _schemaCreator;
 
   Database? _database;
 
@@ -63,8 +71,12 @@ class DatabaseManager {
   }
 
   Future<void> _onCreate(Database db, int version) async {
-    final batch = db.batch();
+    if (_schemaCreator != null) {
+      await _schemaCreator(db, version);
+      return;
+    }
 
+    final batch = db.batch();
     TablesCreators.createAppControlTable(batch);
     TablesCreators.createUsersTable(batch);
     TablesCreators.createIconsTable(batch);

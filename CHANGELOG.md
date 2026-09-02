@@ -1,5 +1,41 @@
 # Changelog
 
+## 2026/09/02 - revision/task-08
+
+1. **Project testing guidelines**
+   - Added `AGENTS.md` with guidance to automate deterministic unit, widget, SQLite, migration, repository, controller, parser, and controlled-dependency tests.
+   - Defined device-, emulator-, Firebase-, platform-, permission-, restart-, and process-persistence-dependent E2E scenarios as manual tests requiring reproducible instructions and user-recorded evidence.
+
+2. **Database and monetary precision**
+   - Updated transaction insert and delete triggers to round opening and closing balances to two decimal places, preventing accumulated floating-point drift.
+   - Advanced the database schema to version `1014` and added a migration that replaces existing transaction triggers with their rounded versions while preserving stored data.
+   - Added an injectable schema creator to `DatabaseManager`, enabling deterministic schema-initialization failure testing without suppressing errors.
+
+3. **Database regression tests**
+   - Added coverage confirming schema creation failures propagate to callers.
+   - Added migration coverage verifying that version `1014` preserves transactions, installs both rounded triggers, maintains transaction counts, and restores exact balances after repeated cent operations are removed.
+   - Added repository coverage proving that 100 one-cent transfers produce exact `-1.00` and `1.00` balances.
+   - Added aggregation coverage ensuring monthly income, expense, and category totals do not expose monetary drift.
+
+4. **E2E infrastructure and dependencies**
+   - Removed the dedicated Firebase Auth Emulator E2E entry point.
+   - Disabled the `integration_test` development dependency and removed its related transitive packages from the lockfile, aligning the project with the documented manual-testing policy for environment-dependent E2E scenarios.
+
+5. **Backlog documentation**
+   - Moved the master testing plan and critical widget-flow backlog into the closed backlog directory.
+   - Marked all Task 7 widget, smoke, and E2E items as completed.
+   - Replaced the original Task 8 checklist with a closed, detailed regression inventory covering atomic transfers, atomic transaction updates, schema error propagation, foreign-key restoration after migration failures, and monetary precision.
+   - Documented severity, reproduction, impact, fixes, regression tests, acceptance criteria, validation evidence, and residual precision risk for each recorded bug.
+
+6. **Gradle diagnostics**
+   - Added the generated Android Gradle problems report documenting eight deprecation warnings for Groovy property assignment syntax scheduled for removal in Gradle 10.
+
+### Conclusion
+
+This revision closes the testing and bug-regression backlogs, strengthens deterministic database validation, and prevents two-decimal monetary balances from accumulating floating-point drift.
+
+It also removes automated E2E infrastructure that depends on external runtime environments and records current Gradle compatibility warnings for future remediation.
+
 ## 2026/09/01 - revision/task-07a
 
 1. **Home balance card**

@@ -42,6 +42,31 @@ void main() {
       expect(tableNames, contains(ofxImportedTransactionsTable));
     });
 
+    test('propaga falha ocorrida durante a criação do schema', () async {
+      final expectedError = StateError(
+        'Falha intencional na criação do schema',
+      );
+
+      manager = DatabaseManager(
+        factory: initializeFfiDatabase(),
+        databasePathProvider: () async => inMemoryDatabasePath,
+        schemaCreator: (_, __) async {
+          throw expectedError;
+        },
+      );
+
+      await expectLater(
+        manager.database,
+        throwsA(
+          isA<StateError>().having(
+            (error) => error.message,
+            'message',
+            expectedError.message,
+          ),
+        ),
+      );
+    });
+
     test('habilita foreign keys durante a abertura', () async {
       final database = await manager.database;
       final result = await database.rawQuery('PRAGMA foreign_keys');
