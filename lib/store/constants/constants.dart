@@ -1,20 +1,3 @@
-// Copyright (C) 2024 rudson
-//
-// This file is part of finances.
-//
-// finances is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// finances is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with finances. If not, see <https://www.gnu.org/licenses/>.
-
 const dbName = 'app_dataBase.db';
 const dbVersion = 1;
 
@@ -78,6 +61,7 @@ const categoryIsIncome = 'categoryIsIncome';
 const transactionsTable = 'transactionsTable';
 const transactionsDateIndex = 'idxTransactionsDate';
 const transactionsCategoryIndex = 'idxTransactionsCategory';
+const transactionsAccountDateIndex = 'idxTransactionsAccountDate';
 const transId = 'transId';
 const transBalanceId = 'transBalanceId';
 const transAccountId = 'transAccountId';
@@ -123,6 +107,14 @@ const ofxTransAccountId = 'accountId';
 const ofxTransCategoryId = 'categoryId';
 const ofxTransDescription = 'description';
 const ofxTransTransferAccountId = 'transferAccountId';
+
+const ofxImportedTransactionsTable = 'ofxImportedTransactionsTable';
+const ofxImportedTransactionId = 'id';
+const ofxImportedTransactionOfxAccountId = 'ofxAccountId';
+const ofxImportedTransactionInstitutionId = 'institutionId';
+const ofxImportedTransactionBankAccountId = 'bankAccountId';
+const ofxImportedTransactionFitId = 'fitId';
+const ofxImportedTransactionUniqueIndex = 'idxOfxImportedTransactionUnique';
 
 const triggerAfterInsertTransaction = 'tr_after_insert_transaction';
 const triggerAfterDeleteTransaction = 'tr_after_delete_transaction';
@@ -247,6 +239,10 @@ const createTransactionsCategoryIndexSQL =
     'CREATE INDEX IF NOT EXISTS $transactionsCategoryIndex'
     ' ON $transactionsTable ($transCategoryId)';
 
+const createTransactionsAccountDateIndexSQL =
+    'CREATE INDEX IF NOT EXISTS $transactionsAccountDateIndex'
+    ' ON $transactionsTable ($transAccountId, $transDate)';
+
 const createTransfersSQL = 'CREATE TABLE IF NOT EXISTS $transfersTable ('
     ' $transferId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
     ' $transferTransId0 INTEGER,'
@@ -322,18 +318,38 @@ const createOfxTransAccountIndexSQL =
     'CREATE INDEX IF NOT EXISTS $ofxTransAccountIndex'
     ' ON $ofxTransTemplateTable ($ofxTransAccountId)';
 
+const createOfxImportedTransactionsSQL =
+    'CREATE TABLE IF NOT EXISTS $ofxImportedTransactionsTable ('
+    ' $ofxImportedTransactionId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+    ' $ofxImportedTransactionOfxAccountId INTEGER NOT NULL,'
+    ' $ofxImportedTransactionInstitutionId TEXT NOT NULL,'
+    ' $ofxImportedTransactionBankAccountId TEXT NOT NULL,'
+    ' $ofxImportedTransactionFitId TEXT NOT NULL,'
+    ' FOREIGN KEY ($ofxImportedTransactionOfxAccountId)'
+    '   REFERENCES $ofxACCTable ($ofxACCId)'
+    '   ON DELETE CASCADE'
+    ')';
+
+const createOfxImportedTransactionUniqueIndexSQL =
+    'CREATE UNIQUE INDEX IF NOT EXISTS $ofxImportedTransactionUniqueIndex'
+    ' ON $ofxImportedTransactionsTable ('
+    ' $ofxImportedTransactionInstitutionId,'
+    ' $ofxImportedTransactionBankAccountId,'
+    ' $ofxImportedTransactionFitId'
+    ' )';
+
 const createTriggerAfterInsertTransaction =
     'CREATE TRIGGER IF NOT EXISTS $triggerAfterInsertTransaction'
     ' AFTER INSERT ON $transactionsTable'
     ' FOR EACH ROW'
     ' BEGIN'
     '   UPDATE $balanceTable'
-    '   SET $balanceClose = $balanceClose + NEW.$transValue,'
+    '   SET $balanceClose = ROUND($balanceClose + NEW.$transValue, 2),'
     '       $balanceTransCount = IFNULL($balanceTransCount, 0) + 1'
     '   WHERE $balanceId = NEW.$transBalanceId;'
     '   UPDATE $balanceTable'
-    '   SET $balanceClose = $balanceClose + NEW.$transValue,'
-    '       $balanceOpen = $balanceOpen + NEW.$transValue'
+    '   SET $balanceClose = ROUND($balanceClose + NEW.$transValue, 2),'
+    '       $balanceOpen = ROUND($balanceOpen + NEW.$transValue, 2)'
     '   WHERE $balanceDate > NEW.$transDate'
     '     AND $balanceAccountId = NEW.$transAccountId;'
     ' END';
@@ -344,12 +360,12 @@ const createTriggerAfterDeleteTransaction =
     ' FOR EACH ROW'
     ' BEGIN'
     '   UPDATE $balanceTable'
-    '   SET $balanceClose = $balanceClose - OLD.$transValue,'
+    '   SET $balanceClose = ROUND($balanceClose - OLD.$transValue, 2),'
     '       $balanceTransCount = IFNULL($balanceTransCount, 0) - 1'
     '   WHERE $balanceId = OLD.$transBalanceId;'
     '   UPDATE $balanceTable'
-    '   SET $balanceClose = $balanceClose - OLD.$transValue,'
-    '       $balanceOpen = $balanceOpen - OLD.$transValue'
+    '   SET $balanceClose = ROUND($balanceClose - OLD.$transValue, 2),'
+    '       $balanceOpen = ROUND($balanceOpen - OLD.$transValue, 2)'
     '   WHERE $balanceDate > OLD.$transDate'
     '     AND $balanceAccountId = OLD.$transAccountId;'
     ' END';

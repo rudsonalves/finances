@@ -1,39 +1,35 @@
-// Copyright (C) 2024 rudson
-//
-// This file is part of finances.
-//
-// finances is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// finances is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with finances. If not, see <https://www.gnu.org/licenses/>.
-
-import 'dart:developer';
-import 'dart:io';
-
 import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:sqflite/sqflite.dart';
 
 import '../constants/constants.dart';
-import 'database_migrations.dart';
 import '../tables_creators.dart';
+import 'database_migrations.dart';
 
-/// Manages all database operations for the application.
-///
-/// This class implements a singleton pattern to ensure that only one
-/// instance of the database is created and used throughout the application.
-/// It is responsible for initializing the database, executing migrations,
-/// and creating tables as defined in `TablesCreators`.
+typedef DatabaseSchemaCreator = Future<void> Function(
+  Database database,
+  int version,
+);
+
 class DatabaseManager {
-  static Database? _database;
+  DatabaseManager({
+    DatabaseFactory? factory,
+    Future<String> Function()? databasePathProvider,
+    DatabaseSchemaCreator? schemaCreator,
+  })  : _databaseFactory = factory ?? databaseFactory,
+        _databasePathProvider = databasePathProvider ?? _defaultDatabasePath,
+        _schemaCreator = schemaCreator;
+
+  final DatabaseFactory _databaseFactory;
+  final Future<String> Function() _databasePathProvider;
+  final DatabaseSchemaCreator? _schemaCreator;
+
+  Database? _database;
+
+  static Future<String> _defaultDatabasePath() async {
+    final directory = await getApplicationDocumentsDirectory();
+    return join(directory.path, dbName);
+  }
 
   Future<Database> get database async {
     if (_database != null) return _database!;
@@ -41,9 +37,6 @@ class DatabaseManager {
     return _database!;
   }
 
-  /// Gets the single instance of the database, initializing it if necessary.
-  ///
-  /// Returns the [Database] instance for use in database operations.
   Future<void> databaseClose() async {
     if (_database != null) {
       await _database!.close();
@@ -51,64 +44,57 @@ class DatabaseManager {
     _database = null;
   }
 
-  /// Retrieves the current database schema version as a string.
-  ///
-  /// The version is derived from `DatabaseMigrations.dbSchemeVersion`.
   String get dbSchemeVersion => DatabaseMigrations.dbSchemeVersion;
 
-  /// Closes the database connection and sets the instance to null.
-  ///
-  /// This method should be called when the database is no longer needed,
-  /// for example, when the application is being closed.
+  Future<String> get databasePath => _databasePathProvider();
+
+  Future<void> deleteDatabase() async {
+    await databaseClose();
+
+    final path = await databasePath;
+    await _databaseFactory.deleteDatabase(path);
+  }
+
   Future<Database> _initDatabase() async {
-    final Directory directory = await getApplicationDocumentsDirectory();
-    final String path = join(directory.path, dbName);
+    final path = await _databasePathProvider();
 
-    // Only to reset database
-    // databaseFactory.deleteDatabase(path);
-
-    _database = await openDatabase(
+    _database = await _databaseFactory.openDatabase(
       path,
-      version: dbVersion,
-      onCreate: _onCreate,
-      onConfigure: _onConfiguration,
+      options: OpenDatabaseOptions(
+        version: dbVersion,
+        onCreate: _onCreate,
+        onConfigure: _onConfiguration,
+      ),
     );
 
     return _database!;
   }
 
-  /// Callback for creating the database tables.
-  ///
-  /// This method is called the first time the database is created and
-  /// utilizes `TablesCreators` to set up the initial database schema.
   Future<void> _onCreate(Database db, int version) async {
-    try {
-      Batch batch = db.batch();
-      // Tables
-      TablesCreators.createAppControlTable(batch);
-      TablesCreators.createUsersTable(batch);
-      TablesCreators.createIconsTable(batch);
-      TablesCreators.createAccountsTable(batch);
-      TablesCreators.createBalanceTable(batch);
-      TablesCreators.createCategoryTable(batch);
-      TablesCreators.createTransactionsTable(batch);
-      TablesCreators.createTransfersTable(batch);
-      TablesCreators.createOfxAccuntTable(batch);
-      TablesCreators.createOfxRelationshipTable(batch);
-      TablesCreators.createOfxTransactionsTable(batch);
-      TablesCreators.createTriggers(batch);
-      await batch.commit();
-    } catch (err) {
-      log('Error: $err');
+    if (_schemaCreator != null) {
+      await _schemaCreator(db, version);
+      return;
     }
+
+    final batch = db.batch();
+    TablesCreators.createAppControlTable(batch);
+    TablesCreators.createUsersTable(batch);
+    TablesCreators.createIconsTable(batch);
+    TablesCreators.createAccountsTable(batch);
+    TablesCreators.createBalanceTable(batch);
+    TablesCreators.createCategoryTable(batch);
+    TablesCreators.createTransactionsTable(batch);
+    TablesCreators.createTransfersTable(batch);
+    TablesCreators.createOfxAccuntTable(batch);
+    TablesCreators.createOfxRelationshipTable(batch);
+    TablesCreators.createOfxTransactionsTable(batch);
+    TablesCreators.createOfxImportedTransactionsTable(batch);
+    TablesCreators.createTriggers(batch);
+
+    await batch.commit(noResult: true);
   }
 
-  /// Configures the database upon opening.
-  ///
-  /// Currently, this method enables foreign key support to ensure
-  /// referential integrity.
   Future<void> _onConfiguration(Database db) async {
-    // Add support for cascade delete
     await db.execute('PRAGMA foreign_keys = ON');
   }
 }

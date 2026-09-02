@@ -1,55 +1,44 @@
-// Copyright (C) 2024 rudson
-//
-// This file is part of finances.
-//
-// finances is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// finances is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with finances. If not, see <https://www.gnu.org/licenses/>.
-
-import 'package:flutter/material.dart';
 import 'package:finances/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
 
 import '../../common/constants/app_constants.dart';
+import '../../common/constants/themes/app_text_styles.dart';
 import '../../common/constants/themes/colors/custom_color.g.dart';
 import '../../common/models/category_db_model.dart';
-import 'widget/destiny_account_dropdown_form.dart';
+import '../../common/models/transaction_db_model.dart';
+import '../../common/validate/transaction_validator.dart';
+import '../../common/widgets/add_cancel_buttons.dart';
+import '../../common/widgets/autocomplete_text_form_field.dart';
+import '../../common/widgets/basic_text_form_field.dart';
+import '../../common/widgets/category_dropdown_form_field.dart';
+import '../../common/widgets/custom_circular_progress_indicator.dart';
+import '../../common/widgets/date_time_picker_form.dart';
+import '../../common/widgets/row_of_two_bottons.dart';
 import '../../common/widgets/simple_spin_box_field.dart';
+import '../../features/home_page/home_page_controller.dart';
+import '../../features/transaction/transaction_state.dart';
 import '../../locator.dart';
 import '../categories/categories_controller.dart';
 import '../categories/widget/add_category_page.dart';
 import './transaction_controller.dart';
-import '../../common/widgets/row_of_two_bottons.dart';
-import '../../common/widgets/add_cancel_buttons.dart';
-import '../../common/models/transaction_db_model.dart';
-import '../../common/widgets/date_time_picker_form.dart';
-import '../../common/widgets/basic_text_form_field.dart';
-import '../../common/validate/transaction_validator.dart';
-import '../../features/transaction/transaction_state.dart';
-import '../../features/home_page/home_page_controller.dart';
-import '../../common/constants/themes/app_text_styles.dart';
-import '../../common/widgets/category_dropdown_form_field.dart';
-import '../../common/widgets/autocomplete_text_form_field.dart';
-import '../../common/widgets/custom_circular_progress_indicator.dart';
+import 'widget/destiny_account_dropdown_form.dart';
 
 class TransactionDialog extends StatefulWidget {
   final bool addTransaction;
   final TransactionDbModel? transaction;
   final int? accountDestinyId;
+  final TransactionController? controller;
+  final HomePageController? homePageController;
+  final CategoriesController? categoriesController;
 
   const TransactionDialog({
     super.key,
     this.addTransaction = true,
     this.transaction,
     this.accountDestinyId,
+    this.controller,
+    this.homePageController,
+    this.categoriesController,
   });
 
   static Future<bool> showTransactionDialog(
@@ -57,6 +46,9 @@ class TransactionDialog extends StatefulWidget {
     bool addTransaction = true,
     TransactionDbModel? transaction,
     int? accountDestinyId,
+    TransactionController? controller,
+    HomePageController? homePageController,
+    CategoriesController? categoriesController,
   }) async {
     return await showDialog<bool>(
           context: context,
@@ -67,6 +59,9 @@ class TransactionDialog extends StatefulWidget {
                   addTransaction: addTransaction,
                   transaction: transaction,
                   accountDestinyId: accountDestinyId,
+                  controller: controller,
+                  homePageController: homePageController,
+                  categoriesController: categoriesController,
                 ),
               ),
             );
@@ -81,12 +76,13 @@ class TransactionDialog extends StatefulWidget {
 
 class _TransactionDialogState extends State<TransactionDialog> {
   final _focusNodeBasicTextFormField = FocusNode();
-  final _homePageController = locator<HomePageController>();
+  late final HomePageController _homePageController;
+  late final CategoriesController _categoriesController;
+  late final TransactionController _controller;
+  late final bool _ownsController;
 
   bool _lockCategory = false;
   bool _removeTransfer = false;
-
-  final _controller = TransactionController();
 
   final _formKey = GlobalKey<FormState>();
   final _originKey = GlobalKey<FormFieldState<int>>();
@@ -95,7 +91,16 @@ class _TransactionDialogState extends State<TransactionDialog> {
   @override
   void initState() {
     super.initState();
-    locator<CategoriesController>().init();
+    _homePageController =
+        widget.homePageController ?? locator<HomePageController>();
+
+    _categoriesController =
+        widget.categoriesController ?? locator<CategoriesController>();
+
+    _ownsController = widget.controller == null;
+    _controller = widget.controller ?? TransactionController();
+
+    _categoriesController.init();
 
     _controller.init(widget.transaction);
 
@@ -117,7 +122,9 @@ class _TransactionDialogState extends State<TransactionDialog> {
 
   @override
   void dispose() {
-    _controller.dispose();
+    if (_ownsController) {
+      _controller.dispose();
+    }
     _focusNodeBasicTextFormField.dispose();
     super.dispose();
   }
@@ -143,7 +150,7 @@ class _TransactionDialogState extends State<TransactionDialog> {
     final CategoryDbModel? newCategory = await showDialog(
       context: context,
       builder: (context) => AddCategoryPage(
-        callBack: locator<CategoriesController>().getAllCategories,
+        callBack: _categoriesController.getAllCategories,
       ),
     );
 
@@ -310,6 +317,7 @@ class _TransactionDialogState extends State<TransactionDialog> {
                         child: DateTimePickerForm(
                           controller: _controller.date,
                           labelText: locale.transPageDate,
+                          validator: transValidator.dateValidator,
                         ),
                       ),
                       // Installments - Repeat Monthly

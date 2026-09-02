@@ -1,20 +1,3 @@
-// Copyright (C) 2024 rudson
-//
-// This file is part of finances.
-//
-// finances is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// finances is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with finances.  If not, see <https://www.gnu.org/licenses/>.
-
 import 'dart:convert';
 
 import '../../locator.dart';
@@ -48,22 +31,25 @@ class CategoryDbModel {
       ')';
 
   Map<String, dynamic> toMap() {
-    if (categoryId != null) {
-      return <String, dynamic>{
-        'categoryId': categoryId,
-        'categoryName': categoryName,
-        'categoryIcon': categoryIcon.iconId!,
-        'categoryBudget': categoryBudget,
-        'categoryIsIncome': categoryIsIncome ? 1 : 0,
-      };
-    } else {
-      return <String, dynamic>{
-        'categoryName': categoryName,
-        'categoryIcon': categoryIcon.iconId!,
-        'categoryBudget': categoryBudget,
-        'categoryIsIncome': categoryIsIncome ? 1 : 0,
-      };
+    final int? iconId = categoryIcon.iconId;
+    if (iconId == null) {
+      throw StateError(
+        'CategoryDbModel cannot be serialized without categoryIcon.iconId.',
+      );
     }
+
+    final Map<String, dynamic> map = {
+      'categoryName': categoryName,
+      'categoryIcon': iconId,
+      'categoryBudget': categoryBudget,
+      'categoryIsIncome': categoryIsIncome ? 1 : 0,
+    };
+
+    if (categoryId != null) {
+      map['categoryId'] = categoryId;
+    }
+
+    return map;
   }
 
   static Future<CategoryDbModel> fromMap(Map<String, dynamic> map) async {
@@ -75,7 +61,7 @@ class CategoryDbModel {
       categoryId: map['categoryId'] as int?,
       categoryName: map['categoryName'] as String,
       categoryIcon: categoryIcon,
-      categoryBudget: map['categoryBudget'] as double,
+      categoryBudget: (map['categoryBudget'] as num).toDouble(),
       categoryIsIncome: (map['categoryIsIncome'] as int) == 1,
     );
   }

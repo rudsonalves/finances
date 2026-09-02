@@ -72,16 +72,58 @@ class OfxTransaction {
   }
 
   factory OfxTransaction.fromMapOfx(Map<String, dynamic> map) {
+    final fitId = map['FITID']?.toString().trim();
+
+    if (fitId == null || fitId.isEmpty) {
+      throw const FormatException('Transação OFX sem FITID.');
+    }
+
+    final amountText = map['TRNAMT']?.toString().trim();
+
+    if (amountText == null || amountText.isEmpty) {
+      throw const FormatException('Transação OFX sem TRNAMT.');
+    }
+
+    final amount = double.tryParse(amountText);
+
+    if (amount == null || !amount.isFinite) {
+      throw FormatException(
+        'Valor inválido em TRNAMT: $amountText.',
+      );
+    }
+
+    final postedText = map['DTPOSTED']?.toString().trim();
+
+    if (postedText == null || postedText.isEmpty) {
+      throw const FormatException('Transação OFX sem DTPOSTED.');
+    }
+
+    if (!RegExp(r'^\d{14}').hasMatch(postedText)) {
+      throw FormatException(
+        'Valor inválido em DTPOSTED: $postedText.',
+      );
+    }
+
+    late final DateTime posted;
+
+    try {
+      posted = DateTimeAdapter.stringToDateTime(postedText);
+    } on FormatException {
+      throw FormatException(
+        'Valor inválido em DTPOSTED: $postedText.',
+      );
+    }
+
     final trans = OfxTransaction(
       type: map['TRNTYPE'].toString(),
-      posted: DateTimeAdapter.stringToDateTime(map['DTPOSTED']),
+      posted: posted,
       postedLocal: DateTimeAdapter.stringDateTimeInTimeZoneLocal(
-        map['DTPOSTED'],
+        postedText,
       ),
-      amount: double.parse(map['TRNAMT']),
-      financialInstitutionID: map['FITID'].toString(),
-      referenceNumber: map['REFNUM'].toString(),
-      memo: map['MEMO'].toString(),
+      amount: amount,
+      financialInstitutionID: fitId,
+      referenceNumber: map['REFNUM']?.toString() ?? '',
+      memo: (map['MEMO'] ?? map['NAME'] ?? '').toString(),
     );
     return trans;
   }
@@ -89,9 +131,12 @@ class OfxTransaction {
   factory OfxTransaction.fromMap(Map<String, dynamic> map) {
     return OfxTransaction(
       type: map['type'].toString(),
-      posted: DateTime.fromMillisecondsSinceEpoch(map['posted']),
+      posted: DateTime.fromMillisecondsSinceEpoch(
+        map['posted'] as int,
+        isUtc: true,
+      ),
       postedLocal: DateTime.fromMillisecondsSinceEpoch(
-        map['posted_local'],
+        map['posted_local'] as int,
       ),
       amount: map['amount'] ?? 0.0,
       financialInstitutionID: map['financial_institution_id'].toString(),

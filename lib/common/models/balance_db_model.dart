@@ -1,20 +1,3 @@
-// Copyright (C) 2024 rudson
-//
-// This file is part of finances.
-//
-// finances is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// finances is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with finances.  If not, see <https://www.gnu.org/licenses/>.
-
 import 'dart:convert';
 
 import './extends_date.dart';
@@ -49,10 +32,24 @@ class BalanceDbModel {
   }
 
   Map<String, dynamic> toMap() {
+    final int? accountId = balanceAccountId;
+    if (accountId == null) {
+      throw StateError(
+        'BalanceDbModel cannot be serialized without balanceAccountId.',
+      );
+    }
+
+    final ExtendedDate? date = balanceDate;
+    if (date == null) {
+      throw StateError(
+        'BalanceDbModel cannot be serialized without balanceDate.',
+      );
+    }
+
     return <String, dynamic>{
       'balanceId': balanceId,
-      'balanceAccountId': balanceAccountId,
-      'balanceDate': balanceDate!.millisecondsSinceEpoch,
+      'balanceAccountId': accountId,
+      'balanceDate': date.millisecondsSinceEpoch,
       'balanceTransCount': balanceTransCount,
       'balanceOpen': balanceOpen,
       'balanceClose': balanceClose,
@@ -66,8 +63,8 @@ class BalanceDbModel {
       balanceDate:
           ExtendedDate.fromMillisecondsSinceEpoch(map['balanceDate'] as int),
       balanceTransCount: map['balanceTransCount'] as int,
-      balanceOpen: map['balanceOpen'] as double,
-      balanceClose: map['balanceClose'] as double,
+      balanceOpen: (map['balanceOpen'] as num).toDouble(),
+      balanceClose: (map['balanceClose'] as num).toDouble(),
     );
   }
 

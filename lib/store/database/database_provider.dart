@@ -1,26 +1,4 @@
-// Copyright (C) 2024 rudson
-//
-// This file is part of finances.
-//
-// finances is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// finances is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with finances. If not, see <https://www.gnu.org/licenses/>.
-
 import 'dart:developer';
-import 'dart:io';
-
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:sqflite/sqflite.dart';
 
 import '../../locator.dart';
 import '../constants/constants.dart';
@@ -28,86 +6,70 @@ import 'database_backup.dart';
 import 'database_manager.dart';
 import 'database_migrations.dart';
 
-/// Provides high-level database operations and lifecycle management.
-///
-/// This class encapsulates the initialization of the database,
-/// application of schema migrations, backup operations, and version management.
-/// It relies on [DatabaseManager] for database connection management,
-/// [DatabaseMigrations] for schema versioning and migrations, and
-/// [DatabaseBackuper] for backup and restore functionality.
 abstract class DatabaseProvider {
-  /// Initializes the database, applies necessary migrations, and updates the
-  /// schema version.
-  ///
-  /// This method checks the current schema version of the database and applies
-  /// any pending migrations to bring the database up to the latest schema version.
-  /// It also backs up the database before applying migrations as a safety measure.
   Future<void> init();
 
-  /// Deletes the current database file from the device.
-  ///
-  /// This method is useful for resetting the database or during uninstallation processes.
-  /// It ensures that the database file is completely removed from the device's storage.
   Future<void> deleteDatabase();
 
-  /// Updates the application version stored in the appControl table.
-  ///
-  /// This method can be used to keep track of the application version that last modified the database.
-  /// It helps in troubleshooting and migrations tied to specific app versions.
-  ///
-  /// Parameters:
-  ///   - appVersion: The current version of the application to be recorded.
   Future<void> updateAppVersion(String appVersion);
 
-  /// Queries the current application version stored in the database.
-  ///
-  /// This method retrieves the app version from the appControl table, which reflects
-  /// the version of the application that last interacted with the database.
-  ///
-  /// Returns the application version as a string.
   Future<String> queryAppVersion();
 
-  /// Closes the database connection when the DatabaseProvider is being disposed.
-  ///
-  /// This method ensures that the database connection is cleanly closed to prevent
-  /// any potential resource leaks or locking issues.
   Future<void> dispose();
 }
 
 class DatabaseProvide implements DatabaseProvider {
-  final _databaseManager = locator<DatabaseManager>();
+  DatabaseProvide({
+    DatabaseManager? databaseManager,
+    DatabaseBackuper? databaseBackuper,
+  })  : _databaseManager = databaseManager ?? locator<DatabaseManager>(),
+        _databaseBackuper = databaseBackuper ?? DatabaseBackup();
+
+  final DatabaseManager _databaseManager;
+  final DatabaseBackuper _databaseBackuper;
 
   @override
   Future<void> init() async {
     final database = await _databaseManager.database;
+    final currentVersion = await _getCurrentDatabaseSchemeVersion();
+    final targetVersion = DatabaseMigrations.databaseSchemeVersion;
 
-    final backupDatabase = await DatabaseBackup().backupDatabase();
+    if (currentVersion >= targetVersion) {
+      return;
+    }
+
+    final backupPath = await _databaseBackuper.backupDatabase();
+
+    if (backupPath == null) {
+      throw StateError(
+        'Database migration aborted because the safety backup failed.',
+      );
+    }
+
     try {
-      int currentVersion = await _getCurrentDatabaseSchemeVersion();
-      if (DatabaseMigrations.databaseSchemeVersion > currentVersion) {
-        await DatabaseMigrations.applyMigrations(
-          db: database,
-          currentVersion: currentVersion,
-          targetVersion: DatabaseMigrations.databaseSchemeVersion,
-        );
-        await _recordUpdateMigration(DatabaseMigrations.databaseSchemeVersion);
-      }
+      await DatabaseMigrations.applyMigrations(
+        db: database,
+        currentVersion: currentVersion,
+        targetVersion: targetVersion,
+      );
+
+      await _recordUpdateMigration(targetVersion);
     } catch (err) {
-      if (backupDatabase != null) {
-        await DatabaseBackup().restoreDatabase(backupDatabase);
+      final restored = await _databaseBackuper.restoreDatabase(
+        backupPath,
+      );
+
+      if (!restored) {
+        throw StateError(
+          'Database migration failed and the safety backup '
+          'could not be restored. Original error: $err',
+        );
       }
-      log('DatabaseProvider.init: $err');
+
+      rethrow;
     }
   }
 
-  /// Records the completion of a database schema migration in the appControl table.
-  ///
-  /// This method updates the appControl table with the latest schema version
-  /// after successful migration. It ensures that the application is aware of
-  /// the current schema version of the database.
-  ///
-  /// Parameters:
-  ///   - targetVersion: The version number of the latest database schema.
   Future<void> _recordUpdateMigration(int targetVersion) async {
     final database = await _databaseManager.database;
 
@@ -120,13 +82,6 @@ class DatabaseProvide implements DatabaseProvider {
     );
   }
 
-  /// Retrieves the current schema version of the database.
-  ///
-  /// This method queries the appControl table to find the current version of
-  /// the database schema. If no version is recorded, it assumes the database
-  /// is at the latest version and records it.
-  ///
-  /// Returns the current schema version as an integer.
   Future<int> _getCurrentDatabaseSchemeVersion() async {
     final database = await _databaseManager.database;
 
@@ -143,13 +98,6 @@ class DatabaseProvide implements DatabaseProvider {
     return results.first[appControlVersion] as int;
   }
 
-  /// Inserts the initial schema version into the appControl table.
-  ///
-  /// This method is called if no current schema version is found, indicating
-  /// that the database is new. It records the latest schema version as the starting version.
-  ///
-  /// Parameters:
-  ///   - targetVersion: The version number to be recorded as the initial database schema version.
   Future<void> _recordMigration(int targetVersion) async {
     final database = await _databaseManager.database;
 
@@ -165,15 +113,7 @@ class DatabaseProvide implements DatabaseProvider {
 
   @override
   Future<void> deleteDatabase() async {
-    final Directory directory = await getApplicationDocumentsDirectory();
-    final String path = join(directory.path, dbName);
-    final database = await _databaseManager.database;
-
-    if (database.isOpen) {
-      await database.close();
-    }
-
-    await databaseFactory.deleteDatabase(path);
+    await _databaseManager.deleteDatabase();
   }
 
   @override

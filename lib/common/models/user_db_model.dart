@@ -1,20 +1,3 @@
-// Copyright (C) 2024 rudson
-//
-// This file is part of finances.
-//
-// finances is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// finances is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with finances.  If not, see <https://www.gnu.org/licenses/>.
-
 import 'dart:convert';
 
 import '../../locator.dart';
@@ -22,9 +5,6 @@ import '../../repositories/user/abstract_user_repository.dart';
 import '../constants/app_constants.dart';
 import './user_model.dart';
 
-/*
-Model for app current user
-*/
 class UserDbModel {
   String? userId;
   String? userName;
@@ -61,7 +41,8 @@ class UserDbModel {
   })  : userCategoryList = userCategoryList ?? [],
         userOfxStopCategories = userOfxStopCategories ?? [1];
 
-  final userRepository = locator<AbstractUserRepository>();
+  AbstractUserRepository get userRepository =>
+      locator<AbstractUserRepository>();
 
   void setFromUserModel(UserModel user) {
     userId = user.id;
@@ -115,9 +96,9 @@ class UserDbModel {
     userGrpShowDots = user.userGrpShowDots;
     userGrpAreaChart = user.userGrpAreaChart;
     userBudgetRef = user.userBudgetRef;
-    userCategoryList = user.userCategoryList;
+    userCategoryList = List<String>.from(user.userCategoryList);
     userMaxTransactions = user.userMaxTransactions;
-    userOfxStopCategories = user.userOfxStopCategories;
+    userOfxStopCategories = List<int>.from(user.userOfxStopCategories);
   }
 
   @override

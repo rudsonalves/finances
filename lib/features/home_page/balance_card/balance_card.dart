@@ -1,35 +1,18 @@
-// Copyright (C) 2024 rudson
-//
-// This file is part of finances.
-//
-// finances is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// finances is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with finances.  If not, see <https://www.gnu.org/licenses/>.
-
-import 'package:flutter/material.dart';
 import 'package:finances/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../common/constants/themes/colors/custom_color.g.dart';
-import '../../../common/functions/card_income_function.dart';
-import '../../../locator.dart';
-import './balance_cart_state.dart';
-import './balance_card_controller.dart';
-import '../../../common/models/account_db_model.dart';
-import '../../../common/current_models/current_account.dart';
-import '../../../common/extensions/money_masked_text.dart';
-import '../../../common/current_models/current_balance.dart';
 import '../../../common/constants/themes/app_text_styles.dart';
+import '../../../common/constants/themes/colors/custom_color.g.dart';
+import '../../../common/current_models/current_account.dart';
+import '../../../common/current_models/current_balance.dart';
+import '../../../common/extensions/money_masked_text.dart';
+import '../../../common/functions/card_income_function.dart';
+import '../../../common/models/account_db_model.dart';
 import '../../../common/widgets/custom_circular_progress_indicator.dart';
+import '../../../locator.dart';
+import './balance_card_controller.dart';
+import './balance_cart_state.dart';
 import 'widget/card_popup_menu.dart';
 import 'widget/main_card_popup_account.dart';
 
@@ -37,12 +20,18 @@ class BalanceCard extends StatefulWidget {
   final double textScale;
   final void Function(AccountDbModel account) balanceCallBack;
   final BalanceCardController controller;
+  final MoneyMaskedText? money;
+  final CurrentBalance? currentBalance;
+  final CurrentAccount? currentAccount;
 
   const BalanceCard({
     super.key,
     required this.textScale,
     required this.balanceCallBack,
     required this.controller,
+    this.money,
+    this.currentBalance,
+    this.currentAccount,
   });
 
   @override
@@ -50,15 +39,26 @@ class BalanceCard extends StatefulWidget {
 }
 
 class _BalanceCardState extends State<BalanceCard> {
-  MoneyMaskedText money = locator<MoneyMaskedText>();
+  late final MoneyMaskedText _money;
+  late final CurrentBalance _currentBalance;
+  late final CurrentAccount _currentAccount;
+
+  bool _balanceHidden = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _money = widget.money ?? locator<MoneyMaskedText>();
+    _currentBalance = widget.currentBalance ?? locator<CurrentBalance>();
+    _currentAccount = widget.currentAccount ?? locator<CurrentAccount>();
+  }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final locale = AppLocalizations.of(context)!;
-    final currentBalance = locator<CurrentBalance>();
-    final currentAccount = locator<CurrentAccount>();
     final formattedDate = DateFormat('MMMM y', locale.localeName);
 
     return Positioned(
@@ -98,23 +98,38 @@ class _BalanceCardState extends State<BalanceCard> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               MainCardPopupAccount(
-                                account: currentAccount,
+                                account: _currentAccount,
                                 widget: widget,
                               ),
                               Row(
                                 children: [
                                   Text(
-                                    money.text(currentBalance.balanceClose),
+                                    _balanceHidden
+                                        ? '••••••'
+                                        : _money
+                                            .text(_currentBalance.balanceClose),
                                     textAlign: TextAlign.left,
                                     style:
                                         AppTextStyles.textStyleBold20.copyWith(
-                                      color:
-                                          currentBalance.balanceClose < -0.005
+                                      color: _balanceHidden
+                                          ? colorScheme.onPrimary
+                                          : _currentBalance.balanceClose <
+                                                  -0.005
                                               ? customColors.sourceMinusred
                                               : colorScheme.onPrimary,
                                     ),
                                   ),
                                   const Spacer(),
+                                  IconButton(
+                                    tooltip: locale.balanceCardBalance,
+                                    onPressed: _toggleBalanceVisibility,
+                                    icon: Icon(
+                                      _balanceHidden
+                                          ? Icons.visibility_off
+                                          : Icons.visibility,
+                                      color: colorScheme.onPrimary,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ],
@@ -175,6 +190,7 @@ class _BalanceCardState extends State<BalanceCard> {
                           text: locale.balanceCardIncomes,
                           value: widget.controller.balance.incomes,
                           icon: Icons.arrow_upward,
+                          money: _money,
                         ),
                         const Spacer(),
                         incomeExpanseShowValue(
@@ -182,6 +198,7 @@ class _BalanceCardState extends State<BalanceCard> {
                           text: locale.balanceCardExpenses,
                           value: -widget.controller.balance.expanses,
                           icon: Icons.arrow_downward,
+                          money: _money,
                         ),
                       ],
                     ),
@@ -204,5 +221,11 @@ class _BalanceCardState extends State<BalanceCard> {
         ),
       ),
     );
+  }
+
+  void _toggleBalanceVisibility() {
+    setState(() {
+      _balanceHidden = !_balanceHidden;
+    });
   }
 }

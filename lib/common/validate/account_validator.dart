@@ -23,7 +23,7 @@ class AccountValidator {
   AccountValidator(this.locale);
 
   String? nameValidator(String? value) {
-    final String name = value ?? '';
+    final String name = value?.trim() ?? '';
 
     if (name.isEmpty) return locale.statefullAccountDialogNameEmpty;
     if (name.length < 2) return locale.statefullAccountDialogNameGt3;
@@ -32,7 +32,7 @@ class AccountValidator {
   }
 
   String? descriptionValidator(String? value) {
-    final String description = value ?? '';
+    final String description = value?.trim() ?? '';
 
     if (description.isEmpty) return locale.statefullAccountDialogDescripEmpty;
     if (description.length < 3) return locale.statefullAccountDialogDescripGt3;
